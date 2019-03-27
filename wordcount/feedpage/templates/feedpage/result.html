@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset='utf-8'>
+        <title>Wordcount by HS</title>
+    </head>
+    <body>
+        <div style='width: 90%; margin-left: auto; margin-right: auto;'>
+            <a href='{%url "home"%}' style='text-decoration: none;'>
+                <h1 style='background-color: black; color: white; width:100%; padding:4px 0px;'>&nbsp;Word Count</h1>
+            </a>
+            <h3 style='text-align: right;'>by SNULION 7th 한현상</h3>
+            <a href='{%url "about"%}'>[?] 도움말</a>
+            <div style='display: flex;'>
+                <div style='width: 58%;'>
+                    <p>▼ 아래에 텍스트로 이루어진 문단을 입력하면 어절 단위로 쪼개어 카운팅 해줍니다.</p>
+                    <form style='display: flex;' action='{%url "result"%}'>
+                        <textarea style='width:100%; min-height:100px;' name='fulltext'></textarea>
+                        <br>
+                        <input
+                        type='submit'
+                        value='쪼갠 결과 확인 Click!'
+                        style='
+                            font-size: 1rem; 
+                            color: white; 
+                            background-color: 
+                            #0f0f0f; 
+                            width: 30%; 
+                            min-height:100px; 
+                            margin: 20px;
+                            '
+                        />
+                    </form>
+                    <h4>History</h4>
+                    {% for text in history%}
+                        <li>{{text}}</li>
+                    {% endfor %}
+                </div>
+                <div style='width: 42%;'>
+                    <strong><p>[분석 결과]</p></strong>
+                    <div style='height: auto; width: 100%; border: grey solid 1px; padding-top: 10px'>
+                    <li style='padding-left: 10px;'>총 단어 수: {{count}}개</li>
+                    <li style='padding-left: 10px;'>유니크 단어 수: {{unique}}개</li>
+                    <ol>
+                        {% for word, count_word in dictionary%}
+                            <li style='padding-left: 10px;'>
+                                {{word}}: {{count_word}}개
+                                <br>
+                            </li>
+                        {% endfor %}
+                    </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
