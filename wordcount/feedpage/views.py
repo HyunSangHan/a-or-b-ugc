@@ -13,8 +13,8 @@ def result(request):
     words = new_text.split()
     word_dic = {}
 
-    history.append(new_text)
-    print(history)
+    if words !=[]:
+        history.append(new_text)
 
     unique = 0
     for word in words:
