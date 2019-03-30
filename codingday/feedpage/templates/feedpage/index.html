@@ -1,36 +1,14 @@
-<!DOCTYPE html>
-<html>
+{% extends 'base.html' %}
 
+{% block content %}
     <h1>feed page</h1>
+    <a href="/feeds/new">new feed</a>
     {% for feed in feeds %}
       <div style="border: 1px solid grey;">
         <a href="/feeds/{{ feed.id }}">더보기</a>
         <p>{{ feed.title }}</p>
         <p>{{ feed.content }}</p>
+        <a href="/feeds/{{ feed.id }}/delete">삭제</a>
       </div>
     {% endfor %} <!-- for를 end시킨다는 뜻! 여기서는 들여쓰기로 끝을 못 내니 -->
-
-  <head>
-    <meta charset="utf-8">
-    <title>연습입니당</title>
-  </head>
-  <body>
-    <h1>Hello World! HS</h1>
-    <h2>Hello World! HS</h2>
-    <h3>Hello World! HS</h3>
-    <h4>Hello World! HS</h4>
-    <h5>Hello World! HS</h5>
-
-    <ul>
-      <li>Hello World! HS</li>
-      <li>Hello World! HS</li>
-      <li>Hello World! HS</li>
-    </ul>
-
-    <ol>
-      <li>Hello World! HS</li>
-      <li>Hello World! HS</li>
-      <li>Hello World! HS</li>
-    </ol>
-  </body>
-</html>
+{% endblock content %}
