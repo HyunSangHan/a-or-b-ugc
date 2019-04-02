@@ -3,14 +3,13 @@ from faker import Faker # 추가
 
 # Create your models here.
 
-from django.utils import timezone # 장고는 created_at과 updated_at을 알아서 만들어 주지 않음. id는 만들어 줌
+from django.utils import timezone
 
 # Create your models here.
-class Feed(models.Model):
+class Event(models.Model):
     # id는 자동 추가
     title = models.CharField(max_length=256)
-    content = models.TextField()
-    editnow = models.BooleanField(default=False)
+    date = models.DateTimeField(blank=False, null=False)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(blank=True, null=True)
 
@@ -19,13 +18,13 @@ class Feed(models.Model):
         self.save()
 
     def __str__(self):
-        return '%s - %s - %s' % (self.title, self.content, self.editnow)
+        return '%s - %s' % (self.title, self.date)
 
     def seed(count): # 추가
             myfake = Faker('ko_KR')
             for i in range(count):
-                Feed.objects.create(
+                Event.objects.create(
                     title=myfake.bs(),
-                    editnow = False,
-                    content=myfake.text()
+                    # date=timezone.now()
+                    date=myfake.date(pattern="%Y-%m-%d", end_datetime=None)
                 )
