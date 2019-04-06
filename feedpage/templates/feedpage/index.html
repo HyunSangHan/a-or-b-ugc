@@ -7,17 +7,19 @@
     {% for feed in feeds %}
 
     {% if feed.editnow %}
-      {% comment %} <a href="/feeds/{{ feed.id }}/editoff">수정안하기</a> {% endcomment %}
-      <form action="/feeds/{{feed.id}}/" method="POST">
-    {% comment %} /{{ feed.id }} {% endcomment %}
-        {% csrf_token %} 
-        <!--csrf_token은 보안을 위해 추가하는 것임-->
-        {% comment %} <p>잠김여부 : {{feed.editnow}} </p> {% endcomment %}
-        {% comment %} <p>title</p> {% endcomment %}
-        <input name="title" value="{{feed.title}}"/> <br />
-        {% comment %} <p>content</p> {% endcomment %}
-        <input name="content" value="{{feed.content}}"/> <br />
-        <input type="submit" value="submit" />
+        <div style="border: 1px solid grey;">
+          <a href="/feeds/{{ feed.id }}/editoff">수정안하기</a>
+          <form action="/feeds/{{feed.id}}/" method="POST">
+      {% comment %} /{{ feed.id }} {% endcomment %}
+          {% csrf_token %} 
+          <!--csrf_token은 보안을 위해 추가하는 것임-->
+          {% comment %} <p>잠김여부 : {{feed.editnow}} </p> {% endcomment %}
+          {% comment %} <p>title</p> {% endcomment %}
+          <input name="title" value="{{feed.title}}"/> <br />
+          {% comment %} <p>content</p> {% endcomment %}
+          <input name="content" value="{{feed.content}}"/> <br />
+          <input type="submit" value="submit" />
+        </div>
     </form>
     {% else %}
 
@@ -28,7 +30,8 @@
         {% comment %} <p>잠김여부 : {{feed.editnow}} </p> {% endcomment %}
         <p>{{ feed.title }}</p>
         <p>{{ feed.content }}</p>
-        <a href="/feeds/{{ feed.id }}/delete">삭제</a>
+        <a href="/feeds/{{ feed.id }}/delete" onclick="return confirm('ㄹㅇ 삭제?')">삭제</a>
+
       </div>
     {% endif %}
 

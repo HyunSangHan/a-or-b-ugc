@@ -54,6 +54,7 @@ def editon(request, id):
 def editoff(request, id):
     feed = Feed.objects.get(id=id)
     feed.editnow = False
+    feed.save()
     return redirect('/feeds')
 
 #     if request.method == "POST":
