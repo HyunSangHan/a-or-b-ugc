@@ -4,6 +4,9 @@
 
 <h1>Profile Edit</h1>
 
-
+<form action='{% url "profile" %}' method='POST'>
+    {% csrf_token %}
+    <input name='username' type='text' value='{{profile.user.username }}' />
+</form>
 
 {% endblock %}

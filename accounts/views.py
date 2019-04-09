@@ -32,4 +32,13 @@ def login(request):
         return render(request, 'accounts/login.html')
 
 def profile(request):
-    return render(request, 'accounts/profile.html')
+    if request.method == 'POST':
+        # 나중에... 비번 확인하는 로직도 넣자
+        tmp_password = request.POST['password']
+        profile.user.username = request.POST['username']
+        profile.user.set_password(tmp_password)
+
+        profile.save
+        return redirect('/feeds')
+    else:
+        return render(request, 'accounts/profile.html')
