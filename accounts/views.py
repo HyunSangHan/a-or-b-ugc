@@ -1,7 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib import auth
-from django.shortcuts import redirect
 
 # Create your views here.
 def signup(request):
@@ -13,7 +12,11 @@ def signup(request):
     return render(request, 'accounts/signup.html')
 
 def logout(request):
-    return render(request, 'accounts/logout.html')
+    if request.method == 'POST':
+        auth.logout(request)
+        return redirect('/accounts/login')
+    else:
+        return render(request, 'accounts/logout.html')
 
 def login(request):
     if request.method == 'POST':
@@ -24,6 +27,9 @@ def login(request):
             auth.login(request, user)
             return redirect('/feeds')
         else:
-            return render(request, 'accounts/login.html', {'error' : 'username or password is incorrect'})
+            return render(request, 'accounts/login.html', {'error' : 'Hey! username or password is incorrect'})
     else:
         return render(request, 'accounts/login.html')
+
+def profile(request):
+    return render(request, 'accounts/profile.html')

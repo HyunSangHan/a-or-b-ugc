@@ -1,12 +1,9 @@
 from django.db import models
-from faker import Faker # 추가
+from faker import Faker
 from django.contrib.auth.models import User 
-from django.db.models.signals import post_save  # 추가
-from django.dispatch import receiver   # 추가
-
-# Create your models here.
-
-from django.utils import timezone # 장고는 created_at과 updated_at을 알아서 만들어 주지 않음. id는 만들어 줌
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.utils import timezone
 
 # Create your models here.
 class Feed(models.Model):

@@ -24,8 +24,7 @@ urlpatterns = [
     # path('', feedpage.views.index, name='index'),
     path('feeds/', include('feedpage.urls')),
     path('events/', include('eventpage.urls')),
-    # path('accounts/', include('accounts.urls')),
-    # accounts내의 urls.py는 지워도 된다
-    path('accounts/', include('django.contrib.auth.urls')), # 얘는 뭐임?
-    path('accounts/signup/', accounts.views.signup, name='signup'),
+    path('accounts/', include('accounts.urls')),
+    # path('accounts/', include('django.contrib.auth.urls')),
+    # path('accounts/signup/', accounts.views.signup, name='signup'),
 ]
