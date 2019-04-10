@@ -8,8 +8,13 @@ from django.utils import timezone
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(default=timezone.now)
     college = models.CharField(max_length=20, blank=True)
     major = models.CharField(max_length=20, blank=True)
+    # admission_year = models.IntegerField(blank=False, null=True)
+    # birthday = models.DateField(blank=False, null=True)
+    # is_male = models.BooleanField(blank=False, null=True)
+    is_graduated = models.BooleanField(blank=False, null=True)
 
     def __str__(self):   # 추가
         return 'id=%d, user id=%d, college=%s, major=%s' % (self.id, self.user.id, self.college, self.major)
