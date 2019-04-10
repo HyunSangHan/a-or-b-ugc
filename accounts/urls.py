@@ -8,3 +8,4 @@ urlpatterns = [
     path('logout/', views.logout, name='logout'),
     path('profile/', views.profile, name='profile'),
 ]
+############### 파라미터 id 해결해야함
