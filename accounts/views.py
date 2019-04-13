@@ -6,6 +6,7 @@ from .models import Profile
 # Create your views here.
 def signup(request):
     if request.method  == 'POST':
+        #이름 겹치면 어떻게 할 건지 정해야됨
         password = request.POST['password1']
         email = request.POST['email']
         if password == request.POST['password2']:
@@ -15,7 +16,7 @@ def signup(request):
             except:
                 user = User.objects.create_user(email=email, username=request.POST['username'], password=password)
                 profile = user.profile
-                print(profile)
+                # print(profile)
                 profile.birthday = request.POST['birthday']
                 profile.is_male = request.POST['gender']
                 profile.left_level = request.POST['politics']
@@ -56,7 +57,7 @@ def login(request):
 def profile(request):
     user = request.user
     profile = user.profile
-
+    # auth.login(request, user)
     if request.method == 'POST':
         current_password = request.POST['current_password']
         password1 = request.POST['password1']

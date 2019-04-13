@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver 
 from django.core.validators import MaxValueValidator, MinValueValidator
+import random
 # Create your models here.
 
 class Profile(models.Model):
@@ -32,6 +33,27 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.username
 
+    def seed(count):
+        myfake = Faker('ko_KR')
+        for i in range(count):
+            username = myfake.name()
+            email = myfake.email() #*args, **kwargs
+            password = '1234'
+            gender = myfake.boolean(chance_of_getting_true=20)
+            birthday = myfake.date_this_century(before_today=True, after_today=False)
+            politics = random.randrange(1,6)
+            region = random.randrange(1,9)
+            user = User.objects.create(
+                username = username,
+                email = email,
+                password = password 
+            )
+            profile = user.profile
+            profile.is_male = gender
+            profile.birthday = birthday
+            profile.left_level = politics
+            profile.region = region
+            profile.save()
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):  
