@@ -7,24 +7,58 @@
 {{ error }}
 {% endif %}
 
-<form method="POST" action="{%url 'signup'%}">
-    {% csrf_token %}
-    사용자 이름:
-    <br>
-    <input name="username" type="text" value="">
-    <br>
-    <br>
-    비밀번호:
-    <br>
-    <input name="password1" type="password" value="">
-    <br>
-    <br>
-    비밀번호 확인:
-    <br>
-    <input name="password2" type="password" value="">
-    <br>
-    <br>
-    <input type="submit" value="Sign Up!">
-</form>
+    <form action='{% url "signup" %}' method='POST'>
+        {% csrf_token %}
+        이메일 : <input type='email' name='email' /> <br/>
+        비번 : <input type='password' name='password1' /> <br/>
+        다시 : <input type='password' name='password2' /> <br/>
+    <p>
+        닉네임 : <input type='text' name='username' /> <br/>
+    </p>
 
-{% endblock %}
+    <p>
+        성별 :
+        <input type='radio' id='genderChoice1' name='gender' value=True required> 
+        <label for='genderChoice1'>남성</label>
+        <input type='radio' id='genderChoice2' name='gender' value=False> 
+        <label for='genderChoice2'>여성</label>
+    </p>
+    <p> 
+        생년월일 : <input type='date' name='birthday'/> <br/>
+    </p>
+    <p>
+        정치성향 :
+        <input type='radio' id='left2' name='politics' value='5' required> 
+        <label for='left2'>진보</label>
+        <input type='radio' id='left1' name='politics' value='4'> 
+        <label for='left1'>중도진보</label>
+        <input type='radio' id='mid' name='politics' value='3'> 
+        <label for='mid'>중도</label>
+        <input type='radio' id='right1' name='politics' value='2'> 
+        <label for='right1'>중도보수</label>
+        <input type='radio' id='right2' name='politics' value='1'> 
+        <label for='right2'>보수</label>
+    </p>
+
+    <p>
+        배경지역 :
+        <input type='radio' id='region1' name='region' value='1' required> 
+        <label for='region1'>서울/경기</label>
+        <input type='radio' id='region1' name='region' value='2' required> 
+        <label for='region2'>강원</label>
+        <input type='radio' id='region1' name='region' value='3' required> 
+        <label for='region3'>충청</label>
+        <input type='radio' id='region1' name='region' value='4' required> 
+        <label for='region4'>호남</label>
+        <input type='radio' id='region1' name='region' value='5' required> 
+        <label for='region5'>영남</label>
+        <input type='radio' id='region1' name='region' value='6' required> 
+        <label for='region6'>제주</label>
+        <input type='radio' id='region1' name='region' value='7' required> 
+        <label for='region7'>해외</label>
+        <input type='radio' id='region1' name='region' value='8' required> 
+        <label for='region8'>기타</label>
+    </p>
+        <input type='submit' value="가입하기" />
+    </form>
+{% endblock content %}

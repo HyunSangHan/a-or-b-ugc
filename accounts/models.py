@@ -1,23 +1,36 @@
 from django.db import models
-from faker import Faker
-from django.contrib.auth.models import User 
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 from django.utils import timezone
+from faker import Faker
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver 
+from django.core.validators import MaxValueValidator, MinValueValidator
 # Create your models here.
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    birthday = models.DateField(blank=True, null=True)
+    is_male = models.BooleanField(blank=True, null=True)
     created_at = models.DateTimeField(default=timezone.now)
-    college = models.CharField(max_length=20, blank=True)
-    major = models.CharField(max_length=20, blank=True)
-    # admission_year = models.IntegerField(blank=False, null=True)
-    # birthday = models.DateField(blank=False, null=True)
-    # is_male = models.BooleanField(blank=False, null=True)
-    is_graduated = models.BooleanField(blank=False, null=True)
+    left_level = models.IntegerField(
+        default=3,
+        validators=[MaxValueValidator(5), MinValueValidator(1)]
+    )
+    region = models.IntegerField(
+        default=8,
+        validators=[MaxValueValidator(8), MinValueValidator(1)]
+    )
+#1 서울/경기
+#2 강원
+#3 충청
+#4 호남
+#5 영남
+#6 제주
+#7 해외
+#8 기타
 
-    def __str__(self):   # 추가
-        return 'id=%d, user id=%d, college=%s, major=%s' % (self.id, self.user.id, self.college, self.major)
+    def __str__(self):
+        return self.user.username
 
 
 @receiver(post_save, sender=User)
@@ -28,3 +41,4 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):  
     instance.profile.save()
+    # 합쳐질지 확인 필요

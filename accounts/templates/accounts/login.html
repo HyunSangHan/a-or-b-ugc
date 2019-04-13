@@ -9,8 +9,8 @@
 <form method="post" action="{% url 'login' %}">
     {% csrf_token %}
     <p>
-        사용자 이름:
-        <input type="text" name="username" value="">
+        ID(이메일주소):
+        <input type="text" name="email" value="">
   	</p>
   	<p>
         비밀번호:

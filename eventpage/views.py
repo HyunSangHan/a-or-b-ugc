@@ -12,8 +12,7 @@ def event(request):
         date = timezone.now()
         Event.objects.create(title=title, date=date)
         return redirect('/events')
-
-
+        
 def new(request):
     event = Event()
     return render(request, 'eventpage/new.html', {'event': event})
