@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
+from django.contrib.auth import update_session_auth_hash
 from django.contrib import auth
-from .models import Profile
+from django.utils import timezone
 
 # Create your views here.
 def signup(request):
@@ -44,6 +45,8 @@ def login(request):
                 username = User.objects.get(email=email).username
                 password = request.POST['password']
                 user = auth.authenticate(request, username = username, password = password)
+                user.profile.recent_login = timezone.now()
+                user.profile.save()
                 if user is not None:
                     auth.login(request, user)
                     return redirect('/feeds')
@@ -74,7 +77,7 @@ def profile(request):
             profile.left_level = request.POST['politics']
             profile.region = request.POST['region']
             profile.save()
-
+            update_session_auth_hash(request, request.user)
             return redirect('/feeds')
 
         else:

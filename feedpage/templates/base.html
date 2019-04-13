@@ -1,4 +1,3 @@
-<!-- feedpage/templates/base.html -->
 <!DOCTYPE html>
 <html>
   <head>
@@ -9,7 +8,10 @@
   <header style="width: 100%; background-color: black; color: white; text-align: left;">
     <div style="text-align: right;">
         {% if user.is_authenticated %}
-              {{ user.get_username }}님, 안녕하세요
+        최근 로그인 일자: {{user.profile.recent_login}}
+        <br/>
+            {{user.profile.birthday}}이 생일이신 {{ user.get_username }}님, 안녕하세요
+              {% comment %} {{ user.profile.is_male }} {% endcomment %}
               <form action='{% url "logout" %}' method='POST'>
                 {% csrf_token %} 
                 <input type='hidden' />

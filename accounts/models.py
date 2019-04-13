@@ -29,6 +29,7 @@ class Profile(models.Model):
 #6 제주
 #7 해외
 #8 기타
+    recent_login = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return self.user.username
@@ -37,8 +38,8 @@ class Profile(models.Model):
         myfake = Faker('ko_KR')
         for i in range(count):
             username = myfake.name()
-            email = myfake.email() #*args, **kwargs
-            password = '1234'
+            email = myfake.email()
+            password = '1234' #수정 필요???
             gender = myfake.boolean(chance_of_getting_true=20)
             birthday = myfake.date_this_century(before_today=True, after_today=False)
             politics = random.randrange(1,6)
@@ -53,6 +54,7 @@ class Profile(models.Model):
             profile.birthday = birthday
             profile.left_level = politics
             profile.region = region
+            profile.recent_login = timezone.now()
             profile.save()
 
 @receiver(post_save, sender=User)
