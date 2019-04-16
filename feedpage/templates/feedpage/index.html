@@ -8,17 +8,17 @@
 
     {% if feed.editnow %}
         <div style="border: 1px solid grey;">
-          <a href="/feeds/{{ feed.id }}/editoff">수정안하기</a>
-          <form action="/feeds/{{feed.id}}/" method="POST">
-      {% comment %} /{{ feed.id }} {% endcomment %}
-          {% csrf_token %} 
-          <!--csrf_token은 보안을 위해 추가하는 것임-->
-          {% comment %} <p>잠김여부 : {{feed.editnow}} </p> {% endcomment %}
-          {% comment %} <p>title</p> {% endcomment %}
-          <input name="title" value="{{feed.title}}"/> <br />
-          {% comment %} <p>content</p> {% endcomment %}
-          <input name="content" value="{{feed.content}}"/> <br />
-          <input type="submit" value="submit" />
+        <a href="/feeds/{{ feed.id }}/editoff">수정안하기</a>
+        <form action="/feeds/{{feed.id}}/" method="POST">
+    {% comment %} /{{ feed.id }} {% endcomment %}
+        {% csrf_token %} 
+        <!--csrf_token은 보안을 위해 추가하는 것임-->
+        {% comment %} <p>잠김여부 : {{feed.editnow}} </p> {% endcomment %}
+        {% comment %} <p>title</p> {% endcomment %}
+        <input name="title" value="{{feed.title}}"/> <br />
+        {% comment %} <p>content</p> {% endcomment %}
+        <input name="content" value="{{feed.content}}"/> <br />
+        <input type="submit" value="submit" />
         </div>
     </form>
     {% else %}
@@ -32,8 +32,22 @@
         <p>{{ feed.content }}</p>
         <a href="/feeds/{{ feed.id }}/delete" onclick="return confirm('ㄹㅇ 삭제?')">삭제</a>
 
-      </div>
+    </div>
+    {% endif %}
+    {% endfor %} 
+
+    {% if feeds.has_previous %}
+    <a href="?page=1">First</a>
+    <a href="?page={{feeds.previous_page_number}}">Previous</a>
     {% endif %}
 
-    {% endfor %} <!-- for를 end시킨다는 뜻! 여기서는 들여쓰기로 끝을 못 내니 -->
+    <span>{{feeds.number}}</span>
+    <span>of</span>
+    <span>{{feeds.paginator.num_pages}}</span>
+
+    {% if feeds.has_next %}
+    <a href="?page={{feeds.next_page_number}}">Next</a>
+    <a href="?page={{feeds.paginator.num_pages}}">Last</a>
+    {% endif %}
+
 {% endblock content %}

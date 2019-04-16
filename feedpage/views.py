@@ -1,10 +1,14 @@
 from django.shortcuts import render
 from .models import Feed # 추가. (참고: .models == feeds.models)
 from django.shortcuts import redirect
+from django.core.paginator import Paginator
 
 def index(request): 
     if request.method == 'GET': # index
-        feeds = Feed.objects.all()
+        feeds_all = Feed.objects.all()
+        paginator = Paginator(feeds_all, 8)
+        page_num = request.GET.get('page')
+        feeds = paginator.get_page(page_num)
         return render(request, 'feedpage/index.html', {'feeds': feeds})
     elif request.method == 'POST': # create
         title = request.POST['title']
