@@ -27,14 +27,16 @@ def show(request, id):
     elif request.method == 'POST': # update
         if feed.editnow:
             feed.title = request.POST['title']
-            feed.content = request.POST['content']
+            feed.content_a = request.POST['content_a']
+            feed.content_b = request.POST['content_b']
             feed.editnow = False
             feed.save()
             feedall = Feed.objects.all()
             return render(request, 'feedpage/index.html', {'feeds': feedall})                
         else:
             feed.title = request.POST['title']
-            feed.content = request.POST['content']
+            feed.content_a = request.POST['content_a']
+            feed.content_b = request.POST['content_b']
             feed.editnow = False
             feed.save()
             return render(request, 'feedpage/show.html', {'feed': feed})    
@@ -60,42 +62,3 @@ def editoff(request, id):
     feed.editnow = False
     feed.save()
     return redirect('/feeds')
-
-#     if request.method == "POST":
-#         # feed = feed_tmp.save(commit=False)
-#         feed.title = request.POST['title']
-#         feed.content = request.POST['content']
-#         feed.save()
-#         return render(request, 'feedpage/edit.html', {'feed': feed})    
-
-
-
-# def edit(request, id):
-#     feed = Feed.objects.get(id=id)
-#     if request.method == "POST":
-#         # feed = feed_tmp.save(commit=False)
-#         feed.title = request.POST['title']
-#         feed.content = request.POST['content']
-#         feed.save()
-#         return render(request, 'feedpage/show.html', {'feed': feed})    
-
-
-# def edit(request, id):
-# #     if request.method == 'GET': # show editor 
-#     feed = Feed.objects.get(id=id)
-#     if request.method == "POST":
-#         feed_tmp = Feed(instance=feed)
-#         if feed_tmp.is_vaild():
-#             feed = feed_tmp.save(commit=False)
-#             feed.title = request.title
-#             feed.content = request.content
-#             feed.save()
-#             return render(request, 'feedpage/new.html', {'feed': feed})    
-
-# def edit(request, id):
-#     if request.method == 'POST': # edit
-#         feed = Feed.objects.get(id=id)
-#         feed.title = request.POST['title']
-#         feed.content = request.POST['content']
-#         feed.save()
-#         return redirect('/feeds')

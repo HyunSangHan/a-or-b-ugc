@@ -7,25 +7,35 @@ from django.utils import timezone
 
 # Create your models here.
 class Feed(models.Model):
-    # id는 자동 추가
     title = models.CharField(max_length=256)
-    content = models.TextField()
+    content_a = models.TextField(blank=False, null=False)
+    content_b = models.TextField(blank=False, null=False)
+    img_a = models.ImageField(blank=True, null=True) #have to fix
+    img_b = models.ImageField(blank=True, null=True) #have to fix
+    upvote_a = models.IntegerField(default=0)
+    upvote_b = models.IntegerField(default=0)
+    report = models.IntegerField(default=0)
+    #hash_tag도 추가 필요
     editnow = models.BooleanField(default=False)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(blank=True, null=True)
 
-    def update_date(self): # 나중에 수정할 때 씀
+    def update_date(self): 
         self.updated_at = timezone.now()
         self.save()
 
     def __str__(self):
         return self.title
 
-    def seed(count): # 추가
+    def seed(count): 
             myfake = Faker('ko_KR')
             for i in range(count):
                 Feed.objects.create(
-                    title=myfake.bs(),
+                    title = myfake.bs(),
                     editnow = False,
-                    content=myfake.text()
+                    content_a = myfake.catch_phrase(),
+                    content_b = myfake.catch_phrase(),
+                    # img_a = ,
+                    # img_b = ,
+                    # hash_tag = [],
                 )
