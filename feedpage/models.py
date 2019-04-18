@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
+# from django.core.validators import MaxValueValidator, MinValueValidator
+import random
 
 # Create your models here.
 class Feed(models.Model):
@@ -35,6 +37,9 @@ class Feed(models.Model):
                     editnow = False,
                     content_a = myfake.catch_phrase(),
                     content_b = myfake.catch_phrase(),
+                    upvote_a = random.randrange(0,100),
+                    upvote_b = random.randrange(0,100),
+                    report = random.randrange(0,4),
                     # img_a = ,
                     # img_b = ,
                     # hash_tag = [],

@@ -6,6 +6,7 @@
   </head>
   <body>
   <header style="width: 100%; background-color: black; color: white; text-align: left;">
+    Hyunsang's Feed Page
     <div style="text-align: right;">
         {% if user.is_authenticated %}
         최근 로그인 일자: {{user.profile.recent_login}}
@@ -24,7 +25,12 @@
               <a href="{% url 'login'%}?next={{request.path}}">로그인</a>
         {% endif %}
     </div>
-    Hyunsang's Feed Page
+
+            <form action="" method="get">
+            <input type="text" name="keyword" value="{{ keyword }}">
+            <input type="submit" value="검색">
+        </form>
+
   </header>
   {% block content %}
   {% endblock %}

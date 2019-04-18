@@ -2,14 +2,18 @@ from django.shortcuts import render
 from .models import Feed # 추가. (참고: .models == feeds.models)
 from django.shortcuts import redirect
 from django.core.paginator import Paginator
+from django.db.models import Q
 
 def index(request): 
     if request.method == 'GET': # index
-        feeds_all = Feed.objects.all()
+        keyword = request.GET.get('keyword', '')
+        feeds_all = Feed.objects.all().order_by('-updated_at', '-created_at')
+        if keyword: 
+            feeds_all = feeds_all.filter(Q(title__icontains=keyword) | Q(content_a__icontains=keyword) | Q(content_b__icontains=keyword))
         paginator = Paginator(feeds_all, 8)
         page_num = request.GET.get('page')
         feeds = paginator.get_page(page_num)
-        return render(request, 'feedpage/index.html', {'feeds': feeds})
+        return render(request, 'feedpage/index.html', {'feeds': feeds, 'keyword' : keyword})
     elif request.method == 'POST': # create
         title = request.POST['title']
         content = request.POST['content']
