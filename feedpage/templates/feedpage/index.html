@@ -26,7 +26,7 @@
 
         <div style="border: 1px solid grey;">
         <a href="/feeds/{{ feed.id }}">더보기</a>
-        <a href="/feeds/{{ feed.id }}/edit">수정하기</a>
+        <a href="/feeds/{{ feed.id }}/edit?next={{request.path}}?page={{page}}">수정하기</a>
         <a href="/feeds/{{ feed.id }}/editon">당장수정하기</a>
         {% comment %} <p>잠김여부 : {{feed.editnow}} </p> {% endcomment %}
         <p>{{ feed.title }}</p>

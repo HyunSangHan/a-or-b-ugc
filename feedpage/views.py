@@ -5,7 +5,12 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 
 def index(request): 
-    if request.method == 'GET': # index
+    if request.method == 'POST': # create
+        title = request.POST['title']
+        content = request.POST['content']
+        Feed.objects.create(title=title, content=content)
+        return redirect('/feeds')
+    else: # index
         keyword = request.GET.get('keyword', '')
         feeds_all = Feed.objects.all().order_by('-updated_at', '-created_at')
         if keyword: 
@@ -13,12 +18,8 @@ def index(request):
         paginator = Paginator(feeds_all, 8)
         page_num = request.GET.get('page')
         feeds = paginator.get_page(page_num)
-        return render(request, 'feedpage/index.html', {'feeds': feeds, 'keyword' : keyword})
-    elif request.method == 'POST': # create
-        title = request.POST['title']
-        content = request.POST['content']
-        Feed.objects.create(title=title, content=content)
-        return redirect('/feeds')
+        return render(request, 'feedpage/index.html', {'feeds': feeds, 'keyword' : keyword, 'page' : page_num})
+
 
 def new(request):
     feed = Feed()
@@ -26,24 +27,16 @@ def new(request):
 
 def show(request, id):
     feed = Feed.objects.get(id=id)
-    if request.method == 'GET': # show
+    if request.method == 'POST': # update
+        feed.title = request.POST['title']
+        feed.content_a = request.POST['content_a']
+        feed.content_b = request.POST['content_b']
+        feed.editnow = False
+        feed.save()
+        return redirect('/feeds')
+    else: # show
         return render(request, 'feedpage/show.html', {'feed': feed})    
-    elif request.method == 'POST': # update
-        if feed.editnow:
-            feed.title = request.POST['title']
-            feed.content_a = request.POST['content_a']
-            feed.content_b = request.POST['content_b']
-            feed.editnow = False
-            feed.save()
-            feedall = Feed.objects.all()
-            return render(request, 'feedpage/index.html', {'feeds': feedall})                
-        else:
-            feed.title = request.POST['title']
-            feed.content_a = request.POST['content_a']
-            feed.content_b = request.POST['content_b']
-            feed.editnow = False
-            feed.save()
-            return render(request, 'feedpage/show.html', {'feed': feed})    
+
 
 def delete(request, id):
     feed = Feed.objects.get(id=id)
