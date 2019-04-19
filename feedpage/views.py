@@ -20,6 +20,7 @@ def index(request):
         page_num = request.GET.get('page')
         feeds = paginator.get_page(page_num)
         search_result_num = len(feeds_all)
+        # print(type(feeds_all.get(id=38).get_percentage()))
         if keyword and feeds:
             is_searched = True
         elif keyword == '':
