@@ -7,8 +7,9 @@ from django.db.models import Q
 def index(request): 
     if request.method == 'POST': # create
         title = request.POST['title']
-        content = request.POST['content']
-        Feed.objects.create(title=title, content=content)
+        content_a = request.POST['content_a']
+        content_b = request.POST['content_b']
+        Feed.objects.create(title=title, content_a=content_a, content_b=content_b)
         return redirect('/feeds')
     else: # index
         keyword = request.GET.get('keyword', '')
@@ -18,8 +19,18 @@ def index(request):
         paginator = Paginator(feeds_all, 8)
         page_num = request.GET.get('page')
         feeds = paginator.get_page(page_num)
-        return render(request, 'feedpage/index.html', {'feeds': feeds, 'keyword' : keyword, 'page' : page_num})
-
+        search_result_num = len(feeds_all)
+        if keyword and feeds:
+            search_msg = '{}건의 검색결과가 있습니다.'.format(search_result_num)
+        elif keyword == '':
+            search_msg = ''
+        else:
+            search_msg = '검색결과가 없습니다. \'작성하기\'를 눌러 {}에 대한 첫번째 글을 작성해보세요!'.format(keyword)
+        print(len(feeds_all))
+        print(search_msg)
+        return render(request, 'feedpage/index.html', {'feeds': feeds, 'keyword': keyword, 'page': page_num, 'search_msg': search_msg})
+#문제1: page1일때 next 파라미터를 못넘김
+#문제2: page2부터는 next 파라미터를 잘 넘기는데도 활용되지 못하고 있음
 
 def new(request):
     feed = Feed()

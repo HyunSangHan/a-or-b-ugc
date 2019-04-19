@@ -1,6 +1,12 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    {% if search_msg != '' %}
+    <p>
+        {{ search_msg }}
+    </p>
+    <hr>
+    {% endif %}
     <a href="/events">eventpage로 돌아가기</a>
     <h1>feed page</h1>
     <a href="/feeds/new">new feed</a>
