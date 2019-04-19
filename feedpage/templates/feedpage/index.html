@@ -1,15 +1,15 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    {% if search_msg != '' %}
+    {% if is_searched and search_result_num != 0 %}
     <p>
-        {{ search_msg }}
+        {{ search_result_num }}개의 검색결과가 있습니다.
     </p>
     <hr>
     {% endif %}
-    <a href="/events">eventpage로 돌아가기</a>
-    <h1>feed page</h1>
-    <a href="/feeds/new">new feed</a>
+    {% if search_result_num != 0 %}
+        <a href="/feeds/new">작성하기</a>
+    {% endif %}
     {% for feed in feeds %}
 
     {% if feed.editnow %}
@@ -46,14 +46,17 @@
     {% endif %}
     {% endfor %} 
 
-    {% if feeds.has_previous %}
-    <a href="?page=1">First</a>
-    <a href="?page={{feeds.previous_page_number}}">Previous</a>
+    {% if search_result_num == 0 %}
+        <div>검색결과가 없습니다. <a href="/feeds/new">작성하기</a>를 눌러 <strong>{{ keyword }}</strong>에 대한 첫번째 글을 작성해보세요!</div>
+    {% else %}
+        {% if feeds.has_previous %}
+        <a href="?page=1">First</a>
+        <a href="?page={{feeds.previous_page_number}}">Previous</a>
+        {% endif %}
+        <span>{{feeds.number}}</span>
+        <span>of</span>
+        <span>{{feeds.paginator.num_pages}}</span>
     {% endif %}
-
-    <span>{{feeds.number}}</span>
-    <span>of</span>
-    <span>{{feeds.paginator.num_pages}}</span>
 
     {% if feeds.has_next %}
     <a href="?page={{feeds.next_page_number}}">Next</a>

@@ -21,14 +21,12 @@ def index(request):
         feeds = paginator.get_page(page_num)
         search_result_num = len(feeds_all)
         if keyword and feeds:
-            search_msg = '{}건의 검색결과가 있습니다.'.format(search_result_num)
+            is_searched = True
         elif keyword == '':
-            search_msg = ''
+            is_searched = False
         else:
-            search_msg = '검색결과가 없습니다. \'작성하기\'를 눌러 {}에 대한 첫번째 글을 작성해보세요!'.format(keyword)
-        print(len(feeds_all))
-        print(search_msg)
-        return render(request, 'feedpage/index.html', {'feeds': feeds, 'keyword': keyword, 'page': page_num, 'search_msg': search_msg})
+            is_searched = True
+        return render(request, 'feedpage/index.html', {'feeds': feeds, 'keyword': keyword, 'page': page_num, 'is_searched': is_searched, 'search_result_num': search_result_num})
 #문제1: page1일때 next 파라미터를 못넘김
 #문제2: page2부터는 next 파라미터를 잘 넘기는데도 활용되지 못하고 있음
 

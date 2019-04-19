@@ -18,7 +18,8 @@
                 <input type='hidden' />
                 <input type='submit' value='로그아웃' />
               </form>
-              <a href="{% url 'profile' %}" style="color: white; text-decoration: none;">내정보수정</a>
+              <a href="{% url 'profile' %}">내정보수정</a>
+              <a href="{% url 'event' %}">공지사항</a>
               {% comment %} <a href="{% url 'logout'%}?next={{request.path}}">로그아웃</a> {% endcomment %}
         {% else %}
               <a href="{% url 'signup' %}">회원가입</a>
@@ -26,7 +27,7 @@
         {% endif %}
     </div>
 
-            <form action="" method="get">
+            <form action="/feeds/" method="get">
             <input type="text" name="keyword" value="{{ keyword }}">
             <input type="submit" value="검색">
         </form>
