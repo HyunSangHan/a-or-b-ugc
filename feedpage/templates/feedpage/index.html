@@ -38,7 +38,7 @@
         <p>{{ feed.title }}</p>
         <p>A: {{ feed.content_a }}</p>
         <p>B: {{ feed.content_b }}</p>
-        <p>[RESULT] A : {{ feed.upvote_a }}표({{ feed.get_percentage }}}) / B : {{ feed.upvote_b }}표({{ feed.get_percentage }}) </p>
+        <p>[RESULT] A : {{ feed.upvote_a }}표({{ feed.get_percentage_a }}) / B : {{ feed.upvote_b }}표({{ feed.get_percentage_b }}) </p>
         신고 : {{feed.report}}<br/>
         <a href="/feeds/{{ feed.id }}/delete" onclick="return confirm('ㄹㅇ 삭제?')">삭제</a>
 

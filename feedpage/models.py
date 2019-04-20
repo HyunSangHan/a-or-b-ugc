@@ -26,15 +26,21 @@ class Feed(models.Model):
         self.updated_at = timezone.now()
         self.save()
 
-    # def get_percentage(self):
-    #     upvote_total = self.upvote_a + self.upvote_b
-    #     if upvote_total > 0:
-    #         perc_a = "{:.1%}".format(self.upvote_a / upvote_total)
-    #         perc_b = "{:.1%}".format(self.upvote_b / upvote_total)
-    #     else:
-    #         perc_a = ""
-    #         perc_b = ""
-    #     return perc_a, perc_b
+    def get_percentage_a(self):
+        upvote_total = self.upvote_a + self.upvote_b
+        if upvote_total > 0:
+            perc_a = "{:.1%}".format(self.upvote_a / upvote_total)
+        else:
+            perc_a = ""
+        return perc_a
+
+    def get_percentage_b(self):
+        upvote_total = self.upvote_a + self.upvote_b
+        if upvote_total > 0:
+            perc_b = "{:.1%}".format(self.upvote_b / upvote_total)
+        else:
+            perc_b = ""
+        return perc_b
 
     def __str__(self):
         return self.title
