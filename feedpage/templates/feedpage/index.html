@@ -1,19 +1,15 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    {% if is_searched and search_result_num != 0 %}
-    <p>
-        {{ search_result_num }}개의 검색결과가 있습니다.
-    </p>
+
+{% if is_searched and search_result_num != 0 %}
+    <p>{{ search_result_num }}개의 검색결과가 있습니다.</p>
     <hr>
     {% endif %}
-    {% if search_result_num != 0 %}
-        <a href="/feeds/new">작성하기</a>
-    {% endif %}
-    {% for feed in feeds %}
 
+    {% for feed in feeds %}
     {% if feed.editnow %}
-        <div style="border: 1px solid grey;">
+    <div style="border: 1px solid grey;">
         <a href="/feeds/{{ feed.id }}/editoff">수정안하기</a>
         <form action="/feeds/{{feed.id}}/" method="POST">
     {% comment %} /{{ feed.id }} {% endcomment %}
@@ -26,22 +22,34 @@
         A: <input name="content_a" value="{{feed.content_a}}"/> <br />
         B: <input name="content_b" value="{{feed.content_b}}"/> <br />
         <input type="submit" value="submit" />
-        </div>
-    </form>
+        </form>
+    </div>
     {% else %}
 
-        <div style="border: 1px solid grey;">
+    <div style="width: 100%; border: 1px solid grey;">
+        {% comment %} <p>잠김여부 : {{feed.editnow}} </p> {% endcomment %}
+        <h3>{{ feed.title }}</h3>
+        <div style="width: 100%; display: inline-flex;">
+            <div style = "width: 45vw; min-height: 45vw; background-color: white; text-align: center; display: flex; justify-content: center; flex-direction: column; margin: auto;">
+                <h4 style="width: 100%;">A</h4>
+                {{feed.content_a}}
+                <p style="width: 100%;">
+                {{feed.upvote_a}}표({{feed.get_percentage_a}})
+                </p>
+            </div>
+            <div style = "width: 45vw; min-height: 45vw; background-color: white; text-align: center; display: flex; justify-content: center; flex-direction: column; margin: auto;">
+                <h4 style="width: 100%;">B</h4>
+                {{feed.content_b}}
+                <p style="width: 100%;">
+                {{feed.upvote_b}}표({{feed.get_percentage_b}})
+                </p>
+            </div>
+        </div>
+        신고 : {{feed.report}}<br/>
         <a href="/feeds/{{ feed.id }}">더보기</a>
         <a href="/feeds/{{ feed.id }}/edit?next={{request.path}}?page={{page}}">수정하기</a>
         <a href="/feeds/{{ feed.id }}/editon">당장수정하기</a>
-        {% comment %} <p>잠김여부 : {{feed.editnow}} </p> {% endcomment %}
-        <p>{{ feed.title }}</p>
-        <p>A: {{ feed.content_a }}</p>
-        <p>B: {{ feed.content_b }}</p>
-        <p>[RESULT] A : {{ feed.upvote_a }}표({{ feed.get_percentage_a }}) / B : {{ feed.upvote_b }}표({{ feed.get_percentage_b }}) </p>
-        신고 : {{feed.report}}<br/>
         <a href="/feeds/{{ feed.id }}/delete" onclick="return confirm('ㄹㅇ 삭제?')">삭제</a>
-
     </div>
     {% endif %}
     {% endfor %} 

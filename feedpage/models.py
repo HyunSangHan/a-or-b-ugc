@@ -22,16 +22,12 @@ class Feed(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(blank=True, null=True)
 
-    def update_date(self): 
-        self.updated_at = timezone.now()
-        self.save()
-
     def get_percentage_a(self):
         upvote_total = self.upvote_a + self.upvote_b
         if upvote_total > 0:
             perc_a = "{:.1%}".format(self.upvote_a / upvote_total)
         else:
-            perc_a = ""
+            perc_a = "-"
         return perc_a
 
     def get_percentage_b(self):
@@ -39,8 +35,12 @@ class Feed(models.Model):
         if upvote_total > 0:
             perc_b = "{:.1%}".format(self.upvote_b / upvote_total)
         else:
-            perc_b = ""
+            perc_b = "-"
         return perc_b
+
+    def update_date(self): 
+        self.updated_at = timezone.now()
+        self.save()
 
     def __str__(self):
         return self.title
