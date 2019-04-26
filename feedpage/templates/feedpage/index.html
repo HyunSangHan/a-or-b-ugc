@@ -21,12 +21,12 @@
         {% comment %} <p>content</p> {% endcomment %}
         A: <input name="content_a" value="{{feed.content_a}}"/> <br />
         B: <input name="content_b" value="{{feed.content_b}}"/> <br />
-        <input type="submit" value="submit" />
+        <input type="submit" value="반영하기" />
         </form>
     </div>
     {% else %}
 
-<ol style = "padding: 0;">
+<ul style = "padding: 0;">
     <li style="border: 0px solid grey; padding-bottom: 50px; list-style-type: none;">
         {% comment %} <p>잠김여부 : {{feed.editnow}} </p> {% endcomment %}
         <h3>{{ feed.title }}</h3>
@@ -48,11 +48,12 @@
         </span>
         신고 : {{feed.report}}<br/>
         <a href="/feeds/{{ feed.id }}">더보기</a>
-        <a href="/feeds/{{ feed.id }}/edit?next={{request.path}}?page={{page}}">수정하기</a>
+        <a href="/feeds/{{ feed.id }}/edit?next={{request.path}}?page={{feeds.number}}">수정하기</a>
+        {% comment %}  {% endcomment %}
         <a href="/feeds/{{ feed.id }}/editon">당장수정하기</a>
         <a href="/feeds/{{ feed.id }}/delete" onclick="return confirm('ㄹㅇ 삭제?')">삭제</a>
     </li>
-</ol>
+</ul>
     {% endif %}
     {% endfor %} 
 

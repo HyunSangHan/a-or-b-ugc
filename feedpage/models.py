@@ -38,6 +38,13 @@ class Feed(models.Model):
             perc_b = "-"
         return perc_b
 
+    def check_invisible(self):
+        if self.report > 9:
+            invisible = True
+        else:
+            invisible = False
+        return invisible
+
     def update_date(self): 
         self.updated_at = timezone.now()
         self.save()

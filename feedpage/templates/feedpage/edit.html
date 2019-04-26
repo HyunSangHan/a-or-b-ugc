@@ -3,7 +3,7 @@
 {% block content %}
     <h1>수정하고 싶나요?</h1>
     <a href="/feeds">메인으로 돌아가기</a>
-    <form action="/feeds/{{feed.id}}/" method="POST">
+    <form action="/feeds/{{feed.id}}/edit/" method="POST">
     {% comment %} /{{ feed.id }} {% endcomment %}
         {% csrf_token %} 
         <!--csrf_token은 보안을 위해 추가하는 것임-->

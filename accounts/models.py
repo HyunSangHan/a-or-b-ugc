@@ -17,6 +17,7 @@ class Profile(models.Model):
         default=3,
         validators=[MaxValueValidator(5), MinValueValidator(1)]
     )
+    major = models.CharField(default="기타", max_length=3)
     region = models.IntegerField(
         default=8,
         validators=[MaxValueValidator(8), MinValueValidator(1)]
@@ -54,6 +55,7 @@ class Profile(models.Model):
             profile.birthday = birthday
             profile.left_level = politics
             profile.region = region
+            profile.major = "예체능"
             profile.recent_login = timezone.now()
             profile.save()
 

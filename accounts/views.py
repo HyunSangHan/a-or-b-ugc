@@ -33,7 +33,7 @@ def signup(request):
 def logout(request):
     if request.method == 'POST':
         auth.logout(request)
-        return redirect('/accounts/login')
+        return redirect(request.META['HTTP_REFERER'])
     else:
         return render(request, 'accounts/logout.html')
 
@@ -76,6 +76,7 @@ def profile(request):
             profile.is_male = request.POST['gender']
             profile.left_level = request.POST['politics']
             profile.region = request.POST['region']
+            profile.major = request.POST['major']
             profile.save()
             update_session_auth_hash(request, request.user)
             return redirect('/feeds')

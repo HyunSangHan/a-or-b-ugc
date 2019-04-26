@@ -26,19 +26,6 @@
     <p> 
         생년월일 : <input type='date' name='birthday'/> <br/>
     </p>
-
-    <p>
-        정치성향 :
-        <select name='politics' required>
-            <option disabled selected value> -- 선택하세요 -- </option>
-            <option value="5">진보</option>
-            <option value="4">중도진보</option>
-            <option value="3">중도</option>
-            <option value="2">중도보수</option>
-            <option value="1">보수</option>
-        </select>
-    </p>
-
     <p>
         배경지역 :
         <select name='region' required>
@@ -51,6 +38,28 @@
             <option value="6">제주</option>
             <option value="7">해외</option>
             <option value="8">기타</option>
+        </select>
+    </p>
+    <p>
+        전공분야 :
+        <input type='radio' id='majorChoice1' name='major' value='문과' required> 
+        <label for='majorChoice1'>문과</label>
+        <input type='radio' id='majorChoice2' name='major' value='이과'> 
+        <label for='majorChoice2'>이과</label>
+        <input type='radio' id='majorChoice3' name='major' value='예체능'> 
+        <label for='majorChoice3'>예체능</label>
+        <input type='radio' id='majorChoice4' name='major' value='기타'> 
+        <label for='majorChoice4'>기타</label>
+    </p>
+    <p>
+        정치성향 :
+        <select name='politics' required>
+            <option disabled selected value> -- 선택하세요 -- </option>
+            <option value="5">진보</option>
+            <option value="4">중도진보</option>
+            <option value="3">중도</option>
+            <option value="2">중도보수</option>
+            <option value="1">보수</option>
         </select>
     </p>
         <input type='submit' value="가입하기" />

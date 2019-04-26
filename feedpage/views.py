@@ -37,16 +37,7 @@ def new(request):
 
 def show(request, id):
     feed = Feed.objects.get(id=id)
-    if request.method == 'POST': # update
-        feed.title = request.POST['title']
-        feed.content_a = request.POST['content_a']
-        feed.content_b = request.POST['content_b']
-        feed.editnow = False
-        feed.save()
-        return redirect('/feeds')
-    else: # show
-        return render(request, 'feedpage/show.html', {'feed': feed})    
-
+    return render(request, 'feedpage/show.html', {'feed': feed})    
 
 def delete(request, id):
     feed = Feed.objects.get(id=id)
@@ -55,17 +46,25 @@ def delete(request, id):
 
 def edit(request, id):
     feed = Feed.objects.get(id=id)
-    if request.method == 'GET': # show
+    if request.method == 'POST':
+        feed.title = request.POST['title']
+        feed.content_a = request.POST['content_a']
+        feed.content_b = request.POST['content_b']
+        feed.editnow = False
+        feed.save()
+        #여기로 보내고 싶은데... '/feeds'+'?page='+feeds.number
+        return redirect('/feeds')
+    else:
         return render(request, 'feedpage/edit.html', {'feed': feed})    
 
 def editon(request, id):
     feed = Feed.objects.get(id=id)
     feed.editnow = True
     feed.save()
-    return redirect('/feeds')
+    return redirect(request.META['HTTP_REFERER'])
 
 def editoff(request, id):
     feed = Feed.objects.get(id=id)
     feed.editnow = False
     feed.save()
-    return redirect('/feeds')
+    return redirect(request.META['HTTP_REFERER'])
