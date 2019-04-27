@@ -10,6 +10,8 @@ import random
 # Create your models here.
 class Feed(models.Model):
     title = models.CharField(max_length=256)
+    creator = models.ForeignKey(User, null=True, on_delete= models.CASCADE)
+    upvote_users = models.ManyToManyField(User, blank=True, related_name='feeds_upvote', through='Upvote')
     content_a = models.TextField(blank=False, null=False)
     content_b = models.TextField(blank=False, null=False)
     img_a = models.ImageField(blank=True, null=True) #have to fix
@@ -67,3 +69,20 @@ class Feed(models.Model):
                 # img_b = ,
                 # hash_tag = [],
             )
+
+class FeedComment(models.Model):
+    reactor = models.ForeignKey(User, null=True, on_delete= models.CASCADE)
+    content = models.TextField()
+    # feed id를 가져야 하는, Feed:FeedComment = 1:N 관계니까
+    feed = models.ForeignKey(Feed, on_delete=models.CASCADE)
+    about_a = models.BooleanField(null=True)
+    created_at = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return str(self.id)
+
+class Upvote(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    feed = models.ForeignKey(Feed, on_delete=models.CASCADE)
+    about_a = models.BooleanField(null=True)
+    created_at = models.DateTimeField(auto_now_add=True)

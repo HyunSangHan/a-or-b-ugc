@@ -1,15 +1,18 @@
 from django.shortcuts import render
-from .models import Feed # 추가. (참고: .models == feeds.models)
+from .models import Feed, FeedComment, Upvote #(참고: .models == feeds.models)
+from accounts.models import Profile, Follow
 from django.shortcuts import redirect
 from django.core.paginator import Paginator
 from django.db.models import Q
+from django.contrib.auth.models import User 
 
 def index(request): 
     if request.method == 'POST': # create
         title = request.POST['title']
         content_a = request.POST['content_a']
         content_b = request.POST['content_b']
-        Feed.objects.create(title=title, content_a=content_a, content_b=content_b)
+        Feed.objects.create(title=title, content_a=content_a, content_b=content_b, creator = request.user)
+
         return redirect('/feeds')
     else: # index
         keyword = request.GET.get('keyword', '')
@@ -68,3 +71,65 @@ def editoff(request, id):
     feed.editnow = False
     feed.save()
     return redirect(request.META['HTTP_REFERER'])
+
+def create_comment(request, id):
+    content = request.POST['content']
+    about_a = request.POST['about_a']
+    FeedComment.objects.create(feed_id=id, content=content, about_a=about_a, reactor=request.user)
+    return redirect(request.META['HTTP_REFERER'])
+
+def delete_comment(request, id, cid):
+    c = FeedComment.objects.get(id=cid)
+    c.delete()
+    return redirect(request.META['HTTP_REFERER'])
+
+
+# 리팩토링 필요하겠음
+def feed_upvote_a(request, pk):
+    # feed id로 한번 필터링하고(정확히는, 불러오고)
+    feed = Feed.objects.get(id = pk)
+    # user id로 한번 더 필터링하고
+    upvote_list = feed.upvote_set.filter(user_id = request.user.id)
+    if upvote_list.count() > 0:
+        if upvote_list.first().about_a: 
+            feed.upvote_set.get(user_id = request.user.id).delete()
+        else:
+            upvote_list.first().about_a == True
+            upvote_list.save()
+    else:
+        Upvote.objects.create(user_id = request.user.id, feed_id = feed.id, about_a = True)
+    return redirect(request.META['HTTP_REFERER'])
+
+def feed_upvote_b(request, pk):
+    # feed id로 한번 필터링하고(정확히는, 불러오고)
+    feed = Feed.objects.get(id = pk)
+    # user id로 한번 더 필터링하고
+    upvote_list = feed.upvote_set.filter(user_id = request.user.id)
+    if upvote_list.count() > 0:
+        if upvote_list.first().about_a: 
+            upvote_list.first().about_a == False
+            upvote_list.save()
+        else:
+            feed.upvote_set.get(user_id = request.user.id).delete()
+    else:
+        Upvote.objects.create(user_id = request.user.id, feed_id = feed.id, about_a = False)
+    return redirect(request.META['HTTP_REFERER'])
+
+def follow_manager(request, pk):
+    follow_from = Profile.objects.get(user_id = request.user.id)
+    follow_to = Profile.objects.get(user_id = pk)
+
+    try:
+        following_already = Follow.objects.get(follow_from=follow_from, follow_to=follow_to)
+    except Follow.DoesNotExist:
+        following_already = None
+
+    if following_already:
+        following_already.delete()
+    else:
+        # Follow.objects.create(follow_from=follow_from, follow_to=follow_to)
+        f = Follow()
+        f.follow_from, f.follow_to = follow_from, follow_to
+        f.save()
+
+    return redirect('/feeds')
