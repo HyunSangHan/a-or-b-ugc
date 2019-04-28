@@ -16,29 +16,13 @@ class Feed(models.Model):
     content_b = models.TextField(blank=False, null=False)
     img_a = models.ImageField(blank=True, null=True) #have to fix
     img_b = models.ImageField(blank=True, null=True) #have to fix
-    upvote_a = models.IntegerField(default=0)
-    upvote_b = models.IntegerField(default=0)
-    report = models.IntegerField(default=0)
+    # upvote_a = models.IntegerField(default=0)
+    # upvote_b = models.IntegerField(default=0)
+    # report = models.IntegerField(default=0)
     #hash_tag도 추가 필요
     editnow = models.BooleanField(default=False)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(blank=True, null=True)
-
-    def get_percentage_a(self):
-        upvote_total = self.upvote_a + self.upvote_b
-        if upvote_total > 0:
-            perc_a = "{:.1%}".format(self.upvote_a / upvote_total)
-        else:
-            perc_a = "-"
-        return perc_a
-
-    def get_percentage_b(self):
-        upvote_total = self.upvote_a + self.upvote_b
-        if upvote_total > 0:
-            perc_b = "{:.1%}".format(self.upvote_b / upvote_total)
-        else:
-            perc_b = "-"
-        return perc_b
 
     def check_invisible(self):
         if self.report > 9:
@@ -62,9 +46,9 @@ class Feed(models.Model):
                 editnow = False,
                 content_a = myfake.catch_phrase(),
                 content_b = myfake.catch_phrase(),
-                upvote_a = random.randrange(0,100),
-                upvote_b = random.randrange(0,100),
-                report = random.randrange(0,4),
+                # upvote_a = random.randrange(0,100),
+                # upvote_b = random.randrange(0,100),
+                # report = random.randrange(0,4),
                 # img_a = ,
                 # img_b = ,
                 # hash_tag = [],
@@ -86,3 +70,6 @@ class Upvote(models.Model):
     feed = models.ForeignKey(Feed, on_delete=models.CASCADE)
     about_a = models.BooleanField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return str(self.id)

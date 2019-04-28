@@ -10,9 +10,7 @@
     <a href="/feeds">A vs B</a>
     <div style="text-align: right;">
     {% if user.is_authenticated %}
-      최근 로그인 일자: {{user.profile.recent_login}}
-      <br/>
-      {{user.profile.birthday}}이 생일이신 {{ user.get_username }}님, 안녕하세요
+      {{ user.get_username }}님, 안녕하세요
       <form action="{% url 'logout' %}" method="POST">
         {% csrf_token %} 
         <input type="hidden" />

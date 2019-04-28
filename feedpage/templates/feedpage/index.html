@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load custom_tags %}
 
 {% block content %}
 
@@ -34,21 +35,19 @@
             <div style = "width: 45vw; border-radius: 25px; min-height: 45vw; background-color: white; text-align: center; display: flex; justify-content: center; flex-direction: column; margin: auto;">
                 <a href="/feeds/{{ feed.id }}/upvote_a">
                 <h4 style="width: 100%;">A</h4>
-                {{ feed.upvote_users.count }}
                 </a>
                 {{feed.content_a}}
                 <p style="width: 100%;">
-                {{feed.upvote_a}}표({{feed.get_percentage_a}})
+                {% get_upvote_a feed.id %}표({% get_upvote_perc_a feed.id %})
                 </p>
             </div>
             <div style = "width: 45vw; border-radius: 25px; min-height: 45vw; background-color: white; text-align: center; display: flex; justify-content: center; flex-direction: column; margin: auto;">
                 <a href="/feeds/{{ feed.id }}/upvote_b">
                 <h4 style="width: 100%;">B</h4>
-                {{ feed.upvote_users.count }}
                 </a>
                 {{feed.content_b}}
                 <p style="width: 100%;">
-                {{feed.upvote_b}}표({{feed.get_percentage_b}})
+                {% get_upvote_b feed.id %}표({% get_upvote_perc_b feed.id %})
                 </p>
             </div>
         </span>

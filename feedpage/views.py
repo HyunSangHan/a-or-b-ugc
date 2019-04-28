@@ -94,8 +94,8 @@ def feed_upvote_a(request, pk):
         if upvote_list.first().about_a: 
             feed.upvote_set.get(user_id = request.user.id).delete()
         else:
-            upvote_list.first().about_a == True
-            upvote_list.save()
+            feed.upvote_set.get(user_id = request.user.id).delete()
+            Upvote.objects.create(user_id = request.user.id, feed_id = feed.id, about_a = True)
     else:
         Upvote.objects.create(user_id = request.user.id, feed_id = feed.id, about_a = True)
     return redirect(request.META['HTTP_REFERER'])
@@ -107,8 +107,8 @@ def feed_upvote_b(request, pk):
     upvote_list = feed.upvote_set.filter(user_id = request.user.id)
     if upvote_list.count() > 0:
         if upvote_list.first().about_a: 
-            upvote_list.first().about_a == False
-            upvote_list.save()
+            feed.upvote_set.get(user_id = request.user.id).delete()
+            Upvote.objects.create(user_id = request.user.id, feed_id = feed.id, about_a = False)
         else:
             feed.upvote_set.get(user_id = request.user.id).delete()
     else:
@@ -132,4 +132,4 @@ def follow_manager(request, pk):
         f.follow_from, f.follow_to = follow_from, follow_to
         f.save()
 
-    return redirect('/feeds')
+    return redirect(request.META['HTTP_REFERER'])
