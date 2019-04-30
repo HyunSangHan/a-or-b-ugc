@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Feed, FeedComment, Upvote #(참고: .models == feeds.models)
+from .models import Feed, FeedComment, HashTag, Upvote #(참고: .models == feeds.models)
 from accounts.models import Profile, Follow
 from django.shortcuts import redirect
 from django.core.paginator import Paginator
@@ -11,19 +11,25 @@ def index(request):
         title = request.POST['title']
         content_a = request.POST['content_a']
         content_b = request.POST['content_b']
-        Feed.objects.create(title=title, content_a=content_a, content_b=content_b, creator = request.user)
+        feed = Feed.objects.create(title=title, content_a=content_a, content_b=content_b, creator = request.user)
+        #edit도
+        # 띄어쓰기 포함도
+        hash_tag_raw = request.POST['hash_tag_raw']
+        hash_tag_all = hash_tag_raw.split("#")
+        for hash_tag in hash_tag_all:
+            HashTag.objects.create(feed_id=feed.id, tag=hash_tag)
 
         return redirect('/feeds')
     else: # index
         keyword = request.GET.get('keyword', '')
         feeds_all = Feed.objects.all().order_by('-updated_at', '-created_at')
         if keyword: 
-            feeds_all = feeds_all.filter(Q(title__icontains=keyword) | Q(content_a__icontains=keyword) | Q(content_b__icontains=keyword))
+            #검색기능 추후 보완 필요(댓글까지 망라)
+            feeds_all = feeds_all.filter(Q(title__icontains=keyword) | Q(content_a__icontains=keyword) | Q(content_b__icontains=keyword)) # | Q(hashtag__icontains=keyword)
         paginator = Paginator(feeds_all, 8)
         page_num = request.GET.get('page')
         feeds = paginator.get_page(page_num)
         search_result_num = len(feeds_all)
-        # print(type(feeds_all.get(id=38).get_percentage()))
         if keyword and feeds:
             is_searched = True
         elif keyword == '':
@@ -31,12 +37,9 @@ def index(request):
         else:
             is_searched = True
         return render(request, 'feedpage/index.html', {'feeds': feeds, 'keyword': keyword, 'page': page_num, 'is_searched': is_searched, 'search_result_num': search_result_num})
-#문제1: page1일때 next 파라미터를 못넘김
-#문제2: page2부터는 next 파라미터를 잘 넘기는데도 활용되지 못하고 있음
 
 def new(request):
-    feed = Feed()
-    return render(request, 'feedpage/new.html', {'feed': feed})
+    return render(request, 'feedpage/new.html')
 
 def show(request, id):
     feed = Feed.objects.get(id=id)
@@ -118,7 +121,6 @@ def feed_upvote_b(request, pk):
 def follow_manager(request, pk):
     follow_from = Profile.objects.get(user_id = request.user.id)
     follow_to = Profile.objects.get(user_id = pk)
-
     try:
         following_already = Follow.objects.get(follow_from=follow_from, follow_to=follow_to)
     except Follow.DoesNotExist:

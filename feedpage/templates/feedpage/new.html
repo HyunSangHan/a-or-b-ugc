@@ -4,12 +4,12 @@
     <h1>new feed</h1>
     <form action="/feeds/" method="POST">
       {% csrf_token %} 
-      <!--csrf_token은 보안을 위해 추가하는 것임-->
       <p>title</p>
-      <input name="title" /> <br />
+      <input name="title" required /> <br />
       <p>content</p>
-        A: <input name="content_a" value="{{feed.content_a}}"/> <br />
-        B: <input name="content_b" value="{{feed.content_b}}"/> <br />
+        A: <input name="content_a" required /> <br />
+        B: <input name="content_b" required /> <br />
+        HASH TAG: <input name="hash_tag_raw" /> <br />
       <input type="submit" value="submit" />
     </form>
 {% endblock content %}

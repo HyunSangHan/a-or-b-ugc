@@ -1,5 +1,5 @@
 from django import template
-from feedpage.models import Feed, FeedComment, Upvote
+from feedpage.models import Feed, FeedComment, Upvote, HashTag
 register = template.Library()
 
 @register.simple_tag
@@ -35,3 +35,9 @@ def get_upvote_perc_b(pk):
     else: 
         upvote_perc_b = "-"
     return upvote_perc_b
+    
+@register.simple_tag
+def get_hashtag_set(pk):
+    feed = Feed.objects.get(id=pk)
+    hashtag_total = feed.hashtag_set.all()
+    return hashtag_total

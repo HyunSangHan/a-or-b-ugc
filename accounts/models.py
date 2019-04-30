@@ -10,7 +10,7 @@ import random
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    follows = models.ManyToManyField('self', through = 'Follow', blank=True, related_name = 'followed', symmetrical=False)
+    follows = models.ManyToManyField('self', through = 'Follow', blank=True, symmetrical=False)
     birthday = models.DateField(blank=True, null=True)
     is_male = models.BooleanField(blank=True, null=True)
     created_at = models.DateTimeField(default=timezone.now)

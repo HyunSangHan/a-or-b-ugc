@@ -16,9 +16,9 @@ class Feed(models.Model):
     content_b = models.TextField(blank=False, null=False)
     img_a = models.ImageField(blank=True, null=True) #have to fix
     img_b = models.ImageField(blank=True, null=True) #have to fix
-    # upvote_a = models.IntegerField(default=0)
-    # upvote_b = models.IntegerField(default=0)
-    # report = models.IntegerField(default=0)
+    upvote_a = models.IntegerField(default=0)
+    upvote_b = models.IntegerField(default=0)
+    report = models.IntegerField(default=0)
     #hash_tag도 추가 필요
     editnow = models.BooleanField(default=False)
     created_at = models.DateTimeField(default=timezone.now)
@@ -64,6 +64,13 @@ class FeedComment(models.Model):
 
     def __str__(self):
         return str(self.id)
+
+class HashTag(models.Model):
+    tag = models.TextField(null=True)
+    feed = models.ForeignKey(Feed, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return str(self.tag)
 
 class Upvote(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
