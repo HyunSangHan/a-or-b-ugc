@@ -41,3 +41,18 @@ def get_hashtag_set(pk):
     feed = Feed.objects.get(id=pk)
     hashtag_total = feed.hashtag_set.all()
     return hashtag_total
+
+@register.simple_tag
+def get_side(fid, cid):
+    feed = Feed.objects.get(id=fid)
+    comment = feed.feedcomment_set.get(id=cid)
+    reactor = comment.reactor
+    try:
+        side_tf = feed.upvote_set.get(user = reactor, feed = feed).about_a
+        if side_tf:
+            side = "[A] "
+        else:
+            side = "[B] "
+    except:
+        side = ""
+    return side

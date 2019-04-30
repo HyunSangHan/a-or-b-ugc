@@ -75,10 +75,10 @@
         {% endif %}
         {% endif %}
     </p>
-    <!-- 댓글 코드 -->
+    <!-- 글 코드 -->
     <p/>
     {% for c in feed.feedcomment_set.all %}
-    [{{c.about_a}}] {{ c.content }}
+    {% get_side feed.id c.id %}{{ c.reactor }} {{ c.content }}
     {% if request.user == c.reactor %}
     <form action="/feeds/{{ feed.id }}/comments/{{ c.id }}/" method="POST">
         {% csrf_token %}

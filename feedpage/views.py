@@ -17,6 +17,7 @@ def index(request):
         hash_tag_raw = request.POST['hash_tag_raw']
         hash_tag_all = hash_tag_raw.split("#")
         for hash_tag in hash_tag_all:
+            # hash_tag = hash_tag.replace(" ", "_")
             HashTag.objects.create(feed_id=feed.id, tag=hash_tag)
 
         return redirect('/feeds')
@@ -124,6 +125,7 @@ def follow_manager(request, pk):
     try:
         following_already = Follow.objects.get(follow_from=follow_from, follow_to=follow_to)
     except Follow.DoesNotExist:
+        #이거뭐지???????????????????
         following_already = None
 
     if following_already:
