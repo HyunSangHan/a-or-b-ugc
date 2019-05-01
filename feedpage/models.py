@@ -59,7 +59,6 @@ class FeedComment(models.Model):
     content = models.TextField()
     # feed id를 가져야 하는, Feed:FeedComment = 1:N 관계니까
     feed = models.ForeignKey(Feed, on_delete=models.CASCADE)
-    about_a = models.BooleanField(null=True)
     created_at = models.DateTimeField(default=timezone.now)
 
     def __str__(self):

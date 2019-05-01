@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load custom_tags %}
-
+<!--언젠간 지표 트래킹도 구현하고 싶다-->
 {% block content %}
 
 {% if is_searched and search_result_num != 0 %}
@@ -30,38 +30,8 @@
         # {{ tag }} &nbsp&nbsp
         {% endif %}
         {% endfor %}
-        {% comment %} {% get_hashtag_set feed.id %} {% endcomment %}
-        <h6>{{ feed.created_at }}</h6>
-        <span style="width: 100%; display: inline-flex;">
-            <div style = "width: 45vw; border-radius: 25px; min-height: 45vw; background-color: white; text-align: center; display: flex; justify-content: center; flex-direction: column; margin: auto;">
-                <a href="/feeds/{{ feed.id }}/upvote_a">
-                <h4 style="width: 100%;">A</h4>
-                </a>
-                {{feed.content_a}}
-                <p style="width: 100%;">
-                {% get_upvote_a feed.id %}표({% get_upvote_perc_a feed.id %})
-                </p>
-            </div>
-            <div style = "width: 45vw; border-radius: 25px; min-height: 45vw; background-color: white; text-align: center; display: flex; justify-content: center; flex-direction: column; margin: auto;">
-                <a href="/feeds/{{ feed.id }}/upvote_b">
-                <h4 style="width: 100%;">B</h4>
-                </a>
-                {{feed.content_b}}
-                <p style="width: 100%;">
-                {% get_upvote_b feed.id %}표({% get_upvote_perc_b feed.id %})
-                </p>
-            </div>
-        </span>
-        신고 : {{feed.report}}<br/>
-        <a href="/feeds/{{ feed.id }}">더보기</a>
-        {% if request.user == feed.creator %}
-        <a href="/feeds/{{ feed.id }}/edit?next={{request.path}}?page={{feeds.number}}">수정하기</a>
-        <a href="/feeds/{{ feed.id }}/editon">당장수정하기</a>
-        <a href="/feeds/{{ feed.id }}/delete" onclick="return confirm('ㄹㅇ 삭제?')">삭제</a>
-{% endif %}
-
     <!-- 팔로우 코드 -->
-    <p>작성자:<strong>{{feed.creator.username}}</strong>
+    <h5>{{feed.creator.username}}
     (구독자: {{ feed.creator.profile.follow_to.all.count }})
     {% if user.is_authenticated %}
         {% if request.user != feed.creator %}
@@ -74,15 +44,79 @@
         </a>
         {% endif %}
         {% endif %}
-    </p>
+    </h5>
+        <h6>{{ feed.created_at }}</h6>
+        <!--A와 B를 함께 두는 행-->
+        <span style="width: 100%; display: inline-flex;">
+            <!--A 네모 시작-->
+            <div style = "width: 45vw; border-radius: 25px; min-height: 45vw; background-color: white; text-align: center; display: flex; justify-content: center; flex-direction: column; margin: auto;">
+            <!--클릭했을 때 노출되는 표시-->
+            {% get_upvote_color feed.id user.id as choice %}
+            {% if choice == "A" %}
+                <div style = "position:absolute; width:45vw; min-height:45vw; border: 2px solid black; border-radius: 25px; opacity:0.9;" >
+                    <div style="padding-top: 10px;"><b>Your Choice!</b></div>
+                </div>
+            {% endif %}
+                <!--A?-->
+                <div style = "width: 45vw; border-radius: 25px; min-height: 45vw; background-color: white; text-align: center; display: flex; justify-content: center; flex-direction: column; margin: auto;">
+                    <!--글씨만 한 레이어 앞으로 뽑아내기 위함-->
+                    <div style="z-index: 1;">
+                    <a href="/feeds/{{ feed.id }}/upvote_a">
+                    <h4 style="width: 100%;">A</h4>
+                    </a>
+                    {{feed.content_a}}
+                    <p style="width: 100%;">
+                    {% get_upvote_a feed.id %}표({% get_upvote_perc_a feed.id %})
+                    </p>
+                    </div>
+                </div>
+            </div>
+            <!--A 네모 끝-->
+
+            <!--B 네모 시작-->
+            <div style = "width: 45vw; border-radius: 25px; min-height: 45vw; background-color: white; text-align: center; display: flex; justify-content: center; flex-direction: column; margin: auto;">
+            <!--클릭했을 때 노출되는 표시-->
+            {% get_upvote_color feed.id user.id as choice %}
+            {% if choice == "B" %}
+                <div style = "position:absolute; width:45vw; min-height:45vw; border: 2px solid black; border-radius: 25px; opacity:0.9;" >
+                    <div style="padding-top: 10px;"><b>Your Choice!</b></div>
+                </div>
+            {% endif %}
+                <!--B?-->
+                <div style = "width: 45vw; border-radius: 25px; min-height: 45vw; background-color: white; text-align: center; display: flex; justify-content: center; flex-direction: column; margin: auto;">
+                    <!--글씨만 한 레이어 앞으로 뽑아내기 위함-->
+                    <div style="z-index: 1;">
+                    <a href="/feeds/{{ feed.id }}/upvote_b">
+                    <h4 style="width: 100%;">B</h4>
+                    </a>
+                    {{feed.content_b}}
+                    <p style="width: 100%;">
+                    {% get_upvote_b feed.id %}표({% get_upvote_perc_b feed.id %})
+                    </p>
+                    </div>
+                </div>
+            </div>
+            <!--A 네모 끝-->
+
+        </span>
+        <!--신고 구현해야함!!!!!!!!!!!!!-->
+        <!--show화면도 구현해야함!!!!!!!!!!!!!-->
+        <p>신고 : {{feed.report}}</p>
+        <a href="/feeds/{{ feed.id }}">더보기</a>
+        {% if request.user == feed.creator %}
+        <a href="/feeds/{{ feed.id }}/edit?next={{request.path}}?page={{feeds.number}}">수정하기</a>
+        <a href="/feeds/{{ feed.id }}/editon">당장수정하기</a>
+        <a href="/feeds/{{ feed.id }}/delete" onclick="return confirm('ㄹㅇ 삭제?')">삭제</a>
+{% endif %}
+
     <!-- 글 코드 -->
     <p/>
     {% for c in feed.feedcomment_set.all %}
-    {% get_side feed.id c.id %}{{ c.reactor }} {{ c.content }}
+    <strong>{{ c.reactor }} </strong> {% get_side feed.id c.id %} {{ c.content }}
     {% if request.user == c.reactor %}
     <form action="/feeds/{{ feed.id }}/comments/{{ c.id }}/" method="POST">
         {% csrf_token %}
-        <button>댓글 삭제</button>
+        <button type="submit">댓글 삭제</button>
     </form>
     {% endif %}
     <br>
@@ -90,7 +124,6 @@
     <form action="/feeds/{{ feed.id }}/comments/" method="POST">
     {% csrf_token %}
     <input type="text" name="content" />
-    <input type="hidden" name="about_a" value=True />
     <button type="submit">댓글 달기</button>
     </form>
     <!-- 댓글 코드 끝 -->

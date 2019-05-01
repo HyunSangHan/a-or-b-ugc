@@ -78,8 +78,7 @@ def editoff(request, id):
 
 def create_comment(request, id):
     content = request.POST['content']
-    about_a = request.POST['about_a']
-    FeedComment.objects.create(feed_id=id, content=content, about_a=about_a, reactor=request.user)
+    FeedComment.objects.create(feed_id=id, content=content, reactor=request.user)
     return redirect(request.META['HTTP_REFERER'])
 
 def delete_comment(request, id, cid):

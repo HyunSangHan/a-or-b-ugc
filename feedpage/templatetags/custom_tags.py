@@ -37,22 +37,29 @@ def get_upvote_perc_b(pk):
     return upvote_perc_b
     
 @register.simple_tag
-def get_hashtag_set(pk):
-    feed = Feed.objects.get(id=pk)
-    hashtag_total = feed.hashtag_set.all()
-    return hashtag_total
-
-@register.simple_tag
 def get_side(fid, cid):
     feed = Feed.objects.get(id=fid)
     comment = feed.feedcomment_set.get(id=cid)
     reactor = comment.reactor
     try:
-        side_tf = feed.upvote_set.get(user = reactor, feed = feed).about_a
+        side_tf = feed.upvote_set.get(user = reactor).about_a
         if side_tf:
             side = "[A] "
         else:
             side = "[B] "
+    except:
+        side = ""
+    return side
+
+@register.simple_tag
+def get_upvote_color(fid, uid):
+    feed = Feed.objects.get(id=fid)
+    try:
+        side_tf = feed.upvote_set.get(user_id = uid).about_a
+        if side_tf:
+            side = "A"
+        else:
+            side = "B"
     except:
         side = ""
     return side
