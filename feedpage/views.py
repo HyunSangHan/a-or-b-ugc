@@ -144,7 +144,7 @@ def follow_manager(request, pk):
             f.save()
 
 #수정필요: 렌더+넥스트
-        return redirect(request.META['HTTP_REFERER'])
+    return redirect(request.META['HTTP_REFERER'])
 
 def report(request, pk):
     # if request.method == 'POST':    
@@ -165,6 +165,3 @@ def report(request, pk):
     except:
         pass
     return redirect(request.META['HTTP_REFERER'])
-
-
-    ####리포트 모델이 제대로 작동하고 있는 것인지 확인 필요

@@ -35,15 +35,19 @@
     (구독자: {{ feed.creator.profile.follow_to.all.count }})
     {% if user.is_authenticated %}
         {% if request.user != feed.creator %}
-        <a href="/feeds/{{ feed.creator.id }}/follow">
             {% if request.user.profile not in feed.creator.profile.follows.all %}
-                구독하기
+                <form action = "/feeds/{{ feed.creator.id }}/follow/" method="POST">
+                    {% csrf_token %}
+                    <input type="submit" value="구독하기" />
+                </form>
             {% else %}
-                구독취소
+                <form action = "/feeds/{{ feed.creator.id }}/follow/" method="POST">
+                    {% csrf_token %}
+                    <input type="submit" value="구독취소" />
+                </form>
             {% endif %}
-        </a>
         {% endif %}
-        {% endif %}
+    {% endif %}
     </h5>
         <h6>{{ feed.created_at }}</h6>
         <!--A와 B를 함께 두는 행-->
@@ -101,26 +105,29 @@
         </span>
         <!--show화면도 구현해야함!!!!!!!!!!!!!-->
         <a href="/feeds/{{ feed.id }}">더보기</a>
-{% if request.user == feed.creator %}
+    {% if request.user == feed.creator %}
         <a href="/feeds/{{ feed.id }}/edit?next={{request.path}}?page={{feeds.number}}">수정하기</a>
         <a href="/feeds/{{ feed.id }}/editon">당장수정하기</a>
         <a href="/feeds/{{ feed.id }}/delete" onclick="return confirm('정말 삭제하시겠습니까?')">삭제</a>
-{% else %}
-    {% comment %} <form action="/feeds/{{ feed.id }}/report/" method="POST">
-        {% csrf_token %}
-        <button>신고({{feed.report_set.count }}건)</button>
-    </form> {% endcomment %}
-    {% get_report_tf feed.id user.id as report_tf %}   
-    {% if report_tf %}
-    <a href="/feeds/{{ feed.id }}/report/" onclick="return alert('이미 신고하셨습니다.')">
-        <button>신고({{feed.report_set.count }}건)</button>
-    </a>
+        <span>신고({{feed.report_set.count }}건)</span>
     {% else %}
-    <a href="/feeds/{{ feed.id }}/report/" onclick="return confirm('정말 신고하실 건가요?')">
-        <button>신고({{feed.report_set.count }}건)</button>
-    </a>
+        {% comment %} <form action="/feeds/{{ feed.id }}/report/" method="POST">
+            {% csrf_token %}
+            <button>신고({{feed.report_set.count }}건)</button>
+        </form> {% endcomment %}
+        {% get_report_tf feed.id user.id as report_tf %}   
+        {% if report_tf and user.id %}
+        <a href="/feeds/{{ feed.id }}/report/" onclick="return alert('이미 신고하셨습니다.')">
+            <button>신고({{feed.report_set.count }}건)</button>
+        </a>
+        {% elif report_tf == False and user.id %}
+        <a href="/feeds/{{ feed.id }}/report/" onclick="return confirm('정말 신고하실 건가요?')">
+            <button>신고({{feed.report_set.count }}건)</button>
+        </a>
+        {% else %}
+        <span>신고({{feed.report_set.count }}건)</span>
+        {% endif %}
     {% endif %}
-{% endif %}
 
     <!-- 글 코드 -->
     <p/>
