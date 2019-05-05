@@ -1,10 +1,12 @@
 from django.shortcuts import render
-from .models import Feed, FeedComment, HashTag, Upvote #(참고: .models == feeds.models)
+from .models import Feed, FeedComment, HashTag, Upvote, Report #(참고: .models == feeds.models)
 from accounts.models import Profile, Follow
 from django.shortcuts import redirect
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.contrib.auth.models import User 
+
+###니드 로그인 기능 리다이렉트 구현 필요
 
 def index(request): 
     if request.method == 'POST': # create
@@ -26,6 +28,7 @@ def index(request):
         feeds_all = Feed.objects.all().order_by('-updated_at', '-created_at')
         if keyword: 
             #검색기능 추후 보완 필요(댓글까지 망라)
+            feeds_all = feeds_all.filter(Q(title__icontains=keyword) | Q(content_a__icontains=keyword) | Q(content_b__icontains=keyword)) # | Q(hashtag__icontains=keyword)
             feeds_all = feeds_all.filter(Q(title__icontains=keyword) | Q(content_a__icontains=keyword) | Q(content_b__icontains=keyword)) # | Q(hashtag__icontains=keyword)
         paginator = Paginator(feeds_all, 8)
         page_num = request.GET.get('page')
@@ -77,18 +80,23 @@ def editoff(request, id):
     return redirect(request.META['HTTP_REFERER'])
 
 def create_comment(request, id):
-    content = request.POST['content']
-    FeedComment.objects.create(feed_id=id, content=content, reactor=request.user)
-    return redirect(request.META['HTTP_REFERER'])
+    if request.method == 'POST':
+        content = request.POST['content']
+        FeedComment.objects.create(feed_id=id, content=content, reactor=request.user)
+        return redirect(request.META['HTTP_REFERER'])
 
 def delete_comment(request, id, cid):
-    c = FeedComment.objects.get(id=cid)
-    c.delete()
-    return redirect(request.META['HTTP_REFERER'])
+    if request.method == 'POST':
+        c = FeedComment.objects.get(id=cid)
+        c.delete()
+        return redirect(request.META['HTTP_REFERER'])
 
 
 # 리팩토링 필요하겠음
 def feed_upvote_a(request, pk):
+    # if request.method == 'POST':
+    # 포스트로 안날려도 되나????????
+
     # feed id로 한번 필터링하고(정확히는, 불러오고)
     feed = Feed.objects.get(id = pk)
     # user id로 한번 더 필터링하고
@@ -104,9 +112,8 @@ def feed_upvote_a(request, pk):
     return redirect(request.META['HTTP_REFERER'])
 
 def feed_upvote_b(request, pk):
-    # feed id로 한번 필터링하고(정확히는, 불러오고)
+    # if request.method == 'POST':
     feed = Feed.objects.get(id = pk)
-    # user id로 한번 더 필터링하고
     upvote_list = feed.upvote_set.filter(user_id = request.user.id)
     if upvote_list.count() > 0:
         if upvote_list.first().about_a: 
@@ -119,20 +126,45 @@ def feed_upvote_b(request, pk):
     return redirect(request.META['HTTP_REFERER'])
 
 def follow_manager(request, pk):
-    follow_from = Profile.objects.get(user_id = request.user.id)
-    follow_to = Profile.objects.get(user_id = pk)
+    if request.method == 'POST':
+        follow_from = Profile.objects.get(user_id = request.user.id)
+        follow_to = Profile.objects.get(user_id = pk)
+        try:
+            following_already = Follow.objects.get(follow_from=follow_from, follow_to=follow_to)
+        except Follow.DoesNotExist:
+            #이거뭐지???????????????????
+            following_already = None
+
+        if following_already:
+            following_already.delete()
+        else:
+            # Follow.objects.create(follow_from=follow_from, follow_to=follow_to)
+            f = Follow()
+            f.follow_from, f.follow_to = follow_from, follow_to
+            f.save()
+
+#수정필요: 렌더+넥스트
+        return redirect(request.META['HTTP_REFERER'])
+
+def report(request, pk):
+    # if request.method == 'POST':    
+    feed = Feed.objects.get(id = pk)
     try:
-        following_already = Follow.objects.get(follow_from=follow_from, follow_to=follow_to)
-    except Follow.DoesNotExist:
-        #이거뭐지???????????????????
-        following_already = None
-
-    if following_already:
-        following_already.delete()
-    else:
-        # Follow.objects.create(follow_from=follow_from, follow_to=follow_to)
-        f = Follow()
-        f.follow_from, f.follow_to = follow_from, follow_to
-        f.save()
-
+        report_list = feed.report_set.filter(user_id = request.user.id)
+        if report_list.count() > 0:
+            pass
+            # if report_list.first(): 
+            #     feed.report_set.get(user_id = request.user.id).delete()
+            # else:
+            #     feed.report_set.get(user_id = request.user.id).delete()
+            #     Report.objects.create(user_id = request.user.id, feed_id = feed.id)
+        else:
+            Report.objects.create(user_id = request.user.id, feed_id = feed.id)
+        feed.report_count = feed.report_set.count()
+        feed.save()
+    except:
+        pass
     return redirect(request.META['HTTP_REFERER'])
+
+
+    ####리포트 모델이 제대로 작동하고 있는 것인지 확인 필요

@@ -18,7 +18,7 @@ class Feed(models.Model):
     img_b = models.ImageField(blank=True, null=True) #have to fix
     upvote_a = models.IntegerField(default=0)
     upvote_b = models.IntegerField(default=0)
-    report = models.IntegerField(default=0)
+    report_count = models.IntegerField(default=0)
     #hash_tag도 추가 필요
     editnow = models.BooleanField(default=False)
     created_at = models.DateTimeField(default=timezone.now)
@@ -46,9 +46,9 @@ class Feed(models.Model):
                 editnow = False,
                 content_a = myfake.catch_phrase(),
                 content_b = myfake.catch_phrase(),
-                # upvote_a = random.randrange(0,100),
-                # upvote_b = random.randrange(0,100),
-                # report = random.randrange(0,4),
+                upvote_a = random.randrange(0,100),
+                upvote_b = random.randrange(0,100),
+                report_count = random.randrange(0,4),
                 # img_a = ,
                 # img_b = ,
                 # hash_tag = [],
@@ -79,3 +79,11 @@ class Upvote(models.Model):
 
     def __str__(self):
         return str(self.about_a)
+
+class Report(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    feed = models.ForeignKey(Feed, on_delete=models.CASCADE)
+    reported_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return str(self.feed)

@@ -62,12 +62,12 @@
                     <!--글씨만 한 레이어 앞으로 뽑아내기 위함-->
                     <div style="z-index: 1;">
                     <a href="/feeds/{{ feed.id }}/upvote_a">
-                    <h4 style="width: 100%;">A</h4>
+                        <h4 style="width: 100%;">A</h4>
+                        {{feed.content_a}}
+                        <p style="width: 100%;">
+                        {% get_upvote_a feed.id %}표({% get_upvote_perc_a feed.id %})
+                        </p>
                     </a>
-                    {{feed.content_a}}
-                    <p style="width: 100%;">
-                    {% get_upvote_a feed.id %}표({% get_upvote_perc_a feed.id %})
-                    </p>
                     </div>
                 </div>
             </div>
@@ -88,25 +88,38 @@
                     <div style="z-index: 1;">
                     <a href="/feeds/{{ feed.id }}/upvote_b">
                     <h4 style="width: 100%;">B</h4>
-                    </a>
                     {{feed.content_b}}
                     <p style="width: 100%;">
                     {% get_upvote_b feed.id %}표({% get_upvote_perc_b feed.id %})
                     </p>
+                    </a>
                     </div>
                 </div>
             </div>
-            <!--A 네모 끝-->
+            <!--B 네모 끝-->
 
         </span>
-        <!--신고 구현해야함!!!!!!!!!!!!!-->
         <!--show화면도 구현해야함!!!!!!!!!!!!!-->
-        <p>신고 : {{feed.report}}</p>
         <a href="/feeds/{{ feed.id }}">더보기</a>
-        {% if request.user == feed.creator %}
+{% if request.user == feed.creator %}
         <a href="/feeds/{{ feed.id }}/edit?next={{request.path}}?page={{feeds.number}}">수정하기</a>
         <a href="/feeds/{{ feed.id }}/editon">당장수정하기</a>
-        <a href="/feeds/{{ feed.id }}/delete" onclick="return confirm('ㄹㅇ 삭제?')">삭제</a>
+        <a href="/feeds/{{ feed.id }}/delete" onclick="return confirm('정말 삭제하시겠습니까?')">삭제</a>
+{% else %}
+    {% comment %} <form action="/feeds/{{ feed.id }}/report/" method="POST">
+        {% csrf_token %}
+        <button>신고({{feed.report_set.count }}건)</button>
+    </form> {% endcomment %}
+    {% get_report_tf feed.id user.id as report_tf %}   
+    {% if report_tf %}
+    <a href="/feeds/{{ feed.id }}/report/" onclick="return alert('이미 신고하셨습니다.')">
+        <button>신고({{feed.report_set.count }}건)</button>
+    </a>
+    {% else %}
+    <a href="/feeds/{{ feed.id }}/report/" onclick="return confirm('정말 신고하실 건가요?')">
+        <button>신고({{feed.report_set.count }}건)</button>
+    </a>
+    {% endif %}
 {% endif %}
 
     <!-- 글 코드 -->
