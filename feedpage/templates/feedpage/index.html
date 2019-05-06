@@ -147,7 +147,7 @@
 {% comment %} 
 
 지금 get방식인데 괜찮을까...?
- {% endcomment %}
+{% endcomment %}
 
         <a href="/feeds/{{ feed.id }}/report/" onclick="return alert('이미 신고하셨습니다.')">
             <button>신고({{feed.report_set.count }}건)</button>
@@ -161,32 +161,34 @@
         {% endif %}
     {% endif %}
 
-    <!-- 글 코드 -->
+    <!-- 댓글 코드 -->
     <p/>
-
-    {% for c in feed.feedcomment_set.all %}
+    {% get_ordered_comment feed.id c.id user.id as comments %}
+    {% for c in comments %}
+    <div style="background-color: gray;">
     <strong>{{ c.reactor }} </strong> {% get_side feed.id c.id %} {{ c.content }}
     {% if request.user == c.reactor %}
     <form action="/feeds/{{ feed.id }}/comments/{{ c.id }}/" method="POST">
         {% csrf_token %}
         <button type="submit">댓글 삭제</button>
     </form>
-    댓글좋아요({{ c.commentupvote_set.count }})
+    댓글좋아요({{ c.total_upvote }})
     {% else %}
     <form action="/feeds/{{ feed.id }}/comments/{{ c.id }}/upvote" method="POST">
         {% csrf_token %}
         {% get_comment_upvote_tf feed.id c.id user.id as comment_upvote_tf %}
         {% if user.is_authenticated %}
             {% if comment_upvote_tf %}
-            <button type="submit">댓글좋아요 취소({{ c.commentupvote_set.count }})</button>
+            <button type="submit">댓글좋아요 취소({{ c.total_upvote }})</button>
             {% else %}
-            <button type="submit">댓글좋아요({{ c.commentupvote_set.count }})</button>
+            <button type="submit">댓글좋아요({{ c.total_upvote }})</button>
             {% endif %}
         {% else %}
-            <span>댓글좋아요({{ c.commentupvote_set.count }})</span>
+            <span>댓글좋아요({{ c.total_upvote }})</span>
         {% endif %}
     </form>
     {% endif %}
+    </div>
     <br>
     {% endfor %}
     <form action="/feeds/{{ feed.id }}/comments/" method="POST">

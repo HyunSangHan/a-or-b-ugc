@@ -91,3 +91,11 @@ def get_comment_upvote_tf(fid, cid, uid):
     else:
         comment_upvote_tf = False
     return comment_upvote_tf
+
+@register.simple_tag
+def get_ordered_comment(fid, cid, uid):
+    feed = Feed.objects.get(id=fid)
+    comments_all = feed.feedcomment_set
+    #댓글 랭킹로직: [1순위] 좋아요 많이받은순 / [2순위] 최신순. 나중에는 각자 선택할 수 있게끔 구현 필요
+    comments = comments_all.order_by('-total_upvote', '-created_at')
+    return comments

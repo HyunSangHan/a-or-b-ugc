@@ -128,11 +128,13 @@ def upvote_comment(request, id, cid):
         upvote_list = c.commentupvote_set.filter(user_id = request.user.id)
         if upvote_list.count() > 0:
             c.commentupvote_set.get(user_id = request.user.id).delete()
-            return redirect(request.META['HTTP_REFERER'])
         else:
             CommentUpvote.objects.create(user_id = request.user.id, feed_comment_id = cid)
-            return redirect(request.META['HTTP_REFERER'])
+        c.total_upvote = c.commentupvote_set.count()
+        c.save()
+        return redirect(request.META['HTTP_REFERER'])
     else: 
+        print(c.commentupvote_set.count())
         return redirect(request.META['HTTP_REFERER'])
 
 # 리팩토링 필요하겠음

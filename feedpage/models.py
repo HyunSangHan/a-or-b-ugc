@@ -42,24 +42,25 @@ class Feed(models.Model):
     def __str__(self):
         return self.title
 
-    def seed(count): 
-        myfake = Faker('ko_KR')
-        for i in range(count):
-            Feed.objects.create(
-                title = myfake.bs(),
-                editnow = False,
-                content_a = myfake.catch_phrase(),
-                content_b = myfake.catch_phrase(),
-                # img_a = ,
-                # img_b = ,
-                # hash_tag = [],
-            )
+    # def seed(count): 
+    #     myfake = Faker('ko_KR')
+    #     for i in range(count):
+    #         Feed.objects.create(
+    #             title = myfake.bs(),
+    #             editnow = False,
+    #             content_a = myfake.catch_phrase(),
+    #             content_b = myfake.catch_phrase(),
+    #             # img_a = ,
+    #             # img_b = ,
+    #             # hash_tag = [],
+    #         )
 
 class FeedComment(models.Model):
     reactor = models.ForeignKey(User, null=True, on_delete= models.CASCADE)
     content = models.TextField()
     feed = models.ForeignKey(Feed, on_delete=models.CASCADE)
     upvote_users = models.ManyToManyField(User, blank=True, related_name='upvote_feed_comments', through='CommentUpvote')
+    total_upvote = models.IntegerField(default=0)
     created_at = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
@@ -93,7 +94,6 @@ class Report(models.Model):
 class CommentUpvote(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     feed_comment = models.ForeignKey(FeedComment, on_delete=models.CASCADE)
-    total_upvote = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
