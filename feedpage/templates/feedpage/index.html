@@ -32,7 +32,10 @@
         {% get_feed_tags feed.id as feed_tags %}
         {% for tag in feed_tags %}
         {% if tag != feed_tags.first %}
-        # {{ tag }} &nbsp&nbsp
+        <a href="/feeds/?keyword={{tag}}"># {{ tag }}</a>
+        &nbsp&nbsp&nbsp
+      </form>
+
         {% endif %}
         {% endfor %}
     <!-- 팔로우 코드 -->
@@ -66,10 +69,16 @@
                     <div style="padding-top: 10px;"><b>Your Choice!</b></div>
                 </div>
             {% endif %}
+
+{% comment %} 
+로그인이 필요한 서비스입니다 얼럿 넣기
+ {% endcomment %}
+
                 <!--A?-->
                 <div style = "width: 45vw; border-radius: 25px; min-height: 45vw; background-color: white; text-align: center; display: flex; justify-content: center; flex-direction: column; margin: auto;">
-                    <!--글씨만 한 레이어 앞으로 뽑아내기 위함-->
+                    <!--글씨만 한 레이어 윗층으로 뽑아내기 위함-->
                     <div style="z-index: 1;">
+<!--get방식인데 괜찮을지... + 비로그인일 경우에 누르지 못하도록 비활성화 필요-->
                     <a href="/feeds/{{ feed.id }}/upvote_a">
                         <h4 style="width: 100%;">A</h4>
                         {{feed.content_a}}
@@ -109,7 +118,7 @@
 
         </span>
         <!--show화면도 구현해야함!!!!!!!!!!!!!-->
-        <a href="/feeds/{{ feed.id }}">더보기</a>
+        <a href="/feeds/{{ feed.id }}">덜보기</a>
     {% if request.user == feed.creator %}
         <a href="/feeds/{{ feed.id }}/edit?next={{request.path}}?page={{feeds.number}}">수정하기</a>
         <a href="/feeds/{{ feed.id }}/editon">당장수정하기</a>
@@ -146,12 +155,28 @@
 
     <!-- 글 코드 -->
     <p/>
+
     {% for c in feed.feedcomment_set.all %}
     <strong>{{ c.reactor }} </strong> {% get_side feed.id c.id %} {{ c.content }}
     {% if request.user == c.reactor %}
-    <form action="/feeds/{{ feed.id }}/comments/{{ c.id }}/" method="DELETE">
+    <form action="/feeds/{{ feed.id }}/comments/{{ c.id }}/" method="POST">
         {% csrf_token %}
         <button type="submit">댓글 삭제</button>
+    </form>
+    댓글좋아요({{ c.commentupvote_set.count }})
+    {% else %}
+    <form action="/feeds/{{ feed.id }}/comments/{{ c.id }}/upvote" method="POST">
+        {% csrf_token %}
+        {% get_comment_upvote_tf feed.id c.id user.id as comment_upvote_tf %}
+        {% if user.is_authenticated %}
+            {% if comment_upvote_tf %}
+            <button type="submit">댓글좋아요 취소({{ c.commentupvote_set.count }})</button>
+            {% else %}
+            <button type="submit">댓글좋아요({{ c.commentupvote_set.count }})</button>
+            {% endif %}
+        {% else %}
+            <span>댓글좋아요({{ c.commentupvote_set.count }})</span>
+        {% endif %}
     </form>
     {% endif %}
     <br>

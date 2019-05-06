@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Feed, FeedComment, HashTag, TagRelation, Upvote, Report #(참고: .models == feeds.models)
+from .models import Feed, FeedComment, HashTag, TagRelation, Upvote, CommentUpvote, Report #(참고: .models == feeds.models)
 from accounts.models import Profile, Follow
 from django.shortcuts import redirect
 from django.core.paginator import Paginator
@@ -29,24 +29,20 @@ def index(request):
 #중복되면 빼는 로직도 필요(나중에)
 #공백이면 빼는 로직도 필요(당장 / below)
         # TagRelation.objects.get(hash_tag="").delete()
-        print(TagRelation.objects.all().count())
-        print(HashTag.objects.all().count())
-        print(HashTag.objects.all())
         return redirect('/feeds')
-    else: # index
+    else: # index get
         keyword = request.GET.get('keyword', '')
         feeds_all = Feed.objects.all().order_by('-updated_at', '-created_at')
         if keyword: 
             #검색기능 추후 보완 필요(댓글까지 망라)
-            feeds_all = feeds_all.filter(Q(title__icontains=keyword) | Q(content_a__icontains=keyword) | Q(content_b__icontains=keyword)) # | Q(hashtag__icontains=keyword)
-            feeds_all = feeds_all.filter(Q(title__icontains=keyword) | Q(content_a__icontains=keyword) | Q(content_b__icontains=keyword)) # | Q(hashtag__icontains=keyword)
+            feeds_all = feeds_all.filter(Q(title__icontains=keyword) | Q(content_a__icontains=keyword) | Q(content_b__icontains=keyword)) # | Q(matched_tags__icontains=keyword)
         paginator = Paginator(feeds_all, 8)
         page_num = request.GET.get('page')
         feeds = paginator.get_page(page_num)
         search_result_num = len(feeds_all)
         if keyword and feeds:
             is_searched = True
-        elif keyword == '':
+        elif keyword == "":
             is_searched = False
         else:
             is_searched = True
@@ -120,11 +116,23 @@ def create_comment(request, id):
         return redirect(request.META['HTTP_REFERER'])
 
 def delete_comment(request, id, cid):
-    if request.method == 'DELETE':
+    if request.method == 'POST':
         c = FeedComment.objects.get(id=cid)
         c.delete()
         return redirect(request.META['HTTP_REFERER'])
 
+def upvote_comment(request, id, cid):
+    if request.method == 'POST':
+        c = FeedComment.objects.get(id=cid)
+        upvote_list = c.commentupvote_set.filter(user_id = request.user.id)
+        if upvote_list.count() > 0:
+            c.commentupvote_set.get(user_id = request.user.id).delete()
+            return redirect(request.META['HTTP_REFERER'])
+        else:
+            CommentUpvote.objects.create(user_id = request.user.id, feed_comment_id = cid)
+            return redirect(request.META['HTTP_REFERER'])
+    else: 
+        return redirect(request.META['HTTP_REFERER'])
 
 # 리팩토링 필요하겠음
 def feed_upvote_a(request, pk):
@@ -183,19 +191,7 @@ def follow_manager(request, pk):
 def report(request, pk):
     # if request.method == 'POST':    
     feed = Feed.objects.get(id = pk)
-    try:
-        report_list = feed.report_set.filter(user_id = request.user.id)
-        if report_list.count() > 0:
-            pass
-            # if report_list.first(): 
-            #     feed.report_set.get(user_id = request.user.id).delete()
-            # else:
-            #     feed.report_set.get(user_id = request.user.id).delete()
-            #     Report.objects.create(user_id = request.user.id, feed_id = feed.id)
-        else:
-            Report.objects.create(user_id = request.user.id, feed_id = feed.id)
-        feed.report_count = feed.report_set.count()
-        feed.save()
-    except:
-        pass
+    report_count = feed.report_set.filter(user_id = request.user.id).count()
+    if report_count == 0:
+        Report.objects.create(user_id = request.user.id, feed_id = feed.id)
     return redirect(request.META['HTTP_REFERER'])

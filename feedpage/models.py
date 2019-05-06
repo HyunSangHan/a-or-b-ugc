@@ -27,7 +27,6 @@ class Feed(models.Model):
     upvote_a = models.IntegerField(default=0)
     upvote_b = models.IntegerField(default=0)
     report_count = models.IntegerField(default=0)
-    #hash_tag도 추가 필요
     editnow = models.BooleanField(default=False)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(blank=True, null=True)
@@ -65,8 +64,8 @@ class Feed(models.Model):
 class FeedComment(models.Model):
     reactor = models.ForeignKey(User, null=True, on_delete= models.CASCADE)
     content = models.TextField()
-    # feed id를 가져야 하는, Feed:FeedComment = 1:N 관계니까
     feed = models.ForeignKey(Feed, on_delete=models.CASCADE)
+    upvote_users = models.ManyToManyField(User, blank=True, related_name='upvote_feed_comments', through='CommentUpvote')
     created_at = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
@@ -96,3 +95,12 @@ class Report(models.Model):
 
     def __str__(self):
         return str(self.feed)
+
+class CommentUpvote(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    feed_comment = models.ForeignKey(FeedComment, on_delete=models.CASCADE)
+    total_upvote = models.IntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return str(self.feed_comment)

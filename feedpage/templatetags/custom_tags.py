@@ -80,3 +80,14 @@ def get_feed_tags(fid):
         feed_tags = None
     # print(str(feed_tags.first().hash_tag))
     return feed_tags
+
+
+@register.simple_tag
+def get_comment_upvote_tf(fid, cid, uid):
+    feed = Feed.objects.get(id=fid)
+    comment = feed.feedcomment_set.get(id=cid)
+    if comment.commentupvote_set.filter(user_id=uid).count() > 0:
+        comment_upvote_tf = True
+    else:
+        comment_upvote_tf = False
+    return comment_upvote_tf
