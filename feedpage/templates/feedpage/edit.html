@@ -1,18 +1,40 @@
 {% extends 'base.html' %}
+{% load custom_tags %}
 
 {% block content %}
     <h1>수정하고 싶나요?</h1>
     <a href="/feeds">메인으로 돌아가기</a>
     <form action="/feeds/{{feed.id}}/edit/" method="POST">
-    {% comment %} /{{ feed.id }} {% endcomment %}
         {% csrf_token %} 
-        <!--csrf_token은 보안을 위해 추가하는 것임-->
         <p>title</p>
         <input name="title" value="{{feed.title}}" required /> <br />
         <p>content</p>
         A: <input name="content_a" value="{{feed.content_a}}" required /> <br />
         B: <input name="content_b" value="{{feed.content_b}}" required /> <br />
+        <!--분기처리필요-->
+        HASH TAG: 
+        <input name="hash_tag_raw" placeholder="#이러한 #형태로 #입력하세요" row="400"/> <br />
         <input type="hidden" name="next" value="{{next}}" />
         <input type="submit" value="submit" />
+        <br/>
+        {% get_feed_tags feed.id as feed_tags %}
+        {% for tag in feed_tags %}
+        # {{ tag }} 
+
+
+
+
+        {% comment %}
+        tag 삭제를 어떻게 구현한담??? 이거 폼태그 안에 폼태그가 있어서인지, 태그삭제가 되지 않고 수정하기 submit이 되어 POST가 날아가는데...
+
+        {{tag.id}}
+            <form action="/feeds/{{ feed.id }}/delete_tag/{{ tag.id }}/" method="DELETE">
+            {% csrf_token %}
+            <button type="submit">X</button>
+            </form>
+            
+            {% endcomment %}
+        &nbsp&nbsp
+        {% endfor %}
     </form>
 {% endblock content %}

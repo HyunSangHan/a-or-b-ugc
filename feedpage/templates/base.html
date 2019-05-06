@@ -31,11 +31,13 @@
       </form>
     </div>
   </header>
+  {% if user.is_authenticated %}
   <a href="/feeds/new">
     <div style="position: fixed; z-index: 100; background-color: yellow; width: 60px; height: 60px; border: 1px solid black; border-radius: 30px; bottom: 30px; right: 30px; display: flex; justify-content: center; align-items: center; text-decoration: none; color: black;">
       <i class="material-icons">create</i>
     </div>
   </a>
+  {% endif %}
   {% block content %}
   {% endblock %}
 

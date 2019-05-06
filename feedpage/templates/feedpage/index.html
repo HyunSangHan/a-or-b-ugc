@@ -12,21 +12,26 @@
 {% if feed.editnow %}
     <div style="border: 1px solid grey;">
         <a href="/feeds/{{ feed.id }}/editoff">수정안하기</a>
-        <form action="/feeds/{{feed.id}}/" method="POST">
+        <form action="/feeds/{{feed.id}}/edit/" method="POST">
         {% csrf_token %} 
+        <p>title</p>
         <input name="title" value="{{feed.title}}" required /> <br />
+        <p>content</p>
         A: <input name="content_a" value="{{feed.content_a}}" required /> <br />
         B: <input name="content_b" value="{{feed.content_b}}" required /> <br />
-        <input type="submit" value="반영하기" />
-        </form>
+        HASH TAG: <input name="hash_tag_raw" placeholder="#이러한 #형태로 #입력하세요" row="400"/> <br />
+        <input type="hidden" name="next" value="{{next}}" />
+        <input type="submit" value="submit" />
+    </form>
     </div>
 
 {% else %}
 <ul style = "padding: 0;">
     <li style="border: 0px solid grey; padding-bottom: 50px; list-style-type: none;">
         <h3>{{ feed.title }}</h3>
-        {% for tag in feed.hashtag_set.all %}
-        {% if tag != feed.hashtag_set.first %}
+        {% get_feed_tags feed.id as feed_tags %}
+        {% for tag in feed_tags %}
+        {% if tag != feed_tags.first %}
         # {{ tag }} &nbsp&nbsp
         {% endif %}
         {% endfor %}
@@ -108,7 +113,17 @@
     {% if request.user == feed.creator %}
         <a href="/feeds/{{ feed.id }}/edit?next={{request.path}}?page={{feeds.number}}">수정하기</a>
         <a href="/feeds/{{ feed.id }}/editon">당장수정하기</a>
-        <a href="/feeds/{{ feed.id }}/delete" onclick="return confirm('정말 삭제하시겠습니까?')">삭제</a>
+
+
+            {% comment %} 딜리트 이렇게하면 안되지!!!!!!!!!!!! {% endcomment %}
+
+
+        <form action="/feeds/{{ feed.id }}/delete/" method="POST">
+            {% csrf_token %}
+            {% comment %} <input type="hidden" name="_method" value="DELETE"/> {% endcomment %}
+            <input type="submit" value="삭제" />
+        </form>
+        {% comment %} <a href="/feeds/{{ feed.id }}/delete" onclick="return confirm('정말 삭제하시겠습니까?')">삭제</a> {% endcomment %}
         <span>신고({{feed.report_set.count }}건)</span>
     {% else %}
         {% comment %} <form action="/feeds/{{ feed.id }}/report/" method="POST">
@@ -134,7 +149,7 @@
     {% for c in feed.feedcomment_set.all %}
     <strong>{{ c.reactor }} </strong> {% get_side feed.id c.id %} {{ c.content }}
     {% if request.user == c.reactor %}
-    <form action="/feeds/{{ feed.id }}/comments/{{ c.id }}/" method="POST">
+    <form action="/feeds/{{ feed.id }}/comments/{{ c.id }}/" method="DELETE">
         {% csrf_token %}
         <button type="submit">댓글 삭제</button>
     </form>
@@ -155,7 +170,11 @@
     {% endfor %} 
 
     {% if search_result_num == 0 %}
-        <div>검색결과가 없습니다. <a href="/feeds/new">작성하기</a>를 눌러 <strong>{{ keyword }}</strong>에 대한 첫번째 글을 작성해보세요!</div>
+        <div>검색결과가 없습니다.
+        {% if user.is_authenticated %}
+        <a href="/feeds/new">작성하기</a>를 눌러 <strong>{{ keyword }}</strong>에 대한 
+        {% endif %}        
+        첫번째 글을 작성해보세요!</div>
     {% else %}
         {% if feeds.has_previous %}
         <a href="?page=1">First</a>

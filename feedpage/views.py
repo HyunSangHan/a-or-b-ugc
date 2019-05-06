@@ -1,10 +1,11 @@
 from django.shortcuts import render
-from .models import Feed, FeedComment, HashTag, Upvote, Report #(참고: .models == feeds.models)
+from .models import Feed, FeedComment, HashTag, TagRelation, Upvote, Report #(참고: .models == feeds.models)
 from accounts.models import Profile, Follow
 from django.shortcuts import redirect
 from django.core.paginator import Paginator
 from django.db.models import Q
-from django.contrib.auth.models import User 
+from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
 
 ###니드 로그인 기능 리다이렉트 구현 필요
 
@@ -19,9 +20,18 @@ def index(request):
         hash_tag_raw = request.POST['hash_tag_raw']
         hash_tag_all = hash_tag_raw.split("#")
         for hash_tag in hash_tag_all:
-            # hash_tag = hash_tag.replace(" ", "_")
-            HashTag.objects.create(feed_id=feed.id, tag=hash_tag)
-
+            try:
+                tag = HashTag.objects.get(tag=hash_tag)
+                TagRelation.objects.create(hash_tag=tag, feed=feed)
+            except ObjectDoesNotExist:
+                tag = HashTag.objects.create(tag=hash_tag)
+                TagRelation.objects.create(hash_tag=tag, feed=feed)
+#중복되면 빼는 로직도 필요(나중에)
+#공백이면 빼는 로직도 필요(당장 / below)
+        # TagRelation.objects.get(hash_tag="").delete()
+        print(TagRelation.objects.all().count())
+        print(HashTag.objects.all().count())
+        print(HashTag.objects.all())
         return redirect('/feeds')
     else: # index
         keyword = request.GET.get('keyword', '')
@@ -50,22 +60,46 @@ def show(request, id):
     return render(request, 'feedpage/show.html', {'feed': feed})    
 
 def delete(request, id):
-    feed = Feed.objects.get(id=id)
-    feed.delete()
-    return redirect('/feeds')
+    print(request.method)
+    if request.method == "POST":
+        feed = Feed.objects.get(id=id)
+        feed.delete()
+        return redirect('/feeds')
+    else:
+        return redirect('/feeds')
 
 def edit(request, id):
     feed = Feed.objects.get(id=id)
+    
     if request.method == 'POST':
         feed.title = request.POST['title']
         feed.content_a = request.POST['content_a']
         feed.content_b = request.POST['content_b']
+        hash_tag_raw = request.POST['hash_tag_raw']
+        hash_tag_all = hash_tag_raw.split("#")
+        for hash_tag in hash_tag_all:
+            try:
+                tag = HashTag.objects.get(tag=hash_tag)
+                TagRelation.objects.create(hash_tag=tag, feed=feed)
+            except ObjectDoesNotExist:
+                tag = HashTag.objects.create(tag=hash_tag)
+                TagRelation.objects.create(hash_tag=tag, feed=feed)
+        #현재상황: edit을 통해 추가된 태그의 첫번째는 #만이 나오는 게 그대로 나오고 있음. 해시태그 하나씩 삭제가 안됨.(form태그 중첩 이슈로 예상)
+        # 태그릴레이션 중복이 허용됨
+
         feed.editnow = False
         feed.save()
         #여기로 보내고 싶은데... '/feeds'+'?page='+feeds.number
         return redirect('/feeds')
     else:
         return render(request, 'feedpage/edit.html', {'feed': feed})    
+
+def delete_tag(request, fid, tid):
+    #되고 있는 것인지 확인 필요
+    if request.method == 'DELETE':
+        tag = HashTag.objects.get(feed_id=fid, tag_id=tid)
+        tag.delete()
+        return redirect(request.META['HTTP_REFERER'])
 
 def editon(request, id):
     feed = Feed.objects.get(id=id)
@@ -86,7 +120,7 @@ def create_comment(request, id):
         return redirect(request.META['HTTP_REFERER'])
 
 def delete_comment(request, id, cid):
-    if request.method == 'POST':
+    if request.method == 'DELETE':
         c = FeedComment.objects.get(id=cid)
         c.delete()
         return redirect(request.META['HTTP_REFERER'])

@@ -1,5 +1,5 @@
 from django import template
-from feedpage.models import Feed, FeedComment, Upvote, HashTag, Report
+from feedpage.models import Feed, FeedComment, Upvote, HashTag, TagRelation, Report
 register = template.Library()
 
 @register.simple_tag
@@ -64,7 +64,6 @@ def get_upvote_color(fid, uid):
         side = ""
     return side
 
-############여기해결하는중
 @register.simple_tag
 def get_report_tf(fid, uid):
     if Report.objects.filter(feed_id=fid, user_id=uid).count() != 0:
@@ -72,3 +71,12 @@ def get_report_tf(fid, uid):
     else:
         report_tf = False
     return report_tf
+
+@register.simple_tag
+def get_feed_tags(fid):
+    try:
+        feed_tags = TagRelation.objects.filter(feed_id=fid)
+    except:
+        feed_tags = None
+    # print(str(feed_tags.first().hash_tag))
+    return feed_tags

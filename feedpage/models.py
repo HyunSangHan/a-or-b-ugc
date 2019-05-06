@@ -7,13 +7,21 @@ from django.utils import timezone
 # from django.core.validators import MaxValueValidator, MinValueValidator
 import random
 
-# Create your models here.
+class HashTag(models.Model):
+    tag = models.TextField(null=True)
+    # feed = models.ForeignKey(Feed, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return str(self.tag)
+
 class Feed(models.Model):
+    # null, blank 나중에 한번 정리하기
     title = models.CharField(max_length=256)
     creator = models.ForeignKey(User, null=True, on_delete= models.CASCADE)
-    upvote_users = models.ManyToManyField(User, blank=True, related_name='feeds_upvote', through='Upvote')
     content_a = models.TextField(blank=False, null=False)
     content_b = models.TextField(blank=False, null=False)
+    upvote_users = models.ManyToManyField(User, blank=True, related_name='upvote_feeds', through='Upvote')
+    matched_tags = models.ManyToManyField(HashTag, blank=True, related_name='tagged_feeds', through='TagRelation')
     img_a = models.ImageField(blank=True, null=True) #have to fix
     img_b = models.ImageField(blank=True, null=True) #have to fix
     upvote_a = models.IntegerField(default=0)
@@ -64,12 +72,13 @@ class FeedComment(models.Model):
     def __str__(self):
         return str(self.id)
 
-class HashTag(models.Model):
-    tag = models.TextField(null=True)
+class TagRelation(models.Model):
     feed = models.ForeignKey(Feed, on_delete=models.CASCADE)
+    hash_tag = models.ForeignKey(HashTag, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return str(self.tag)
+        return str(self.hash_tag)
 
 class Upvote(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
