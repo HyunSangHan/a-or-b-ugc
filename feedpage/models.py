@@ -24,9 +24,6 @@ class Feed(models.Model):
     matched_tags = models.ManyToManyField(HashTag, blank=True, related_name='tagged_feeds', through='TagRelation')
     img_a = models.ImageField(blank=True, null=True) #have to fix
     img_b = models.ImageField(blank=True, null=True) #have to fix
-    upvote_a = models.IntegerField(default=0)
-    upvote_b = models.IntegerField(default=0)
-    report_count = models.IntegerField(default=0)
     editnow = models.BooleanField(default=False)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(blank=True, null=True)
@@ -36,8 +33,6 @@ class Feed(models.Model):
             visible = False
         else:
             visible = True
-        print(self.report_set.count())
-        print(visible)
         return visible
 
     def update_date(self): 
@@ -55,9 +50,6 @@ class Feed(models.Model):
                 editnow = False,
                 content_a = myfake.catch_phrase(),
                 content_b = myfake.catch_phrase(),
-                upvote_a = random.randrange(0,100),
-                upvote_b = random.randrange(0,100),
-                report_count = random.randrange(0,4),
                 # img_a = ,
                 # img_b = ,
                 # hash_tag = [],

@@ -142,6 +142,13 @@
         </form> {% endcomment %}
         {% get_report_tf feed.id user.id as report_tf %}   
         {% if report_tf and user.id %}
+
+
+{% comment %} 
+
+지금 get방식인데 괜찮을까...?
+ {% endcomment %}
+
         <a href="/feeds/{{ feed.id }}/report/" onclick="return alert('이미 신고하셨습니다.')">
             <button>신고({{feed.report_set.count }}건)</button>
         </a>
