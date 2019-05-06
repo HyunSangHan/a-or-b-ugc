@@ -17,6 +17,7 @@ def index(request):
         feed = Feed.objects.create(title=title, content_a=content_a, content_b=content_b, creator = request.user)
         #edit도
         # 띄어쓰기 포함도
+        # 샾 안넣었을때의 코너케이스도 챙기기 필요
         hash_tag_raw = request.POST['hash_tag_raw']
         hash_tag_all = hash_tag_raw.split("#")
         for hash_tag in hash_tag_all:

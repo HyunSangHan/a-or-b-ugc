@@ -9,6 +9,7 @@
     {% endif %}
 
     {% for feed in feeds %}
+{% if feed.check_visible %}
 {% if feed.editnow %}
     <div style="border: 1px solid grey;">
         <a href="/feeds/{{ feed.id }}/editoff">수정안하기</a>
@@ -191,6 +192,9 @@
     </li>
 </ul>
 </div>
+    {% endif %}
+    {% else %}
+    신고가 10건 이상 접수되어 숨김처리된 게시글입니다.
     {% endif %}
     {% endfor %} 
 

@@ -31,12 +31,14 @@ class Feed(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(blank=True, null=True)
 
-    def check_invisible(self):
-        if self.report > 9:
-            invisible = True
+    def check_visible(self):
+        if self.report_set.count() > 9:
+            visible = False
         else:
-            invisible = False
-        return invisible
+            visible = True
+        print(self.report_set.count())
+        print(visible)
+        return visible
 
     def update_date(self): 
         self.updated_at = timezone.now()
