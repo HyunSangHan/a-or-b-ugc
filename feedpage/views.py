@@ -18,20 +18,25 @@ def index(request):
         #edit도
         # 띄어쓰기 포함도
         # 샾 안넣었을때의 코너케이스도 챙기기 필요
-        hash_tag_raw = request.POST['hash_tag_raw']
+        # replace왜 안먹히지? 확인 필요
+        hash_tag_raw = request.POST['hash_tag_raw'].replace(" ", "")
         hash_tag_all = hash_tag_raw.split("#")
         for hash_tag in hash_tag_all:
-            try:
+            ###################################
+            if HashTag.objects.filter(tag=hash_tag).count() > 0:
                 tag = HashTag.objects.get(tag=hash_tag)
                 TagRelation.objects.create(hash_tag=tag, feed=feed)
-            except ObjectDoesNotExist:
+            else:
                 tag = HashTag.objects.create(tag=hash_tag)
                 TagRelation.objects.create(hash_tag=tag, feed=feed)
 #중복되면 빼는 로직도 필요(나중에)
 #공백이면 빼는 로직도 필요(당장 / below)
-        # TagRelation.objects.get(hash_tag="").delete()
+# 왜 이거 안됨? => [에러메시지] invalid literal for int() with base 10: ''
+# print(TagRelation.objects.filter(hash_tag="").count())
+# TagRelation.objects.get(hash_tag="").delete()
         return redirect('/feeds')
     else: # index get
+        # print(HashTag.objects.all())
         keyword = request.GET.get('keyword', '')
         feeds_all = Feed.objects.all().order_by('-updated_at', '-created_at')
         if keyword: 
@@ -75,10 +80,10 @@ def edit(request, id):
         hash_tag_raw = request.POST['hash_tag_raw']
         hash_tag_all = hash_tag_raw.split("#")
         for hash_tag in hash_tag_all:
-            try:
+            if HashTag.objects.filter(tag=hash_tag).count() > 0:
                 tag = HashTag.objects.get(tag=hash_tag)
                 TagRelation.objects.create(hash_tag=tag, feed=feed)
-            except ObjectDoesNotExist:
+            else:
                 tag = HashTag.objects.create(tag=hash_tag)
                 TagRelation.objects.create(hash_tag=tag, feed=feed)
         #현재상황: edit을 통해 추가된 태그의 첫번째는 #만이 나오는 게 그대로 나오고 있음. 해시태그 하나씩 삭제가 안됨.(form태그 중첩 이슈로 예상)

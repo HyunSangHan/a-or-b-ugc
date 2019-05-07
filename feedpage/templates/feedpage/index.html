@@ -40,24 +40,24 @@
         {% endif %}
         {% endfor %}
     <!-- 팔로우 코드 -->
-    <h5>{{feed.creator.username}}
-    (구독자: {{ feed.creator.profile.follow_to.all.count }})
-    {% if user.is_authenticated %}
-        {% if request.user != feed.creator %}
-            {% if request.user.profile not in feed.creator.profile.follows.all %}
-                <form action = "/feeds/{{ feed.creator.id }}/follow/" method="POST">
-                    {% csrf_token %}
-                    <input type="submit" value="구독하기" />
-                </form>
-            {% else %}
-                <form action = "/feeds/{{ feed.creator.id }}/follow/" method="POST">
-                    {% csrf_token %}
-                    <input type="submit" value="구독취소" />
-                </form>
+        <h5>{{feed.creator.username}}
+        (구독자: {{ feed.creator.profile.follow_to.all.count }})
+        {% if user.is_authenticated %}
+            {% if request.user != feed.creator %}
+                {% if request.user.profile not in feed.creator.profile.follows.all %}
+                    <form action = "/feeds/{{ feed.creator.id }}/follow/" method="POST">
+                        {% csrf_token %}
+                        <input type="submit" value="구독하기" />
+                    </form>
+                {% else %}
+                    <form action = "/feeds/{{ feed.creator.id }}/follow/" method="POST">
+                        {% csrf_token %}
+                        <input type="submit" value="구독취소" />
+                    </form>
+                {% endif %}
             {% endif %}
         {% endif %}
-    {% endif %}
-    </h5>
+        </h5>
         <h6>{{ feed.created_at }}</h6>
         <!--A와 B를 함께 두는 행-->
         <span style="width: 100%; display: inline-flex;">
@@ -165,29 +165,30 @@
     <p/>
     {% get_ordered_comment feed.id c.id user.id as comments %}
     {% for c in comments %}
-    <div style="background-color: gray;">
-    <strong>{{ c.reactor }} </strong> {% get_side feed.id c.id %} {{ c.content }}
-    {% if request.user == c.reactor %}
-    <form action="/feeds/{{ feed.id }}/comments/{{ c.id }}/" method="POST">
-        {% csrf_token %}
-        <button type="submit">댓글 삭제</button>
-    </form>
-    댓글좋아요({{ c.total_upvote }})
-    {% else %}
-    <form action="/feeds/{{ feed.id }}/comments/{{ c.id }}/upvote" method="POST">
-        {% csrf_token %}
-        {% get_comment_upvote_tf feed.id c.id user.id as comment_upvote_tf %}
-        {% if user.is_authenticated %}
-            {% if comment_upvote_tf %}
-            <button type="submit">댓글좋아요 취소({{ c.total_upvote }})</button>
+    <div style="background-color: white; padding: 6px; margin: -6px 0; border-radius: 15px;">
+        <strong>{{ c.reactor }} </strong> {% get_side feed.id c.id %} {{ c.content }}
+        <!--for inline-flex-->
+        <div style="display:inline-flex;">
+            <span>(좋아요: {{ c.total_upvote }}개)</span>
+            {% if request.user == c.reactor %}
+            <form action="/feeds/{{ feed.id }}/comments/{{ c.id }}/" method="POST">
+                {% csrf_token %}
+                <input type="submit" style="color: white; background-color: #a1a1a1;" value="삭제" />
+            </form>
             {% else %}
-            <button type="submit">댓글좋아요({{ c.total_upvote }})</button>
+            <form action="/feeds/{{ feed.id }}/comments/{{ c.id }}/upvote" method="POST">
+                {% csrf_token %}
+                {% get_comment_upvote_tf feed.id c.id user.id as comment_upvote_tf %}
+                {% if user.is_authenticated %}
+                    {% if comment_upvote_tf %}
+                    <input type="submit" style="color: red;" value="좋아요 취소"/>
+                    {% else %}
+                    <input type="submit" value="좋아요" />
+                    {% endif %}
+                {% endif %}
+            </form>
             {% endif %}
-        {% else %}
-            <span>댓글좋아요({{ c.total_upvote }})</span>
-        {% endif %}
-    </form>
-    {% endif %}
+        </div>
     </div>
     <br>
     {% endfor %}
@@ -210,7 +211,7 @@
     {% if search_result_num == 0 %}
         <div>검색결과가 없습니다.
         {% if user.is_authenticated %}
-        <a href="/feeds/new">작성하기</a>를 눌러 <strong>{{ keyword }}</strong>에 대한 
+        <a href="/feeds/new">작성하기 버튼</a>을 눌러 <strong>{{ keyword }}</strong>에 대한 
         {% endif %}        
         첫번째 글을 작성해보세요!</div>
     {% else %}

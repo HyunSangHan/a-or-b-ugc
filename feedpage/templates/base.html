@@ -3,11 +3,11 @@
   <head>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <meta charset="utf-8">
-    <title>A vs B</title>
+    <title>B C D</title>
   </head>
   <body style="background: #eeeeee;">
   <header style="width: 100%; height: 130px; background-color: yellow; color: black; text-align: left;">
-    <a href="/feeds">A vs B</a>
+    <a href="/feeds">B와 D사이의 C(Choice)</a>
     <div style="text-align: right;">
     {% if user.is_authenticated %}
       {{ user.get_username }}님, 안녕하세요
@@ -16,7 +16,6 @@
         <input type="hidden" />
         <input type="submit" value='로그아웃' />
       </form>
-      <a href="/feeds/new">작성하기</a>
       <a href="{% url 'profile' %}">내정보수정</a>
       <a href="{% url 'event' %}">공지사항</a>
       {% else %}

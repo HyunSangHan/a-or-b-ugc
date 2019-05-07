@@ -9,7 +9,6 @@ import random
 
 class HashTag(models.Model):
     tag = models.TextField(null=True)
-    # feed = models.ForeignKey(Feed, on_delete=models.CASCADE)
 
     def __str__(self):
         return str(self.tag)
