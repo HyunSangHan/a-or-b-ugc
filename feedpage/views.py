@@ -39,9 +39,19 @@ def index(request):
         # print(HashTag.objects.all())
         keyword = request.GET.get('keyword', '')
         feeds_all = Feed.objects.all().order_by('-updated_at', '-created_at')
+    #검색기능 추후 보완 필요
         if keyword: 
-            #검색기능 추후 보완 필요(댓글까지 망라)
-            feeds_all = feeds_all.filter(Q(title__icontains=keyword) | Q(content_a__icontains=keyword) | Q(content_b__icontains=keyword)) # | Q(matched_tags__icontains=keyword)
+            #필드에서 피드 뽑아오기
+            feeds_by_field = list(feeds_all.filter(Q(title__icontains=keyword) | Q(content_a__icontains=keyword) | Q(content_b__icontains=keyword)))
+            #해시태그에서 피드 뽑아오기
+            feeds_by_hashtag = []
+            tags = HashTag.objects.all().filter(Q(tag__icontains=keyword))
+            for tag in tags:
+                feeds_by_hashtag = feeds_by_hashtag + list(tag.tagged_feeds.all())
+            feeds_all = list(set(feeds_by_field + feeds_by_hashtag))
+#페이지네이션과의 파라미터 조화 필요
+
+
         paginator = Paginator(feeds_all, 8)
         page_num = request.GET.get('page')
         feeds = paginator.get_page(page_num)
@@ -82,19 +92,23 @@ def edit(request, id):
         for hash_tag in hash_tag_all:
             if HashTag.objects.filter(tag=hash_tag).count() > 0:
                 tag = HashTag.objects.get(tag=hash_tag)
-                TagRelation.objects.create(hash_tag=tag, feed=feed)
+                if TagRelation.objects.filter(hash_tag=tag, feed=feed).count() == 0:
+                    TagRelation.objects.create(hash_tag=tag, feed=feed)
             else:
                 tag = HashTag.objects.create(tag=hash_tag)
                 TagRelation.objects.create(hash_tag=tag, feed=feed)
         #현재상황: edit을 통해 추가된 태그의 첫번째는 #만이 나오는 게 그대로 나오고 있음. 해시태그 하나씩 삭제가 안됨.(form태그 중첩 이슈로 예상)
-        # 태그릴레이션 중복이 허용됨
+        #나중에는 태그 위치 조절할 수 있는 기능 / 특정 태그 삭제하는 기능 구현 필요
 
         feed.editnow = False
+        feed.update_date()
         feed.save()
-        #여기로 보내고 싶은데... '/feeds'+'?page='+feeds.number
-        return redirect('/feeds')
+        next = request.POST['next']
+        #여기로 보내고 싶은데... '/feeds'+'?page='+feeds.number // /feeds/?page=2
+        return redirect('%s'%next)
     else:
-        return render(request, 'feedpage/edit.html', {'feed': feed})    
+        next = request.META['HTTP_REFERER']
+        return render(request, 'feedpage/edit.html', {'feed': feed, 'next': next})    
 
 def delete_tag(request, fid, tid):
     #되고 있는 것인지 확인 필요
@@ -182,7 +196,7 @@ def follow_manager(request, pk):
         try:
             following_already = Follow.objects.get(follow_from=follow_from, follow_to=follow_to)
         except Follow.DoesNotExist:
-            #이거뭐지???????????????????
+            #갑자기 이거뭐지???????????????????
             following_already = None
 
         if following_already:

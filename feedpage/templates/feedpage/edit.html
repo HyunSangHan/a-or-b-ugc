@@ -2,18 +2,18 @@
 {% load custom_tags %}
 
 {% block content %}
-    <h1>수정하고 싶나요?</h1>
+    <h1>수정하기</h1>
     <a href="/feeds">메인으로 돌아가기</a>
     <form action="/feeds/{{feed.id}}/edit/" method="POST">
         {% csrf_token %} 
         <p>title</p>
         <input name="title" value="{{feed.title}}" required /> <br />
         <p>content</p>
-        A: <input name="content_a" value="{{feed.content_a}}" required /> <br />
-        B: <input name="content_b" value="{{feed.content_b}}" required /> <br />
+        A: <input name="content_a" value="{{feed.content_a}}" size="40" required /> <br />
+        B: <input name="content_b" value="{{feed.content_b}}" size="40" required /> <br />
         <!--분기처리필요-->
         HASH TAG: 
-        <input name="hash_tag_raw" placeholder="#이러한 #형태로 #입력하세요" row="400"/> <br />
+        <input name="hash_tag_raw" placeholder="#이러한 #형태로 #입력하세요" size="30"/> <br />
         <input type="hidden" name="next" value="{{next}}" />
         <input type="submit" value="submit" />
         <br/>

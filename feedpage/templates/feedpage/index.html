@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load custom_tags %}
 <!--언젠간 지표 트래킹도 구현하고 싶다-->
+<!--index에는 리뷰를 A, B별 베스트 1개만 노출하고, 더보기로 들어가야 전체 댓글이 보이는 것으로 구현예정-->
 {% block content %}
 
 {% if is_searched and search_result_num != 0 %}
@@ -34,9 +35,7 @@
         {% for tag in feed_tags %}
         {% if tag != feed_tags.first %}
         <a href="/feeds/?keyword={{tag}}"># {{ tag }}</a>
-        &nbsp&nbsp&nbsp
-      </form>
-
+        &nbsp&nbsp
         {% endif %}
         {% endfor %}
     <!-- 팔로우 코드 -->
@@ -121,13 +120,8 @@
         <!--show화면도 구현해야함!!!!!!!!!!!!!-->
         <a href="/feeds/{{ feed.id }}">덜보기</a>
     {% if request.user == feed.creator %}
-        <a href="/feeds/{{ feed.id }}/edit?next={{request.path}}?page={{feeds.number}}">수정하기</a>
+        <a href="/feeds/{{ feed.id }}/edit?next={{request.GET.urlencode}}">수정하기</a>
         <a href="/feeds/{{ feed.id }}/editon">당장수정하기</a>
-
-
-            {% comment %} 딜리트 이렇게하면 안되지!!!!!!!!!!!! {% endcomment %}
-
-
         <form action="/feeds/{{ feed.id }}/delete/" method="POST">
             {% csrf_token %}
             {% comment %} <input type="hidden" name="_method" value="DELETE"/> {% endcomment %}
@@ -142,13 +136,6 @@
         </form> {% endcomment %}
         {% get_report_tf feed.id user.id as report_tf %}   
         {% if report_tf and user.id %}
-
-
-{% comment %} 
-
-지금 get방식인데 괜찮을까...?
-{% endcomment %}
-
         <a href="/feeds/{{ feed.id }}/report/" onclick="return alert('이미 신고하셨습니다.')">
             <button>신고({{feed.report_set.count }}건)</button>
         </a>
@@ -157,7 +144,7 @@
             <button>신고({{feed.report_set.count }}건)</button>
         </a>
         {% else %}
-        <span>신고({{feed.report_set.count }}건)</span>
+            <span>신고({{feed.report_set.count }}건)</span>
         {% endif %}
     {% endif %}
 
@@ -170,12 +157,6 @@
         <!--for inline-flex-->
         <div style="display:inline-flex;">
             <span>(좋아요: {{ c.total_upvote }}개)</span>
-            {% if request.user == c.reactor %}
-            <form action="/feeds/{{ feed.id }}/comments/{{ c.id }}/" method="POST">
-                {% csrf_token %}
-                <input type="submit" style="color: white; background-color: #a1a1a1;" value="삭제" />
-            </form>
-            {% else %}
             <form action="/feeds/{{ feed.id }}/comments/{{ c.id }}/upvote" method="POST">
                 {% csrf_token %}
                 {% get_comment_upvote_tf feed.id c.id user.id as comment_upvote_tf %}
@@ -186,6 +167,11 @@
                     <input type="submit" value="좋아요" />
                     {% endif %}
                 {% endif %}
+            </form>
+            {% if request.user == c.reactor %}
+            <form action="/feeds/{{ feed.id }}/comments/{{ c.id }}/" method="POST">
+                {% csrf_token %}
+                <input type="submit" style="color: white; background-color: #a1a1a1;" value="삭제" />
             </form>
             {% endif %}
         </div>
