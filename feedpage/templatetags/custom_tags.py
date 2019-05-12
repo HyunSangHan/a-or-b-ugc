@@ -75,12 +75,17 @@ def get_report_tf(fid, uid):
 @register.simple_tag
 def get_feed_tags(fid):
     try:
-        feed_tags = TagRelation.objects.filter(feed_id=fid)
+        feed_tags_all = TagRelation.objects.filter(feed_id=fid)
     except:
-        feed_tags = None
-    # print(str(feed_tags.first().hash_tag))
-    return feed_tags
+        feed_tags_all = None
 
+    # 태그노출 중복 제거를 위한 코드
+    # '일단은' 구현했으나, 더 개선된 로직으로 수정 필요
+    feed_tags = []
+    for feed_tag in feed_tags_all:
+        if feed_tag != feed_tags_all.first():
+            feed_tags.append(str(feed_tag))
+    return list(set(feed_tags))
 
 @register.simple_tag
 def get_comment_upvote_tf(fid, cid, uid):

@@ -2,14 +2,16 @@
 
 {% block content %}
     <h1>new feed</h1>
-    <form action="/feeds/" method="POST">
+    <form action="/feeds/" method="POST" enctype="multipart/form-data">
       {% csrf_token %} 
       <p>title</p>
       <input name="title" required /> <br />
 <!--대칭 형태로 입력창도 UI 수정 필요-->
       <p>content</p>
         A: <input name="content_a" size="40" required /> <br />
+        <input name="img_a" type="file" /> <br />
         B: <input name="content_b" size="40" required /> <br />
+        <input name="img_b" type="file" /> <br />
         HASH TAG: <input name="hash_tag_raw" placeholder="#이러한 #형태로 #입력하세요" size="30"/> <br />
       <input type="submit" value="submit" />
     </form>

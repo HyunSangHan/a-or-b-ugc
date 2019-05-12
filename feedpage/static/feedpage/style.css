@@ -1,0 +1,128 @@
+body {
+    background-color: #eeeeee;
+}
+
+.invisible {
+    display: none;
+}
+
+.m-auto {
+    margin: auto;
+}
+
+
+.ellipsis{
+    text-overflow:ellipsis;
+    -o-text-overflow:ellipsis;
+    overflow:hidden;
+    white-space:nowrap;
+    word-wrap:normal !important;
+}
+
+div > a {
+    text-decoration: none;
+    color: black;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+.h-100 {
+    height: 100%;
+}
+
+.w-100 {
+    width: 100%;
+}
+
+.w-80 {
+    width: 80%;
+}
+
+.container {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.each-content {
+    width: 100%;
+    display: inline-flex;
+}
+
+.each-li {
+    padding-bottom: 50px;
+    list-style-type: none;
+}
+
+.contents {
+    bacKground-color: white;
+    padding: 5px;
+    margin: -5px;
+}
+
+@media (min-width: 576px) {
+
+    .contents {
+        padding: 30px;
+    }
+    
+    .container {
+        max-width: 540px;
+    }
+}
+
+@media (min-width: 768px) {
+    .contents {
+        padding: 40px;
+    }
+
+    .container {
+        max-width: 720px;
+    }
+}
+
+
+
+
+/* for highly customize*/
+.logout-btn {
+    padding: 0 !important;
+}
+
+.logout-btn > button:hover {
+    background-color: white;
+}
+
+
+/* MDL */
+
+.demo-card-image.mdl-card {
+    /* width: 256px; */
+    height: 256px;
+  }
+
+.demo-card-image > .mdl-card__actions {
+    height: 52px;
+    padding: 16px;
+    background: rgba(0, 0, 0, 0.2);
+  }
+
+  .demo-card-image__filename {
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+.demo-card-image.mdl-card.mdl-shadow--2dp {
+    margin: 1%;
+}
+
+.mdl-button.mdl-js-button.mdl-button--fab.mdl-js-ripple-effect.mdl-button--colored{
+    position: fixed;
+    z-index: 100;
+    bottom: 40px;
+    right: 20px;
+}

@@ -31,12 +31,9 @@ def signup(request):
         return render(request, 'accounts/signup.html')
 
 def logout(request):
-    if request.method == 'POST':
-        auth.logout(request)
-        return redirect(request.META['HTTP_REFERER'])
-    else:
-        return render(request, 'accounts/logout.html')
-
+    auth.logout(request)
+    return redirect(request.META['HTTP_REFERER'])
+    
 def login(request):
     if request.method == 'POST':
         email = request.POST['email']

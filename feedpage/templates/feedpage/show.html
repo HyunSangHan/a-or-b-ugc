@@ -5,5 +5,8 @@
     <a href="/feeds">메인으로 돌아가기</a>
     <p>{{ feed.title }}</p>
     <p>{{ feed.content_a }}</p>
+    {% comment %} <img src="{{ feed.img_a.url }}" alt="img_a"> {% endcomment %}
+    <br/>
+    {% comment %} <img src="{{ feed.img_b.url }}" alt="img_b"> {% endcomment %}
     <p>{{ feed.content_b }}</p>
 {% endblock content %}

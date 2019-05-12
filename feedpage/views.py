@@ -14,7 +14,9 @@ def index(request):
         title = request.POST['title']
         content_a = request.POST['content_a']
         content_b = request.POST['content_b']
-        feed = Feed.objects.create(title=title, content_a=content_a, content_b=content_b, creator = request.user)
+        img_a = request.FILES.get('img_a', False)
+        img_b = request.FILES.get('img_b', False)
+        feed = Feed.objects.create(title=title, content_a=content_a, img_a=img_a, img_b=img_b, content_b=content_b, creator = request.user)
         #edit도
         # 띄어쓰기 포함도
         # 샾 안넣었을때의 코너케이스도 챙기기 필요
@@ -29,8 +31,7 @@ def index(request):
             else:
                 tag = HashTag.objects.create(tag=hash_tag)
                 TagRelation.objects.create(hash_tag=tag, feed=feed)
-#중복되면 빼는 로직도 필요(나중에)
-#공백이면 빼는 로직도 필요(당장 / below)
+# 공백이면 빼는 로직도 필요(당장 / below)
 # 왜 이거 안됨? => [에러메시지] invalid literal for int() with base 10: ''
 # print(TagRelation.objects.filter(hash_tag="").count())
 # TagRelation.objects.get(hash_tag="").delete()
@@ -104,7 +105,7 @@ def edit(request, id):
         feed.update_date()
         feed.save()
         next = request.POST['next']
-        #여기로 보내고 싶은데... '/feeds'+'?page='+feeds.number // /feeds/?page=2
+        #여기로 보내기 위함=> '/feeds'+'?page='+feeds.number
         return redirect('%s'%next)
     else:
         next = request.META['HTTP_REFERER']
@@ -116,18 +117,6 @@ def delete_tag(request, fid, tid):
         tag = HashTag.objects.get(feed_id=fid, tag_id=tid)
         tag.delete()
         return redirect(request.META['HTTP_REFERER'])
-
-def editon(request, id):
-    feed = Feed.objects.get(id=id)
-    feed.editnow = True
-    feed.save()
-    return redirect(request.META['HTTP_REFERER'])
-
-def editoff(request, id):
-    feed = Feed.objects.get(id=id)
-    feed.editnow = False
-    feed.save()
-    return redirect(request.META['HTTP_REFERER'])
 
 def create_comment(request, id):
     if request.method == 'POST':
@@ -217,3 +206,45 @@ def report(request, pk):
     if report_count == 0:
         Report.objects.create(user_id = request.user.id, feed_id = feed.id)
     return redirect(request.META['HTTP_REFERER'])
+
+def statistics(request, id):
+    if request.method == "POST":
+        return redirect(request.META['HTTP_REFERER'])
+    else:
+        return render(request, 'feedpage/statistics.html', {'test': 'test'})
+
+def creator(request, pk):
+    if request.method == "POST":
+        return redirect(request.META['HTTP_REFERER'])
+    else:
+        keyword = request.GET.get('keyword', '')
+        feeds = Feed.objects.filter(creator_id=pk)
+        return render(request, 'feedpage/creator.html', {'feeds': feeds})
+
+def mysubscribe(request):
+    if request.method == "POST":
+        return redirect(request.META['HTTP_REFERER'])
+    else:
+        # my_subs = Follow.objects.()
+        # 이거 아님!
+        feeds = Feed.objects.filter(creator_id=request.user.id)
+        print(feeds)
+        return render(request, 'feedpage/mysubscribe.html', {'feeds': feeds})
+
+def myhistory(request):
+    if request.method == "POST":
+        return redirect(request.META['HTTP_REFERER'])
+    else:
+        feeds = Feed.objects.filter(creator_id=request.user.id)
+        print(feeds)
+        return render(request, 'feedpage/myhistory.html', {'feeds': feeds})
+
+def myreaction(request):
+    if request.method == "POST":
+        return redirect(request.META['HTTP_REFERER'])
+    else:
+        feeds = Feed.objects.filter(creator_id=request.user.id)
+        print(feeds)
+        return render(request, 'feedpage/myreaction.html', {'feeds': feeds})
+
+        ##########myreacton

@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'feedpage.apps.FeedpageConfig',
     'eventpage.apps.EventpageConfig',
     'accounts.apps.AccountsConfig',
+    'sass_processor',
 ]
 
 MIDDLEWARE = [
@@ -120,5 +121,15 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT =  os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = (
+	os.path.join(BASE_DIR, 'feedpage', 'static'),
+)
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+SASS_PROCESSOR_ENABLED =  True
+SASS_PROCESSOR_ROOT =  os.path.join(BASE_DIR, 'feedpage', 'static')
 
 LOGIN_REDIRECT_URL = "/feeds/"
