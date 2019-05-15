@@ -19,13 +19,13 @@
           <a href="/feeds" class="mdl-layout-title">B C D</a>
           <!-- Add spacer, to align navigation to the right -->
           <div class="mdl-layout-spacer"></div>
-          <!-- Navigation. We hide it in small screens. -->
-          <nav class="mdl-navigation mdl-layout--large-screen-only">
+          <!-- Navigation. It will be hidden in small screens. -->
+          {% comment %} <nav class="mdl-navigation mdl-layout--large-screen-only">
             <a class="mdl-navigation__link" href="">Link</a>
             <a class="mdl-navigation__link" href="">Link</a>
             <a class="mdl-navigation__link" href="">Link</a>
             <a class="mdl-navigation__link" href="">Link</a>
-          </nav>
+          </nav> {% endcomment %}
           <form action="/feeds/" method="get">
             <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable mdl-textfield--floating-label mdl-textfield--align-right">
               <label class="mdl-button mdl-js-button mdl-button--icon" for="fixed-header-drawer-exp">
@@ -45,7 +45,7 @@
         </span>
         {% if user.is_authenticated %}
           <nav class="mdl-navigation">
-            <a class="mdl-navigation__link" href="{% url 'profile' %}">회원정보수정</a>
+            <a class="mdl-navigation__link" href="{% url 'profile' %}">프로필수정</a>
             <a class="mdl-navigation__link" href="{% url 'event' %}">공지사항</a>
             <a class="mdl-navigation__link" href="{% url 'logout' %}">로그아웃</a>
           </nav>

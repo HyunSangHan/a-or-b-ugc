@@ -56,7 +56,8 @@ class FeedComment(models.Model):
     reactor = models.ForeignKey(User, null=True, on_delete= models.CASCADE)
     content = models.TextField()
     feed = models.ForeignKey(Feed, on_delete=models.CASCADE)
-    upvote_users = models.ManyToManyField(User, blank=True, related_name='upvote_feed_comments', through='CommentUpvote')
+    upvote_side = models.IntegerField(default=0)
+    upvote_users = models.ManyToManyField(User, blank=True, related_name='upvote_feedcomments', through='CommentUpvote')
     total_upvote = models.IntegerField(default=0)
     created_at = models.DateTimeField(default=timezone.now)
 
@@ -90,8 +91,8 @@ class Report(models.Model):
 
 class CommentUpvote(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    feed_comment = models.ForeignKey(FeedComment, on_delete=models.CASCADE)
+    feedcomment = models.ForeignKey(FeedComment, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return str(self.feed_comment)
+        return str(self.feedcomment)

@@ -10,6 +10,34 @@ from django.core.exceptions import ObjectDoesNotExist
 ###니드 로그인 기능 리다이렉트 구현 필요
 
 def index(request): 
+    # print(HashTag.objects.all())
+    keyword = request.GET.get('keyword', '')
+    feeds_all = Feed.objects.all().order_by('-updated_at', '-created_at')
+#검색기능 추후 보완 필요
+    if keyword: 
+        #필드에서 피드 뽑아오기
+        feeds_by_field = list(feeds_all.filter(Q(title__icontains=keyword) | Q(content_a__icontains=keyword) | Q(content_b__icontains=keyword)))
+        #해시태그에서 피드 뽑아오기
+        feeds_by_hashtag = []
+        tags = HashTag.objects.all().filter(Q(tag__icontains=keyword))
+        for tag in tags:
+            feeds_by_hashtag = feeds_by_hashtag + list(tag.tagged_feeds.all())
+        feeds_all = list(set(feeds_by_field + feeds_by_hashtag))
+#페이지네이션과의 파라미터 조화 필요
+
+    paginator = Paginator(feeds_all, 8)
+    page_num = request.GET.get('page')
+    feeds = paginator.get_page(page_num)
+    search_result_num = len(feeds_all)
+    if keyword and feeds:
+        is_searched = True
+    elif keyword == "":
+        is_searched = False
+    else:
+        is_searched = True
+    return render(request, 'feedpage/index.html', {'feeds': feeds, 'keyword': keyword, 'page': page_num, 'is_searched': is_searched, 'search_result_num': search_result_num})
+
+def new(request):
     if request.method == 'POST': # create
         title = request.POST['title']
         content_a = request.POST['content_a']
@@ -36,37 +64,8 @@ def index(request):
 # print(TagRelation.objects.filter(hash_tag="").count())
 # TagRelation.objects.get(hash_tag="").delete()
         return redirect('/feeds')
-    else: # index get
-        # print(HashTag.objects.all())
-        keyword = request.GET.get('keyword', '')
-        feeds_all = Feed.objects.all().order_by('-updated_at', '-created_at')
-    #검색기능 추후 보완 필요
-        if keyword: 
-            #필드에서 피드 뽑아오기
-            feeds_by_field = list(feeds_all.filter(Q(title__icontains=keyword) | Q(content_a__icontains=keyword) | Q(content_b__icontains=keyword)))
-            #해시태그에서 피드 뽑아오기
-            feeds_by_hashtag = []
-            tags = HashTag.objects.all().filter(Q(tag__icontains=keyword))
-            for tag in tags:
-                feeds_by_hashtag = feeds_by_hashtag + list(tag.tagged_feeds.all())
-            feeds_all = list(set(feeds_by_field + feeds_by_hashtag))
-#페이지네이션과의 파라미터 조화 필요
-
-
-        paginator = Paginator(feeds_all, 8)
-        page_num = request.GET.get('page')
-        feeds = paginator.get_page(page_num)
-        search_result_num = len(feeds_all)
-        if keyword and feeds:
-            is_searched = True
-        elif keyword == "":
-            is_searched = False
-        else:
-            is_searched = True
-        return render(request, 'feedpage/index.html', {'feeds': feeds, 'keyword': keyword, 'page': page_num, 'is_searched': is_searched, 'search_result_num': search_result_num})
-
-def new(request):
-    return render(request, 'feedpage/new.html')
+    else:
+        return render(request, 'feedpage/new.html')
 
 def show(request, id):
     feed = Feed.objects.get(id=id)
@@ -120,8 +119,17 @@ def delete_tag(request, fid, tid):
 
 def create_comment(request, id):
     if request.method == 'POST':
+        upvote_list = Upvote.objects.filter(feed_id=id, user_id=request.user.id)
+        if upvote_list.count() > 0:
+            if upvote_list.first().about_a:
+                upvote_side = 1
+            else:
+                upvote_side = 2
+        else:
+            upvote_side = 0
         content = request.POST['content']
-        FeedComment.objects.create(feed_id=id, content=content, reactor=request.user)
+        FeedComment.objects.create(feed_id=id, content=content, reactor=request.user, upvote_side=upvote_side)
+        print(FeedComment.objects.filter(feed_id=id, reactor=request.user).first().upvote_side)
         return redirect(request.META['HTTP_REFERER'])
 
 def delete_comment(request, id, cid):
@@ -137,7 +145,7 @@ def upvote_comment(request, id, cid):
         if upvote_list.count() > 0:
             c.commentupvote_set.get(user_id = request.user.id).delete()
         else:
-            CommentUpvote.objects.create(user_id = request.user.id, feed_comment_id = cid)
+            CommentUpvote.objects.create(user_id = request.user.id, feedcomment_id = cid)
         c.total_upvote = c.commentupvote_set.count()
         c.save()
         return redirect(request.META['HTTP_REFERER'])
@@ -154,28 +162,56 @@ def feed_upvote_a(request, pk):
     feed = Feed.objects.get(id = pk)
     # user id로 한번 더 필터링하고
     upvote_list = feed.upvote_set.filter(user_id = request.user.id)
+    feedcomment_list = feed.feedcomment_set.filter(reactor_id = request.user.id)
     if upvote_list.count() > 0:
-        if upvote_list.first().about_a: 
+        if upvote_list.first().about_a:
+            if feedcomment_list.count() > 0:
+                for c in feedcomment_list:
+                    c.upvote_side = 0
+                    c.save()
             feed.upvote_set.get(user_id = request.user.id).delete()
         else:
+            if feedcomment_list.count() > 0:
+                for c in feedcomment_list:
+                    c.upvote_side = 1
+                    c.save()
             feed.upvote_set.get(user_id = request.user.id).delete()
             Upvote.objects.create(user_id = request.user.id, feed_id = feed.id, about_a = True)
     else:
+        if feedcomment_list.count() > 0:
+            for c in feedcomment_list:
+                c.upvote_side = 1
+                c.save()
         Upvote.objects.create(user_id = request.user.id, feed_id = feed.id, about_a = True)
+    print(feedcomment_list.first().upvote_side)
     return redirect(request.META['HTTP_REFERER'])
 
 def feed_upvote_b(request, pk):
     # if request.method == 'POST':
     feed = Feed.objects.get(id = pk)
     upvote_list = feed.upvote_set.filter(user_id = request.user.id)
+    feedcomment_list = feed.feedcomment_set.filter(reactor_id = request.user.id)
     if upvote_list.count() > 0:
         if upvote_list.first().about_a: 
+            if feedcomment_list.count() > 0:
+                for c in feedcomment_list:
+                    c.upvote_side = 2
+                    c.save()
             feed.upvote_set.get(user_id = request.user.id).delete()
             Upvote.objects.create(user_id = request.user.id, feed_id = feed.id, about_a = False)
         else:
+            if feedcomment_list.count() > 0:
+                for c in feedcomment_list:
+                    c.upvote_side = 0
+                    c.save()
             feed.upvote_set.get(user_id = request.user.id).delete()
     else:
+        if feedcomment_list.count() > 0:
+            for c in feedcomment_list:
+                c.upvote_side = 2
+                c.save()
         Upvote.objects.create(user_id = request.user.id, feed_id = feed.id, about_a = False)
+    print(feedcomment_list.first().upvote_side)
     return redirect(request.META['HTTP_REFERER'])
 
 def follow_manager(request, pk):

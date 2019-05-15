@@ -98,6 +98,22 @@ def get_comment_upvote_tf(fid, cid, uid):
     return comment_upvote_tf
 
 @register.simple_tag
+def get_bestcomment_a(fid):
+    feed = Feed.objects.get(id=fid)
+    comments_a_all = feed.feedcomment_set.filter(upvote_side=1)
+    comments = comments_a_all.order_by('-total_upvote', 'created_at')
+    comment_a = comments.first()
+    return comment_a
+
+@register.simple_tag
+def get_bestcomment_b(fid):
+    feed = Feed.objects.get(id=fid)
+    comments_b_all = feed.feedcomment_set.filter(upvote_side=2)
+    comments = comments_b_all.order_by('-total_upvote', 'created_at')
+    comment_b = comments.first()
+    return comment_b
+
+@register.simple_tag
 def get_ordered_comment(fid, cid, uid):
     feed = Feed.objects.get(id=fid)
     comments_all = feed.feedcomment_set
