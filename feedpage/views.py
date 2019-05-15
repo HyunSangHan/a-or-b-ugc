@@ -165,25 +165,12 @@ def feed_upvote_a(request, pk):
     feedcomment_list = feed.feedcomment_set.filter(reactor_id = request.user.id)
     if upvote_list.count() > 0:
         if upvote_list.first().about_a:
-            if feedcomment_list.count() > 0:
-                for c in feedcomment_list:
-                    c.upvote_side = 0
-                    c.save()
             feed.upvote_set.get(user_id = request.user.id).delete()
         else:
-            if feedcomment_list.count() > 0:
-                for c in feedcomment_list:
-                    c.upvote_side = 1
-                    c.save()
             feed.upvote_set.get(user_id = request.user.id).delete()
             Upvote.objects.create(user_id = request.user.id, feed_id = feed.id, about_a = True)
     else:
-        if feedcomment_list.count() > 0:
-            for c in feedcomment_list:
-                c.upvote_side = 1
-                c.save()
         Upvote.objects.create(user_id = request.user.id, feed_id = feed.id, about_a = True)
-    print(feedcomment_list.first().upvote_side)
     return redirect(request.META['HTTP_REFERER'])
 
 def feed_upvote_b(request, pk):
@@ -193,25 +180,12 @@ def feed_upvote_b(request, pk):
     feedcomment_list = feed.feedcomment_set.filter(reactor_id = request.user.id)
     if upvote_list.count() > 0:
         if upvote_list.first().about_a: 
-            if feedcomment_list.count() > 0:
-                for c in feedcomment_list:
-                    c.upvote_side = 2
-                    c.save()
             feed.upvote_set.get(user_id = request.user.id).delete()
             Upvote.objects.create(user_id = request.user.id, feed_id = feed.id, about_a = False)
         else:
-            if feedcomment_list.count() > 0:
-                for c in feedcomment_list:
-                    c.upvote_side = 0
-                    c.save()
             feed.upvote_set.get(user_id = request.user.id).delete()
     else:
-        if feedcomment_list.count() > 0:
-            for c in feedcomment_list:
-                c.upvote_side = 2
-                c.save()
         Upvote.objects.create(user_id = request.user.id, feed_id = feed.id, about_a = False)
-    print(feedcomment_list.first().upvote_side)
     return redirect(request.META['HTTP_REFERER'])
 
 def follow_manager(request, pk):

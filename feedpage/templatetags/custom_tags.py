@@ -39,15 +39,12 @@ def get_upvote_perc_b(pk):
 @register.simple_tag
 def get_side(fid, cid):
     feed = Feed.objects.get(id=fid)
-    comment = feed.feedcomment_set.get(id=cid)
-    reactor = comment.reactor
-    try:
-        side_tf = feed.upvote_set.get(user = reactor).about_a
-        if side_tf:
-            side = "[A] "
-        else:
-            side = "[B] "
-    except:
+    feedcomment = feed.feedcomment_set.get(id=cid)
+    if feedcomment.upvote_side == 1:
+        side = "[A] "
+    elif feedcomment.upvote_side == 2:
+        side = "[B] "
+    else:
         side = ""
     return side
 
