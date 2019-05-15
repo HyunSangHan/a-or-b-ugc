@@ -94,6 +94,7 @@ def get_comment_upvote_tf(fid, cid, uid):
         comment_upvote_tf = False
     return comment_upvote_tf
 
+# A에 대한 best댓글을 뽑아내기(index용)
 @register.simple_tag
 def get_bestcomment_a(fid):
     feed = Feed.objects.get(id=fid)
@@ -102,6 +103,7 @@ def get_bestcomment_a(fid):
     comment_a = comments.first()
     return comment_a
 
+# B에 대한 best댓글을 뽑아내기(index용)
 @register.simple_tag
 def get_bestcomment_b(fid):
     feed = Feed.objects.get(id=fid)
@@ -110,8 +112,18 @@ def get_bestcomment_b(fid):
     comment_b = comments.first()
     return comment_b
 
+# 내 댓글만 뽑아내기(index용)
 @register.simple_tag
-def get_ordered_comment(fid, cid, uid):
+def get_my_comment(fid, uid):
+    feed = Feed.objects.get(id=fid)
+    comments_all = feed.feedcomment_set.filter(reactor_id = uid)
+    #댓글 랭킹로직: [1순위] 좋아요 많이받은순 / [2순위] 오래된순. 나중에는 각자 선택할 수 있게끔 구현 필요
+    comments = comments_all.order_by('-total_upvote', 'created_at')
+    return comments
+
+# 댓글 전체 다 뽑아내기(show용)
+@register.simple_tag
+def get_ordered_comment(fid):
     feed = Feed.objects.get(id=fid)
     comments_all = feed.feedcomment_set
     #댓글 랭킹로직: [1순위] 좋아요 많이받은순 / [2순위] 오래된순. 나중에는 각자 선택할 수 있게끔 구현 필요

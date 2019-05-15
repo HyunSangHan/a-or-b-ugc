@@ -162,15 +162,31 @@
                         </div>
                         <!-- 댓글 코드 -->
                         <br><br>
-
+                        <!--A베스트댓글-->
                         {% get_bestcomment_a feed.id as comment_a %}
                         {{ comment_a.reactor }} [A] {{ comment_a.content }} {{ comment_a.total_upvote }}
-<br>
+                        {% if comment_a.reactor == user %}
+                        [MY]
+                        {% endif %}
+                        <br>
+                        <!--B베스트댓글-->
                         {% get_bestcomment_b feed.id as comment_b %}
                         {{ comment_b.reactor }} [B] {{ comment_b.content }} {{ comment_b.total_upvote }}
-
-
-                        {% get_ordered_comment feed.id c.id user.id as comments %}
+                        {% if comment_b.reactor == user %}
+                        [MY]
+                        {% endif %}
+                        <br>
+                        <!--내가쓴댓글모음(베댓이 아닌경우만)-->
+                        {% get_my_comment feed.id user.id as my_comments %}
+                        {% for c in my_comments %}
+                            {% if c != comment_a and c != comment_b %}
+                                <strong>{{ c.reactor }} </strong> {% get_side feed.id c.id %} {{ c.content }} {{ c.total_upvote }} [MY]
+                            {% endif %}
+                            <br>
+                        {% endfor %}
+================
+                        <!--show 안으로 들어갈 부분(전체댓글)-->
+                        {% get_ordered_comment feed.id as comments %}
                         {% for c in comments %}
                             <div style="background-color: white; padding: 6px; margin: -6px 0; border-radius: 15px;">
                                 <strong>{{ c.reactor }} </strong> {% get_side feed.id c.id %} {{ c.content }}
