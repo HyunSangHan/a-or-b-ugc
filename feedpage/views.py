@@ -258,54 +258,34 @@ def statistics(request, id):
     else:
         return render(request, 'feedpage/statistics.html', {'test': 'test'})
 
-def creator(request, pk):
-    if request.method == "POST":
+def creator(request, creator_name):
+    print("================="+creator_name)
+    creators = User.objects.filter(username=creator_name)
+    if creators.count() > 0:
+        creator = creators.first()
+        feeds = Feed.objects.filter(creator=creator)
+        print(feeds)
+        return render(request, 'feedpage/creator.html', {'feeds': feeds})
+    else:
         try:
             next = request.META['HTTP_REFERER']
         except:
             next = '/feeds/'
         return redirect('%s'%next)
-    else:
-        keyword = request.GET.get('keyword', '')
-        feeds = Feed.objects.filter(creator_id=pk)
-        return render(request, 'feedpage/creator.html', {'feeds': feeds})
 
 def mysubscribe(request):
-    if request.method == "POST":
-        try:
-            next = request.META['HTTP_REFERER']
-        except:
-            next = '/feeds/'
-        return redirect('%s'%next)
-    else:
-        # my_subs = Follow.objects.()
-        # 이거 아님!
-        feeds = Feed.objects.filter(creator_id=request.user.id)
-        print(feeds)
-        return render(request, 'feedpage/mysubscribe.html', {'feeds': feeds})
+    # my_subs = Follow.objects.()
+    # 이거 아님!
+    feeds = Feed.objects.filter(creator_id=request.user.id)
+    print(feeds)
+    return render(request, 'feedpage/mysubscribe.html', {'feeds': feeds})
 
 def myhistory(request):
-    if request.method == "POST":
-        try:
-            next = request.META['HTTP_REFERER']
-        except:
-            next = '/feeds/'
-        return redirect('%s'%next)
-    else:
-        feeds = Feed.objects.filter(creator_id=request.user.id)
-        print(feeds)
-        return render(request, 'feedpage/myhistory.html', {'feeds': feeds})
+    feeds = Feed.objects.filter(creator_id=request.user.id)
+    print(feeds)
+    return render(request, 'feedpage/myhistory.html', {'feeds': feeds})
 
 def myreaction(request):
-    if request.method == "POST":
-        try:
-            next = request.META['HTTP_REFERER']
-        except:
-            next = '/feeds/'
-        return redirect('%s'%next)
-    else:
-        feeds = Feed.objects.filter(creator_id=request.user.id)
-        print(feeds)
-        return render(request, 'feedpage/myreaction.html', {'feeds': feeds})
-
-        ##########myreacton
+    feeds = Feed.objects.filter(creator_id=request.user.id)
+    print(feeds)
+    return render(request, 'feedpage/myreaction.html', {'feeds': feeds})
