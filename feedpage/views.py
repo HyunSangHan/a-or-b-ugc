@@ -6,6 +6,7 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
+from operator import attrgetter
 
 ###니드 로그인 기능 리다이렉트 구현 필요
 
@@ -267,22 +268,26 @@ def creator(request, creator_name):
 
 def mysubscribe(request):
     follow_from = Profile.objects.get(user_id = request.user.id)
-    # my_subs = Follow.objects.filter(follow_to=follow_from).first().follow_from.user.username
     my_subs = Follow.objects.filter(follow_from=follow_from)
     feeds = []
     for my_sub in my_subs:
         my_sub_user = my_sub.follow_to.user
-        print(my_sub_user.feed_set.all())
         feeds = feeds + list(my_sub_user.feed_set.all())
+    ######updated_at으로 정렬도 해줘야함 필요
+    ######구독 하나도 없을 경우 메시지 띄워주기 필요
     return render(request, 'feedpage/mysubscribe.html', {'feeds': feeds})
 
 def myhistory(request):
     feeds = Feed.objects.filter(creator_id=request.user.id)
-    print(feeds)
     return render(request, 'feedpage/myhistory.html', {'feeds': feeds})
 
 def myreaction(request):
-    #이거 아님!
-    feeds = Feed.objects.filter(creator_id=request.user.id)
+    feeds = []
+    my_upvotes = list(request.user.upvote_set.all())
+    print(my_upvotes)
+    for my_upvote in my_upvotes:
+        ##############여기 왜 안되지?
+        print(list(my_upvote.feed))
+        feeds = feeds + list(my_upvote.feed)
     print(feeds)
     return render(request, 'feedpage/myreaction.html', {'feeds': feeds})
