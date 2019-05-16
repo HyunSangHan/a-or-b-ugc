@@ -10,6 +10,7 @@ from django.core.exceptions import ObjectDoesNotExist
 ###니드 로그인 기능 리다이렉트 구현 필요
 
 def index(request): 
+    print(request.user)
     # print(HashTag.objects.all())
     keyword = request.GET.get('keyword', '')
     feeds_all = Feed.objects.all().order_by('-updated_at', '-created_at')
@@ -82,8 +83,7 @@ def delete(request, id):
 
 def edit(request, id):
     feed = Feed.objects.get(id=id)
-    
-    if request.method == 'POST':
+    if request.method == 'POST' and feed.creator == request.user:
         feed.title = request.POST['title']
         feed.content_a = request.POST['content_a']
         feed.content_b = request.POST['content_b']
@@ -106,12 +106,16 @@ def edit(request, id):
         next = request.POST['next']
         #여기로 보내기 위함=> '/feeds'+'?page='+feeds.number
         return redirect('%s'%next)
-    else:
+    elif feed.creator == request.user:
         next = request.META['HTTP_REFERER']
-        return render(request, 'feedpage/edit.html', {'feed': feed, 'next': next})    
+        return render(request, 'feedpage/edit.html', {'feed': feed, 'next': next})
+    else:
+        print("비정상적인 수정 접근 시도")
+        return redirect(request.META['HTTP_REFERER'])
 
 def delete_tag(request, fid, tid):
     #되고 있는 것인지 확인 필요
+    ####################################
     if request.method == 'DELETE':
         tag = HashTag.objects.get(feed_id=fid, tag_id=tid)
         tag.delete()

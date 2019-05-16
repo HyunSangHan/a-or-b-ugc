@@ -133,7 +133,7 @@
                         <div>
                             <a href="/feeds/{{ feed.id }}">덜보기</a>
                             {% if request.user == feed.creator %}
-                                <a href="/feeds/{{ feed.id }}/edit?next={{request.GET.urlencode}}">수정하기</a>
+                                <a href="/feeds/{{ feed.id }}/edit">수정하기</a>
                                 <form action="/feeds/{{ feed.id }}/delete/" method="POST">
                                     {% csrf_token %}
                                     {% comment %} <input type="hidden" name="_method" value="DELETE"/> {% endcomment %}

@@ -27,13 +27,15 @@ def signup(request):
                 return redirect('/feeds')
         else:
             return render(request, 'accounts/signup.html', {'error' : 'Check your password'})
-    else:
+    elif request.user.is_anonymous:
         return render(request, 'accounts/signup.html')
+    else:
+        return redirect('/feeds/')
 
 def logout(request):
     auth.logout(request)
     return redirect(request.META['HTTP_REFERER'])
-    
+
 def login(request):
     if request.method == 'POST':
         email = request.POST['email']
@@ -51,14 +53,16 @@ def login(request):
                     return render(request, 'accounts/login.html', {'error' : 'Hey! password is incorrect'})
         except:
             return render(request, 'accounts/login.html', {'error' : 'Hey! email is incorrect'})
-    else:
+    elif request.user.is_anonymous:
         return render(request, 'accounts/login.html')
+    else:
+        return redirect('/feeds/')
 
 def profile(request):
-    user = request.user
-    profile = user.profile
     # auth.login(request, user)
     if request.method == 'POST':
+        user = request.user
+        profile = user.profile
         current_password = request.POST['current_password']
         password1 = request.POST['password1']
         password2 = request.POST['password2']
@@ -77,7 +81,6 @@ def profile(request):
             profile.save()
             update_session_auth_hash(request, request.user)
             return redirect('/feeds')
-
         else:
             # for error message
             if user.check_password(current_password) == False :
@@ -87,5 +90,7 @@ def profile(request):
             else :
                 error_msg = 'Unexpected error! Please tell us about this error case'
             return render(request, 'accounts/profile.html', {'profile': profile, 'error': error_msg})
-
-    return render(request, 'accounts/profile.html', {'profile': profile}) #for GET method
+    else:
+        user = request.user
+        profile = user.profile
+        return render(request, 'accounts/profile.html', {'profile': profile}) #for GET method
