@@ -10,7 +10,6 @@ from django.core.exceptions import ObjectDoesNotExist
 ###니드 로그인 기능 리다이렉트 구현 필요
 
 def index(request): 
-    print(request.user)
     # print(HashTag.objects.all())
     keyword = request.GET.get('keyword', '')
     feeds_all = Feed.objects.all().order_by('-updated_at', '-created_at')
@@ -83,7 +82,7 @@ def delete(request, id):
 
 def edit(request, id):
     feed = Feed.objects.get(id=id)
-    if request.method == 'POST' and feed.creator == request.user:
+    if request.method == 'POST' and feed.creator == request.user and feed.feedcomment_set.count() == 0 and feed.upvote_set.count() == 0:
         feed.title = request.POST['title']
         feed.content_a = request.POST['content_a']
         feed.content_b = request.POST['content_b']
@@ -106,12 +105,16 @@ def edit(request, id):
         next = request.POST['next']
         #여기로 보내기 위함=> '/feeds'+'?page='+feeds.number
         return redirect('%s'%next)
-    elif feed.creator == request.user:
+    elif feed.creator == request.user and feed.feedcomment_set.count() == 0 and feed.upvote_set.count() == 0:
         next = request.META['HTTP_REFERER']
         return render(request, 'feedpage/edit.html', {'feed': feed, 'next': next})
     else:
         print("비정상적인 수정 접근 시도")
-        return redirect(request.META['HTTP_REFERER'])
+        try:
+            next = request.META['HTTP_REFERER']
+        except:
+            next = '/feeds/'
+        return redirect('%s'%next)
 
 def delete_tag(request, fid, tid):
     #되고 있는 것인지 확인 필요
@@ -134,13 +137,21 @@ def create_comment(request, id):
         content = request.POST['content']
         FeedComment.objects.create(feed_id=id, content=content, reactor=request.user, upvote_side=upvote_side)
         print(FeedComment.objects.filter(feed_id=id, reactor=request.user).first().upvote_side)
-        return redirect(request.META['HTTP_REFERER'])
+    try:
+        next = request.META['HTTP_REFERER']
+    except:
+        next = '/feeds/'
+    return redirect('%s'%next)
 
 def delete_comment(request, id, cid):
     if request.method == 'POST':
         c = FeedComment.objects.get(id=cid)
         c.delete()
-        return redirect(request.META['HTTP_REFERER'])
+    try:
+        next = request.META['HTTP_REFERER']
+    except:
+        next = '/feeds/'
+    return redirect('%s'%next)
 
 def upvote_comment(request, id, cid):
     if request.method == 'POST':
@@ -152,10 +163,11 @@ def upvote_comment(request, id, cid):
             CommentUpvote.objects.create(user_id = request.user.id, feedcomment_id = cid)
         c.total_upvote = c.commentupvote_set.count()
         c.save()
-        return redirect(request.META['HTTP_REFERER'])
-    else: 
-        print(c.commentupvote_set.count())
-        return redirect(request.META['HTTP_REFERER'])
+    try:
+        next = request.META['HTTP_REFERER']
+    except:
+        next = '/feeds/'
+    return redirect('%s'%next)
 
 # 리팩토링 필요하겠음
 def feed_upvote_a(request, pk):
@@ -175,7 +187,11 @@ def feed_upvote_a(request, pk):
             Upvote.objects.create(user_id = request.user.id, feed_id = feed.id, about_a = True)
     else:
         Upvote.objects.create(user_id = request.user.id, feed_id = feed.id, about_a = True)
-    return redirect(request.META['HTTP_REFERER'])
+    try:
+        next = request.META['HTTP_REFERER']
+    except:
+        next = '/feeds/'
+    return redirect('%s'%next)
 
 def feed_upvote_b(request, pk):
     # if request.method == 'POST':
@@ -190,7 +206,11 @@ def feed_upvote_b(request, pk):
             feed.upvote_set.get(user_id = request.user.id).delete()
     else:
         Upvote.objects.create(user_id = request.user.id, feed_id = feed.id, about_a = False)
-    return redirect(request.META['HTTP_REFERER'])
+    try:
+        next = request.META['HTTP_REFERER']
+    except:
+        next = '/feeds/'
+    return redirect('%s'%next)
 
 def follow_manager(request, pk):
     if request.method == 'POST':
@@ -210,8 +230,11 @@ def follow_manager(request, pk):
             f.follow_from, f.follow_to = follow_from, follow_to
             f.save()
 
-#수정필요: 렌더+넥스트
-    return redirect(request.META['HTTP_REFERER'])
+    try:
+        next = request.META['HTTP_REFERER']
+    except:
+        next = '/feeds/'
+    return redirect('%s'%next)
 
 def report(request, pk):
     # if request.method == 'POST':    
@@ -219,17 +242,29 @@ def report(request, pk):
     report_count = feed.report_set.filter(user_id = request.user.id).count()
     if report_count == 0:
         Report.objects.create(user_id = request.user.id, feed_id = feed.id)
-    return redirect(request.META['HTTP_REFERER'])
+    try:
+        next = request.META['HTTP_REFERER']
+    except:
+        next = '/feeds/'
+    return redirect('%s'%next)
 
 def statistics(request, id):
     if request.method == "POST":
-        return redirect(request.META['HTTP_REFERER'])
+        try:
+            next = request.META['HTTP_REFERER']
+        except:
+            next = '/feeds/'
+        return redirect('%s'%next)
     else:
         return render(request, 'feedpage/statistics.html', {'test': 'test'})
 
 def creator(request, pk):
     if request.method == "POST":
-        return redirect(request.META['HTTP_REFERER'])
+        try:
+            next = request.META['HTTP_REFERER']
+        except:
+            next = '/feeds/'
+        return redirect('%s'%next)
     else:
         keyword = request.GET.get('keyword', '')
         feeds = Feed.objects.filter(creator_id=pk)
@@ -237,7 +272,11 @@ def creator(request, pk):
 
 def mysubscribe(request):
     if request.method == "POST":
-        return redirect(request.META['HTTP_REFERER'])
+        try:
+            next = request.META['HTTP_REFERER']
+        except:
+            next = '/feeds/'
+        return redirect('%s'%next)
     else:
         # my_subs = Follow.objects.()
         # 이거 아님!
@@ -247,7 +286,11 @@ def mysubscribe(request):
 
 def myhistory(request):
     if request.method == "POST":
-        return redirect(request.META['HTTP_REFERER'])
+        try:
+            next = request.META['HTTP_REFERER']
+        except:
+            next = '/feeds/'
+        return redirect('%s'%next)
     else:
         feeds = Feed.objects.filter(creator_id=request.user.id)
         print(feeds)
@@ -255,7 +298,11 @@ def myhistory(request):
 
 def myreaction(request):
     if request.method == "POST":
-        return redirect(request.META['HTTP_REFERER'])
+        try:
+            next = request.META['HTTP_REFERER']
+        except:
+            next = '/feeds/'
+        return redirect('%s'%next)
     else:
         feeds = Feed.objects.filter(creator_id=request.user.id)
         print(feeds)

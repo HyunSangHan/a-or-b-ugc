@@ -19,7 +19,7 @@ urlpatterns = [
     path('<int:pk>/follow/', views.follow_manager, name='follow'),
     path('<int:pk>/statistics/', views.statistics, name='statistics'),
     path('myhistory/', views.myhistory, name='myhistory'), 
-    path('creator/', views.creator, name='creator'), 
+    path('creator/<int:pk>', views.creator, name='creator'),
     path('mysubscribe/', views.mysubscribe, name='mysubscribe'), 
     path('myreaction/', views.myreaction, name='myreaction'), 
 ]

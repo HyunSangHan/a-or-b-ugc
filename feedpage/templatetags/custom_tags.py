@@ -48,6 +48,7 @@ def get_side(fid, cid):
         side = ""
     return side
 
+# 지금은 유효하지 않음
 @register.simple_tag
 def get_upvote_color(fid, uid):
     feed = Feed.objects.get(id=fid)
@@ -129,3 +130,13 @@ def get_ordered_comment(fid):
     #댓글 랭킹로직: [1순위] 좋아요 많이받은순 / [2순위] 오래된순. 나중에는 각자 선택할 수 있게끔 구현 필요
     comments = comments_all.order_by('-total_upvote', 'created_at')
     return comments
+
+# 좋아요나 댓글 달린 경우 글을 수정하지 못하게 하는 판별용
+@register.simple_tag
+def is_deletable(fid):
+    feed = Feed.objects.get(id=fid)
+    if feed.feedcomment_set.count() > 0 or feed.upvote_set.count() > 0:
+        deletable = False
+    else:
+        deletable = True
+    return deletable
