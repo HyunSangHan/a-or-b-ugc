@@ -23,7 +23,10 @@
                             {% endif %}
                         {% endfor %}
                         <!-- 팔로우 코드 -->
-                        <h5>{{feed.creator.username}}
+                        <h5>
+                            <a href="/feeds/creator/{{feed.creator.username}}">
+                                {{feed.creator.username}}
+                            </a>
                             (구독자: {{ feed.creator.profile.follow_to.all.count }})
                             {% if user.is_authenticated %}
                                 {% if request.user != feed.creator %}

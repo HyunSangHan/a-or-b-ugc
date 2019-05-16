@@ -216,19 +216,12 @@ def follow_manager(request, pk):
     if request.method == 'POST':
         follow_from = Profile.objects.get(user_id = request.user.id)
         follow_to = Profile.objects.get(user_id = pk)
-        try:
-            following_already = Follow.objects.get(follow_from=follow_from, follow_to=follow_to)
-        except Follow.DoesNotExist:
-            #갑자기 이거뭐지???????????????????
-            following_already = None
+        following_already = Follow.objects.filter(follow_from=follow_from, follow_to=follow_to)
 
-        if following_already:
-            following_already.delete()
+        if following_already.count() > 0:
+            following_already.first().delete()
         else:
-            # Follow.objects.create(follow_from=follow_from, follow_to=follow_to)
-            f = Follow()
-            f.follow_from, f.follow_to = follow_from, follow_to
-            f.save()
+            Follow.objects.create(follow_from=follow_from, follow_to=follow_to)
 
     try:
         next = request.META['HTTP_REFERER']
@@ -259,7 +252,6 @@ def statistics(request, id):
         return render(request, 'feedpage/statistics.html', {'test': 'test'})
 
 def creator(request, creator_name):
-    print("================="+creator_name)
     creators = User.objects.filter(username=creator_name)
     if creators.count() > 0:
         creator = creators.first()
@@ -274,10 +266,14 @@ def creator(request, creator_name):
         return redirect('%s'%next)
 
 def mysubscribe(request):
-    # my_subs = Follow.objects.()
-    # 이거 아님!
-    feeds = Feed.objects.filter(creator_id=request.user.id)
-    print(feeds)
+    follow_from = Profile.objects.get(user_id = request.user.id)
+    # my_subs = Follow.objects.filter(follow_to=follow_from).first().follow_from.user.username
+    my_subs = Follow.objects.filter(follow_from=follow_from)
+    feeds = []
+    for my_sub in my_subs:
+        my_sub_user = my_sub.follow_to.user
+        print(my_sub_user.feed_set.all())
+        feeds = feeds + list(my_sub_user.feed_set.all())
     return render(request, 'feedpage/mysubscribe.html', {'feeds': feeds})
 
 def myhistory(request):
@@ -286,6 +282,7 @@ def myhistory(request):
     return render(request, 'feedpage/myhistory.html', {'feeds': feeds})
 
 def myreaction(request):
+    #이거 아님!
     feeds = Feed.objects.filter(creator_id=request.user.id)
     print(feeds)
     return render(request, 'feedpage/myreaction.html', {'feeds': feeds})

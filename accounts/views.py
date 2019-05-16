@@ -11,10 +11,10 @@ def signup(request):
         password = request.POST['password1']
         email = request.POST['email']
         if password == request.POST['password2']:
-            try: 
-                if User.objects.get(email=email):
-                    return render(request, 'accounts/signup.html', {'error' : 'The email address is already exist'})
-            except:
+            email_already = User.objects.filter(email=email)
+            if email_already.count() > 0:
+                return render(request, 'accounts/signup.html', {'error' : 'The email address is already exist'})
+            else:
                 user = User.objects.create_user(email=email, username=request.POST['username'], password=password)
                 profile = user.profile
                 # print(profile)
@@ -34,7 +34,7 @@ def signup(request):
 
 def logout(request):
     auth.logout(request)
-    return redirect(request.META['HTTP_REFERER'])
+    return redirect('/feeds/')
 
 def login(request):
     if request.method == 'POST':
