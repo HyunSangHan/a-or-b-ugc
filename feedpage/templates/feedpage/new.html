@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div class="mdl-grid container">
+  <div class="mdl-cell--12-col m-auto contents">
     <h1>new feed</h1>
     <form action="/feeds/new/" method="POST" enctype="multipart/form-data">
       {% csrf_token %} 
@@ -25,7 +27,9 @@
         <label class="mdl-textfield__label" for="hash_tag">Hash Tag (#이러한 #형태로 #입력하세요)</label>
       </div>
 
-
+<!--임시-->
+      <input name="img_a" type="file" /> <br />
+      <input name="img_b" type="file" /> <br />
 
       {% comment %} A: <input name="content_a" size="40" required /> <br />
       <input name="img_a" type="file" /> <br />
@@ -39,4 +43,6 @@
         Submit
       </button>
     </form>
+  </div>
+</div>
 {% endblock content %}

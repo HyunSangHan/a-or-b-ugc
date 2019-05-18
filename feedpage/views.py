@@ -99,8 +99,6 @@ def edit(request, id):
                 TagRelation.objects.create(hash_tag=tag, feed=feed)
         #현재상황: edit을 통해 추가된 태그의 첫번째는 #만이 나오는 게 그대로 나오고 있음. 해시태그 하나씩 삭제가 안됨.(form태그 중첩 이슈로 예상)
         #나중에는 태그 위치 조절할 수 있는 기능 / 특정 태그 삭제하는 기능 구현 필요
-
-        feed.editnow = False
         feed.update_date()
         feed.save()
         next = request.POST['next']
@@ -155,15 +153,15 @@ def delete_comment(request, id, cid):
     return redirect('%s'%next)
 
 def upvote_comment(request, id, cid):
-    if request.method == 'POST':
-        c = FeedComment.objects.get(id=cid)
-        upvote_list = c.commentupvote_set.filter(user_id = request.user.id)
-        if upvote_list.count() > 0:
-            c.commentupvote_set.get(user_id = request.user.id).delete()
-        else:
-            CommentUpvote.objects.create(user_id = request.user.id, feedcomment_id = cid)
-        c.total_upvote = c.commentupvote_set.count()
-        c.save()
+    # if request.method == 'POST':
+    c = FeedComment.objects.get(id=cid)
+    upvote_list = c.commentupvote_set.filter(user_id = request.user.id)
+    if upvote_list.count() > 0:
+        c.commentupvote_set.get(user_id = request.user.id).delete()
+    else:
+        CommentUpvote.objects.create(user_id = request.user.id, feedcomment_id = cid)
+    c.total_upvote = c.commentupvote_set.count()
+    c.save()
     try:
         next = request.META['HTTP_REFERER']
     except:

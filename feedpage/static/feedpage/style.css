@@ -1,15 +1,50 @@
 body {
-    background-color: #eeeeee;
+    background-color: rgb(250, 250, 250);
+    letter-spacing: -0.3px;
+}
+
+.header-shadow {
+    box-shadow: 0 1px 8px 0 rgba(0,0,0,0.03), 0 -7px 2px -2px rgba(0,0,0,.2), 0 0px 0px 0 rgba(0,0,0,.12) !important;
+}
+
+.service-title {
+    padding-right: 20px;
+    text-align: center;
+    font-size: 20px;
+}
+
+.flex {
+    display: flex;
+}
+
+.v-center {
+    vertical-align: middle;
+    margin: auto;
+}
+
+.inline-flex {
+    display: inline-flex;
 }
 
 .invisible {
     display: none;
 }
 
+.letter-space {
+    letter-spacing: 0;
+}
+
 .m-auto {
     margin: auto;
 }
 
+h2 {
+    font-weight: 900 !important;
+    font-size: 24px !important;
+    color: black;
+    margin: 4px 0 !important;
+    line-height: 24px !important;
+}
 
 .ellipsis{
     text-overflow:ellipsis;
@@ -29,16 +64,104 @@ a {
     color: black;
 }
 
+.mt--1 {
+    margin-top: -4px;
+}
+
+.mt-1 {
+    margin-top: 4px;
+}
+
+.mtb-05 {
+    margin: 2px 0;
+}
+
+.mtb-1 {
+    margin: 4px 0;
+}
+
+.mt-2 {
+    margin-top: 8px;
+}
+
+.mt-3 {
+    margin-top: 12px;
+}
+
+.mb-1 {
+    margin-bottom: 4px;
+}
+
+.mb-2 {
+    margin-bottom: 8px;
+}
+
+.mb-3 {
+    margin-bottom: 12px;
+}
+
+.mr-1perc {
+    margin-right: 1%;
+}
+
+.ml-1perc {
+    margin-left: 1%;
+}
+
+.ml-1 {
+    margin-left: 4px;
+}
+
+.ml-2 {
+    margin-left: 8px;
+}
+
+.ml-3 {
+    margin-left: 12px;
+}
+
+.ml-auto {
+    margin-left: auto !important;
+}
+
 .h-100 {
-    height: 100%;
+    height: 100% !important;
 }
 
 .w-100 {
-    width: 100%;
+    width: 100% !important;
 }
 
 .w-80 {
-    width: 80%;
+    width: 80% !important;
+}
+
+.font-11 {
+    font-size: 11px;
+}
+
+.font-12 {
+    font-size: 12px;
+}
+
+.font-13 {
+    font-size: 13px;
+}
+
+.font-14 {
+    font-size: 14px;
+}
+
+.font-light {
+    font-weight: 400px !important;
+}
+
+.font-white {
+    color: white;
+}
+
+.font-red {
+    color: red !important;
 }
 
 .container {
@@ -47,22 +170,12 @@ a {
     margin-right: auto;
 }
 
-.each-content {
-    width: 100%;
-    display: inline-flex;
+@media (max-width: 575px) {
+    .demo-card-image.mdl-card {
+        /* width: 256px; */
+        height: 265px;
+    }
 }
-
-.each-li {
-    padding-bottom: 50px;
-    list-style-type: none;
-}
-
-.contents {
-    bacKground-color: white;
-    padding: 5px;
-    margin: -5px;
-}
-
 @media (min-width: 576px) {
 
     .contents {
@@ -71,6 +184,11 @@ a {
     
     .container {
         max-width: 540px;
+    }
+
+    .demo-card-image.mdl-card {
+        /* width: 256px; */
+        height: 365px;
     }
 }
 
@@ -82,12 +200,70 @@ a {
     .container {
         max-width: 720px;
     }
+
+    .demo-card-image.mdl-card {
+        /* width: 256px; */
+        height: 365px;
+    }
 }
 
 
+.link-black {
+    color: black;
+}
 
+.link-grey {
+    color: #9B9B9B;
+}
 
-/* for highly customize*/
+.bg-white {
+    background-color: white !important;
+}
+
+.bg-black {
+    background-color: black !important;
+}
+
+/* for highly customize... specific component*/
+
+.each-content {
+    width: 100%;
+    display: inline-flex;
+}
+
+.each-li {
+    padding-top: 30px;
+    padding-bottom: 30px;
+    list-style-type: none;
+    width: 97%;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left;
+}
+
+.contents {
+    background-color: white;
+    padding: 5px;
+    margin: -5px;
+}
+
+.contents-margin {
+    width: 95%;
+    margin: auto;
+}
+
+.content-img {
+    border-radius: 10px !important;
+}
+
+.w-more-btn {
+    width: calc(100% + 14px);
+}
+
+.more-btn > div {
+    margin-right: 20px !important;
+}
+
 .logout-btn {
     padding: 0 !important;
 }
@@ -96,13 +272,32 @@ a {
     background-color: white;
 }
 
+.user-face {
+    height: 22px;
+    width: 22px;
+    border-radius: 50%;
+    background-color: lightgrey;
+}
+
+.besticon {
+    padding: 3px;
+    margin-right: 4px;
+    line-height: normal;
+}
+
+.bestcomment {
+    padding: 3px;
+    margin: 4px;
+}
+
+.comment-heart {
+    font-size: 16px !important;
+}
+
+.comment-input {
+}
 
 /* MDL */
-
-.demo-card-image.mdl-card {
-    /* width: 256px; */
-    height: 256px;
-  }
 
 .demo-card-image > .mdl-card__actions {
     height: 52px;
@@ -116,9 +311,9 @@ a {
     font-weight: 500;
   }
 
-.demo-card-image.mdl-card.mdl-shadow--2dp {
+/* .demo-card-image.mdl-card.mdl-shadow--2dp {
     margin: 1%;
-}
+} */
 
 .mdl-button.mdl-js-button.mdl-button--fab.mdl-js-ripple-effect.mdl-button--colored{
     position: fixed;
