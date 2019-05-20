@@ -41,9 +41,9 @@ def get_side(fid, cid):
     feed = Feed.objects.get(id=fid)
     feedcomment = feed.feedcomment_set.get(id=cid)
     if feedcomment.upvote_side == 1:
-        side = "[A] "
+        side = "A"
     elif feedcomment.upvote_side == 2:
-        side = "[B] "
+        side = "B"
     else:
         side = ""
     return side

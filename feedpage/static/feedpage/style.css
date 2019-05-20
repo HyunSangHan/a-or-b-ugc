@@ -1,6 +1,17 @@
+@import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
+
+.toggle-comments {
+    cursor: pointer;
+}
+
+.all-comments {
+    display: none;
+}
+
 body {
     background-color: rgb(250, 250, 250);
     letter-spacing: -0.3px;
+    font-family: "Noto Sans KR", sans-serif !important;
 }
 
 .header-shadow {
@@ -19,7 +30,6 @@ body {
 
 .v-center {
     vertical-align: middle;
-    margin: auto;
 }
 
 .inline-flex {
@@ -38,12 +48,17 @@ body {
     margin: auto;
 }
 
+.mtb-auto {
+    margin: auto 0;
+}
+
 h2 {
     font-weight: 900 !important;
     font-size: 24px !important;
     color: black;
     margin: 4px 0 !important;
     line-height: 24px !important;
+    font-family: "Noto Sans KR", sans-serif !important;
 }
 
 .ellipsis{
@@ -62,6 +77,15 @@ div > a {
 a {
     text-decoration: none;
     color: black;
+}
+
+.ellipsis{
+    width:100%;
+    text-overflow:ellipsis;
+    -o-text-overflow:ellipsis;
+    overflow:hidden;
+    white-space:nowrap;
+    word-wrap:normal !important;
 }
 
 .mt--1 {
@@ -138,30 +162,37 @@ a {
 
 .font-11 {
     font-size: 11px;
+    font-family: "Noto Sans KR", sans-serif !important;
 }
 
 .font-12 {
     font-size: 12px;
+    font-family: "Noto Sans KR", sans-serif !important;
 }
 
 .font-13 {
     font-size: 13px;
+    font-family: "Noto Sans KR", sans-serif !important;
 }
 
 .font-14 {
     font-size: 14px;
+    font-family: "Noto Sans KR", sans-serif !important;
 }
 
 .font-light {
     font-weight: 400px !important;
+    font-family: "Noto Sans KR", sans-serif !important;
 }
 
 .font-white {
     color: white;
+    font-family: "Noto Sans KR", sans-serif !important;
 }
 
 .font-red {
     color: red !important;
+    font-family: "Noto Sans KR", sans-serif !important;
 }
 
 .container {
@@ -212,12 +243,20 @@ a {
     color: black;
 }
 
+.link-light-black {
+    color: #666;
+}
+
 .link-grey {
     color: #9B9B9B;
 }
 
 .bg-white {
     background-color: white !important;
+}
+
+.bg-grey {
+    background-color: grey !important;
 }
 
 .bg-black {
@@ -279,15 +318,41 @@ a {
     background-color: lightgrey;
 }
 
-.besticon {
-    padding: 3px;
-    margin-right: 4px;
-    line-height: normal;
+.sideicon {
+    padding: 3px 0;
+    margin-right: 5px;
+    line-height: 12px;
+    font-size: 11px;
+    text-align: center;
+    color: white;
 }
 
-.bestcomment {
-    padding: 3px;
-    margin: 4px;
+.sideicon.best {
+    min-width: 43px;
+    padding-left: 5px;
+    padding-right: 5px;
+    background-color: black;
+}
+
+.sideicon.norm {
+    min-width: 8px;
+    padding-left: 5px;
+    padding-right: 5px;
+    background-color: black;
+}
+
+.comment {
+    height: 18px;
+    margin: 3px 0;
+}
+
+.comment-reactor {
+    margin-top: -1px;
+}
+
+.comment-content {
+    margin-left: 3px;
+    margin-top: -2px;
 }
 
 .comment-heart {
@@ -295,6 +360,9 @@ a {
 }
 
 .comment-input {
+    border-bottom: 3px solid black !important;
+    padding: 8px 0 !important;
+    font-size: 14px !important;
 }
 
 /* MDL */
