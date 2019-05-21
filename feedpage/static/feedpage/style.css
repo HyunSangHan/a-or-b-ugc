@@ -13,7 +13,6 @@
     position: fixed;
     width: 100vw;
     height: 100vh;
-    background-color: black;
     opacity: 0;
     display: none;
 }
@@ -227,8 +226,8 @@ a {
         margin-top: -26px;
         margin-right: 20px;
         z-index: 3;
-        width: 134px;
-        height: 240px;
+        /* width: 134px; */
+        /* height: 240px; */
         border: 1px solid #ddd;
         background-color: white;
         box-shadow: 2px -1px 0px 0 rgba(0,-1,0,0.03), 0 0px 0px -1px rgba(0,0,0,.2), 0 0px 0px 0 rgba(0,0,0,.12) !important;
@@ -253,8 +252,8 @@ a {
         margin-top: -26px;
         margin-right: 20px;
         z-index: 3;
-        width: 134px;
-        height: 240px;
+        /* width: 134px; */
+        /* height: 240px; */
         border: 1px solid #ddd;
         background-color: white;
         box-shadow: 2px -1px 0px 0 rgba(0,-1,0,0.03), 0 0px 0px -1px rgba(0,0,0,.2), 0 0px 0px 0 rgba(0,0,0,.12) !important;
@@ -283,14 +282,18 @@ a {
         margin-top: -26px;
         margin-right: 20px;
         z-index: 3;
-        width: 134px;
-        height: 240px;
+        /* width: 134px; */
+        /* height: 240px; */
         border: 1px solid #ddd;
         background-color: white;
         box-shadow: 2px -1px 0px 0 rgba(0,-1,0,0.03), 0 0px 0px -1px rgba(0,0,0,.2), 0 0px 0px 0 rgba(0,0,0,.12) !important;
         display: none;
     }
     
+    .more-info > div {
+        margin: 10px 20px 0px;
+    }
+
     .demo-card-image.mdl-card {
         /* width: 256px; */
         height: 365px;
@@ -362,6 +365,15 @@ a {
     margin-right: 20px !important;
 }
 
+.more-info > div {
+    margin: 10px 20px 0px;
+    text-align: center;
+}
+
+.more-info > div:last-child {
+    margin-bottom: 10px;
+}
+
 .logout-btn {
     padding: 0 !important;
 }
@@ -430,13 +442,13 @@ a {
     height: 52px;
     padding: 16px;
     background: rgba(0, 0, 0, 0.2);
-  }
+}
 
-  .demo-card-image__filename {
+.demo-card-image__filename {
     color: #fff;
     font-size: 14px;
     font-weight: 500;
-  }
+}
 
 /* .demo-card-image.mdl-card.mdl-shadow--2dp {
     margin: 1%;

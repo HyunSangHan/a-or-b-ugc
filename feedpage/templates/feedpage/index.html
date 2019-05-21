@@ -22,15 +22,8 @@
                                 <button id="demo-menu-lower-right" class="mdl-button mdl-js-button mdl-button--icon v-center m-auto">
                                     <i class="material-icons">more_vert</i>
                                 </button>
-                                <div class="more-info ">
-                                </div>
-
-
-                                {% comment %} <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="demo-menu-lower-right">
-                                    <li class="mdl-menu__item">Some Action</li>
-                                    <li class="mdl-menu__item">Another Action</li>
-                                    <li disabled class="mdl-menu__item">Disabled Action</li>
-                                    <li class="mdl-menu__item"> {% endcomment %}
+                                <div class="more-info">
+                                    <div>
                                         {% if user.is_authenticated %}
                                             {% if request.user != feed.creator %}
                                                 {% if request.user.profile not in feed.creator.profile.follows.all %}
@@ -46,6 +39,18 @@
                                                 {% endif %}
                                             {% endif %}
                                         {% endif %}
+                                    </div>
+                                    <div>신고하기</div>
+                                    <div>수정하기</div>
+                                    <div>삭제하기</div>
+                                </div>
+
+
+                                {% comment %} <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="demo-menu-lower-right">
+                                    <li class="mdl-menu__item">Some Action</li>
+                                    <li class="mdl-menu__item">Another Action</li>
+                                    <li disabled class="mdl-menu__item">Disabled Action</li>
+                                    <li class="mdl-menu__item"> {% endcomment %}
 
 
                                     {% comment %} </li> {% endcomment %}
