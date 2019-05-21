@@ -8,6 +8,16 @@
     display: none;
 }
 
+.transp-bg {
+    z-index: 2;
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background-color: black;
+    opacity: 0;
+    display: none;
+}
+
 body {
     background-color: rgb(250, 250, 250);
     letter-spacing: -0.3px;
@@ -213,11 +223,16 @@ a {
     .more-info {
         position: absolute;
         right: 5%;
-        top: 70px;
-        z-index: 2;
+        top: auto;
+        margin-top: -26px;
+        margin-right: 20px;
+        z-index: 3;
         width: 134px;
         height: 240px;
-        border: 1px solid grey;
+        border: 1px solid #ddd;
+        background-color: white;
+        box-shadow: 2px -1px 0px 0 rgba(0,-1,0,0.03), 0 0px 0px -1px rgba(0,0,0,.2), 0 0px 0px 0 rgba(0,0,0,.12) !important;
+        display: none;
     }
     
 }
@@ -234,11 +249,16 @@ a {
     .more-info {
         position: absolute;
         right: calc(50% - 235px);
-        top: 70px;
-        z-index: 2;
+        top: auto;
+        margin-top: -26px;
+        margin-right: 20px;
+        z-index: 3;
         width: 134px;
         height: 240px;
-        border: 1px solid grey;
+        border: 1px solid #ddd;
+        background-color: white;
+        box-shadow: 2px -1px 0px 0 rgba(0,-1,0,0.03), 0 0px 0px -1px rgba(0,0,0,.2), 0 0px 0px 0 rgba(0,0,0,.12) !important;
+        display: none;
     }    
 
     .demo-card-image.mdl-card {
@@ -259,11 +279,16 @@ a {
     .more-info {
         position: absolute;
         right: calc(50% - 320px);
-        top: 70px;
-        z-index: 2;
+        top: auto;
+        margin-top: -26px;
+        margin-right: 20px;
+        z-index: 3;
         width: 134px;
         height: 240px;
-        border: 1px solid grey;
+        border: 1px solid #ddd;
+        background-color: white;
+        box-shadow: 2px -1px 0px 0 rgba(0,-1,0,0.03), 0 0px 0px -1px rgba(0,0,0,.2), 0 0px 0px 0 rgba(0,0,0,.12) !important;
+        display: none;
     }
     
     .demo-card-image.mdl-card {
