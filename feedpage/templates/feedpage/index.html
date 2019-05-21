@@ -13,16 +13,24 @@
                 {% if feed.check_visible %}
                     <li class="each-li">
                         <div class="inline-flex w-more-btn">
-                            <h2 class="test">{{ feed.title }}</h2>
+
+                            <a href="/feeds/{{ feed.id }}">
+                                <h2 class="link-black">{{ feed.title }}</h2>
+                            </a>
                             <div class="ml-auto more-btn">
+
                                 <button id="demo-menu-lower-right" class="mdl-button mdl-js-button mdl-button--icon v-center m-auto">
                                     <i class="material-icons">more_vert</i>
                                 </button>
-                                <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="demo-menu-lower-right">
+                                <div class="more-info">
+                                </div>
+
+
+                                {% comment %} <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="demo-menu-lower-right">
                                     <li class="mdl-menu__item">Some Action</li>
                                     <li class="mdl-menu__item">Another Action</li>
                                     <li disabled class="mdl-menu__item">Disabled Action</li>
-                                    <li class="mdl-menu__item">
+                                    <li class="mdl-menu__item"> {% endcomment %}
                                         {% if user.is_authenticated %}
                                             {% if request.user != feed.creator %}
                                                 {% if request.user.profile not in feed.creator.profile.follows.all %}
@@ -38,8 +46,10 @@
                                                 {% endif %}
                                             {% endif %}
                                         {% endif %}
-                                    </li>
-                                </ul>
+
+
+                                    {% comment %} </li> {% endcomment %}
+                                {% comment %} </ul> {% endcomment %}
                             </div>
                         </div>
                         <div class="letter-space">
@@ -280,7 +290,7 @@
                                         {% endif %}
     
                                         <div class="font-11 v-center mtb-auto comment-reactor"><strong>{{ c.reactor }}</strong></div>
-                                        <div class="font-14 v-center mtb-auto comment-content">{{ c.content }}</div>
+                                        <div class="font-14 v-center mtb-auto comment-content ellipsis">{{ c.content }}</div>
                                             {% comment %} {{ comment_a.total_upvote }}
                                             {% if comment_a.reactor == user %}
                                             [MY]
@@ -326,7 +336,6 @@
                                             {% endif %}
                                         </div> {% endcomment %}
                                     </div>
-                                    <br/>
                                 {% endfor %}
                             </div>
                         {% endif %}
