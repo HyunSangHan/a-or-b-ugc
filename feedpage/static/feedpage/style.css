@@ -52,6 +52,12 @@ strong {
     display: flex;
 }
 
+.flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .none {
     display: none;
 }
@@ -84,8 +90,8 @@ h2 {
     font-weight: 900 !important;
     font-size: 24px !important;
     color: black;
-    margin: 4px 0 !important;
-    line-height: 24px !important;
+    margin: 0 !important;
+    line-height: 30px !important;
     font-family: "Noto Sans KR", sans-serif !important;
 }
 
@@ -374,6 +380,37 @@ a {
     border-radius: 10px !important;
 }
 
+.content-label {
+    position: absolute;
+    padding: 5px 8px;
+    border-radius: 2px;
+    text-align: center;
+    color: white;
+    z-index: 1;
+    font-size: 15px;
+    border-bottom-right-radius: 10px;
+}
+
+.content-result-bg {
+    opacity: 0.6;
+    position: absolute;
+}
+
+.content-result {
+    color: white;
+    z-index: 1;
+    position: absolute;
+}
+
+.content-result-perc {
+    font-weight: 600;
+    font-size: 50px;
+    letter-spacing: 2px;
+}
+
+.content-result-num {
+}
+
 .w-more-btn {
     width: calc(100% + 14px);
 }
@@ -417,6 +454,8 @@ a {
     font-size: 11px;
     text-align: center;
     color: white;
+    border-top-left-radius: 5px;
+    border-bottom-right-radius: 5px;
 }
 
 .sideicon.best {

@@ -13,12 +13,10 @@
                 {% if feed.check_visible %}
                     <li class="each-li">
                         <div class="inline-flex w-more-btn">
-
                             <a href="/feeds/{{ feed.id }}">
                                 <h2 class="link-black">{{ feed.title }}</h2>
                             </a>
                             <div class="ml-auto more-btn">
-
                                 <button id="demo-menu-lower-right" class="mdl-button mdl-js-button mdl-button--icon more-js-btn v-center m-auto">
                                     <i class="material-icons">more_vert</i>
                                 </button>
@@ -40,8 +38,6 @@
                                                 </a>
                                             </div>
                                             <div>
-
-
                                                 {% get_report_tf feed.id user.id as report_tf %}
                                                 {% if report_tf %}
                                                     <span class="font-lightgrey" onclick="return alert('이미 신고하셨습니다.')">신고하기</span>
@@ -50,10 +46,7 @@
                                                         신고하기
                                                     </a>
                                                 {% endif %}
-
             {% comment %} <span>신고({{feed.report_set.count }}건)</span> {% endcomment %}
-
-
                                             </div>
                                         {% else %}
                                             <div>
@@ -96,22 +89,44 @@
                             </a>
                             {% comment %} (구독자: {{ feed.creator.profile.follow_to.all.count }}) {% endcomment %}
                         </div>
-
                         <!--A와 B를 함께 두는 행-->
                         <div class="each-content">
-
                             <!-- Image card A-->
                             <div class="mr-1perc demo-card-image mdl-card content-img" style="background: url('{{ feed.img_a.url }}') center / cover;">
                                 <a href="/feeds/{{ feed.id }}/upvote_a" class="w-100 h-100">
+                                    <!--A 라벨링-->
+                                    <div class="content-label bg-black">
+                                    A / {{ feed.content_a}}
+                                    </div>
+                                    <!--A 결과 숫자-->
+                                    <div class="content-result flex-center w-100 h-100">
+                                        <span class="content-result-perc">64</span>%
+                                    </div>
+                                    <!--win일때 배경-->
+                                    <div class="content-result-bg flex-center w-100 h-100 bg-black">
+                                    </div>
                                 </a>
                             </div>
-
                             <!-- Image card B-->
                             <div class="ml-1perc demo-card-image mdl-card content-img" style="background: url('{{ feed.img_b.url }}') center / cover;">
                                 <a href="/feeds/{{ feed.id }}/upvote_b" class="w-100 h-100">
                                 </a>
+                                    {% comment %} <!--B 라벨링-->
+                                    <div class="content-label bg-black">
+                                    b / {{ feed.content_b}}
+                                    </div> {% endcomment %}
+                                    <!--lose일때 B 라벨링-->
+                                    <div class="content-label bg-grey">
+                                    B / {{ feed.content_b}}
+                                    </div>
+                                    <!--B 결과 숫자-->
+                                    <div class="content-result flex-center w-100 h-100">
+                                        <span class="content-result-perc">36</span>%
+                                    </div>
+                                    <!--lose일때 배경-->
+                                    <div class="content-result-bg flex-center w-100 h-100 bg-grey">
+                                    </div>
                             </div>
-
                 {% comment %}         
                             <!--A 네모 시작-->
                             <div style = "width: 45vw; border-radius: 25px; min-height: 45vw; background-color: white; text-align: center; display: flex; justify-content: center; flex-direction: column; margin: auto;">
@@ -174,8 +189,9 @@
                         <div class="mt-2 w-100">
                             <!--A베스트댓글-->
                             {% get_bestcomment_a feed.id as comment_a %}
-                            <div class="comment w-100 v-center mt-1 inline-flex">
-                                {% if comment_a %}
+                            {% get_bestcomment_b feed.id as comment_b %}
+                            {% if comment_a and comment_b %}
+                                <div class="comment w-100 v-center mt-1 inline-flex">
                                     <div class="sideicon best">A / BEST</div>
                                     <div class="font-11 v-center mtb-auto comment-reactor"><strong>{{ comment_a.reactor }}</strong></div>
                                     <div class="font-14 v-center mtb-auto comment-content">{{ comment_a.content }}</div>
@@ -199,12 +215,9 @@
                                             </div>
                                         {% endif %}
                                     {% endif %}
-                                {% endif %}
-                            </div>
+                                </div>
                             <!--B베스트댓글-->
-                            {% get_bestcomment_b feed.id as comment_b %}
-                            <div class="comment w-100 v-center mtb-1 inline-flex">
-                                {% if comment_b %}
+                                <div class="comment w-100 v-center mtb-1 inline-flex">
                                     <div class="sideicon best">B / BEST</div>
                                     <div class="font-11 v-center mtb-auto comment-reactor"><strong>{{ comment_b.reactor }}</strong></div>
                                     <div class="font-14 v-center mtb-auto comment-content ellipsis">{{ comment_b.content }}</div>
@@ -228,8 +241,8 @@
                                             </div>
                                         {% endif %}
                                     {% endif %}
-                                {% endif %}
-                            </div>
+                                </div>
+                            {% endif %}
                         </div>
 
                         {% comment %} <!--내가쓴댓글모음(베댓이 아닌경우만)-->
@@ -248,7 +261,7 @@
                         <a href="/feeds/{{ feed.id }}">
                             <div class="font-12 link-light-black font-light mt-2">댓글 {{feed.feedcomment_set.count}}개 더보기</div>
                         </a>
-                        {% else %}
+                        {% elif feed.feedcomment_set.count != 0 %}
                             <div class="font-12 link-light-black font-light mt-2 toggle-comments">댓글 {{feed.feedcomment_set.count}}개 더보기</div>
                             <div class="all-comments">
                                 {% get_ordered_comment feed.id as comments %}

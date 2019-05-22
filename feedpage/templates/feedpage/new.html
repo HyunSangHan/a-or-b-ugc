@@ -8,18 +8,18 @@
       {% csrf_token %} 
       {% comment %} <input name="title" required /> <br /> {% endcomment %}
       <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-        <input class="mdl-textfield__input" type="text" id="title" name="title">
+        <input class="mdl-textfield__input" type="text" id="title" name="title" maxlength="30" required>
         <label class="mdl-textfield__label" for="title">Title</label>
       </div>
 
 <!--대칭 형태로 입력창도 UI 수정 필요-->
       <br>
       <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-        <input class="mdl-textfield__input" type="text" id="content_a" name="content_a">
+        <input class="mdl-textfield__input" type="text" id="content_a" name="content_a" maxlength="21" required>
         <label class="mdl-textfield__label" for="content_a">A</label>
       </div>
       <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-        <input class="mdl-textfield__input" type="text" id="content_b" name="content_b">
+        <input class="mdl-textfield__input" type="text" id="content_b" name="content_b" maxlength="21" required>
         <label class="mdl-textfield__label" for="content_b">B</label>
       </div>
       <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">

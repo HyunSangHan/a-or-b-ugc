@@ -26,7 +26,7 @@ class Feed(models.Model):
 # 수정가능여부
 # 익명여부
     created_at = models.DateTimeField(default=timezone.now)
-    updated_at = models.DateTimeField(blank=True, null=True)
+    updated_at = models.DateTimeField(default=timezone.now)
 
     def check_visible(self):
         if self.report_set.count() > 9:

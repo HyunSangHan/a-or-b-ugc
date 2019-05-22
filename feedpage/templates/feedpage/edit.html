@@ -7,10 +7,10 @@
     <form action="/feeds/{{feed.id}}/edit/" method="POST">
         {% csrf_token %} 
         <p>title</p>
-        <input name="title" value="{{feed.title}}" required /> <br />
+        <input name="title" value="{{feed.title}}" maxlength="30" required /> <br />
         <p>content</p>
-        A: <input name="content_a" value="{{feed.content_a}}" size="40" required /> <br />
-        B: <input name="content_b" value="{{feed.content_b}}" size="40" required /> <br />
+        A: <input name="content_a" value="{{feed.content_a}}" size="40"  maxlength="21" required /> <br />
+        B: <input name="content_b" value="{{feed.content_b}}" size="40"  maxlength="21" required /> <br />
         <!--분기처리필요-->
         HASH TAG: 
         <input name="hash_tag_raw" placeholder="#이러한 #형태로 #입력하세요" size="30"/> <br />

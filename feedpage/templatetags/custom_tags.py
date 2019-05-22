@@ -102,7 +102,10 @@ def get_bestcomment_a(fid):
     comments_a_all = feed.feedcomment_set.filter(upvote_side=1)
     comments = comments_a_all.order_by('-total_upvote', 'created_at')
     comment_a = comments.first()
-    return comment_a
+    if comment_a is not None:
+        if comment_a.total_upvote > 0:
+            return comment_a
+    return
 
 # B에 대한 best댓글을 뽑아내기(index용)
 @register.simple_tag
@@ -111,7 +114,10 @@ def get_bestcomment_b(fid):
     comments_b_all = feed.feedcomment_set.filter(upvote_side=2)
     comments = comments_b_all.order_by('-total_upvote', 'created_at')
     comment_b = comments.first()
-    return comment_b
+    if comment_b is not None:
+        if comment_b.total_upvote > 0:
+            return comment_b
+    return
 
 # 내 댓글만 뽑아내기(index용)
 @register.simple_tag
