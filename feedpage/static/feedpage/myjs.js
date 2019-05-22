@@ -3,7 +3,7 @@ $(document).ready(() => {
         $(this).next().slideDown();
         $(this).hide();
     })
-    $('.mdl-js-button').on('click', function() {
+    $('.more-js-btn').on('click', function() {
         $(this).next().toggle();
     })
 })

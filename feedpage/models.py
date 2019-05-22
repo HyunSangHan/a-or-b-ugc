@@ -21,8 +21,8 @@ class Feed(models.Model):
     content_b = models.TextField(blank=False, null=False)
     upvote_users = models.ManyToManyField(User, blank=True, related_name='upvote_feeds', through='Upvote')
     matched_tags = models.ManyToManyField(HashTag, blank=True, related_name='tagged_feeds', through='TagRelation')
-    img_a = models.ImageField(blank=True, null=True, upload_to='img_a') #have to fix
-    img_b = models.ImageField(blank=True, null=True, upload_to='img_b') #have to fix
+    img_a = models.ImageField(blank=True, null=True, upload_to='feed_img')
+    img_b = models.ImageField(blank=True, null=True, upload_to='feed_img') #have to fix
 # 수정가능여부
 # 익명여부
     created_at = models.DateTimeField(default=timezone.now)

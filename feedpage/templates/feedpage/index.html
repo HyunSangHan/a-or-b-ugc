@@ -19,42 +19,59 @@
                             </a>
                             <div class="ml-auto more-btn">
 
-                                <button id="demo-menu-lower-right" class="mdl-button mdl-js-button mdl-button--icon v-center m-auto">
+                                <button id="demo-menu-lower-right" class="mdl-button mdl-js-button mdl-button--icon more-js-btn v-center m-auto">
                                     <i class="material-icons">more_vert</i>
                                 </button>
                                 <div class="more-info">
                                     <div>
-                                        {% if user.is_authenticated %}
-                                            {% if request.user != feed.creator %}
-                                                {% if request.user.profile not in feed.creator.profile.follows.all %}
-                                                    <form action = "/feeds/{{ feed.creator.id }}/follow/" method="POST">
-                                                        {% csrf_token %}
-                                                        <input type="submit" value="구독하기" />
-                                                    </form>
-                                                {% else %}
-                                                    <form action = "/feeds/{{ feed.creator.id }}/follow/" method="POST">
-                                                        {% csrf_token %}
-                                                        <input type="submit" value="구독취소" />
-                                                    </form>
-                                                {% endif %}
-                                            {% endif %}
-                                        {% endif %}
+                                        <a href="/feeds/{{ feed.id }}" class="link-black">
+                                            더보기
+                                        </a>
                                     </div>
-                                    <div>신고하기</div>
-                                    <div>수정하기</div>
-                                    <div>삭제하기</div>
+                                    {% if user.is_authenticated %}
+                                        {% if request.user != feed.creator %}
+                                            <div>
+                                                <a href = "/feeds/{{ feed.creator.id }}/follow/" class="link-black">
+                                                    {% if request.user.profile not in feed.creator.profile.follows.all %}
+                                                        구독하기
+                                                    {% else %}
+                                                        구독취소
+                                                    {% endif %}
+                                                </a>
+                                            </div>
+                                            <div>
+
+
+                                                {% get_report_tf feed.id user.id as report_tf %}
+                                                {% if report_tf %}
+                                                    <span class="font-lightgrey" onclick="return alert('이미 신고하셨습니다.')">신고하기</span>
+                                                {% else %}
+                                                    <a href="/feeds/{{ feed.id }}/report/" onclick="return confirm('정말 신고하실 건가요?')" class="link-black">
+                                                        신고하기
+                                                    </a>
+                                                {% endif %}
+
+            {% comment %} <span>신고({{feed.report_set.count }}건)</span> {% endcomment %}
+
+
+                                            </div>
+                                        {% else %}
+                                            <div>
+                                                {% is_deletable feed.id as is_deletable_feed %}
+                                                {% if is_deletable_feed %}
+                                                    <a href="/feeds/{{ feed.id }}/edit" class="link-black">수정하기</a>
+                                                {% else %}
+                                                    <span class="font-lightgrey" onclick="return alert('다른 사용자가 이미 투표/댓글 참여를 한 게시물의 경우, 내용 수정이 불가합니다. 반드시 수정이 필요하다면 삭제 후 재등록해주세요.')">수정하기</span>
+                                                {% endif %}                                
+                                            </div>
+                                            <div>
+                                                <a href="/feeds/{{ feed.id }}/delete/" onclick="return confirm('정말 삭제하실 건가요?')" class="link-black">
+                                                    삭제하기
+                                                </a>
+                                            </div>
+                                        {% endif %}
+                                    {% endif %}
                                 </div>
-
-
-                                {% comment %} <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="demo-menu-lower-right">
-                                    <li class="mdl-menu__item">Some Action</li>
-                                    <li class="mdl-menu__item">Another Action</li>
-                                    <li disabled class="mdl-menu__item">Disabled Action</li>
-                                    <li class="mdl-menu__item"> {% endcomment %}
-
-
-                                    {% comment %} </li> {% endcomment %}
-                                {% comment %} </ul> {% endcomment %}
                             </div>
                         </div>
                         <div class="letter-space">
@@ -87,36 +104,12 @@
                             <div class="mr-1perc demo-card-image mdl-card content-img" style="background: url('{{ feed.img_a.url }}') center / cover;">
                                 <a href="/feeds/{{ feed.id }}/upvote_a" class="w-100 h-100">
                                 </a>
-
-
-                                {% comment %} <div class="mdl-card__title mdl-card--expand">
-                                </div> {% endcomment %}
-
-                                {% comment %} <div class="mdl-card__actions">
-                                    <span class="demo-card-image__filename">
-                                        <a href="/feeds/{{ feed.id }}/upvote_a">
-                                            {{ feed.content_a}}
-                                        </a>
-                                    </span>
-                                </div> {% endcomment %}
-
                             </div>
 
                             <!-- Image card B-->
                             <div class="ml-1perc demo-card-image mdl-card content-img" style="background: url('{{ feed.img_b.url }}') center / cover;">
                                 <a href="/feeds/{{ feed.id }}/upvote_b" class="w-100 h-100">
                                 </a>
-                                {% comment %} <div class="mdl-card__title mdl-card--expand">
-                                </div> {% endcomment %}
-
-                                {% comment %} <div class="mdl-card__actions">
-                                    <span class="demo-card-image__filename ">
-                                        <a href="/feeds/{{ feed.id }}/upvote_b">
-                                            {{ feed.content_b}}
-                                        </a>
-                                    </span>
-                                </div> {% endcomment %}
-
                             </div>
 
                 {% comment %}         
@@ -176,35 +169,7 @@
                             </div>
                             <!--B 네모 끝--> {% endcomment %}
                         </div>
-                        <!-- 그러고보니 show화면도 구현해야함!!!!!!!!!!!!!-->
-                        <div>
-                            {% comment %} {% if request.user == feed.creator %}
-                                {% is_deletable feed.id as is_deletable_feed %}
-                                {% if is_deletable_feed %}
-                                    <a href="/feeds/{{ feed.id }}/edit">수정하기</a>
-                                {% else %}
-                                    수정불가
-                                {% endif %}
-                                <form action="/feeds/{{ feed.id }}/delete/" method="POST">
-                                    {% csrf_token %}
-                                    <input type="submit" value="삭제" />
-                                </form>
-                                <span>신고({{feed.report_set.count }}건)</span>
-                            {% else %}
-                                {% get_report_tf feed.id user.id as report_tf %}   
-                                {% if report_tf and user.id %}
-                                    <a href="/feeds/{{ feed.id }}/report/" onclick="return alert('이미 신고하셨습니다.')">
-                                        <button>신고({{feed.report_set.count }}건)</button>
-                                    </a>
-                                {% elif report_tf == False and user.id %}
-                                    <a href="/feeds/{{ feed.id }}/report/" onclick="return confirm('정말 신고하실 건가요?')">
-                                        <button>신고({{feed.report_set.count }}건)</button>
-                                    </a>
-                                {% else %}
-                                    <span>신고({{feed.report_set.count }}건)</span>
-                                {% endif %}
-                            {% endif %} {% endcomment %}
-                        </div>
+
                         <!-- 댓글 코드 -->
                         <div class="mt-2 w-100">
                             <!--A베스트댓글-->

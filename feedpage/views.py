@@ -73,13 +73,17 @@ def show(request, id):
     return render(request, 'feedpage/show.html', {'feed': feed})    
 
 def delete(request, id):
-    print(request.method)
-    if request.method == "POST":
-        feed = Feed.objects.get(id=id)
+    feed = Feed.objects.get(id=id)
+    if feed.creator == request.user:
         feed.delete()
-        return redirect('/feeds')
+        next = request.META['HTTP_REFERER']
     else:
-        return redirect('/feeds')
+        print("비정상적인 수정 접근 시도")
+        try:
+            next = request.META['HTTP_REFERER']
+        except:
+            next = '/feeds/'
+    return redirect('%s'%next)
 
 def edit(request, id):
     feed = Feed.objects.get(id=id)
@@ -212,15 +216,14 @@ def feed_upvote_b(request, pk):
     return redirect('%s'%next)
 
 def follow_manager(request, pk):
-    if request.method == 'POST':
-        follow_from = Profile.objects.get(user_id = request.user.id)
-        follow_to = Profile.objects.get(user_id = pk)
-        following_already = Follow.objects.filter(follow_from=follow_from, follow_to=follow_to)
+    follow_from = Profile.objects.get(user_id = request.user.id)
+    follow_to = Profile.objects.get(user_id = pk)
+    following_already = Follow.objects.filter(follow_from=follow_from, follow_to=follow_to)
 
-        if following_already.count() > 0:
-            following_already.first().delete()
-        else:
-            Follow.objects.create(follow_from=follow_from, follow_to=follow_to)
+    if following_already.count() > 0:
+        following_already.first().delete()
+    else:
+        Follow.objects.create(follow_from=follow_from, follow_to=follow_to)
 
     try:
         next = request.META['HTTP_REFERER']

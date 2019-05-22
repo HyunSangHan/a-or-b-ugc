@@ -27,6 +27,17 @@ strong {
     font-weight: 800;
 }
 
+/* delete button's default styling */
+/* button, input[type="submit"], input[type="reset"] {
+	background: none;
+	color: inherit;
+	border: none;
+	padding: 0;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+} */
+
 .header-shadow {
     box-shadow: 0 1px 8px 0 rgba(0,0,0,0.03), 0 -7px 2px -2px rgba(0,0,0,.2), 0 0px 0px 0 rgba(0,0,0,.12) !important;
 }
@@ -39,6 +50,10 @@ strong {
 
 .flex {
     display: flex;
+}
+
+.none {
+    display: none;
 }
 
 .v-center {
@@ -203,6 +218,11 @@ a {
     font-family: "Noto Sans KR", sans-serif !important;
 }
 
+.font-lightgrey {
+    color: lightgrey;
+    font-family: "Noto Sans KR", sans-serif !important;
+}
+
 .font-red {
     color: red !important;
 }
@@ -223,7 +243,7 @@ a {
         position: absolute;
         right: 5%;
         top: auto;
-        margin-top: -26px;
+        margin-top: -27px;
         margin-right: 20px;
         z-index: 3;
         /* width: 134px; */
@@ -289,10 +309,6 @@ a {
         box-shadow: 2px -1px 0px 0 rgba(0,-1,0,0.03), 0 0px 0px -1px rgba(0,0,0,.2), 0 0px 0px 0 rgba(0,0,0,.12) !important;
         display: none;
     }
-    
-    .more-info > div {
-        margin: 10px 20px 0px;
-    }
 
     .demo-card-image.mdl-card {
         /* width: 256px; */
@@ -302,7 +318,8 @@ a {
 
 
 .link-black {
-    color: black;
+    color: rgba(0,0,0,.87);
+    font-weight: 400;
 }
 
 .link-light-black {
@@ -370,8 +387,12 @@ a {
     text-align: center;
 }
 
+.more-info > div:first-child {
+    margin-top: 15px;
+}
+
 .more-info > div:last-child {
-    margin-bottom: 10px;
+    margin-bottom: 15px;
 }
 
 .logout-btn {
