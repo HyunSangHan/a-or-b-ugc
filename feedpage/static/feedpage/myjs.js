@@ -6,4 +6,5 @@ $(document).ready(() => {
     $('.more-js-btn').on('click', function() {
         $(this).next().toggle();
     })
+    $('.element').CopyToClipboard();
 })

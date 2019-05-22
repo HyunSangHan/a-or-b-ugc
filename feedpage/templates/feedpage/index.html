@@ -26,6 +26,7 @@
                                             더보기
                                         </a>
                                     </div>
+                                    <div data-clipboard-text="http://localhost:8000/feeds/{{ feed.id }}" onclick="return alert('게시물의 주소가 클립보드에 복사되었습니다.')">공유하기</div>
                                     {% if user.is_authenticated %}
                                         {% if request.user != feed.creator %}
                                             <div>
@@ -80,7 +81,11 @@
                         <div class="inline-flex v-center mt-1 mb-2">
                             <a href="/feeds/creator/{{feed.creator.username}}" class="link-grey">
                                 <div class="inline-flex">
-                                    <div class="user-face" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
+                                    {% if feed.creator.profile.image.url != "/media/False" %}
+                                        <div class="user-face" style="background: url('{{ feed.creator.profile.image.url }}') center / cover;"></div>
+                                    {% else %}
+                                        <div class="user-face" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
+                                    {% endif %}
                                     <span class="font-12 ml-1">
                                     <!-- 시간은 일단 가상의 값임. 수정 필요 {{ feed.created_at }}-->
                                         {{feed.creator.username}} · 1시간전
@@ -110,7 +115,6 @@
                             <!-- Image card B-->
                             <div class="ml-1perc demo-card-image mdl-card content-img" style="background: url('{{ feed.img_b.url }}') center / cover;">
                                 <a href="/feeds/{{ feed.id }}/upvote_b" class="w-100 h-100">
-                                </a>
                                     {% comment %} <!--B 라벨링-->
                                     <div class="content-label bg-black">
                                     b / {{ feed.content_b}}
@@ -126,6 +130,7 @@
                                     <!--lose일때 배경-->
                                     <div class="content-result-bg flex-center w-100 h-100 bg-grey">
                                     </div>
+                                </a>
                             </div>
                 {% comment %}         
                             <!--A 네모 시작-->
@@ -259,10 +264,10 @@
                         <!--show 안으로 들어갈 부분(전체댓글)-->
                         {% if feed.feedcomment_set.count > 6 %}
                         <a href="/feeds/{{ feed.id }}">
-                            <div class="font-12 link-light-black font-light mt-2">댓글 {{feed.feedcomment_set.count}}개 더보기</div>
+                            <div class="font-12 link-light-black font-light mt-2">댓글 {{feed.feedcomment_set.count}}개 모두 보기</div>
                         </a>
                         {% elif feed.feedcomment_set.count != 0 %}
-                            <div class="font-12 link-light-black font-light mt-2 toggle-comments">댓글 {{feed.feedcomment_set.count}}개 더보기</div>
+                            <div class="font-12 link-light-black font-light mt-2 toggle-comments">댓글 {{feed.feedcomment_set.count}}개 모두 보기</div>
                             <div class="all-comments">
                                 {% get_ordered_comment feed.id as comments %}
                                 {% for c in comments %}

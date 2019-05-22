@@ -422,6 +422,7 @@ a {
 .more-info > div {
     margin: 10px 20px 0px;
     text-align: center;
+    cursor: pointer;
 }
 
 .more-info > div:first-child {
@@ -468,7 +469,7 @@ a {
 .sideicon.norm {
     min-width: 8px;
     padding-left: 5px;
-    padding-right: 5px;
+    padding-right: 6px;
     background-color: grey;
 }
 

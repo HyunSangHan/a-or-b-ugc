@@ -22,6 +22,7 @@ def signup(request):
                 profile.is_male = request.POST['gender']
                 profile.left_level = request.POST['politics']
                 profile.region = request.POST['region']
+                profile.image = request.FILES.get('profile_image', False)
                 profile.save()
                 auth.login(request, user)
                 return redirect('/feeds')

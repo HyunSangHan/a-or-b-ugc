@@ -7,15 +7,17 @@
 {{ error }}
 {% endif %}
 
-    <form action='{% url "signup" %}' method='POST'>
+    <form action='{% url "signup" %}' method='POST' enctype="multipart/form-data">
         {% csrf_token %}
-        이메일 : <input type='email' name='email' /> <br/>
-        비번 : <input type='password' name='password1' /> <br/>
-        다시 : <input type='password' name='password2' /> <br/>
+        이메일 : <input type='email' name='email' required /> <br/>
+        비번 : <input type='password' name='password1' required /> <br/>
+        다시 : <input type='password' name='password2' required /> <br/>
     <p>
-        닉네임 : <input type='text' name='username' /> <br/>
+        닉네임 : <input type='text' name='username' required /> <br/>
     </p>
-
+    <p>
+        프로필사진 : <input name="profile_image" type="file" accept="image/*" /> <br />
+    </p>
     <p>
         성별 :
         <input type='radio' id='genderChoice1' name='gender' value=True required> 

@@ -15,10 +15,10 @@ class HashTag(models.Model):
 
 class Feed(models.Model):
     # null, blank 나중에 한번 정리하기
-    title = models.CharField(max_length=256)
+    title = models.CharField(max_length=30)
     creator = models.ForeignKey(User, null=True, on_delete= models.CASCADE)
-    content_a = models.TextField(blank=False, null=False)
-    content_b = models.TextField(blank=False, null=False)
+    content_a = models.CharField(max_length=30)
+    content_b = models.CharField(max_length=30)
     upvote_users = models.ManyToManyField(User, blank=True, related_name='upvote_feeds', through='Upvote')
     matched_tags = models.ManyToManyField(HashTag, blank=True, related_name='tagged_feeds', through='TagRelation')
     img_a = models.ImageField(blank=True, null=True, upload_to='feed_img')

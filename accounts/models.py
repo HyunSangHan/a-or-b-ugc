@@ -13,7 +13,7 @@ class Profile(models.Model):
     follows = models.ManyToManyField('self', through = 'Follow', blank=True, symmetrical=False)
     birthday = models.DateField(blank=True, null=True)
     is_male = models.BooleanField(blank=True, null=True)
-    image = models.ImageField(upload_to='blah', default='/static/feedpage/default_avatar.png')
+    image = models.ImageField(blank=True, null=True, upload_to='profile_img')
     created_at = models.DateTimeField(default=timezone.now)
     left_level = models.IntegerField(
         default=3,
