@@ -180,39 +180,45 @@ def feed_upvote_a(request, pk):
     # feed id로 한번 필터링하고(정확히는, 불러오고)
     feed = Feed.objects.get(id = pk)
     # user id로 한번 더 필터링하고
-    upvote_list = feed.upvote_set.filter(user_id = request.user.id)
-    feedcomment_list = feed.feedcomment_set.filter(reactor_id = request.user.id)
-    if upvote_list.count() > 0:
-        if upvote_list.first().about_a:
-            feed.upvote_set.get(user_id = request.user.id).delete()
-        else:
-            feed.upvote_set.get(user_id = request.user.id).delete()
-            Upvote.objects.create(user_id = request.user.id, feed_id = feed.id, about_a = True)
-    else:
-        Upvote.objects.create(user_id = request.user.id, feed_id = feed.id, about_a = True)
     try:
-        next = request.META['HTTP_REFERER']
+        upvote_list = feed.upvote_set.filter(user_id = request.user.id)
+        feedcomment_list = feed.feedcomment_set.filter(reactor_id = request.user.id)
+        if upvote_list.count() > 0:
+            if upvote_list.first().about_a:
+                feed.upvote_set.get(user_id = request.user.id).delete()
+            else:
+                feed.upvote_set.get(user_id = request.user.id).delete()
+                Upvote.objects.create(user_id = request.user.id, feed_id = feed.id, about_a = True)
+        else:
+            Upvote.objects.create(user_id = request.user.id, feed_id = feed.id, about_a = True)
+        try:
+            next = request.META['HTTP_REFERER']
+        except:
+            next = '/feeds/'
     except:
-        next = '/feeds/'
+        next = '/accounts/login'
     return redirect('%s'%next)
 
 def feed_upvote_b(request, pk):
     # if request.method == 'POST':
     feed = Feed.objects.get(id = pk)
-    upvote_list = feed.upvote_set.filter(user_id = request.user.id)
-    feedcomment_list = feed.feedcomment_set.filter(reactor_id = request.user.id)
-    if upvote_list.count() > 0:
-        if upvote_list.first().about_a: 
-            feed.upvote_set.get(user_id = request.user.id).delete()
-            Upvote.objects.create(user_id = request.user.id, feed_id = feed.id, about_a = False)
-        else:
-            feed.upvote_set.get(user_id = request.user.id).delete()
-    else:
-        Upvote.objects.create(user_id = request.user.id, feed_id = feed.id, about_a = False)
     try:
-        next = request.META['HTTP_REFERER']
+        upvote_list = feed.upvote_set.filter(user_id = request.user.id)
+        feedcomment_list = feed.feedcomment_set.filter(reactor_id = request.user.id)
+        if upvote_list.count() > 0:
+            if upvote_list.first().about_a: 
+                feed.upvote_set.get(user_id = request.user.id).delete()
+                Upvote.objects.create(user_id = request.user.id, feed_id = feed.id, about_a = False)
+            else:
+                feed.upvote_set.get(user_id = request.user.id).delete()
+        else:
+            Upvote.objects.create(user_id = request.user.id, feed_id = feed.id, about_a = False)
+        try:
+            next = request.META['HTTP_REFERER']
+        except:
+            next = '/feeds/'
     except:
-        next = '/feeds/'
+        next = '/accounts/login'
     return redirect('%s'%next)
 
 def follow_manager(request, pk):

@@ -99,17 +99,43 @@
                             <!-- Image card A-->
                             <div class="mr-1perc demo-card-image mdl-card content-img" style="background: url('{{ feed.img_a.url }}') center / cover;">
                                 <a href="/feeds/{{ feed.id }}/upvote_a" class="w-100 h-100">
-                                    <!--A 라벨링-->
-                                    <div class="content-label bg-black">
-                                    A / {{ feed.content_a}}
-                                    </div>
-                                    <!--A 결과 숫자-->
-                                    <div class="content-result flex-center w-100 h-100">
-                                        <span class="content-result-perc">64</span>%
-                                    </div>
-                                    <!--win일때 배경-->
-                                    <div class="content-result-bg flex-center w-100 h-100 bg-black">
-                                    </div>
+                                    {% get_upvote_color feed.id user.id as choice %}
+                                    <!--lose일때 A 라벨링-->
+                                    {% if choice == "B" %}
+                                        <div class="content-label bg-grey">
+                                        A / {{ feed.content_a}}
+                                        </div>
+                                    <!--그 외 평소/win일 때 A 라벨링-->
+                                    {% else %}
+                                        <div class="content-label bg-black">
+                                        A / {{ feed.content_a}}
+                                        </div>
+                                    {% endif %}
+
+                                    <!--A를 upvote한 경우-->
+                                    {% if choice != "" %}
+                                        <!--A 결과 숫자-->
+                                        <div class="content-result flex-center w-100 h-100">
+                                            <div class="mt-3">
+                                                <span class="content-result-perc">{% get_upvote_perc_a feed.id %}</span>%
+                                                <div class="w-100 mt-2" style="text-align: center;">
+                                                    (
+                                                    {% comment %} <span class="mt-3">
+                                                        <i class="material-icons">thumb_up</i>
+                                                    </span> {% endcomment %}
+                                                    {% get_upvote_a feed.id %} )
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% if choice == "A" %}
+                                            <!--선택한 것일때 배경-->
+                                            <div class="content-result-bg flex-center w-100 h-100 bg-black">
+                                            </div>
+                                        {% else %}
+                                            <div class="content-result-bg flex-center w-100 h-100 bg-grey">
+                                            </div>
+                                        {% endif %}
+                                    {% endif %}
                                 </a>
                             </div>
                             <!-- Image card B-->
@@ -119,17 +145,44 @@
                                     <div class="content-label bg-black">
                                     b / {{ feed.content_b}}
                                     </div> {% endcomment %}
+
                                     <!--lose일때 B 라벨링-->
-                                    <div class="content-label bg-grey">
-                                    B / {{ feed.content_b}}
-                                    </div>
-                                    <!--B 결과 숫자-->
-                                    <div class="content-result flex-center w-100 h-100">
-                                        <span class="content-result-perc">36</span>%
-                                    </div>
-                                    <!--lose일때 배경-->
-                                    <div class="content-result-bg flex-center w-100 h-100 bg-grey">
-                                    </div>
+                                    {% if choice == "A" %}
+                                        <div class="content-label bg-grey">
+                                        B / {{ feed.content_b}}
+                                        </div>
+                                    <!--그 외 평소/win일 때 B 라벨링-->
+                                    {% else %}
+                                        <div class="content-label bg-black">
+                                        B / {{ feed.content_b}}
+                                        </div>
+                                    {% endif %}
+
+                                    <!--B를 upvote한 경우-->
+                                    {% get_upvote_color feed.id user.id as choice %}
+                                    {% if choice != "" %}
+                                        <!--B 결과 숫자-->
+                                        <div class="content-result flex-center w-100 h-100">
+                                            <div class="mt-3">
+                                                <span class="content-result-perc">{% get_upvote_perc_b feed.id %}</span>%
+                                                <div class="w-100 mt-2" style="text-align: center;">
+                                                    (
+                                                    {% comment %} <span class="mt-3">
+                                                        <i class="material-icons">thumb_up</i>
+                                                    </span> {% endcomment %}
+                                                    {% get_upvote_b feed.id %} )
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% if choice == "B" %}
+                                            <!--선택한 것일때 배경-->
+                                            <div class="content-result-bg flex-center w-100 h-100 bg-black">
+                                            </div>
+                                        {% else %}
+                                            <div class="content-result-bg flex-center w-100 h-100 bg-grey">
+                                            </div>
+                                        {% endif %}
+                                    {% endif %}
                                 </a>
                             </div>
                 {% comment %}         

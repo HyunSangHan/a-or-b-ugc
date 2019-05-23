@@ -20,7 +20,7 @@ def get_upvote_perc_a(pk):
     upvote_total = feed.upvote_set.count()
     if upvote_total > 0:
         upvote_a = feed.upvote_set.filter(about_a=True).count()
-        upvote_perc_a = "{:.1%}".format(upvote_a / upvote_total)
+        upvote_perc_a = "{:.0f}".format((upvote_a / upvote_total)*100)
     else: 
         upvote_perc_a = "-"
     return upvote_perc_a
@@ -31,7 +31,7 @@ def get_upvote_perc_b(pk):
     upvote_total = feed.upvote_set.count()
     if upvote_total > 0:
         upvote_b = feed.upvote_set.filter(about_a=False).count()
-        upvote_perc_b = "{:.1%}".format(upvote_b / upvote_total)
+        upvote_perc_b = "{:.0f}".format((upvote_b / upvote_total)*100)
     else: 
         upvote_perc_b = "-"
     return upvote_perc_b

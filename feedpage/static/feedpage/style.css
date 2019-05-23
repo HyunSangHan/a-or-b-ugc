@@ -8,6 +8,7 @@
     display: none;
 }
 
+/* test for closing more info */
 .transp-bg {
     z-index: 2;
     position: fixed;
@@ -144,6 +145,10 @@ a {
 
 .mt-3 {
     margin-top: 12px;
+}
+
+.mt-4 {
+    margin-top: 16px;
 }
 
 .mb-1 {
