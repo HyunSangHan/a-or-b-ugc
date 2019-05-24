@@ -286,15 +286,8 @@ def mysubscribe(request):
 
 def myhistory(request):
     feeds = Feed.objects.filter(creator_id=request.user.id)
-    return render(request, 'feedpage/myhistory.html', {'feeds': feeds})
+    return render(request, 'feedpage/mypage.html', {'feeds': feeds})
 
 def myreaction(request):
-    feeds = []
-    my_upvotes = list(request.user.upvote_set.all())
-    print(my_upvotes)
-    for my_upvote in my_upvotes:
-        ##############여기 왜 안되지?
-        print(list(my_upvote.feed))
-        feeds = feeds + list(my_upvote.feed)
-    print(feeds)
-    return render(request, 'feedpage/myreaction.html', {'feeds': feeds})
+    upvotes = request.user.upvote_set.all()
+    return render(request, 'feedpage/myreaction.html', {'upvotes': upvotes})

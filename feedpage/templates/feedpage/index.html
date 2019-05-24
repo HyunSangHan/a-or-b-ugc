@@ -26,7 +26,7 @@
                                             더보기
                                         </a>
                                     </div>
-                                    <div data-clipboard-text="http://localhost:8000/feeds/{{ feed.id }}" onclick="return alert('게시물의 주소가 클립보드에 복사되었습니다.')">공유하기</div>
+                                    <div data-clipboard-text="localhost:8000/feeds/{{ feed.id }}" onclick="return alert('콘텐츠의 주소가 클립보드에 복사되었습니다.')">공유하기</div>
                                     {% if user.is_authenticated %}
                                         {% if request.user != feed.creator %}
                                             <div>
@@ -116,7 +116,7 @@
                                     {% if choice != "" %}
                                         <!--A 결과 숫자-->
                                         <div class="content-result flex-center w-100 h-100">
-                                            <div class="mt-3">
+                                            <div class="mt-3 opacity-07">
                                                 <span class="content-result-perc">{% get_upvote_perc_a feed.id %}</span>%
                                                 <div class="w-100 mt-2" style="text-align: center;">
                                                     (

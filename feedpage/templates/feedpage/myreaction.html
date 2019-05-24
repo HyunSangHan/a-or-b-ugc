@@ -9,10 +9,10 @@
     </th>
     <th>title
     </th>
-    {% for feed in feeds %}
+    {% for upvote in upvotes %}
     <tr>
-        <td>{{feed.creator}}</td>
-        <td>{{feed.title}}</td>
+        <td>{{upvote.feed.creator}}</td>
+        <td>{{upvote.feed.title}}</td>
     </tr>
     {% endfor %}
 </table>

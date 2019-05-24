@@ -45,9 +45,15 @@
         </div>
       </header>
       <div class="mdl-layout__drawer">
-        <span class="mdl-layout-title">
-          {{request.user.username}}
-        </span>
+        <a href="{% url 'profile' %}">
+          <span class="mdl-layout-title sidebar-profile">
+            <div class="user-face-big" style="background: url('{{ request.user.profile.image.url }}') center / cover;"></div>
+            <div class="sidebar-username ellipsis">{{request.user.username}}</div>
+            <div>
+              <i class="material-icons" style="margin-left:6px; font-size:14px; color:#666;">arrow_forward_ios</i>
+            </div>
+          </span>
+        </a>
         {% if user.is_authenticated %}
           <nav class="mdl-navigation">
             <a class="mdl-navigation__link" href="{% url 'profile' %}">프로필수정</a>
@@ -70,9 +76,36 @@
     </div>
 
     {% if user.is_authenticated %}
-      <a href="/feeds/new" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
+      <div class="nav-bar-wrap">
+        <a href="/feeds/">
+          <div>
+            <i class="material-icons">home</i>
+          </div>
+        </a>
+        <a href="/feeds/mysubscribe/">
+          <div>
+            <i class="material-icons">library_books</i>
+          </div>
+        </a>
+        <a href="/feeds/new">
+          <div>
+            <i class="material-icons">add_circle_outline</i>
+          </div>
+        </a>
+        <a href="/feeds/myreaction">
+          <div>
+            <i class="material-icons">bookmark_border</i>
+          </div>
+        </a>
+        <a href="/feeds/myhistory">
+          <div class="user-face mb-1" style="background: url('{{ request.user.profile.image.url }}') center / cover;"></div>
+        </a>
+      </div>
+
+
+      {% comment %} <a href="/feeds/new" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
         <i class="material-icons">create</i>
-      </a>
+      </a> {% endcomment %}
     {% endif %}
     <script src="{% static 'feedpage/myjs.js' %}"></script>
   </body>
