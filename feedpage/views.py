@@ -7,6 +7,7 @@ from django.db.models import Q
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from operator import attrgetter
+from django.http import JsonResponse
 
 ###니드 로그인 기능 리다이렉트 구현 필요
 
@@ -139,12 +140,23 @@ def create_comment(request, id):
             upvote_side = 0
         content = request.POST['content']
         FeedComment.objects.create(feed_id=id, content=content, reactor=request.user, upvote_side=upvote_side)
-        print(FeedComment.objects.filter(feed_id=id, reactor=request.user).first().upvote_side)
-    try:
-        next = request.META['HTTP_REFERER']
-    except:
-        next = '/feeds/'
-    return redirect('%s'%next)
+        new_comment = FeedComment.objects.latest('id')
+
+    context = {
+        'comment': {
+            'id': new_comment.id,
+            'reactor': new_comment.reactor.username,
+            'content': new_comment.content,
+            'upvote_side': new_comment.upvote_side,
+        }
+    }
+    return JsonResponse(context)
+
+    # try:
+    #     next = request.META['HTTP_REFERER']
+    # except:
+    #     next = '/feeds/'
+    # return redirect('%s'%next)
 
 def delete_comment(request, id, cid):
     if request.method == 'POST':
@@ -282,11 +294,11 @@ def mysubscribe(request):
         feeds = feeds + list(my_sub_user.feed_set.all())
     ######updated_at으로 정렬도 해줘야함 필요
     ######구독 하나도 없을 경우 메시지 띄워주기 필요
-    return render(request, 'feedpage/mysubscribe.html', {'feeds': feeds})
+    return render(request, 'feedpage/mysubscribe.html', {'feeds': feeds, 'my_subs': my_subs})
 
-def myhistory(request):
+def myupload(request):
     feeds = Feed.objects.filter(creator_id=request.user.id)
-    return render(request, 'feedpage/mypage.html', {'feeds': feeds})
+    return render(request, 'feedpage/myupload.html', {'feeds': feeds})
 
 def myreaction(request):
     upvotes = request.user.upvote_set.all().order_by('-created_at')

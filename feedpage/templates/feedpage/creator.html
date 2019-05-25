@@ -5,15 +5,15 @@
 <table>
 크리에이터스 페이지
 <hr>
-    <th>creator
-    </th>
-    <th>title
-    </th>
-    {% for feed in feeds %}
-    <tr>
-        <td>{{feed.creator}}</td>
-        <td>{{feed.title}}</td>
-    </tr>
-    {% endfor %}
+  <th>creator
+  </th>
+  <th>title
+  </th>
+  {% for feed in feeds %}
+  <tr>
+    <td>{{feed.creator}}</td>
+    <td>{{feed.title}}</td>
+  </tr>
+  {% endfor %}
 </table>
 {% endblock content %}

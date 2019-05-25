@@ -5,18 +5,14 @@
 
 <div class="mdl-grid container">
   <div class="mdl-cell--12-col m-auto contents">
-    <!--구독채널 리스트-->
-    <div class="subs-list">
-    {% for my_sub in my_subs %}
-      <div>
-        {% if my_sub.follow_to.user.profile.image == '/media/False' %}
-        <div class="subs-face" style="background: url('{{ my_sub.follow_to.user.profile.image.url }}') center / cover;"></div>
-        {% else %}
-        <div class="subs-face" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
-        {% endif %}
-        <div class="subs-name ellipsis">{{ my_sub.follow_to.user.username}}</div>
-      </div>
-    {% endfor %}
+
+    <div class="two-tabs flex">
+      <a href="/feeds/myupload" class="each-tab flex-center font-white bg-black">
+        내가 작성한
+      </a>
+      <a href="/feeds/myreaction" class="each-tab flex-center">
+        내가 참여한
+      </a>
     </div>
 
     <div class="contents-margin">
