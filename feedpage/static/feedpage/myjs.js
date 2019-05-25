@@ -1,13 +1,19 @@
 $(document).ready(() => {
-  $('.toggle-comments').on('click', function() {
-    $(this).next().slideDown();
+  // 댓글 펼치기
+  $('.toggle-comments').on('click', function(event) {
+    $(this).siblings('.all-comments').slideDown();
     $(this).hide();
-  })
+  });
+
+  //더보기버튼
   $('.more-js-btn').on('click', function() {
     $(this).next().toggle();
   })
+
+  //클립보드에 복사
   $('.element').CopyToClipboard();
 
+  // 댓글 달기 구현
   $('.comment-submit').on('click', function(event) {
     event.preventDefault();
 
@@ -21,24 +27,27 @@ $(document).ready(() => {
       data: {
         csrfmiddlewaretoken: csrfmiddlewaretoken,
         id: id,
-        content: $this.siblings('.comment-input-js').children('.comment-input').val()
+        content: $this.siblings('.comment-input-wrap').children('.comment-input').val()
       },
       dataType: 'json',
       success: function(data) {
         console.log(data);
         const str = `
-<div class="toggle-comment last-comment">
-  <p>${data.comment.username}: ${data.comment.content}</p>
-  <form action="/feeds/${id}/comments/${data.comment.id}/" method="POST">
-    <input type="hidden" name="csrfmiddlewaretoken" value=${csrfmiddlewaretoken}>
-    <button class="mdl-button mdl-js-button mdl-button--icon">
-      <i class="material-icons">clear</i>
-    </button>
-  </form>
+<div>
+  <div class="comment w-100 v-center mtb-1 inline-flex">
+    <div class="sideicon norm"> ${data.comment.upvote_side} </div>
+    <div class="font-11 v-center mtb-auto comment-reactor"><strong>${data.comment.reactor}</strong></div>
+    <div class="font-14 v-center mtb-auto comment-content ellipsis">${data.comment.content}</div>
+    <div class="ml-auto more-btn">
+      <a href="/feeds/${id}/comments/${data.comment.id}/upvote">
+        <i class="material-icons comment-heart v-center m-auto link-grey ml-1">favorite_border</i>
+      </a>
+    </div>
+  </div>
 </div>`;
-        const $commentList = $this.parent().parent().siblings('.all-comments');
-        $commentList.prepend(str);
-        $this.siblings('.mdl-textfield__input').val('');
+        const $comments = $this.parent().siblings('.comment-wrap');
+        $comments.append(str);
+        $this.siblings('.comment-input-wrap').children('.comment-input').val('');
       },
       error: function(response, status, error) {
         alert('error');
@@ -48,5 +57,5 @@ $(document).ready(() => {
         console.log(response);
       },
     });
-  });    
+  });
 })

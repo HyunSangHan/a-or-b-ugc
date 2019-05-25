@@ -8,6 +8,9 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from operator import attrgetter
 from django.http import JsonResponse
+import urllib
+import json
+
 
 ###니드 로그인 기능 리다이렉트 구현 필요
 

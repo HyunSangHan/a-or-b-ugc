@@ -13,7 +13,7 @@
         {% if feed.check_visible %}
           <li class="each-li">
             <div class="inline-flex w-more-btn">
-              <a href="/feeds/{{ feed.id }}">
+              <a href="/feeds/{{ feed.id }}" class="test-js">
                 <h2 class="link-black">{{ feed.title }}</h2>
               </a>
               <div class="ml-auto more-btn">
@@ -244,7 +244,7 @@
             </div>
 
             <!-- 댓글 코드 -->
-            <div class="mt-2 w-100">
+            <div class="mt-2 w-100 comment-wrap">
               <!--A베스트댓글-->
               {% get_bestcomment_a feed.id as comment_a %}
               {% get_bestcomment_b feed.id as comment_b %}
@@ -304,9 +304,9 @@
             </div>
             <!--show 안으로 들어갈 부분(전체댓글)-->
             {% if feed.feedcomment_set.count > 6 %}
-            <a href="/feeds/{{ feed.id }}">
-              <div class="font-12 link-light-black font-light mt-2">댓글 {{feed.feedcomment_set.count}}개 모두 보기</div>
-            </a>
+              <a href="/feeds/{{ feed.id }}">
+                <div class="font-12 link-light-black font-light mt-2">댓글 {{feed.feedcomment_set.count}}개 모두 보기</div>
+              </a>
             {% elif feed.feedcomment_set.count != 0 %}
               <div class="font-12 link-light-black font-light mt-2 toggle-comments">댓글 {{feed.feedcomment_set.count}}개 모두 보기</div>
               <div class="all-comments">
@@ -348,11 +348,11 @@
             {% if user.is_authenticated %}
               <form action="/feeds/{{ feed.id }}/comments/" method="POST">
                 {% csrf_token %}
-                <div class="comment-input-js mdl-textfield mdl-js-textfield mdl-textfield--floating-label w-100">
+                <div class="comment-input-wrap mdl-textfield mdl-js-textfield mdl-textfield--floating-label w-100">
                   <input class="mdl-textfield__input comment-input" type="text" id="feedcomment" name="content">
                   <label class="mdl-textfield__label" for="feedcomment">댓글을 입력하세요.</label>
                 </div>
-                <button type="submit" class="comment-submit" data-feedid="{{ feed.id }}" data-csrfmiddlewaretoken="{{ csrf_token }}">댓글 달기</button>
+                <button type="submit" class="comment-submit" data-feedid="{{ feed.id }}" data-csrfmiddlewaretoken="{{ csrf_token }}">댓글달기</button>
               </form> 
               {% comment %}  invisible {% endcomment %}
             {% endif %}

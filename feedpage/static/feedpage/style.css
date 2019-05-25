@@ -4,7 +4,7 @@
   cursor: pointer;
 }
 
-/* 세미나용으로 수정 */
+/* 세ㅣ나용으로 수정 */
 .all-comments {
   display: none;
 }
@@ -501,12 +501,12 @@ a {
   margin: -3px 0 0 -5px;
 }
 
-.subs-list > div:first-child {
+.subs-list > a:first-child {
   margin-left: 20px;
   margin-right: 10px;
 }
 
-.subs-list > div {
+.subs-list > a {
   margin-left: 10px;
   margin-right: 10px;
   width: 80px;

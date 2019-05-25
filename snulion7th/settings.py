@@ -40,9 +40,11 @@ INSTALLED_APPS = [
     'eventpage.apps.EventpageConfig',
     'accounts.apps.AccountsConfig',
     'sass_processor',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -126,10 +128,14 @@ STATICFILES_DIRS = (
 	os.path.join(BASE_DIR, 'feedpage', 'static'),
 )
 
+LOGIN_REDIRECT_URL = "/feeds/"
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 SASS_PROCESSOR_ENABLED =  True
 SASS_PROCESSOR_ROOT =  os.path.join(BASE_DIR, 'feedpage', 'static')
 
-LOGIN_REDIRECT_URL = "/feeds/"
+
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True

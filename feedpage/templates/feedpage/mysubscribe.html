@@ -8,14 +8,14 @@
     <!--구독채널 리스트-->
     <div class="subs-list">
     {% for my_sub in my_subs %}
-      <div>
-        {% if my_sub.follow_to.user.profile.image == '/media/False' %}
+      <a href="/feeds/creator/{{my_sub.follow_to.user.username}}/">
+        {% if my_sub.follow_to.user.profile.image.url != '/media/False' %}
         <div class="subs-face" style="background: url('{{ my_sub.follow_to.user.profile.image.url }}') center / cover;"></div>
         {% else %}
         <div class="subs-face" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
         {% endif %}
         <div class="subs-name ellipsis">{{ my_sub.follow_to.user.username}}</div>
-      </div>
+      </a>
     {% endfor %}
     </div>
 

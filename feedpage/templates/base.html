@@ -49,11 +49,11 @@
           <a href="{% url 'profile' %}">
             <span class="mdl-layout-title sidebar-profile">
               {% if user.profile.image.url != "/media/False" %}
-                <div class="user-face-big" style="background: url('{{ request.user.profile.image.url }}') center / cover;"></div>
+                <div class="user-face-big" style="background: url('{{ user.profile.image.url }}') center / cover;"></div>
               {% else %}
                 <div class="user-face-big" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
               {% endif %}
-              <div class="sidebar-username ellipsis">{{request.user.username}}</div>
+              <div class="sidebar-username ellipsis">{{user.username}}</div>
               <div>
                 <i class="material-icons" style="margin-left:6px; font-size:14px; color:#666;">arrow_forward_ios</i>
               </div>
@@ -102,7 +102,11 @@
           </div>
         </a>
         <a href="/feeds/myupload">
-          <div class="user-face mb-1" style="background: url('{{ request.user.profile.image.url }}') center / cover;"></div>
+          {% if user.profile.image.url != "/media/False"%}
+            <div class="user-face mb-1" style="background: url('{{ user.profile.image.url }}') center / cover;"></div>
+          {% else %}
+            <div class="user-face mb-1" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
+          {% endif %}
         </a>
       </div>
 
