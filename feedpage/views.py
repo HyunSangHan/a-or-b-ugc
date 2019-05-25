@@ -45,7 +45,7 @@ def new(request):
         content_b = request.POST['content_b']
         img_a = request.FILES.get('img_a', False)
         img_b = request.FILES.get('img_b', False)
-        feed = Feed.objects.create(title=title, content_a=content_a, img_a=img_a, img_b=img_b, content_b=content_b, creator = request.user)
+        feed = Feed.objects.create(title=title, content_a=content_a, img_a=img_a, img_b=img_b, content_b=content_b, creator=request.user)
         #edit도
         # 띄어쓰기 포함도
         # 샾 안넣었을때의 코너케이스도 챙기기 필요
@@ -289,5 +289,8 @@ def myhistory(request):
     return render(request, 'feedpage/mypage.html', {'feeds': feeds})
 
 def myreaction(request):
-    upvotes = request.user.upvote_set.all()
+    upvotes = request.user.upvote_set.all().order_by('-created_at')
     return render(request, 'feedpage/myreaction.html', {'upvotes': upvotes})
+
+def mynotice(request):
+    return render(request, 'feedpage/mynotice.html')

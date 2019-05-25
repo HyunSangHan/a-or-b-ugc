@@ -22,4 +22,5 @@ urlpatterns = [
     path('creator/<creator_name>/', views.creator, name='creator'),
     path('mysubscribe/', views.mysubscribe, name='mysubscribe'), 
     path('myreaction/', views.myreaction, name='myreaction'), 
+    path('mynotice/', views.mynotice, name='mynotice'), 
 ]
