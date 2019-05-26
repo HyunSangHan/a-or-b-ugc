@@ -278,7 +278,7 @@ def creator(request, creator_name):
     creators = User.objects.filter(username=creator_name)
     if creators.count() > 0:
         creator = creators.first()
-        feeds = Feed.objects.filter(creator=creator)
+        feeds = Feed.objects.filter(creator=creator).order_by('-updated_at', '-created_at')
         print(feeds)
         return render(request, 'feedpage/creator.html', {'feeds': feeds})
     else:
@@ -295,17 +295,17 @@ def mysubscribe(request):
     for my_sub in my_subs:
         my_sub_user = my_sub.follow_to.user
         feeds = feeds + list(my_sub_user.feed_set.all())
-    ######updated_at으로 정렬도 해줘야함 필요
-    ######구독 하나도 없을 경우 메시지 띄워주기 필요
+    feeds = sorted(feeds , key = lambda x: x.updated_at, reverse=True)
+
     return render(request, 'feedpage/mysubscribe.html', {'feeds': feeds, 'my_subs': my_subs})
 
 def myupload(request):
-    feeds = Feed.objects.filter(creator_id=request.user.id)
+    feeds = Feed.objects.filter(creator_id=request.user.id).order_by('-updated_at', '-created_at')
     return render(request, 'feedpage/myupload.html', {'feeds': feeds})
 
 def myreaction(request):
     upvotes = request.user.upvote_set.all().order_by('-created_at')
     return render(request, 'feedpage/myreaction.html', {'upvotes': upvotes})
 
-def mynotice(request):
-    return render(request, 'feedpage/mynotice.html')
+def mynotification(request):
+    return render(request, 'feedpage/mynotification.html')

@@ -1,6 +1,38 @@
 from django import template
 from feedpage.models import Feed, FeedComment, Upvote, HashTag, TagRelation, Report
 register = template.Library()
+from datetime import datetime, timedelta
+from django.utils import timezone
+
+@register.simple_tag
+def get_deltatime(pk):
+    feedtime = Feed.objects.get(id=pk).updated_at
+    nowtime = timezone.now()
+    deltatime = nowtime-feedtime
+    delta_second = deltatime.seconds
+    delta_day = deltatime.days
+
+    if delta_day == 0:
+        if delta_second < 10:
+            deltatime_view = "방금전"
+        elif delta_second < 60:
+            deltatime_view = str(delta_second) + "초전"
+        elif delta_second < 3600:
+            delta_minute = deltatime.seconds // 60
+            deltatime_view = str(delta_minute) + "분전"
+        else: # delta_second >= 3600
+            delta_hour = deltatime.seconds // 3600
+            deltatime_view = str(delta_hour) + "시간전"
+    else: # delta_day > 0
+        if delta_day < 30:
+            deltatime_view = str(delta_day) + "일전"
+        elif delta_day < 365:
+            delta_month = deltatime.days // 30
+            dletatime_view = str(delta_month) + "개월전"
+        else: #delta_day >= 365
+            delta_year = deltatime.days // 365
+            dletatime_view = str(delta_year) + "일전"
+    return deltatime_view
 
 @register.simple_tag
 def get_upvote_a(pk):

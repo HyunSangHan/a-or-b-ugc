@@ -88,7 +88,7 @@
                   {% endif %}
                   <span class="font-12 ml-1">
                   <!-- 시간은 일단 가상의 값임. 수정 필요 {{ feed.created_at }}-->
-                    {{feed.creator.username}} · 1시간전
+                    {{feed.creator.username}} · {% get_deltatime feed.id %}
                   </span>
                 </div>
               </a>
@@ -298,6 +298,32 @@
                         </a>
                       </div>
                     {% endif %}
+
+                    <!--AJAX 실패한 케이스-->
+                    {% comment %} {% if comment_upvote_tf %}
+                      <div class="ml-auto more-btn comment-heart-btn-on">
+                        <a href="/feeds/{{ feed.id }}/comments/{{ comment_b.id }}/upvote" class="comment-heart-btn">
+                          <i class="material-icons comment-heart v-center m-auto link-grey font-red ml-1">favorite</i>
+                        </a>
+                      </div>
+                      <div class="ml-auto more-btn comment-heart-btn-off">
+                        <a href="/feeds/{{ feed.id }}/comments/{{ comment_b.id }}/upvote" class="comment-heart-btn">
+                          <i class="material-icons comment-heart v-center m-auto link-grey ml-1">favorite_border</i>
+                        </a>
+                      </div>
+                    {% else %}
+                      <div class="ml-auto more-btn comment-heart-btn-off">
+                        <a href="/feeds/{{ feed.id }}/comments/{{ comment_b.id }}/upvote" class="comment-heart-btn">
+                          <i class="material-icons comment-heart v-center m-auto link-grey ml-1">favorite_border</i>
+                        </a>
+                      </div>
+                      <div class="ml-auto more-btn comment-heart-btn-on">
+                        <a href="/feeds/{{ feed.id }}/comments/{{ comment_b.id }}/upvote" class="comment-heart-btn">
+                          <i class="material-icons comment-heart v-center m-auto link-grey font-red ml-1 comment-heart-btn-off">favorite</i>
+                        </a>
+                      </div>
+                    {% endif %} {% endcomment %}
+
                   {% endif %}
                 </div>
               {% endif %}
@@ -352,9 +378,8 @@
                   <input class="mdl-textfield__input comment-input" type="text" id="feedcomment" name="content">
                   <label class="mdl-textfield__label" for="feedcomment">댓글을 입력하세요.</label>
                 </div>
-                <button type="submit" class="comment-submit" data-feedid="{{ feed.id }}" data-csrfmiddlewaretoken="{{ csrf_token }}">댓글달기</button>
+                <button type="submit" class="comment-submit invisible" data-feedid="{{ feed.id }}" data-csrfmiddlewaretoken="{{ csrf_token }}">댓글달기</button>
               </form> 
-              {% comment %}  invisible {% endcomment %}
             {% endif %}
               <!-- 댓글 코드 끝 -->
           </li>

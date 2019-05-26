@@ -1,11 +1,21 @@
 @import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
 
+.hr-scroll {
+  white-space: nowrap;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+}
+
+.hr-scroll::-webkit-scrollbar {
+  display: none; 
+}
+
 .toggle-comments {
   cursor: pointer;
 }
 
-/* 세ㅣ나용으로 수정 */
-.all-comments {
+.all-comments, .comment-heart-btn-on, .comment-heart-btn-off {
   display: none;
 }
 
@@ -501,14 +511,8 @@ a {
   margin: -3px 0 0 -5px;
 }
 
-.subs-list > a:first-child {
-  margin-left: 20px;
-  margin-right: 10px;
-}
-
-.subs-list > a {
-  margin-left: 10px;
-  margin-right: 10px;
+.subs-list-each {
+  min-width: 80px;
   width: 80px;
   height: auto;
 }
