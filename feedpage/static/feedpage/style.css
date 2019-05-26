@@ -503,7 +503,7 @@ a {
   margin: 10px 10px 10px 0;
 }
 
-.subs-list {
+.subs-list-wrap {
   width: calc(100% + 10px);
   display: flex;
   background-color: rgb(245, 245, 245);
@@ -511,13 +511,28 @@ a {
   margin: -3px 0 0 -5px;
 }
 
+.subs-list {
+  display: flex;
+  width: 92.15%;
+  margin: 0 auto;
+}
+
 .subs-list-each {
-  min-width: 80px;
-  width: 80px;
+  min-width: 60px;
+  width: 60px;
   height: auto;
+  padding-right: 20px;
 }
 
 .subs-face {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  border: 1px solid #eee;
+  margin: 0 auto;
+}
+
+.subs-face:first-child {
   width: 4rem;
   height: 4rem;
   border-radius: 50%;
