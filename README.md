@@ -1,2 +1,2 @@
 # snulion7th
-My first Django project!
+My first Django project!# a-or-b-ugc
