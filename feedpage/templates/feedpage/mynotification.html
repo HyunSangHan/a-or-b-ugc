@@ -2,39 +2,113 @@
 {% load custom_tags %}
 
 {% block content %}
-  <h1>아직 구현 전</h1>
-  <hr>
-  {% for n in noti %}
-  {{n.noti_type}}
-  {{n.feed.title}}
-  {{n.follow.follow_from}}
-  {{n.created_at}}
-  {{n.is_checked}}
-  <br>
+  <h1>알림</h1>
+<h3>미확인 노티</h3>
+  <!--1피드투표/2피드댓글/3신고/4신고숨김/5댓글좋아요/6구독/7구독새글-->
+  {% for noti in noti_unchecked %}
+    <!-- 1.피드투표 -->
+    {% if noti.noti_type == 1 %}
+      <div>
+        <a href="/feeds/{{ noti.feed.id }}">
+          <strong>{{noti.noti_from}}</strong>님이 회원님의 콘텐츠에 투표했습니다.
+        </a>
+      </div>
+    <!-- 2.피드댓글 -->
+    {% elif noti.noti_type == 2 %}
+      <div>
+        <a href="/feeds/{{ noti.feed.id }}">
+          <strong>{{noti.noti_from}}</strong>님이 회원님의 콘텐츠에 댓글을 남겼습니다.
+        </a>
+      </div>
+    <!-- 3.신고 -->
+    {% elif noti.noti_type == 3 %}
+      <div>
+        <a href="/feeds/{{ noti.feed.id }}">
+          회원님이 업로드한 콘텐츠 <strong>{{noti.feed.title}}</strong>가 신고당했습니다.
+        </a>
+      </div>
+    <!-- 4.신고숨김 -->
+    {% elif noti.noti_type == 4 %}
+      <div>
+        <a href="/feeds/{{ noti.feed.id }}">
+          회원님이 업로드한 콘텐츠 <strong>{{noti.feed.title}}</strong>가 10회 이상 신고당하여 추천피드에 노출되지 않게 되었습니다.
+        </a>
+      </div>
+    <!-- 5.댓글좋아요 -->
+    {% elif noti.noti_type == 5 %}
+      <div>
+        <a href="/feeds/{{ noti.feed.id }}">
+          <strong>{{noti.noti_from}}</strong>님이 회원님의 댓글을 좋아합니다.
+        </a>
+      </div>
+    <!-- 6.구독 -->
+    {% elif noti.noti_type == 6 %}
+      <div>
+        <a href="/feeds/creator/{{ noti.noti_from.user.username }}">
+          <strong>{{noti.noti_from}}</strong>님이 회원님을 구독하기로 했습니다.
+        </a>
+      </div>
+    <!-- 7.구독새글 -->
+    {% elif noti.noti_type == 7 %}
+      <div>
+        <a href="/feeds/{{ noti.feed.id }}">
+          회원님이 구독하신 <strong>{{noti.noti_from}}</strong>님이 새 콘텐츠를 업로드했습니다.
+        </a>
+      </div>
+    {% endif %}
   {% endfor %}
-  <hr>
-확인한 노티
-  <p> 
-  {% for n in noti_checked %}
-  {{n.noti_type}}
-  {{n.feed.title}}
-  {{n.follow.follow_from}}
-  {{n.created_at}}
-  {{n.is_checked}}
-  <br>
+<hr>
+<h3>미확인 노티</h3>
+  {% for noti in noti_checked %}
+    <!-- 1.피드투표 -->
+    {% if noti.noti_type == 1 %}
+      <div>
+        <a href="/feeds/{{ noti.feed.id }}">
+          <strong>{{noti.noti_from}}</strong>님이 회원님의 콘텐츠에 투표했습니다.
+        </a>
+      </div>
+    <!-- 2.피드댓글 -->
+    {% elif noti.noti_type == 2 %}
+      <div>
+        <a href="/feeds/{{ noti.feed.id }}">
+          <strong>{{noti.noti_from}}</strong>님이 회원님의 콘텐츠에 댓글을 남겼습니다.
+        </a>
+      </div>
+    <!-- 3.신고 -->
+    {% elif noti.noti_type == 3 %}
+      <div>
+        <a href="/feeds/{{ noti.feed.id }}">
+          회원님이 업로드한 콘텐츠 <strong>{{noti.feed.title}}</strong>가 신고당했습니다.
+        </a>
+      </div>
+    <!-- 4.신고숨김 -->
+    {% elif noti.noti_type == 4 %}
+      <div>
+        <a href="/feeds/{{ noti.feed.id }}">
+          회원님이 업로드한 콘텐츠 <strong>{{noti.feed.title}}</strong>가 10회 이상 신고당하여 추천피드에 노출되지 않게 되었습니다.
+        </a>
+      </div>
+    <!-- 5.댓글좋아요 -->
+    {% elif noti.noti_type == 5 %}
+      <div>
+        <a href="/feeds/{{ noti.feed.id }}">
+          <strong>{{noti.noti_from}}</strong>님이 회원님의 댓글을 좋아합니다.
+        </a>
+      </div>
+    <!-- 6.구독 -->
+    {% elif noti.noti_type == 6 %}
+      <div>
+        <a href="/feeds/creator/{{ noti.noti_from.user.username }}">
+          <strong>{{noti.noti_from}}</strong>님이 회원님을 구독하기로 했습니다.
+        </a>
+      </div>
+    <!-- 7.구독새글 -->
+    {% elif noti.noti_type == 7 %}
+      <div>
+        <a href="/feeds/{{ noti.feed.id }}">
+          회원님이 구독하신 <strong>{{noti.noti_from}}</strong>님이 새 콘텐츠를 업로드했습니다.
+        </a>
+      </div>
+    {% endif %}
   {% endfor %}
-  </p>
-미확인 노티
-  <p> 
-  {% for n in noti_unchecked %}
-  {{n.noti_type}}
-  {{n.follow.follow_from}}
-  {{n.feed.title}}
-  {{n.created_at}}
-  {{n.is_checked}}
-  {% f_is_checked n.id %}
-  <br>
-  {% endfor %}
-  </p>
-
 {% endblock content %}

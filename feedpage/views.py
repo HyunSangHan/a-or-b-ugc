@@ -11,7 +11,7 @@ from django.http import JsonResponse
 import urllib
 import json
 from .reuse_function import make_notification
-
+from django.utils import timezone
 
 ###니드 로그인 기능 리다이렉트 구현 필요
 
@@ -301,7 +301,6 @@ def creator(request, creator_name):
     if creators.count() > 0:
         creator = creators.first()
         feeds = Feed.objects.filter(creator=creator).order_by('-updated_at', '-created_at')
-        print(feeds)
         return render(request, 'feedpage/creator.html', {'feeds': feeds})
     else:
         try:
@@ -331,10 +330,18 @@ def myreaction(request):
 
 def mynotification(request):
     noti = Notification.objects.filter(noti_to=request.user.profile, is_mine=False).order_by('-created_at')
-    noti_unchecked = noti.filter(is_checked=False)
+    noti_unchecked = noti.filter(is_checked=False) #지난번기준 미확인알림
+    profile = Profile.objects.get(user=request.user)
+    
+    for each_noti in noti_unchecked:
+        if each_noti.created_at < profile.notichecked_at:
+            each_noti.is_checked = True
+            each_noti.save()
+
+    noti_unchecked = noti.filter(is_checked=False) #지난번기준 미확인알림
     noti_checked = noti.filter(is_checked=True)
-    print(noti)
-    print(noti_unchecked)
-    print(noti_checked)
+
+    profile.notichecked_at = timezone.now()
+    profile.save()
     return render(request, 'feedpage/mynotification.html', {'noti': noti, 'noti_unchecked': noti_unchecked, 'noti_checked': noti_checked})
 
