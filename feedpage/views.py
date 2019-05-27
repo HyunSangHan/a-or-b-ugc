@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Feed, FeedComment, HashTag, TagRelation, Upvote, CommentUpvote, Report #(참고: .models == feeds.models)
+from .models import Feed, FeedComment, HashTag, TagRelation, Upvote, CommentUpvote, Report, Notification
 from accounts.models import Profile, Follow
 from django.shortcuts import redirect
 from django.core.paginator import Paginator
@@ -10,6 +10,7 @@ from operator import attrgetter
 from django.http import JsonResponse
 import urllib
 import json
+from .reuse_function import make_notification
 
 
 ###니드 로그인 기능 리다이렉트 구현 필요
@@ -68,6 +69,9 @@ def new(request):
 # 왜 이거 안됨? => [에러메시지] invalid literal for int() with base 10: ''
 # print(TagRelation.objects.filter(hash_tag="").count())
 # TagRelation.objects.get(hash_tag="").delete()
+        # 노티 만들기
+        feedid = feed.id
+        make_notification(7, feedid, request.user.id)
         return redirect('/feeds')
     else:
         return render(request, 'feedpage/new.html')
@@ -144,22 +148,23 @@ def create_comment(request, id):
         content = request.POST['content']
         FeedComment.objects.create(feed_id=id, content=content, reactor=request.user, upvote_side=upvote_side)
         new_comment = FeedComment.objects.latest('id')
-
-    context = {
-        'comment': {
-            'id': new_comment.id,
-            'reactor': new_comment.reactor.username,
-            'content': new_comment.content,
-            'upvote_side': new_comment.upvote_side,
+        context = {
+            'comment': {
+                'id': new_comment.id,
+                'reactor': new_comment.reactor.username,
+                'content': new_comment.content,
+                'upvote_side': new_comment.upvote_side,
+            }
         }
-    }
-    return JsonResponse(context)
-
-    # try:
-    #     next = request.META['HTTP_REFERER']
-    # except:
-    #     next = '/feeds/'
-    # return redirect('%s'%next)
+        # 노티 만들기
+        make_notification(2, id, request.user.id)
+        return JsonResponse(context)
+    else: 
+        try:
+            next = request.META['HTTP_REFERER']
+        except:
+            next = '/feeds/'
+        return redirect('%s'%next)
 
 def delete_comment(request, id, cid):
     if request.method == 'POST':
@@ -179,8 +184,12 @@ def upvote_comment(request, id, cid):
         c.commentupvote_set.get(user_id = request.user.id).delete()
     else:
         CommentUpvote.objects.create(user_id = request.user.id, feedcomment_id = cid)
+        # 노티 만들기
+        make_notification(5, cid, request.user.id)
+
     c.total_upvote = c.commentupvote_set.count()
     c.save()
+
     try:
         next = request.META['HTTP_REFERER']
     except:
@@ -206,6 +215,8 @@ def feed_upvote_a(request, pk):
                 Upvote.objects.create(user_id = request.user.id, feed_id = feed.id, about_a = True)
         else:
             Upvote.objects.create(user_id = request.user.id, feed_id = feed.id, about_a = True)
+            # 노티 만들기
+            make_notification(1, pk, request.user.id)
         try:
             next = request.META['HTTP_REFERER']
         except:
@@ -228,6 +239,8 @@ def feed_upvote_b(request, pk):
                 feed.upvote_set.get(user_id = request.user.id).delete()
         else:
             Upvote.objects.create(user_id = request.user.id, feed_id = feed.id, about_a = False)
+            # 노티 만들기
+            make_notification(1, pk, request.user.id)
         try:
             next = request.META['HTTP_REFERER']
         except:
@@ -245,6 +258,9 @@ def follow_manager(request, pk):
         following_already.first().delete()
     else:
         Follow.objects.create(follow_from=follow_from, follow_to=follow_to)
+        # 노티 만들기
+        make_notification(6, pk, request.user.id)
+
 
     try:
         next = request.META['HTTP_REFERER']
@@ -258,6 +274,12 @@ def report(request, pk):
     report_count = feed.report_set.filter(user_id = request.user.id).count()
     if report_count == 0:
         Report.objects.create(user_id = request.user.id, feed_id = feed.id)
+        # 노티 만들기
+        make_notification(3, pk, request.user.id)
+    elif report_count > 9:
+        # 노티만들기
+        make_notification(4, pk, request.user.id)
+
     try:
         next = request.META['HTTP_REFERER']
     except:
@@ -308,4 +330,11 @@ def myreaction(request):
     return render(request, 'feedpage/myreaction.html', {'upvotes': upvotes})
 
 def mynotification(request):
-    return render(request, 'feedpage/mynotification.html')
+    noti = Notification.objects.filter(noti_to=request.user.profile, is_mine=False).order_by('-created_at')
+    noti_unchecked = noti.filter(is_checked=False)
+    noti_checked = noti.filter(is_checked=True)
+    print(noti)
+    print(noti_unchecked)
+    print(noti_checked)
+    return render(request, 'feedpage/mynotification.html', {'noti': noti, 'noti_unchecked': noti_unchecked, 'noti_checked': noti_checked})
+

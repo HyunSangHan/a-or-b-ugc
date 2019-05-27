@@ -1,6 +1,7 @@
 from django.db import models
 from faker import Faker
 from django.contrib.auth.models import User 
+from accounts.models import Profile, Follow
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
@@ -96,3 +97,16 @@ class CommentUpvote(models.Model):
 
     def __str__(self):
         return str(self.feedcomment)
+
+class Notification(models.Model):
+    noti_from = models.ForeignKey(Profile, related_name = 'noti_from', null=True, on_delete= models.CASCADE)
+    noti_to = models.ForeignKey(Profile, related_name = 'noti_to', null=True, on_delete= models.CASCADE)
+    noti_type = models.IntegerField(default=0)
+    feed = models.ForeignKey(Feed, null=True, on_delete=models.CASCADE)
+    follow = models.ForeignKey(Follow, null=True, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(default=timezone.now)
+    is_checked = models.BooleanField(default=False)
+    is_mine = models.BooleanField(default=False)
+
+    def __str__(self):
+        return str(self.created_at)

@@ -1,5 +1,5 @@
 from django import template
-from feedpage.models import Feed, FeedComment, Upvote, HashTag, TagRelation, Report
+from feedpage.models import Feed, FeedComment, Upvote, HashTag, TagRelation, Report, Notification
 register = template.Library()
 from datetime import datetime, timedelta
 from django.utils import timezone
@@ -178,3 +178,11 @@ def is_deletable(fid):
     else:
         deletable = True
     return deletable
+
+#test
+@register.simple_tag
+def f_is_checked(nid):
+    noti = Notification.objects.get(id=nid)
+    noti.is_checked = True
+    noti.save()
+    return

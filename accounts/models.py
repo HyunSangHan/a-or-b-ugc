@@ -15,6 +15,7 @@ class Profile(models.Model):
     is_male = models.BooleanField(blank=True, null=True)
     image = models.ImageField(blank=True, null=True, upload_to='profile_img')
     created_at = models.DateTimeField(default=timezone.now)
+    notichecked_at = models.DateTimeField(default=timezone.now)
     left_level = models.IntegerField(
         default=3,
         validators=[MaxValueValidator(5), MinValueValidator(1)]

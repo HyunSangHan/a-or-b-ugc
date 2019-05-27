@@ -1,11 +1,40 @@
 {% extends 'base.html' %}
+{% load custom_tags %}
 
 {% block content %}
   <h1>아직 구현 전</h1>
-  <p>
-    @@@@님이 A에 투표했습니다. [썸네일이미지]
+  <hr>
+  {% for n in noti %}
+  {{n.noti_type}}
+  {{n.feed.title}}
+  {{n.follow.follow_from}}
+  {{n.created_at}}
+  {{n.is_checked}}
+  <br>
+  {% endfor %}
+  <hr>
+확인한 노티
+  <p> 
+  {% for n in noti_checked %}
+  {{n.noti_type}}
+  {{n.feed.title}}
+  {{n.follow.follow_from}}
+  {{n.created_at}}
+  {{n.is_checked}}
+  <br>
+  {% endfor %}
   </p>
-  <p>
-    @@@@님이 댓글을 남겼습니다. [썸네일이미지]
+미확인 노티
+  <p> 
+  {% for n in noti_unchecked %}
+  {{n.noti_type}}
+  {{n.follow.follow_from}}
+  {{n.feed.title}}
+  {{n.created_at}}
+  {{n.is_checked}}
+  {% f_is_checked n.id %}
+  <br>
+  {% endfor %}
   </p>
+
 {% endblock content %}
