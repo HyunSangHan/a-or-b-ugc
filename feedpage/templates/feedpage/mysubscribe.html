@@ -8,7 +8,7 @@
     <!--구독채널 리스트-->
     <div class="subs-list-wrap hr-scroll">
       <div class="subs-list">
-        {% for my_sub in my_subs %}
+        {% for my_sub in my_subs reversed %}
           <a class="subs-list-each" href="/feeds/creator/{{my_sub.follow_to.user.username}}/">
             {% if my_sub.follow_to.user.profile.image.url != '/media/False' %}
             <div class="subs-face" style="background: url('{{ my_sub.follow_to.user.profile.image.url }}') center / cover;"></div>
