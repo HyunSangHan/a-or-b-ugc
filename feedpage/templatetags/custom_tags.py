@@ -5,10 +5,14 @@ from datetime import datetime, timedelta
 from django.utils import timezone
 
 @register.simple_tag
-def get_deltatime(pk):
-    feedtime = Feed.objects.get(id=pk).updated_at
+def get_deltatime(pk, type_id):
     nowtime = timezone.now()
-    deltatime = nowtime-feedtime
+    if type_id == 1: #피드일때
+        feedtime = Feed.objects.get(id=pk).updated_at
+        deltatime = nowtime-feedtime
+    if type_id == 2: #알림일때
+        notitime = Notification.objects.get(id=pk).created_at
+        deltatime = nowtime-notitime
     delta_second = deltatime.seconds
     delta_day = deltatime.days
 

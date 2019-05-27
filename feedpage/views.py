@@ -338,7 +338,7 @@ def mynotification(request):
             each_noti.is_checked = True
             each_noti.save()
 
-    noti_unchecked = noti.filter(is_checked=False) #지난번기준 미확인알림
+    noti_unchecked = noti.filter(is_checked=False) #새로운기준 확인알림
     noti_checked = noti.filter(is_checked=True)
 
     profile.notichecked_at = timezone.now()

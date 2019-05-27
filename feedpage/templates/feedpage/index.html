@@ -87,8 +87,7 @@
                     <div class="user-face" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
                   {% endif %}
                   <span class="font-12 ml-1">
-                  <!-- 시간은 일단 가상의 값임. 수정 필요 {{ feed.created_at }}-->
-                    {{feed.creator.username}} · {% get_deltatime feed.id %}
+                    {{feed.creator.username}} · {% get_deltatime feed.id 1 %}
                   </span>
                 </div>
               </a>

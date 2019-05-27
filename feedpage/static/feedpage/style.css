@@ -235,6 +235,14 @@ a {
   font-family: "Noto Sans KR", sans-serif !important;
 }
 
+.font-25 {
+  font-size: 25px !important;
+}
+
+.font-28 {
+  font-size: 28px !important;
+}
+
 .font-light {
   font-weight: 400px !important;
   font-family: "Noto Sans KR", sans-serif !important;
@@ -490,8 +498,8 @@ a {
 }
 
 .user-face {
-  height: 22px;
-  width: 22px;
+  height: 26px;
+  width: 26px;
   border-radius: 50%;
   background-color: lightgrey;
 }
@@ -507,9 +515,9 @@ a {
 .subs-list-wrap {
   width: calc(100% + 10px);
   display: flex;
-  background-color: rgb(245, 245, 245);
-  padding: 20px 0;
-  margin: -3px 0 0 -5px;
+  padding: 9px 0;
+  margin: 5px 0 5px -5px;
+  border-bottom: 1px rgb(245,245,245) solid;
 }
 
 .subs-list {
@@ -605,9 +613,9 @@ a {
   justify-content: space-around;
   align-items: center;
   position: fixed;
-  bottom: 0;
+  bottom: -2px;
   width: 100%;
-  height: 42px;
+  height: 50px;
   background-color: white;
   z-index: 1;
   box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);
