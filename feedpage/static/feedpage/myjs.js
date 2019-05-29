@@ -77,11 +77,14 @@ $(document).ready(() => {
   });
 
   //댓글달기 버튼 나오기
-  $('.comment-input').on('input', function(event) {
-    const $this = $(this);
-    // if ($this.parent().hasClass(".is-dirty")) {
-      $this.siblings('.comment-submit').removeClass('invisible');
-      // }
+  $('.comment-input').on('input',
+    function(event) {
+      const $this = $(this);
+      if ($this.val().length !== 0) {
+        $this.siblings('.comment-submit').removeClass('invisible');
+        }
+      else {
+        $this.siblings('.comment-submit').addClass('invisible');
+      }
   });
-
 })
