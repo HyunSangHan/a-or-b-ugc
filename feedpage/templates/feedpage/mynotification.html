@@ -2,79 +2,34 @@
 {% load custom_tags %}
 
 {% block content %}
-  <h1>알림</h1>
-<h3>새로운 알림</h3>
   <!--1피드투표/2피드댓글/3신고/4신고숨김/5댓글좋아요/6구독/7구독새글-->
-  {% for noti in noti_unchecked %}
-    <div>
-      <!-- 1.피드투표 -->
-      {% if noti.noti_type == 1 %}
-        <a href="/feeds/{{ noti.feed.id }}">
-          <strong>{{noti.noti_from}}</strong>님이 회원님의 콘텐츠에 투표했습니다.
-        </a>
-      <!-- 2.피드댓글 -->
-      {% elif noti.noti_type == 2 %}
-        <a href="/feeds/{{ noti.feed.id }}">
-          <strong>{{noti.noti_from}}</strong>님이 회원님의 콘텐츠에 댓글을 남겼습니다.
-        </a>
-      <!-- 3.신고 -->
-      {% elif noti.noti_type == 3 %}
-        <a href="/feeds/{{ noti.feed.id }}">
-          회원님이 업로드한 콘텐츠 <strong>{{noti.feed.title}}</strong>가 신고당했습니다.
-        </a>
-      <!-- 4.신고숨김 -->
-      {% elif noti.noti_type == 4 %}
-        <a href="/feeds/{{ noti.feed.id }}">
-          회원님이 업로드한 콘텐츠 <strong>{{noti.feed.title}}</strong>가 10회 이상 신고당하여 추천피드에 노출되지 않게 되었습니다.
-        </a>
-      <!-- 5.댓글좋아요 -->
-      {% elif noti.noti_type == 5 %}
-        <a href="/feeds/{{ noti.feed.id }}">
-          <strong>{{noti.noti_from}}</strong>님이 회원님의 댓글을 좋아합니다.
-        </a>
-      <!-- 6.구독 -->
-      {% elif noti.noti_type == 6 %}
-        <a href="/feeds/creator/{{ noti.noti_from.user.username }}">
-          <strong>{{noti.noti_from}}</strong>님이 회원님을 구독하기로 했습니다.
-        </a>
-      <!-- 7.구독새글 -->
-      {% elif noti.noti_type == 7 %}
-        <a href="/feeds/{{ noti.feed.id }}">
-          회원님이 구독하신 <strong>{{noti.noti_from}}</strong>님이 새 콘텐츠를 업로드했습니다.
-        </a>
-      {% endif %}
-      <br>{% get_deltatime noti.id 2 %}
-    </div>
-  {% endfor %}
-<hr>
-<h3>지난 알림</h3>
   {% for noti in noti_checked %}
     <!-- 1.피드투표 -->
     {% if noti.noti_type == 1 %}
       <div>
         <a href="/feeds/{{ noti.feed.id }}">
-          <strong>{{noti.noti_from}}</strong>님이 회원님의 콘텐츠에 투표했습니다.
+          <strong>{{noti.noti_from}}</strong>님이 회원님이 업로드한 A/B 중 하나에 투표했습니다.
         </a>
       </div>
     <!-- 2.피드댓글 -->
     {% elif noti.noti_type == 2 %}
       <div>
         <a href="/feeds/{{ noti.feed.id }}">
-          <strong>{{noti.noti_from}}</strong>님이 회원님의 콘텐츠에 댓글을 남겼습니다.
+          <strong>{{noti.noti_from}}</strong>님이 회원님이 업로드한 A/B에 댓글을 남겼습니다.
         </a>
       </div>
     <!-- 3.신고 -->
     {% elif noti.noti_type == 3 %}
       <div>
         <a href="/feeds/{{ noti.feed.id }}">
-          회원님이 업로드한 콘텐츠 <strong>{{noti.feed.title}}</strong>에 대한 신고가 접수되었습니다. 운영자의 모니터링 후 이용약관에 따라 처리될 예정입니다.
+          업로드했던 A/B에 대한 신고 접수: <strong>{{noti.feed.title}}</strong>
         </a>
       </div>
     <!-- 4.신고숨김 -->
     {% elif noti.noti_type == 4 %}
       <div>
         <a href="/feeds/{{ noti.feed.id }}">
-          회원님이 업로드한 콘텐츠 <strong>{{noti.feed.title}}</strong>가 10회 이상 신고당하여 추천피드에 노출되지 않게 되었습니다.
+          회원님이 업로드한 A/B가 10회 이상 신고당하여 추천피드에 노출되지 않게 되었습니다.: <strong>{{noti.feed.title}}</strong>
         </a>
       </div>
     <!-- 5.댓글좋아요 -->
@@ -95,7 +50,7 @@
     {% elif noti.noti_type == 7 %}
       <div>
         <a href="/feeds/{{ noti.feed.id }}">
-          <strong>{{noti.noti_from}}</strong>님이 업로드한 새 콘텐츠: "{{noti.feed.title}}"
+          <strong>{{noti.noti_from}}</strong>님이 업로드한 새 A/B: "{{noti.feed.title}}"
         </a>
       </div>
     {% endif %}

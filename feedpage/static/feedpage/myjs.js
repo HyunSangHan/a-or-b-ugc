@@ -9,7 +9,7 @@ $(document).ready(() => {
   //더보기버튼
   $('.more-js-btn').on('click', function() {
     $(this).next().toggle();
-  })
+  });
 
   //클립보드에 복사
   $('.element').CopyToClipboard();
@@ -44,7 +44,7 @@ $(document).ready(() => {
       data: {
         csrfmiddlewaretoken: csrfmiddlewaretoken,
         id: id,
-        content: $this.siblings('.comment-input-wrap').children('.comment-input').val()
+        content: $this.siblings('.comment-input').val()
       },
       dataType: 'json',
       success: function(data) {
@@ -62,9 +62,9 @@ $(document).ready(() => {
     </div>
   </div>
 </div>`;
-        const $comments = $this.parent().siblings('.comment-wrap');
+        const $comments = $this.parent().parent().siblings('.comment-wrap');
         $comments.append(str);
-        $this.siblings('.comment-input-wrap').children('.comment-input').val('');
+        $this.siblings('.comment-input').val('');
       },
       error: function(response, status, error) {
         alert('error');
@@ -75,4 +75,13 @@ $(document).ready(() => {
       },
     });
   });
+
+  //댓글달기 버튼 나오기
+  $('.comment-input').on('input', function(event) {
+    const $this = $(this);
+    // if ($this.parent().hasClass(".is-dirty")) {
+      $this.siblings('.comment-submit').removeClass('invisible');
+      // }
+  });
+
 })
