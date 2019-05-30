@@ -29,6 +29,7 @@ $(document).ready(() => {
   //   $this.hide();
   //   $this.siblings('.comment-heart-btn-on').show();
   // });
+  
 
     // 댓글 달기 구현
   $('.comment-submit').on('click', function(event) {
@@ -87,4 +88,5 @@ $(document).ready(() => {
         $this.siblings('.comment-submit').addClass('invisible');
       }
   });
+
 })

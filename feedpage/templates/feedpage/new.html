@@ -1,6 +1,52 @@
 {% extends 'base.html' %}
+{% load custom_tags %}
 
 {% block content %}
+
+<div class="mdl-grid container">
+  <div class="mdl-cell--12-col m-auto contents">
+    <div class="contents-margin">
+          <li class="each-li">
+            <div class="w-more-btn">
+              <h2 class="link-black">타이틀</h2>
+              <div class="font-13 font-light">
+                #해시태그
+              </div>
+            </div>
+            <div class="inline-flex v-center mt-1 mb-2">
+              <div class="inline-flex">
+                {% if user.profile.image.url != "/media/False" %}
+                  <div class="user-face" style="background: url('{{ user.profile.image.url }}') center / cover;"></div>
+                {% else %}
+                  <div class="user-face" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
+                {% endif %}
+                <span class="font-12 ml-1">
+                  {{user.username}}
+                </span>
+              </div>
+              {% comment %} (구독자: {{ feed.creator.profile.follow_to.all.count }}) {% endcomment %}
+            </div>
+            <!--A와 B를 함께 두는 행-->
+            <div class="each-content">
+              <!-- Image card A-->
+              <div class="mr-1perc demo-card-image mdl-card content-img" style="background: url('/static/feedpage/default_avatar.png') center / cover;">
+                <div class="content-label bg-black">
+                A / 콘텐츠
+                </div>
+              </div>
+              <!-- Image card B-->
+              <div class="mr-1perc demo-card-image mdl-card content-img" style="background: url('/static/feedpage/default_avatar.png') center / cover;">
+                <div class="content-label bg-black">
+                B / 콘텐츠
+                </div>
+              </div>
+            </div>
+          </li>
+    </div>
+  </div>
+</div>
+
+
 <div class="mdl-grid container">
   <div class="mdl-cell--12-col m-auto contents">
     <h1>글쓰기....</h1>

@@ -140,10 +140,6 @@
               <!-- Image card B-->
               <div class="ml-1perc demo-card-image mdl-card content-img" style="background: url('{{ feed.img_b.url }}') center / cover;">
                 <a href="/feeds/{{ feed.id }}/upvote_b" class="w-100 h-100">
-                  {% comment %} <!--B 라벨링-->
-                  <div class="content-label bg-black">
-                  b / {{ feed.content_b}}
-                  </div> {% endcomment %}
 
                   <!--lose일때 B 라벨링-->
                   {% if choice == "A" %}
@@ -184,62 +180,6 @@
                   {% endif %}
                 </a>
               </div>
-        {% comment %}         
-              <!--A 네모 시작-->
-              <div style = "width: 45vw; border-radius: 25px; min-height: 45vw; background-color: white; text-align: center; display: flex; justify-content: center; flex-direction: column; margin: auto;">
-              <!--클릭했을 때 노출되는 표시-->
-              {% get_upvote_color feed.id user.id as choice %}
-              {% if choice == "A" %}
-                <div style = "position:absolute; width:45vw; min-height:45vw; border: 2px solid black; border-radius: 25px; opacity:0.9;" >
-                  <div style="padding-top: 10px;"><b>Your Choice!</b></div>
-                </div>
-              {% endif %}
-
-        <!--로그인이 필요한 서비스입니다 얼럿 넣기-->
-
-                <!--A?-->
-                <div style = "width: 45vw; border-radius: 25px; min-height: 45vw; background-color: white; text-align: center; display: flex; justify-content: center; flex-direction: column; margin: auto;">
-                  <!--글씨만 한 레이어 윗층으로 뽑아내기 위함-->
-                <img src="{{ feed.img_a.url }}" alt="img_a" style="z-index: 0; position: absolute; width: 45vw;">
-                  <div style="z-index: 1;">
-        <!--get방식인데 괜찮을지... + 비로그인일 경우에 누르지 못하도록 비활성화 필요-->
-                  <a href="/feeds/{{ feed.id }}/upvote_a">
-                    <h4 style="width: 100%;">A</h4>
-                    {{feed.content_a}}
-                    <p style="width: 100%;">
-                    {% get_upvote_a feed.id %}표({% get_upvote_perc_a feed.id %})
-                    </p>
-                  </a>
-                  </div>
-                </div>
-              </div>
-              <!--A 네모 끝-->
-
-              <!--B 네모 시작-->
-              <div style = "width: 45vw; border-radius: 25px; min-height: 45vw; background-color: white; text-align: center; display: flex; justify-content: center; flex-direction: column; margin: auto;">
-              <!--클릭했을 때 노출되는 표시-->
-              {% get_upvote_color feed.id user.id as choice %}
-              {% if choice == "B" %}
-                <div style = "position:absolute; width:45vw; min-height:45vw; border: 2px solid black; border-radius: 25px; opacity:0.9;" >
-                  <div style="padding-top: 10px;"><b>Your Choice!</b></div>
-                </div>
-              {% endif %}
-                <!--B?-->
-                <div style = "width: 45vw; border-radius: 25px; min-height: 45vw; background-color: white; text-align: center; display: flex; justify-content: center; flex-direction: column; margin: auto;">
-                <img src="{{ feed.img_b.url }}" alt="img_b" style="z-index: 0; position: absolute; width: 45vw;">
-                  <!--글씨만 한 레이어 앞으로 뽑아내기 위함-->
-                  <div style="z-index: 1;">
-                  <a href="/feeds/{{ feed.id }}/upvote_b">
-                  <h4 style="width: 100%;">B</h4>
-                  {{feed.content_b}}
-                  <p style="width: 100%;">
-                  {% get_upvote_b feed.id %}표({% get_upvote_perc_b feed.id %})
-                  </p>
-                  </a>
-                  </div>
-                </div>
-              </div>
-              <!--B 네모 끝--> {% endcomment %}
             </div>
 
             <!-- 댓글 코드 -->
@@ -328,7 +268,7 @@
               {% endif %}
             </div>
             <!--show 안으로 들어갈 부분(전체댓글)-->
-            {% if feed.feedcomment_set.count > 6 %}
+            {% if feed.feedcomment_set.count > 100 %}
               <a href="/feeds/{{ feed.id }}">
                 <div class="font-12 link-light-black font-light mt-2">댓글 {{feed.feedcomment_set.count}}개 모두 보기</div>
               </a>
