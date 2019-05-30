@@ -125,6 +125,15 @@ h2 {
   font-family: "Noto Sans KR", sans-serif !important;
 }
 
+.content-title {
+  font-weight: 900 !important;
+  font-size: 24px !important;
+  color: black;
+  margin: 0 !important;
+  line-height: 30px !important;
+  font-family: "Noto Sans KR", sans-serif !important;
+}
+
 .ellipsis{
   text-overflow:ellipsis;
   -o-text-overflow:ellipsis;
@@ -199,6 +208,10 @@ a {
 
 .ml-1perc {
   margin-left: 1%;
+}
+
+.ml--1 {
+  margin-left: -4px !important;
 }
 
 .ml-1 {
@@ -592,6 +605,11 @@ a {
   padding-left: 5px;
   padding-right: 6px;
   background-color: grey;
+}
+
+/* 아직 미사용 */
+.feed-input-border {
+  border: 0.1px solid rgb(240,240,240);
 }
 
 .comment {

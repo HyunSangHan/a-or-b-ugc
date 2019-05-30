@@ -6,42 +6,51 @@
 <div class="mdl-grid container">
   <div class="mdl-cell--12-col m-auto contents">
     <div class="contents-margin">
+      <form action="/feeds/new/" method="POST" enctype="multipart/form-data">
+        {% csrf_token %} 
           <li class="each-li">
             <div class="w-more-btn">
-              <h2 class="link-black">타이틀</h2>
+              <input class="content-title ml--1 w-100" name="title" placeholder="제목을 입력하세요(30자 이내)" maxlength="30" required/>
               <div class="font-13 font-light">
-                #해시태그
+                <input class="font-13 font-light letter-space ml--1 w-100" type="text" id="hash_tag" name="hash_tag_raw" placeholder="#이러한 #형태로 #해시태그를 #입력하세요" />
               </div>
             </div>
             <div class="inline-flex v-center mt-1 mb-2">
-              <div class="inline-flex">
-                {% if user.profile.image.url != "/media/False" %}
-                  <div class="user-face" style="background: url('{{ user.profile.image.url }}') center / cover;"></div>
-                {% else %}
-                  <div class="user-face" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
-                {% endif %}
-                <span class="font-12 ml-1">
-                  {{user.username}}
-                </span>
-              </div>
-              {% comment %} (구독자: {{ feed.creator.profile.follow_to.all.count }}) {% endcomment %}
+              <a href="/accounts/profile/" class="link-grey">
+                <div class="inline-flex">
+                  {% if user.profile.image.url != "/media/False" %}
+                    <div class="user-face" style="background: url('{{ user.profile.image.url }}') center / cover;"></div>
+                  {% else %}
+                    <div class="user-face" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
+                  {% endif %}
+                  <span class="font-12 ml-1">
+                    {{user.username}}
+                  </span>
+                </div>
+              </a>
             </div>
             <!--A와 B를 함께 두는 행-->
             <div class="each-content">
               <!-- Image card A-->
               <div class="mr-1perc demo-card-image mdl-card content-img" style="background: url('/static/feedpage/default_avatar.png') center / cover;">
                 <div class="content-label bg-black">
-                A / 콘텐츠
+                A / 
+                  <input type="text" id="content_a" name="content_a" maxlength="21" required>
                 </div>
               </div>
               <!-- Image card B-->
-              <div class="mr-1perc demo-card-image mdl-card content-img" style="background: url('/static/feedpage/default_avatar.png') center / cover;">
+              <div class="ml-1perc demo-card-image mdl-card content-img" style="background: url('/static/feedpage/default_avatar.png') center / cover;">
                 <div class="content-label bg-black">
-                B / 콘텐츠
+                B / 
+                  <input type="text" id="content_b" name="content_b" maxlength="21" required>
                 </div>
               </div>
             </div>
           </li>
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+          Submit
+        </button>
+      </form>
     </div>
   </div>
 </div>
@@ -52,7 +61,6 @@
     <h1>글쓰기....</h1>
     <form action="/feeds/new/" method="POST" enctype="multipart/form-data">
       {% csrf_token %} 
-      {% comment %} <input name="title" required /> <br /> {% endcomment %}
       <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
         <input class="mdl-textfield__input" type="text" id="title" name="title" maxlength="30" required>
         <label class="mdl-textfield__label" for="title">Title</label>
