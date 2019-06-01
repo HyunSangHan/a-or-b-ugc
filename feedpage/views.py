@@ -301,7 +301,7 @@ def creator(request, creator_name):
     if creators.count() > 0:
         creator = creators.first()
         feeds = Feed.objects.filter(creator=creator).order_by('-updated_at', '-created_at')
-        return render(request, 'feedpage/creator.html', {'feeds': feeds})
+        return render(request, 'feedpage/creator.html', {'feeds': feeds, 'creator': creator})
     else:
         try:
             next = request.META['HTTP_REFERER']

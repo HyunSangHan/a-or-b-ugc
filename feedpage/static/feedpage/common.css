@@ -1,0 +1,333 @@
+@import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
+
+body {
+  background-color: rgb(250, 250, 250);
+  letter-spacing: -0.3px;
+  font-family: "Noto Sans KR", sans-serif !important;
+}
+
+h2 {
+  font-weight: 900 !important;
+  font-size: 24px !important;
+  color: black;
+  margin: 0 !important;
+  line-height: 30px !important;
+  font-family: "Noto Sans KR", sans-serif !important;
+}
+
+strong {
+  font-weight: 800;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+  font-weight: inherit !important;
+}
+
+div > a {
+  text-decoration: none;
+  color: black;
+}
+
+.hr-scroll {
+  white-space: nowrap;
+  overflow: overlay;
+  overflow-x: auto
+  -webkit-overflow-scrolling: touch;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+}
+
+.hr-scroll::-webkit-scrollbar {
+  display: none; 
+}
+
+/* delete button's default styling */
+button, input[type="submit"], input[type="reset"] {
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  outline: inherit;
+  border: none;
+}
+
+.container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.relative {
+  position: relative;
+}
+
+.flex {
+  display: flex !important;
+  display: -webkit-flex !important;
+  display: -ms-flexbox !important;
+}
+
+.flex-center {
+  display: -webkit-flex !important;
+  display: -ms-flexbox !important;
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+}
+
+.v-center {
+  vertical-align: middle;
+}
+
+.inline-flex {
+  display: inline-flex;
+}
+
+.invisible, .none {
+  display: none;
+}
+
+.letter-space {
+  letter-spacing: 0;
+}
+
+.m-auto {
+  margin: auto;
+}
+
+.mtb-auto {
+  margin: auto 0;
+}
+
+.content-title {
+  font-weight: 900 !important;
+  font-size: 24px !important;
+  color: black;
+  margin: 0 !important;
+  line-height: 30px !important;
+  font-family: "Noto Sans KR", sans-serif !important;
+}
+
+.ellipsis{
+  text-overflow:ellipsis;
+  -o-text-overflow:ellipsis;
+  overflow:hidden;
+  white-space:nowrap;
+  word-wrap:normal !important;
+}
+
+
+.ellipsis{
+  width:100%;
+  text-overflow:ellipsis;
+  -o-text-overflow:ellipsis;
+  overflow:hidden;
+  white-space:nowrap;
+  word-wrap:normal !important;
+}
+
+.mt--2 {
+  margin-top: -8px;
+}
+
+.mt--1 {
+  margin-top: -4px;
+}
+
+.mt-1 {
+  margin-top: 4px;
+}
+
+.mtb-05 {
+  margin: 2px 0;
+}
+
+.mtb-1 {
+  margin: 4px 0;
+}
+
+.mt-2 {
+  margin-top: 8px;
+}
+
+.mt-3 {
+  margin-top: 12px;
+}
+
+.mt-4 {
+  margin-top: 16px;
+}
+
+.mb-1 {
+  margin-bottom: 4px;
+}
+
+.mb-2 {
+  margin-bottom: 8px;
+}
+
+.mb-3 {
+  margin-bottom: 12px;
+}
+
+.mr-1perc {
+  margin-right: 1%;
+}
+
+.ml-1perc {
+  margin-left: 1%;
+}
+
+.ml--1 {
+  margin-left: -4px !important;
+}
+
+.ml-1 {
+  margin-left: 4px;
+}
+
+.ml-2 {
+  margin-left: 8px;
+}
+
+.ml-3 {
+  margin-left: 12px;
+}
+
+.ml-auto {
+  margin-left: auto !important;
+}
+
+.h-100 {
+  height: 100% !important;
+}
+
+.w-100 {
+  width: 100% !important;
+}
+
+.w-80 {
+  width: 80% !important;
+}
+
+.font-11 {
+  font-size: 11px;
+  font-family: "Noto Sans KR", sans-serif !important;
+}
+
+.font-12 {
+  font-size: 12px;
+  font-family: "Noto Sans KR", sans-serif !important;
+}
+
+.font-13 {
+  font-size: 13px;
+  font-family: "Noto Sans KR", sans-serif !important;
+}
+
+.font-14 {
+  font-size: 14px;
+  font-family: "Noto Sans KR", sans-serif !important;
+}
+
+.font-15 {
+  font-size: 15px;
+  font-family: "Noto Sans KR", sans-serif !important;
+}
+
+.font-25 {
+  font-size: 25px !important;
+}
+
+.font-28 {
+  font-size: 28px !important;
+}
+
+.font-light {
+  font-weight: 400px !important;
+  font-family: "Noto Sans KR", sans-serif !important;
+}
+
+.font-white {
+  color: white;
+  font-family: "Noto Sans KR", sans-serif !important;
+}
+
+.font-lightgrey {
+  color: lightgrey;
+  font-family: "Noto Sans KR", sans-serif !important;
+}
+
+.font-black {
+  color: black !important;
+  font-family: "Noto Sans KR", sans-serif !important;
+}
+
+.font-red {
+  color: red !important;
+}
+
+
+.link-black {
+  color: rgba(0,0,0,.87);
+  font-weight: 400;
+}
+
+.link-light-black {
+  color: #666;
+}
+
+.link-grey {
+  color: #9B9B9B;
+}
+
+.bg-white {
+  background-color: white !important;
+}
+
+.bg-grey {
+  background-color: grey !important;
+}
+
+.bg-black {
+  background-color: black !important;
+}
+
+/* MDL */
+
+.demo-card-image > .mdl-card__actions {
+  height: 52px;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.demo-card-image__filename {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* .demo-card-image.mdl-card.mdl-shadow--2dp {
+  margin: 1%;
+} */
+
+.mdl-button.mdl-js-button.mdl-button--fab.mdl-js-ripple-effect.mdl-button--colored{
+  position: fixed;
+  z-index: 100;
+  bottom: 40px;
+  right: 20px;
+}
+
+/* 나중에 덮어씌웠으면 하는 부분 */
+/* .comment-label:after {
+  background-color: black !important;
+  bottom: 20px;
+  content: '';
+  height: 2px;
+  left: 45%;
+  position: absolute;
+  transition-duration: .2s;
+  transition-timing-function: cubic-bezier(.4,0,.2,1);
+  visibility: hidden;
+  width: 10px;
+} */
