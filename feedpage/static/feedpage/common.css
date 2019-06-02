@@ -6,6 +6,11 @@ body {
   font-family: "Noto Sans KR", sans-serif !important;
 }
 
+header {
+  margin-left: -1px !important;
+  width: 101% !important;
+}
+
 h2 {
   font-weight: 900 !important;
   font-size: 24px !important;
@@ -147,7 +152,7 @@ button, input[type="submit"], input[type="reset"] {
 }
 
 .mt-2 {
-  margin-top: 8px;
+  margin-top: 8px !important;
 }
 
 .mt-3 {

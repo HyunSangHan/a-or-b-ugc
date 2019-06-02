@@ -1,175 +1,403 @@
+{% extends 'base_black.html' %}
 {% load custom_tags %}
-{% load staticfiles %}
 
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A/B</title>
-    <link rel="stylesheet" href="{% static 'feedpage/common.css' %}" />
-    <link rel="stylesheet" href="{% static 'feedpage/partial.css' %}" />
-    <link rel="stylesheet" href="{% static 'feedpage/responsive.css' %}" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500|Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp">
-    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.grey-amber.min.css" />
-    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="https://milankyncl.github.io/jquery-copy-to-clipboard/jquery.copy-to-clipboard.js"></script>
-  </head>
-  <body>
-    {% comment %} <div class="transp-bg"></div> {% endcomment %}
-    <!-- Always shows a header, even in smaller screens. -->
-    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-      <header class="mdl-layout__header bg-black header-shadow">
-        <div class="mdl-layout__header-row">
-          <!-- Title -->
-          <!-- Add spacer, to align navigation to the right -->
-          <div class="mdl-layout-spacer service-title">
-          </div>
-          <form action="/feeds/" method="get">
-            <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable mdl-textfield--floating-label mdl-textfield--align-right">
-              <label class="mdl-button mdl-js-button mdl-button--icon" for="fixed-header-drawer-exp">
-                <i class="material-icons" style="color: white">search</i>
-              </label>
-              <div class="mdl-textfield__expandable-holder font-white" style="border-bottom: 1px solid;">
-                <input class="mdl-textfield__input none" type="text" name="keyword" id="fixed-header-drawer-exp">
-                <input type="submit" value="통합검색" id="fixed-header-drawer-exp" class="invisible" />
-              </div>
-            </div>
-          </form>
+{% block content %}
+
+<div class="mdl-grid container relative">
+  {% if creator.profile.image.url != "/media/False" %}
+    <div class="creator-img" style="background: url('{{ creator.profile.image.url }}') center / cover;"></div>
+  {% else %}
+    <div class="creator-img" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
+  {% endif %}
+  <div class="mdl-cell--12-col m-auto black-creator">
+    <div class="contents-margin">
+      <div class="creator-name-card">
+        <div class="creator-name ellipsis">
+          {{ creator.username }}
         </div>
-      </header>
-      <div class="mdl-layout__drawer">
-        {% if user.is_authenticated %}
-          <a href="{% url 'profile' %}">
-            <span class="mdl-layout-title sidebar-profile">
-              {% if user.profile.image.url != "/media/False" %}
-                <div class="user-face-big" style="background: url('{{ user.profile.image.url }}') center / cover;"></div>
+        <div class="creator-subs-num">
+          구독자 {{ creator.profile.follow_to.all.count }}명
+        </div>
+        <div>
+          {% if user.is_authenticated %}
+            {% if request.user != creator %}
+              {% if request.user.profile not in creator.profile.follows.all %}
+                <a href = "/feeds/{{ creator.id }}/follow/">
+                  <button class="subs-btn bg-black font-white">
+                    구독하기
+                  </button>
+                </a>
               {% else %}
-                <div class="user-face-big" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
-              {% endif %}
-              <div class="sidebar-username ellipsis">{{user.username}}</div>
-              <div>
-                <i class="material-icons" style="margin-left:6px; font-size:14px; color:#666;">arrow_forward_ios</i>
-              </div>
-            </span>
-          </a>
-          <nav class="mdl-navigation">
-            <a class="mdl-navigation__link" href="{% url 'profile' %}">프로필수정</a>
-            <a class="mdl-navigation__link" href="{% url 'event' %}">공지사항</a>
-            <a class="mdl-navigation__link" href="{% url 'logout' %}">로그아웃</a>
-          </nav>
-        {% else %}
-          <nav class="mdl-navigation">
-            <a class="mdl-navigation__link" href="{% url 'login' %}">로그인</a>
-            <a class="mdl-navigation__link" href="{% url 'signup' %}">회원가입</a>
-          </nav>
-        {% endif %}
-      </div>
-      <main class="mdl-layout__content mt--1">
-        <div class="page-content m-auto">
-          <div class="page-content-black mdl-layout__content bg-black w-100 font-white">
-            <div class="page-content m-auto">
-              <div class="mdl-grid container">
-                <div class="mdl-cell--12-col m-auto black-creator">
-                  <div class="contents-margin">
-                    <div class="creator-name-card">
-                      <div class="creator-name ellipsis">
-                        {{ creator.username }}
-                      </div>
-                      <div class="creator-subs-num">
-                        구독자 {{ creator.profile.follow_to.all.count }}명
-                      </div>
-                      {% if creator.profile.image.url != "/media/False" %}
-                        <div class="creator-img" style="background: url('{{ creator.profile.image.url }}') center / cover;"></div>
-                      {% else %}
-                        <div class="creator-img" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
-                      {% endif %}
-
-
-                      </div>
-                      <div>
-                        {% if user.is_authenticated %}
-                          {% if request.user != creator %}
-                            {% if request.user.profile not in creator.profile.follows.all %}
-                              <a href = "/feeds/{{ creator.id }}/follow/">
-                                <button class="subs-btn bg-black font-white">
-                                  구독하기
-                                </button>
-                              </a>
-                            {% else %}
-                              <a href = "/feeds/{{ creator.id }}/follow/">
-                                <button class="subs-btn bg-white font-black flex" style="padding-left: 10px;">
-                                  구독중
-                                  <img src='/static/feedpage/checkicon.png' style="width: 14px; margin: 4px -1px 0 2px;">
-                                </button>
-                              </a>
-                            {% endif %}
-                          {% endif %}
-                        {% endif %}
+                <a href = "/feeds/{{ creator.id }}/follow/">
+                  <button class="subs-btn bg-white flex-center" style="padding-left: 2px;">
+                    <div class="flex-center" style="margin-top: 3px;">
+                      <div>구독중</div>
+                      <div class="subs-check-icon">
+                        <img src='/static/feedpage/checkicon.png' alt="check_icon" style="width: 14px;">
                       </div>
                     </div>
+                  </button>
+                </a>
+              {% endif %}
+            {% else %}
+              <a href = "/accounts/profile/">
+                <button class="subs-btn bg-black font-white" style="width: 87px; font-weight: 300;">
+                  프로필 수정
+                </button>
+              </a>
+            {% endif %}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<!--피드 나오는 영역-->
+<div class="mdl-grid container">
+<!--투탭-->
+  {% if request.user == creator %}
+    <div class="page-content-two-tabs w-100">
+      <div class="page-content-tab on">
+        <a href = "/feeds/creator/{{ creator.username }}/" class="w-100 h-100 flex-center">
+          내가 작성한
+        </a>
+      </div>
+      <div class="page-content-tab">
+        <a href = "/feeds/myreaction/" class="w-100 h-100 flex-center">
+          내가 참여한
+        </a>
+      </div>
+    </div>
+  {% endif %}
+<!--피드 나오는 영역-->
+
+  <div class="mdl-cell--12-col m-auto contents">
+    <div class="contents-margin">
+
+      {% for feed in feeds %}
+        {% if feed.check_visible %}
+          <li class="each-li">
+            <div class="inline-flex w-more-btn">
+              <a href="/feeds/{{ feed.id }}" class="test-js">
+                <h2 class="link-black">{{ feed.title }}</h2>
+              </a>
+              <div class="ml-auto more-btn">
+                <button id="demo-menu-lower-right" class="mdl-button mdl-js-button mdl-button--icon more-js-btn v-center m-auto">
+                  <i class="material-icons">more_vert</i>
+                </button>
+                <div class="more-info">
+                  <div>
+                    <a href="/feeds/{{ feed.id }}" class="link-black">
+                      <strong>더보기</strong>
+                    </a>
                   </div>
+<!--배포 이후에 수정할 부분-->
+                  <div data-clipboard-text="localhost:8000/feeds/{{ feed.id }}" onclick="return alert('콘텐츠의 주소가 클립보드에 복사되었습니다.')">공유하기</div>
+                  {% if user.is_authenticated %}
+                    {% if request.user != feed.creator %}
+                      <div>
+                        <a href = "/feeds/{{ feed.creator.id }}/follow/" class="link-black">
+                          {% if request.user.profile not in feed.creator.profile.follows.all %}
+                            구독하기
+                          {% else %}
+                            구독취소
+                          {% endif %}
+                        </a>
+                      </div>
+                      <div>
+                        {% get_report_tf feed.id user.id as report_tf %}
+                        {% if report_tf %}
+                          <span class="font-lightgrey" onclick="return alert('이미 신고하셨습니다.')">신고하기</span>
+                        {% else %}
+                          <a href="/feeds/{{ feed.id }}/report/" onclick="return confirm('정말 신고하실 건가요?')" class="link-black">
+                            신고하기
+                          </a>
+                        {% endif %}
+      {% comment %} <span>신고({{feed.report_set.count }}건)</span> {% endcomment %}
+                      </div>
+                    {% else %}
+                      <div>
+                        {% is_deletable feed.id as is_deletable_feed %}
+                        {% if is_deletable_feed %}
+                          <a href="/feeds/{{ feed.id }}/edit" class="link-black">수정하기</a>
+                        {% else %}
+                          <span class="font-lightgrey" onclick="return alert('다른 사용자가 이미 투표/댓글 참여를 한 게시물의 경우, 내용 수정이 불가합니다. 반드시 수정이 필요하다면 삭제 후 재등록해주세요.')">수정하기</span>
+                        {% endif %}                                
+                      </div>
+                      <div>
+                        <a href="/feeds/{{ feed.id }}/delete/" onclick="return confirm('정말 삭제하실 건가요?')" class="link-black">
+                          삭제하기
+                        </a>
+                      </div>
+                    {% endif %}
+                  {% endif %}
                 </div>
               </div>
             </div>
-          </div>
-          <div class="mdl-grid container" style="margin-top: -10px;">
-            <div class="mdl-cell--12-col m-auto contents">
-              <div class="contents-margin">
-                <table>
-                크리에이터스 페이지
-                  <th>creator
-                  </th>
-                  <th>title
-                  </th>
-                  {% for feed in feeds %}
-                  <tr>
-                    <td>{{feed.creator}}</td>
-                    <td>{{feed.title}}</td>
-                  </tr>
-                  {% endfor %}
-                </table>
+            <div class="letter-space">
+              {% get_feed_tags feed.id as feed_tags %}
+              {% for tag in feed_tags %}
+                {% if tag != feed_tags.first %}
+                  <span class="font-13 font-light">
+                    <a href="/feeds/?keyword={{tag}}" class="link-black">#{{ tag }}</a>
+                  </span>
+                {% endif %}
+              {% endfor %}
+            </div>
+            <div class="inline-flex v-center mt-1 mb-2">
+              <a href="/feeds/creator/{{feed.creator.username}}" class="link-grey">
+                <div class="inline-flex">
+                  {% if feed.creator.profile.image.url != "/media/False" %}
+                    <div class="user-face" style="background: url('{{ feed.creator.profile.image.url }}') center / cover;"></div>
+                  {% else %}
+                    <div class="user-face" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
+                  {% endif %}
+                  <span class="font-12 ml-1">
+                    {{feed.creator.username}} · {% get_deltatime feed.id 1 %}
+                  </span>
+                </div>
+              </a>
+              {% comment %} (구독자: {{ feed.creator.profile.follow_to.all.count }}) {% endcomment %}
+            </div>
+            <!--A와 B를 함께 두는 행-->
+            <div class="each-content">
+              <!-- Image card A-->
+              <div class="mr-1perc demo-card-image mdl-card content-img" style="background: url('{{ feed.img_a.url }}') center / cover;">
+                <a href="/feeds/{{ feed.id }}/upvote_a" class="w-100 h-100">
+                  {% get_upvote_color feed.id user.id as choice %}
+                  <!--lose일때 A 라벨링-->
+                  {% if choice == "B" %}
+                    <div class="content-label bg-grey">
+                    <strong>A /</strong> {{ feed.content_a}}
+                    </div>
+                  <!--그 외 평소/win일 때 A 라벨링-->
+                  {% else %}
+                    <div class="content-label bg-black">
+                    <strong>A /</strong> {{ feed.content_a}}
+                    </div>
+                  {% endif %}
+
+                  <!--A를 upvote한 경우-->
+                  {% if choice != "" %}
+                    <!--A 결과 숫자-->
+                    <div class="content-result flex-center w-100 h-100">
+                      <div class="mt-3 opacity-07">
+                        <span class="content-result-perc">{% get_upvote_perc_a feed.id %}</span>%
+                        <div class="w-100 mt-2" style="text-align: center;">
+                          (
+                          {% comment %} <span class="mt-3">
+                            <i class="material-icons">thumb_up</i>
+                          </span> {% endcomment %}
+                          {% get_upvote_a feed.id %} )
+                        </div>
+                      </div>
+                    </div>
+                    {% if choice == "A" %}
+                      <!--선택한 것일때 배경-->
+                      <div class="content-result-bg flex-center w-100 h-100 bg-black">
+                      </div>
+                    {% else %}
+                      <div class="content-result-bg flex-center w-100 h-100 bg-grey">
+                      </div>
+                    {% endif %}
+                  {% endif %}
+                </a>
+              </div>
+              <!-- Image card B-->
+              <div class="ml-1perc demo-card-image mdl-card content-img" style="background: url('{{ feed.img_b.url }}') center / cover;">
+                <a href="/feeds/{{ feed.id }}/upvote_b" class="w-100 h-100">
+
+                  <!--lose일때 B 라벨링-->
+                  {% if choice == "A" %}
+                    <div class="content-label bg-grey">
+                    <strong>B /</strong> {{ feed.content_b}}
+                    </div>
+                  <!--그 외 평소/win일 때 B 라벨링-->
+                  {% else %}
+                    <div class="content-label bg-black">
+                    <strong>B /</strong> {{ feed.content_b}}
+                    </div>
+                  {% endif %}
+
+                  <!--B를 upvote한 경우-->
+                  {% get_upvote_color feed.id user.id as choice %}
+                  {% if choice != "" %}
+                    <!--B 결과 숫자-->
+                    <div class="content-result flex-center w-100 h-100">
+                      <div class="mt-3">
+                        <span class="content-result-perc">{% get_upvote_perc_b feed.id %}</span>%
+                        <div class="w-100 mt-2" style="text-align: center;">
+                          (
+                          {% comment %} <span class="mt-3">
+                            <i class="material-icons">thumb_up</i>
+                          </span> {% endcomment %}
+                          {% get_upvote_b feed.id %} )
+                        </div>
+                      </div>
+                    </div>
+                    {% if choice == "B" %}
+                      <!--선택한 것일때 배경-->
+                      <div class="content-result-bg flex-center w-100 h-100 bg-black">
+                      </div>
+                    {% else %}
+                      <div class="content-result-bg flex-center w-100 h-100 bg-grey">
+                      </div>
+                    {% endif %}
+                  {% endif %}
+                </a>
               </div>
             </div>
-          </div>
-        </div>
-      </main>
+
+            <!-- 댓글 코드 -->
+            <div class="mt-2 w-100 comment-wrap">
+              {% get_bestcomment_a feed.id as comment_a %}
+              {% get_bestcomment_b feed.id as comment_b %}
+              {% if comment_a and comment_b %}
+              <!--A베스트댓글-->
+                <div class="comment w-100 v-center mt-1 inline-flex">
+                  <div class="sideicon best">A / BEST</div>
+                  <div class="font-11 v-center mtb-auto comment-reactor"><strong>{{ comment_a.reactor }}</strong></div>
+                  <div class="font-14 v-center mtb-auto comment-content">{{ comment_a.content }}</div>
+                  {% comment %} {{ comment_a.total_upvote }}
+                  {% if comment_a.reactor == user %}
+                  [MY]
+                  {% endif %} {% endcomment %}
+                  {% get_comment_upvote_tf feed.id comment_a.id user.id as comment_upvote_tf %}
+                  {% if user.is_authenticated %}
+                    {% if comment_upvote_tf %}
+                      <div class="ml-auto more-btn">
+                        <a href="/feeds/{{ feed.id }}/comments/{{ comment_a.id }}/upvote">
+                          <i class="material-icons comment-heart v-center m-auto link-grey font-red ml-1">favorite</i>
+                        </a>
+                      </div>
+                    {% else %}
+                      <div class="ml-auto more-btn">
+                        <a href="/feeds/{{ feed.id }}/comments/{{ comment_a.id }}/upvote">
+                          <i class="material-icons comment-heart v-center m-auto link-grey ml-1">favorite_border</i>
+                        </a>
+                      </div>
+                    {% endif %}
+                  {% endif %}
+                </div>
+              <!--B베스트댓글-->
+                <div class="comment w-100 v-center mtb-1 inline-flex">
+                  <div class="sideicon best">B / BEST</div>
+                  <div class="font-11 v-center mtb-auto comment-reactor"><strong>{{ comment_b.reactor }}</strong></div>
+                  <div class="font-14 v-center mtb-auto comment-content ellipsis">{{ comment_b.content }}</div>
+                    {% comment %} {{ comment_a.total_upvote }}
+                    {% if comment_a.reactor == user %}
+                    [MY]
+                    {% endif %} {% endcomment %}
+                  {% get_comment_upvote_tf feed.id comment_b.id user.id as comment_upvote_tf %}
+                  {% if user.is_authenticated %}
+                    {% if comment_upvote_tf %}
+                      <div class="ml-auto more-btn">
+                        <a href="/feeds/{{ feed.id }}/comments/{{ comment_b.id }}/upvote">
+                          <i class="material-icons comment-heart v-center m-auto link-grey font-red ml-1">favorite</i>
+                        </a>
+                      </div>
+                    {% else %}
+                      <div class="ml-auto more-btn">
+                        <a href="/feeds/{{ feed.id }}/comments/{{ comment_b.id }}/upvote">
+                          <i class="material-icons comment-heart v-center m-auto link-grey ml-1">favorite_border</i>
+                        </a>
+                      </div>
+                    {% endif %}
+
+                    <!--AJAX 실패한 케이스-->
+                    {% comment %} {% if comment_upvote_tf %}
+                      <div class="ml-auto more-btn comment-heart-btn-on">
+                        <a href="/feeds/{{ feed.id }}/comments/{{ comment_b.id }}/upvote" class="comment-heart-btn">
+                          <i class="material-icons comment-heart v-center m-auto link-grey font-red ml-1">favorite</i>
+                        </a>
+                      </div>
+                      <div class="ml-auto more-btn comment-heart-btn-off">
+                        <a href="/feeds/{{ feed.id }}/comments/{{ comment_b.id }}/upvote" class="comment-heart-btn">
+                          <i class="material-icons comment-heart v-center m-auto link-grey ml-1">favorite_border</i>
+                        </a>
+                      </div>
+                    {% else %}
+                      <div class="ml-auto more-btn comment-heart-btn-off">
+                        <a href="/feeds/{{ feed.id }}/comments/{{ comment_b.id }}/upvote" class="comment-heart-btn">
+                          <i class="material-icons comment-heart v-center m-auto link-grey ml-1">favorite_border</i>
+                        </a>
+                      </div>
+                      <div class="ml-auto more-btn comment-heart-btn-on">
+                        <a href="/feeds/{{ feed.id }}/comments/{{ comment_b.id }}/upvote" class="comment-heart-btn">
+                          <i class="material-icons comment-heart v-center m-auto link-grey font-red ml-1 comment-heart-btn-off">favorite</i>
+                        </a>
+                      </div>
+                    {% endif %} {% endcomment %}
+
+                  {% endif %}
+                </div>
+              {% endif %}
+            </div>
+            <!--show 안으로 들어갈 부분(전체댓글)-->
+            {% if feed.feedcomment_set.count > 100 %}
+              <a href="/feeds/{{ feed.id }}">
+                <div class="font-12 link-light-black font-light mt-2">댓글 {{feed.feedcomment_set.count}}개 모두 보기</div>
+              </a>
+            {% elif feed.feedcomment_set.count != 0 %}
+              <div class="font-12 link-light-black font-light mt-2 toggle-comments">댓글 {{feed.feedcomment_set.count}}개 모두 보기</div>
+              <div class="all-comments">
+                {% get_ordered_comment feed.id as comments %}
+                {% for c in comments %}
+                  {% get_side feed.id c.id as side %}
+                  <div class="comment w-100 v-center mtb-1 inline-flex">
+                    {% if side != ""%}
+                      <div class="sideicon norm"> {{ side }} </div>
+                    {% endif %}
+  
+                    <div class="font-11 v-center mtb-auto comment-reactor"><strong>{{ c.reactor }}</strong></div>
+                    <div class="font-14 v-center mtb-auto comment-content ellipsis">{{ c.content }}</div>
+                      {% comment %} {{ comment_a.total_upvote }}
+                      {% if comment_a.reactor == user %}
+                      [MY]
+                      {% endif %} {% endcomment %}
+                    {% get_comment_upvote_tf feed.id c.id user.id as comment_upvote_tf %}
+                    {% if user.is_authenticated %}
+                      {% if comment_upvote_tf %}
+                        <div class="ml-auto more-btn">
+                          <a href="/feeds/{{ feed.id }}/comments/{{ c.id }}/upvote">
+                            <i class="material-icons comment-heart v-center m-auto link-grey font-red ml-1">favorite</i>
+                          </a>
+                        </div>
+                      {% else %}
+                        <div class="ml-auto more-btn">
+                          <a href="/feeds/{{ feed.id }}/comments/{{ c.id }}/upvote">
+                            <i class="material-icons comment-heart v-center m-auto link-grey ml-1">favorite_border</i>
+                          </a>
+                        </div>
+                      {% endif %}
+                    {% endif %}
+                  </div>
+                {% endfor %}
+              </div>
+            {% endif %}
+            <!-- 댓글쓰기 창 -->
+            {% if user.is_authenticated %}
+              <form action="/feeds/{{ feed.id }}/comments/" method="POST">
+                {% csrf_token %}
+                <div class="comment-input-wrap mdl-textfield mdl-js-textfield mdl-textfield--floating-label w-100">
+                  <input class="mdl-textfield__input comment-input" type="text" id="feedcomment" name="content" placeholder="댓글을 입력하세요.">
+                  {% comment %} <input class="mdl-textfield__input comment-input" type="text" id="feedcomment" name="content"> {% endcomment %}
+                  {% comment %} <input class="comment-input" type="text" id="feedcomment" name="content"> {% endcomment %}
+                  {% comment %} <label class="mdl-textfield__label" for="feedcomment">댓글을 입력하세요.</label> {% endcomment %}
+                  <input type="submit" class="comment-submit invisible" data-feedid="{{ feed.id }}" data-csrfmiddlewaretoken="{{ csrf_token }}" value="댓글달기">
+                </div>
+              </form> 
+            {% endif %}
+              <!-- 댓글 코드 끝 -->
+          </li>
+        {% else %}
+          신고가 10건 이상 접수되어 숨김처리된 게시글입니다.
+        {% endif %}
+      {% endfor %} 
+
     </div>
+  </div>
+</div>
 
-    {% if user.is_authenticated %}
-      <div class="nav-bar-wrap">
-        <a href="/feeds/">
-          <div>
-            <i class="material-icons-outlined">home</i>
-          </div>
-        </a>
-        <a href="/feeds/mysubscribe/">
-          <div>
-            <i class="material-icons-outlined">library_books</i>
-          </div>
-        </a>
-        <a href="/feeds/new">
-          <div>
-            <i class="material-icons-outlined">add_circle_outline</i>
-          </div>
-        </a>
-        <a href="/feeds/mynotification">
-          <div>
-            <i class="material-icons-outlined">notifications_none</i>
-          </div>
-        </a>
-        <a href="/feeds/myupload">
-          {% if user.profile.image.url != "/media/False"%}
-            <div class="user-face mb-1" style="background: url('{{ user.profile.image.url }}') center / cover;"></div>
-          {% else %}
-            <div class="user-face mb-1" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
-          {% endif %}
-        </a>
-      </div>
-    {% endif %}
-    <script src="{% static 'feedpage/myjs.js' %}"></script>
-  </body>
-</html>
-
-
+{% endblock content %}

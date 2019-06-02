@@ -1,3 +1,4 @@
+{% load custom_tags %}
 {% load staticfiles %}
 
 <!DOCTYPE html>
@@ -19,26 +20,18 @@
     {% comment %} <div class="transp-bg"></div> {% endcomment %}
     <!-- Always shows a header, even in smaller screens. -->
     <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-      <header class="mdl-layout__header bg-white header-shadow">
+      <header class="mdl-layout__header bg-black header-shadow">
         <div class="mdl-layout__header-row">
           <!-- Title -->
           <!-- Add spacer, to align navigation to the right -->
           <div class="mdl-layout-spacer service-title">
-            <a href="/feeds">A / B</a>
           </div>
-          <!-- Navigation. It will be hidden in small screens. -->
-          {% comment %} <nav class="mdl-navigation mdl-layout--large-screen-only">
-            <a class="mdl-navigation__link" href="">Link</a>
-            <a class="mdl-navigation__link" href="">Link</a>
-            <a class="mdl-navigation__link" href="">Link</a>
-            <a class="mdl-navigation__link" href="">Link</a>
-          </nav> {% endcomment %}
           <form action="/feeds/" method="get">
             <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable mdl-textfield--floating-label mdl-textfield--align-right">
               <label class="mdl-button mdl-js-button mdl-button--icon" for="fixed-header-drawer-exp">
-                <i class="material-icons">search</i>
+                <i class="material-icons" style="color: white">search</i>
               </label>
-              <div class="mdl-textfield__expandable-holder">
+              <div class="mdl-textfield__expandable-holder font-white" style="border-bottom: 1px solid;">
                 <input class="mdl-textfield__input none" type="text" name="keyword" id="fixed-header-drawer-exp">
                 <input type="submit" value="통합검색" id="fixed-header-drawer-exp" class="invisible" />
               </div>
@@ -74,9 +67,11 @@
         {% endif %}
       </div>
       <main class="mdl-layout__content mt--1">
-        <div class="page-content m-auto">
+        <div class="page-content-black mdl-layout__content bg-black w-100 font-white">
+
           {% block content %}
           {% endblock %}
+          
         </div>
       </main>
     </div>
@@ -103,7 +98,7 @@
             <i class="material-icons-outlined">notifications_none</i>
           </div>
         </a>
-        <a href="/feeds/creator/{{ request.user.username }}/">
+        <a href="/feeds/myupload">
           {% if user.profile.image.url != "/media/False"%}
             <div class="user-face mb-1" style="background: url('{{ user.profile.image.url }}') center / cover;"></div>
           {% else %}
@@ -115,5 +110,3 @@
     <script src="{% static 'feedpage/myjs.js' %}"></script>
   </body>
 </html>
-
-

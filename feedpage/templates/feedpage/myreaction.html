@@ -1,20 +1,51 @@
-{% extends 'base.html' %}
+{% extends 'base_black.html' %}
 {% load custom_tags %}
 
 {% block content %}
 
+<div class="mdl-grid container relative">
+  {% if creator.profile.image.url != "/media/False" %}
+    <div class="creator-img" style="background: url('{{ request.user.profile.image.url }}') center / cover;"></div>
+  {% else %}
+    <div class="creator-img" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
+  {% endif %}
+  <div class="mdl-cell--12-col m-auto black-creator">
+    <div class="contents-margin">
+      <div class="creator-name-card">
+        <div class="creator-name ellipsis">
+          {{ request.user.username }}
+        </div>
+        <div class="creator-subs-num">
+          구독자 {{ request.user.profile.follow_to.all.count }}명
+        </div>
+        <div>
+          <a href = "/accounts/profile/">
+            <button class="subs-btn bg-black font-white" style="width: 87px; font-weight: 300;">
+              프로필 수정
+            </button>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
 <div class="mdl-grid container">
-  <div class="mdl-cell--12-col m-auto contents">
-
-    <div class="two-tabs flex">
-      <a href="/feeds/myupload" class="each-tab flex-center">
+<!--투탭-->
+  <div class="page-content-two-tabs w-100">
+    <div class="page-content-tab">
+      <a href = "/feeds/creator/{{ request.user.username }}/" class="w-100 h-100 flex-center">
         내가 작성한
       </a>
-      <a href="/feeds/myreaction" class="each-tab flex-center font-white bg-black">
+    </div>
+    <div class="page-content-tab on">
+      <a href = "/feeds/myreaction/" class="w-100 h-100 flex-center">
         내가 참여한
       </a>
     </div>
-
+  </div>
+<!--피드 나오는 영역-->
+  <div class="mdl-cell--12-col m-auto contents">
     <div class="contents-margin">
       {% for upvote in upvotes %}
         {% if upvote.feed.check_visible %}
@@ -246,9 +277,9 @@
               {% endif %}
             </div>
             {% if feed.feedcomment_set.count > 6 %}
-            <a href="/feeds/{{ upvote.feed.id }}">
-              <div class="font-12 link-light-black font-light mt-2">댓글 {{upvote.feed.feedcomment_set.count}}개 모두 보기</div>
-            </a>
+              <a href="/feeds/{{ upvote.feed.id }}">
+                <div class="font-12 link-light-black font-light mt-2">댓글 {{upvote.feed.feedcomment_set.count}}개 모두 보기</div>
+              </a>
             {% elif upvote.feed.feedcomment_set.count != 0 %}
               <div class="font-12 link-light-black font-light mt-2 toggle-comments">댓글 {{upvote.feed.feedcomment_set.count}}개 모두 보기</div>
               <div class="all-comments">
@@ -283,13 +314,12 @@
             {% endif %}
             <!-- 댓글쓰기 창 -->
             {% if user.is_authenticated %}
-              <form action="/feeds/{{ upvote.feed.id }}/comments/" method="POST">
+              <form action="/feeds/{{ feed.id }}/comments/" method="POST">
                 {% csrf_token %}
-                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label w-100">
-                  <input class="mdl-textfield__input comment-input" type="text" id="feedcomment" name="content">
-                  <label class="mdl-textfield__label" for="feedcomment">댓글을 입력하세요.</label>
+                <div class="comment-input-wrap mdl-textfield mdl-js-textfield mdl-textfield--floating-label w-100">
+                  <input class="mdl-textfield__input comment-input" type="text" id="feedcomment" name="content" placeholder="댓글을 입력하세요.">
+                  <input type="submit" class="comment-submit invisible" data-feedid="{{ feed.id }}" data-csrfmiddlewaretoken="{{ csrf_token }}" value="댓글달기">
                 </div>
-                <button type="submit" class="invisible">댓글 달기</button>
               </form> 
             {% endif %}
               <!-- 댓글 코드 끝 -->
@@ -299,6 +329,8 @@
         {% endif %}
       {% endfor %} 
     </div>
+
   </div>
 </div>
+
 {% endblock content %}
