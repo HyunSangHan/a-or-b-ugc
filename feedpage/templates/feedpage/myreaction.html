@@ -4,7 +4,7 @@
 {% block content %}
 
 <div class="mdl-grid container relative">
-  {% if creator.profile.image.url != "/media/False" %}
+  {% if request.user.profile.image.url != "/media/False" %}
     <div class="creator-img" style="background: url('{{ request.user.profile.image.url }}') center / cover;"></div>
   {% else %}
     <div class="creator-img" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
@@ -125,8 +125,7 @@
                     <div class="user-face" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
                   {% endif %}
                   <span class="font-12 ml-1">
-                  <!-- 시간은 일단 가상의 값임. 수정 필요 {{ feed.created_at }}-->
-                    {{upvote.feed.creator.username}} · 1시간전
+                    {{upvote.feed.creator.username}} · {% get_deltatime upvote.feed.id 1 %}
                   </span>
                 </div>
               </a>
@@ -140,12 +139,12 @@
                 <!--lose일때 A 라벨링-->
                 {% if choice == "B" %}
                   <div class="content-label bg-grey">
-                  A / {{ upvote.feed.content_a}}
+                    <strong>A / </strong>{{ upvote.feed.content_a}}
                   </div>
                 <!--그 외 평소/win일 때 A 라벨링-->
                 {% else %}
                   <div class="content-label bg-black">
-                  A / {{ upvote.feed.content_a}}
+                    <strong>A / </strong>{{ upvote.feed.content_a}}
                   </div>
                 {% endif %}
 
@@ -184,12 +183,12 @@
                 <!--lose일때 B 라벨링-->
                 {% if choice == "A" %}
                   <div class="content-label bg-grey">
-                  B / {{ upvote.feed.content_b}}
+                    <strong>B / </strong>{{ upvote.feed.content_b}}
                   </div>
                 <!--그 외 평소/win일 때 B 라벨링-->
                 {% else %}
                   <div class="content-label bg-black">
-                  B / {{ upvote.feed.content_b}}
+                    <strong>B / </strong>{{ upvote.feed.content_b}}
                   </div>
                 {% endif %}
 
