@@ -102,6 +102,7 @@
   background-color: white;
   padding: 5px;
   margin: -5px;
+  min-height: 80vh;
 }
 
 .black-creator {
@@ -195,7 +196,15 @@
 .user-face-big {
   height: 30px;
   width: 30px;
-  border-radius: 50%;
+  border-radius: 15px;
+  background-color: lightgrey;
+  margin: 10px 10px 10px 0;
+}
+
+.user-face-bigger {
+  height: 40px;
+  width: 40px;
+  border-radius: 20px;
   background-color: lightgrey;
   margin: 10px 10px 10px 0;
 }
@@ -305,7 +314,7 @@
 .comment-submit {
   position: absolute;
   top: 25px;
-  right: -8px;
+  right: -6px;
   font-size: 14px;
   font-weight: 700;
 }
@@ -356,7 +365,7 @@
   margin-top: 15px;
   font-weight: 500;
   font-size: 13px;
-  border-radius: 12px;
+  border-radius: 16px;
   border: 1px solid white !important;
   letter-spacing: -0.3px;
 }
@@ -364,3 +373,56 @@
 .subs-check-icon {
   margin: -2px -1px 0 2px
 }
+
+.each-noti {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  list-style-type: none;
+  width: 97%;
+  min-height: 50px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left;
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+}
+
+.noti-content-ml {
+  margin-left: 48px;
+}
+
+.noti-content-mr {
+  margin-right: 51px;
+}
+
+.both-img-wrap {
+  position: relative;
+  width: 50px;
+  height: 50px;
+}
+.left-img, .right-img {
+  position: absolute;
+  height: 50px;
+  width: 65%;
+}
+
+.left-img {
+  left: 0; top: 0; -webkit-clip-path: polygon(0 0, 100% 0%, 50% 100%, 0% 100%); clip-path: polygon(0 0, 100% 0%, 50% 100%, 0% 100%); 
+}
+.right-img {
+  right: 0; top: 0; -webkit-clip-path: polygon(50% 0, 100% 0%, 100% 100%, 0% 100%); clip-path: polygon(50% 0, 100% 0%, 100% 100%, 0% 100%); 
+}
+/* 
+.test {
+  position: absolute;
+  opacity: 0.1;
+  top: 0;
+  left: 0;
+  margin-left: -17px;
+  margin-top: 0;
+  background-color: grey;
+  width: 106%;
+  height: 100%;
+  z-index: 1;
+} */

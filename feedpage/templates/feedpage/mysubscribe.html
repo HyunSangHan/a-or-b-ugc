@@ -397,11 +397,13 @@
             {% if user.is_authenticated %}
               <form action="/feeds/{{ feed.id }}/comments/" method="POST">
                 {% csrf_token %}
-                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label w-100">
-                  <input class="mdl-textfield__input comment-input" type="text" id="feedcomment" name="content">
-                  <label class="mdl-textfield__label" for="feedcomment">댓글을 입력하세요.</label>
+                <div class="comment-input-wrap mdl-textfield mdl-js-textfield mdl-textfield--floating-label w-100">
+                  <input class="mdl-textfield__input comment-input" type="text" id="feedcomment" name="content" placeholder="댓글을 입력하세요.">
+                  {% comment %} <input class="mdl-textfield__input comment-input" type="text" id="feedcomment" name="content"> {% endcomment %}
+                  {% comment %} <input class="comment-input" type="text" id="feedcomment" name="content"> {% endcomment %}
+                  {% comment %} <label class="mdl-textfield__label" for="feedcomment">댓글을 입력하세요.</label> {% endcomment %}
+                  <input type="submit" class="comment-submit invisible" data-feedid="{{ feed.id }}" data-csrfmiddlewaretoken="{{ csrf_token }}" value="댓글달기">
                 </div>
-                <button type="submit" class="invisible">댓글 달기</button>
               </form> 
             {% endif %}
               <!-- 댓글 코드 끝 -->

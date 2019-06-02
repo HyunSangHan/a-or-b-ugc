@@ -2,58 +2,178 @@
 {% load custom_tags %}
 
 {% block content %}
-  <!--1피드투표/2피드댓글/3신고/4신고숨김/5댓글좋아요/6구독/7구독새글-->
-  {% for noti in noti_checked %}
-    <!-- 1.피드투표 -->
-    {% if noti.noti_type == 1 %}
-      <div>
-        <a href="/feeds/{{ noti.feed.id }}">
-          <strong>{{noti.noti_from}}</strong>님이 회원님이 업로드한 A/B 중 하나에 투표했습니다.
-        </a>
+  <div class="mdl-grid container">
+    <div class="mdl-cell--12-col m-auto contents noti">
+      <div class="contents-margin">
+      <!--1피드투표/2피드댓글/3신고/4신고숨김/5댓글좋아요/6구독/7구독새글-->
+        {% for noti in noti_checked %}
+          <!-- 1.피드투표 -->
+          {% if noti.noti_type == 1 %}
+            <a href="/feeds/{{ noti.feed.id }}">
+              <li class="each-noti">
+                {% if noti.noti_from.image.url != "/media/False"%}
+                  <div class="user-face-bigger abs-left m-0" style="background: url('{{noti.noti_from.image.url}}') center / cover;"></div>
+                {% else %}
+                  <div class="user-face-bigger abs-left m-0" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
+                {% endif %}
+                <div class="flex-center">
+                  <div class="noti-content-ml noti-content-mr font-13">
+                    <strong>{{noti.noti_from}}</strong>님이 회원님이 업로드한 아젠다에 투표했습니다.
+                    <span class="font-grey">
+                      {% get_deltatime noti.id 2 %}
+                    </span>
+                  </div>
+                  <div class="abs-right">
+                    <div class="both-img-wrap">
+                      <div class="left-img" style="background: url('{{noti.feed.img_a.url}}') center / cover;"></div>
+                      <div class="right-img" style="background: url('{{noti.feed.img_b.url}}') center / cover;"></div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </a>
+          <!-- 2.피드댓글 -->
+          {% elif noti.noti_type == 2 %}
+            <a href="/feeds/{{ noti.feed.id }}">
+              <li class="each-noti">
+                {% if noti.noti_from.image.url != "/media/False"%}
+                  <div class="user-face-bigger abs-left m-0" style="background: url('{{noti.noti_from.image.url}}') center / cover;"></div>
+                {% else %}
+                  <div class="user-face-bigger abs-left m-0" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
+                {% endif %}
+                <div class="flex-center">
+                  <div class="noti-content-ml noti-content-mr font-13">
+                    <strong>{{noti.noti_from}}</strong>님이 회원님이 업로드한 아젠다에 댓글을 남겼습니다.
+                    <span class="font-grey">
+                      {% get_deltatime noti.id 2 %}
+                    </span>
+                  </div>
+                  <div class="abs-right">
+                    <div class="both-img-wrap">
+                      <div class="left-img" style="background: url('{{noti.feed.img_a.url}}') center / cover;"></div>
+                      <div class="right-img" style="background: url('{{noti.feed.img_b.url}}') center / cover;"></div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </a>
+          <!-- 3.신고 -->
+          {% elif noti.noti_type == 3 %}
+            <a href="/feeds/{{ noti.feed.id }}">
+              <li class="each-noti">
+                <div class="user-face-bigger abs-left m-0" style="background: url('/static/feedpage/alert.jpeg') center / cover;"></div>
+                <div class="flex-center">
+                  <div class="noti-content-ml noti-content-mr font-13">
+                    업로드했던 아젠다에 대한 신고 접수: <strong>{{noti.feed.title}}</strong>
+                    <span class="font-grey">
+                      {% get_deltatime noti.id 2 %}
+                    </span>
+                  </div>
+                  <div class="abs-right">
+                    <div class="both-img-wrap">
+                      <div class="left-img" style="background: url('{{noti.feed.img_a.url}}') center / cover;"></div>
+                      <div class="right-img" style="background: url('{{noti.feed.img_b.url}}') center / cover;"></div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </a>
+          <!-- 4.신고숨김 -->
+          {% elif noti.noti_type == 4 %}
+            <a href="/feeds/{{ noti.feed.id }}">
+              <li class="each-noti">
+                <div class="user-face-bigger abs-left m-0" style="background: url('/static/feedpage/alert.jpeg') center / cover;"></div>
+                <div class="flex-center">
+                  <div class="noti-content-ml noti-content-mr font-13">
+                    회원님이 업로드한 아젠다가 10회 이상 신고당하여 추천피드에 노출되지 않게 되었습니다.: <strong>{{noti.feed.title}}</strong>
+                  </div>
+                  <div class="abs-right">
+                    <div class="both-img-wrap">
+                      <div class="left-img" style="background: url('{{noti.feed.img_a.url}}') center / cover;"></div>
+                      <div class="right-img" style="background: url('{{noti.feed.img_b.url}}') center / cover;"></div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </a>
+          <!-- 5.댓글좋아요 -->
+          {% elif noti.noti_type == 5 %}
+            <a href="/feeds/{{ noti.feed.id }}">
+              <li class="each-noti">
+                {% if noti.noti_from.image.url != "/media/False"%}
+                  <div class="user-face-bigger abs-left m-0" style="background: url('{{noti.noti_from.image.url}}') center / cover;"></div>
+                {% else %}
+                  <div class="user-face-bigger abs-left m-0" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
+                {% endif %}
+                <div class="flex-center">
+                  <div class="noti-content-ml noti-content-mr font-13">
+                    <strong>{{noti.noti_from}}</strong>님이 회원님의 댓글을 좋아합니다.
+                    <span class="font-grey">
+                      {% get_deltatime noti.id 2 %}
+                    </span>
+                  </div>
+                  <div class="abs-right">
+                    <div class="both-img-wrap">
+                      <div class="left-img" style="background: url('{{noti.feed.img_a.url}}') center / cover;"></div>
+                      <div class="right-img" style="background: url('{{noti.feed.img_b.url}}') center / cover;"></div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </a>
+          <!-- 6.구독 -->
+          {% elif noti.noti_type == 6 %}
+            <a href="/feeds/creator/{{ noti.noti_from.user.username }}">
+              <li class="each-noti">
+                {% if noti.noti_from.image.url != "/media/False"%}
+                  <div class="user-face-bigger abs-left m-0" style="background: url('{{noti.noti_from.image.url}}') center / cover;"></div>
+                {% else %}
+                  <div class="user-face-bigger abs-left m-0" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
+                {% endif %}
+                <div class="flex-center">
+                  <div class="noti-content-ml noti-content-mr font-13">
+                    <strong>{{noti.noti_from}}</strong>님이 회원님의 구독자가 되었습니다.
+                    <span class="font-grey">
+                      {% get_deltatime noti.id 2 %}
+                    </span>
+                  </div>
+                  <div class="abs-right">
+                    <div class="both-img-wrap">
+                      <div class="left-img" style="background: url('{{noti.feed.img_a.url}}') center / cover;"></div>
+                      <div class="right-img" style="background: url('{{noti.feed.img_b.url}}') center / cover;"></div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </a>
+          <!-- 7.구독새글 -->
+          {% elif noti.noti_type == 7 %}
+            <a href="/feeds/{{ noti.feed.id }}">
+              <li class="each-noti">
+                {% if noti.noti_from.image.url != "/media/False"%}
+                  <div class="user-face-bigger abs-left m-0" style="background: url('{{noti.noti_from.image.url}}') center / cover;"></div>
+                {% else %}
+                  <div class="user-face-bigger abs-left m-0" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
+                {% endif %}
+                <div class="flex-center">
+                  <div class="noti-content-ml noti-content-mr font-13">
+                    <strong>{{noti.noti_from}}</strong>님이 업로드한 새 아젠다: "{{noti.feed.title}}"
+                    <span class="font-grey">
+                      {% get_deltatime noti.id 2 %}
+                    </span>
+                  </div>
+                  <div class="abs-right">
+                    <div class="both-img-wrap">
+                      <div class="left-img" style="background: url('{{noti.feed.img_a.url}}') center / cover;"></div>
+                      <div class="right-img" style="background: url('{{noti.feed.img_b.url}}') center / cover;"></div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </a>
+          {% endif %}
+        {% endfor %}
       </div>
-    <!-- 2.피드댓글 -->
-    {% elif noti.noti_type == 2 %}
-      <div>
-        <a href="/feeds/{{ noti.feed.id }}">
-          <strong>{{noti.noti_from}}</strong>님이 회원님이 업로드한 A/B에 댓글을 남겼습니다.
-        </a>
-      </div>
-    <!-- 3.신고 -->
-    {% elif noti.noti_type == 3 %}
-      <div>
-        <a href="/feeds/{{ noti.feed.id }}">
-          업로드했던 A/B에 대한 신고 접수: <strong>{{noti.feed.title}}</strong>
-        </a>
-      </div>
-    <!-- 4.신고숨김 -->
-    {% elif noti.noti_type == 4 %}
-      <div>
-        <a href="/feeds/{{ noti.feed.id }}">
-          회원님이 업로드한 A/B가 10회 이상 신고당하여 추천피드에 노출되지 않게 되었습니다.: <strong>{{noti.feed.title}}</strong>
-        </a>
-      </div>
-    <!-- 5.댓글좋아요 -->
-    {% elif noti.noti_type == 5 %}
-      <div>
-        <a href="/feeds/{{ noti.feed.id }}">
-          <strong>{{noti.noti_from}}</strong>님이 회원님의 댓글을 좋아합니다.
-        </a>
-      </div>
-    <!-- 6.구독 -->
-    {% elif noti.noti_type == 6 %}
-      <div>
-        <a href="/feeds/creator/{{ noti.noti_from.user.username }}">
-          <strong>{{noti.noti_from}}</strong>님이 회원님의 구독자가 되었습니다.
-        </a>
-      </div>
-    <!-- 7.구독새글 -->
-    {% elif noti.noti_type == 7 %}
-      <div>
-        <a href="/feeds/{{ noti.feed.id }}">
-          <strong>{{noti.noti_from}}</strong>님이 업로드한 새 A/B: "{{noti.feed.title}}"
-        </a>
-      </div>
-    {% endif %}
-    {% get_deltatime noti.id 2 %}<br>
-  {% endfor %}
+    </div>
+  </div>
 {% endblock content %}

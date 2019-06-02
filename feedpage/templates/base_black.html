@@ -98,7 +98,7 @@
             <i class="material-icons-outlined">notifications_none</i>
           </div>
         </a>
-        <a href="/feeds/myupload">
+        <a href="/feeds/creator/{{request.user.username}}/">
           {% if user.profile.image.url != "/media/False"%}
             <div class="user-face mb-1" style="background: url('{{ user.profile.image.url }}') center / cover;"></div>
           {% else %}
