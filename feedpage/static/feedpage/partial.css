@@ -193,6 +193,13 @@
   background-color: lightgrey;
 }
 
+.user-face-nav {
+  height: 27px;
+  width: 27px;
+  border-radius: 50%;
+  background-color: lightgrey;
+}
+
 .user-face-big {
   height: 30px;
   width: 30px;
@@ -389,11 +396,11 @@
 }
 
 .noti-content-ml {
-  margin-left: 8px;
+  margin-left: 10px;
 }
 
 .noti-content-mr {
-  margin-right: 51px;
+  margin-right: 50px;
 }
 
 .both-img-wrap {
@@ -404,7 +411,7 @@
 .left-img, .right-img {
   position: absolute;
   height: 50px;
-  width: 65%;
+  width: 63%;
 }
 
 .left-img {

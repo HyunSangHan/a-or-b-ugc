@@ -127,6 +127,11 @@ button, input[type="submit"], input[type="reset"] {
   right:0;
 }
 
+.abs-right--10 {
+  position: absolute;
+  right: -10px;
+}
+
 .ellipsis{
   width:100%;
   text-overflow:ellipsis;
