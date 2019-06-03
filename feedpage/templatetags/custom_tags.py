@@ -183,10 +183,9 @@ def is_deletable(fid):
         deletable = True
     return deletable
 
-#test
 @register.simple_tag
-def f_is_checked(nid):
-    noti = Notification.objects.get(id=nid)
-    noti.is_checked = True
-    noti.save()
-    return
+def get_noti_amount(uid):
+    noti = Notification.objects.filter(noti_to=uid, is_mine=False)
+    noti_unchecked = noti.filter(is_checked=False) #지난번기준 미확인알림
+    noti_amount_unchecked = noti_unchecked.count()
+    return noti_amount_unchecked

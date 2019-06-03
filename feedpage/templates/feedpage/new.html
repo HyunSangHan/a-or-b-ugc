@@ -8,46 +8,57 @@
     <div class="contents-margin">
       <form action="/feeds/new/" method="POST" enctype="multipart/form-data">
         {% csrf_token %} 
-          <li class="each-li">
-            <div class="w-100">
-              <input class="content-title w-100 feed-input-border" name="title" placeholder="제목을 입력하세요(30자 이내)" maxlength="30" required/>
-              <div class="font-13 font-light">
-                <input class="font-13 font-light letter-space w-100 feed-input-border" type="text" id="hash_tag" name="hash_tag_raw" placeholder="#이러한 #형태로 #해시태그를 #입력하세요" />
+        <li class="each-li">
+          <div class="w-100">
+            <input class="content-title w-100 feed-input-border" name="title" placeholder="제목을 입력하세요(30자 이내)" maxlength="30" required/>
+            <div class="font-13 font-light">
+              <input class="font-13 font-light letter-space w-100 feed-input-border" type="text" id="hash_tag" name="hash_tag_raw" placeholder="#으로 #구분하여 #한단어씩 #해시태그를 #입력하세요" />
+            </div>
+          </div>
+          <div class="inline-flex v-center mt-1 mb-2">
+            <a href="/accounts/profile/" class="link-grey">
+              <div class="inline-flex">
+                {% if user.profile.image.url != "/media/False" %}
+                  <div class="user-face" style="background: url('{{ user.profile.image.url }}') center / cover;"></div>
+                {% else %}
+                  <div class="user-face" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
+                {% endif %}
+                <span class="font-12 ml-1">
+                  {{user.username}}
+                </span>
+              </div>
+            </a>
+          </div>
+          <!--A와 B를 함께 두는 행-->
+          <div class="each-content">
+            <!-- Image card A-->
+            <div class="mr-1perc demo-card-image mdl-card content-img inner" style="background: url('/static/feedpage/default_avatar.png') center / cover;">
+              <div class="content-label bg-black">
+                <strong>A / </strong>
+                <input type="text" class="w-80 font-15 feed-input-border font-white bg-black" placeholder=" 내용(21자 이내)" name="content_a" maxlength="21" required>
               </div>
             </div>
-            <div class="inline-flex v-center mt-1 mb-2">
-              <a href="/accounts/profile/" class="link-grey">
-                <div class="inline-flex">
-                  {% if user.profile.image.url != "/media/False" %}
-                    <div class="user-face" style="background: url('{{ user.profile.image.url }}') center / cover;"></div>
-                  {% else %}
-                    <div class="user-face" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
-                  {% endif %}
-                  <span class="font-12 ml-1">
-                    {{user.username}}
-                  </span>
-                </div>
-              </a>
-            </div>
-            <!--A와 B를 함께 두는 행-->
-            <div class="each-content">
-              <!-- Image card A-->
-              <div class="mr-1perc demo-card-image mdl-card content-img inner" style="background: url('/static/feedpage/default_avatar.png') center / cover;">
-                <div class="content-label bg-black">
-                  <strong>A / </strong>
-                  <input type="text" class="w-80 font-15 feed-input-border font-white bg-black" placeholder=" 내용(21자 이내)" name="content_a" maxlength="21" required>
-                </div>
+            <!-- Image card B-->
+            <div class="ml-1perc demo-card-image mdl-card content-img inner" >
+              <div class="content-label bg-black">
+                <strong>B / </strong>
+                <input type="text" class="w-80 font-15 feed-input-border font-white bg-black" placeholder=" 내용(21자 이내)" name="content_b" maxlength="21" required>
               </div>
-              <!-- Image card B-->
-              <div class="ml-1perc demo-card-image mdl-card content-img inner" >
-                <div class="content-label bg-black">
-                  <strong>B / </strong>
-                  <input type="text" class="w-80 font-15 feed-input-border font-white bg-black" placeholder=" 내용(21자 이내)" name="content_b" maxlength="21" required>
-                </div>
-                {% comment %} <input name="img_b" class="h-100 m-auto font-14" type="file" accept="image/*" required/> <br /> {% endcomment %}
-              </div>
+              {% comment %} <input name="img_b" class="h-100 m-auto font-14" type="file" accept="image/*" required/> <br /> {% endcomment %}
             </div>
-          </li>
+          </div>
+          <input name="img_a" type="file" accept="image/*" required/> <br />
+          <input name="img_b" type="file" accept="image/*" required/> <br />
+          <br>
+          <button type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+            Submit
+          </button>
+        </li>
+      </form>
+    </div>
+  </div> 
+</div>
+{% endblock content %}
 
 
 {% comment %} 
@@ -58,61 +69,4 @@
                         </div>
                         <!--테스트영역-->
 
-                        <!--테스트영역-->
-                        <div class="filebox">
-                          <label for="ex_file">업로드</label>
-                          <input name="img_a" type="file" id="ex_file" accept="image/*" required>
-                        </div>
-                        <!--테스트영역-->
-                                <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
-                                  Submit
-                                </button>
-                              </form>
-                            </div>
-                          </div>
-                        </div>
 {% endcomment %}
-
-{% comment %} <div class="filebox preview-image">
-  <input class="upload-name" value="파일선택" disabled="disabled" >
-  <label for="input-file">업로드</label>
-  <input type="file" id="input-file" class="upload-hidden">
-</div> {% endcomment %}
-{% comment %} 
-
-<div class="mdl-grid container">
-  <div class="mdl-cell--12-col m-auto contents">
-    <h1>글쓰기....</h1>
-    <form action="/feeds/new/" method="POST" enctype="multipart/form-data">
-      {% csrf_token %} 
-      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-        <input class="mdl-textfield__input" type="text" id="title" name="title" maxlength="30" required>
-        <label class="mdl-textfield__label" for="title">Title</label>
-      </div>
-
-<!--대칭 형태로 입력창도 UI 수정 필요-->
-      <br>
-      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-        <input class="mdl-textfield__input" type="text" id="content_a" name="content_a" maxlength="21" required>
-        <label class="mdl-textfield__label" for="content_a">A</label>
-      </div>
-      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-        <input class="mdl-textfield__input" type="text" id="content_b" name="content_b" maxlength="21" required>
-        <label class="mdl-textfield__label" for="content_b">B</label>
-      </div>
-      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-        <input class="mdl-textfield__input" type="text" id="hash_tag" name="hash_tag_raw">
-        <label class="mdl-textfield__label" for="hash_tag">Hash Tag (#이러한 #형태로 #입력하세요)</label>
-      </div>
-
-<!--임시-->
-      <input name="img_a" type="file" accept="image/*" required/> <br />
-      <input name="img_b" type="file" accept="image/*" required/> <br />
-      <br>
-      <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
-        Submit
-      </button>
-    </form>
-  </div>
-</div> {% endcomment %}
-{% endblock content %}
