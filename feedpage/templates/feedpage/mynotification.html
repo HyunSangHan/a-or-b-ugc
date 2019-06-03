@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
 {% load custom_tags %}
+<!--1피드투표/2피드댓글/3신고/4신고숨김/5댓글좋아요/6구독/7구독새글-->
 
 {% block content %}
   <div class="mdl-grid container">
     <div class="mdl-cell--12-col m-auto contents noti">
       <div class="contents-margin">
-      <!--1피드투표/2피드댓글/3신고/4신고숨김/5댓글좋아요/6구독/7구독새글-->
-        {% for noti in noti_checked %}
-          <!-- 1.피드투표 -->
+        {% for noti in noti %}
           {% if noti.noti_type == 1 %}
+          <!-- 1.피드투표 -->
             <li class="each-noti">
               <a href="/feeds/creator/{{ noti.noti_from.user.username }}">
                 {% if noti.noti_from.image.url != "/media/False"%}
@@ -34,8 +34,8 @@
                 </div>
               </a>
             </li>
-          <!-- 2.피드댓글 -->
           {% elif noti.noti_type == 2 %}
+          <!-- 2.피드댓글 -->
             <li class="each-noti">
               <a href="/feeds/creator/{{ noti.noti_from.user.username }}">
                 {% if noti.noti_from.image.url != "/media/False"%}
@@ -61,16 +61,16 @@
                 </div>
               </a>
             </li>
-          <!-- 3.신고 -->
           {% elif noti.noti_type == 3 %}
+          <!-- 3.신고 -->
             <li class="each-noti">
               <a href="/feeds/{{ noti.feed.id }}">
-                <div class="user-face-bigger m-0" style="background: url('/static/feedpage/alert.jpeg') center / cover;"></div>
+                <div class="user-face-bigger m-0" style="background: url('/static/feedpage/yellowcard.png') center / cover;"></div>
               </a>
               <a href="/feeds/{{ noti.feed.id }}">
-                <div class="flex-center">
+                <div class="flex-center w-100 h-100">
                   <div class="noti-content-ml noti-content-mr font-13 font-black">
-                    아젠다에 대한 신고 접수: <strong>{{noti.feed.title}}</strong>
+                    <strong>{{noti.feed.title}}</strong> 아젠다에 대한 신고 접수
                     <div class="font-grey">
                       {% get_deltatime noti.id 2 %}
                     </div>
@@ -84,11 +84,11 @@
                 </div>
               </a>
             </li>
-          <!-- 4.신고숨김 -->
           {% elif noti.noti_type == 4 %}
+          <!-- 4.신고숨김 -->
             <li class="each-noti">
               <a href="/feeds/{{ noti.feed.id }}">
-                <div class="user-face-bigger m-0" style="background: url('/static/feedpage/alert.jpeg') center / cover;"></div>
+                <div class="user-face-bigger m-0" style="background: url('/static/feedpage/redcard.png') center / cover;"></div>
               </a>
               <a href="/feeds/{{ noti.feed.id }}">
                 <div class="flex-center">
@@ -104,8 +104,8 @@
                 </div>
               </a>
             </li>
-          <!-- 5.댓글좋아요 -->
           {% elif noti.noti_type == 5 %}
+          <!-- 5.댓글좋아요 -->
             <li class="each-noti">
               <a href="/feeds/creator/{{ noti.noti_from.user.username }}">
                 {% if noti.noti_from.image.url != "/media/False"%}
@@ -131,8 +131,8 @@
                 </div>
               </a>
             </li>
-          <!-- 6.구독 -->
           {% elif noti.noti_type == 6 %}
+          <!-- 6.구독 -->
             <li class="each-noti">
               <a href="/feeds/creator/{{ noti.noti_from.user.username }}">
                 {% if noti.noti_from.image.url != "/media/False"%}
@@ -158,8 +158,8 @@
                 </div>
               </a>
             </li>
-          <!-- 7.구독새글 -->
           {% elif noti.noti_type == 7 %}
+          <!-- 7.구독새글 -->
             <li class="each-noti">
               <a href="/feeds/creator/{{ noti.noti_from.user.username }}">
                 {% if noti.noti_from.image.url != "/media/False"%}
