@@ -34,6 +34,16 @@
     margin-right: 8px;
   }  
 
+  .page-content-two-tabs {
+    width: 100% !important;
+    height: 50px;
+    padding: 0 !important;
+    margin-bottom: -11px;
+    display: inline-flex;
+    background-color: white;
+    padding: 5px;
+    margin: 0 -15px 7px -8px
+  }
 }
 
 @media (min-width: 576px) {
@@ -79,6 +89,16 @@
     background-color: grey;
   }
 
+  .page-content-two-tabs {
+    width: calc(100% + 20px) !important;
+    height: 50px;
+    padding: 0 !important;
+    margin-bottom: -11px;
+    display: inline-flex;
+    background-color: white;
+    padding: 5px;
+    margin: 0 -15px 7px -5px
+  }
 }
 
 @media (min-width: 768px) {
@@ -112,5 +132,16 @@
   .demo-card-image.mdl-card {
     /* width: 256px; */
     height: 365px;
+  }
+
+  .page-content-two-tabs {
+    width: calc(100% + 20px) !important;
+    height: 50px;
+    padding: 0 !important;
+    margin-bottom: -11px;
+    display: inline-flex;
+    background-color: white;
+    padding: 5px;
+    margin: 0 -15px 7px -5px
   }
 }

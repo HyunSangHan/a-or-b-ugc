@@ -72,17 +72,6 @@
   margin-bottom: -12px;
 }
 
-.page-content-two-tabs {
-  width: calc(100% + 20px) !important;
-  height: 50px;
-  padding: 0 !important;
-  margin-bottom: -11px;
-  display: inline-flex;
-  background-color: white;
-  padding: 5px;
-  margin: 0 -15px 7px -5px
-}
-
 .page-content-two-tabs:hover {
   cursor: pointer;
 }
