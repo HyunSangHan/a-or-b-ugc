@@ -2,7 +2,8 @@ from django.db import models
 from django.utils import timezone
 from faker import Faker
 from django.contrib.auth.models import User
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_save
+from django.contrib.auth.hashers import make_password, is_password_usable
 from django.dispatch import receiver 
 from django.core.validators import MaxValueValidator, MinValueValidator
 import random
@@ -38,21 +39,26 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.username
 
-    def seed(count):
+    def seed(min_count, max_count):
         myfake = Faker('ko_KR')
-        for i in range(count):
+        for i in range(min_count, max_count):
             username = myfake.name()
-            email = myfake.email()
+            email = '{}@{}.com'.format(i, i)
             password = '1234' #수정 필요???
             gender = myfake.boolean(chance_of_getting_true=20)
             birthday = myfake.date_this_century(before_today=True, after_today=False)
             politics = random.randrange(1,6)
             region = random.randrange(1,9)
-            user = User.objects.create(
+
+            user = User.objects.create_user(
                 username = username,
-                email = email,
-                password = password 
+                password = password,
+                email = email
             )
+
+            # user.set_password('1234')
+            # user.save()
+
             profile = user.profile
             profile.is_male = gender
             profile.birthday = birthday
@@ -69,6 +75,11 @@ class Follow(models.Model):
 
     def __str__(self):
         return '{} follows {}'.format(self.follow_from, self.follow_to)
+
+# @receiver(pre_save, sender=User)
+# def password_hashing(instance, **kwargs):
+#     if not is_password_usable(instance.password):
+#         instance.password = make_password(instance.password)
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):  
