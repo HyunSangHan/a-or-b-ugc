@@ -2,19 +2,26 @@ from django.db import models
 from django.utils import timezone
 from faker import Faker
 from django.contrib.auth.models import User
-from django.db.models.signals import post_save, pre_save
-from django.contrib.auth.hashers import make_password, is_password_usable
+from django.db.models.signals import post_save
 from django.dispatch import receiver 
 from django.core.validators import MaxValueValidator, MinValueValidator
 import random
-# Create your models here.
+from imagekit.models import ProcessedImageField
+from imagekit.processors import Thumbnail, ResizeToFill
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     follows = models.ManyToManyField('self', through = 'Follow', blank=True, symmetrical=False)
     birthday = models.DateField(blank=True, null=True)
     is_male = models.BooleanField(blank=True, null=True)
-    image = models.ImageField(blank=True, null=True, upload_to='profile_img')
+    image = ProcessedImageField(
+		upload_to = 'profile_img',
+		processors = [ResizeToFill(60, 60)],
+		format = 'JPEG',
+		# options = {'quality': 50},
+        blank = True,
+        null = True
+        )
     created_at = models.DateTimeField(default=timezone.now)
     notichecked_at = models.DateTimeField(default=timezone.now)
     left_level = models.IntegerField(
@@ -55,9 +62,6 @@ class Profile(models.Model):
                 password = password,
                 email = email
             )
-
-            # user.set_password('1234')
-            # user.save()
 
             profile = user.profile
             profile.is_male = gender

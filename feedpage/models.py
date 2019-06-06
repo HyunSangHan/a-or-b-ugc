@@ -7,6 +7,8 @@ from django.dispatch import receiver
 from django.utils import timezone
 # from django.core.validators import MaxValueValidator, MinValueValidator
 import random
+from imagekit.models import ProcessedImageField
+from imagekit.processors import Thumbnail, ResizeToFill
 
 class HashTag(models.Model):
     tag = models.TextField(null=True)
@@ -22,8 +24,20 @@ class Feed(models.Model):
     content_b = models.CharField(max_length=30)
     upvote_users = models.ManyToManyField(User, blank=True, related_name='upvote_feeds', through='Upvote')
     matched_tags = models.ManyToManyField(HashTag, blank=True, related_name='tagged_feeds', through='TagRelation')
-    img_a = models.ImageField(blank=True, null=True, upload_to='feed_img')
-    img_b = models.ImageField(blank=True, null=True, upload_to='feed_img') #have to fix
+    img_a = ProcessedImageField(
+		upload_to = 'feed_img',
+		processors = [ResizeToFill(730, 730)],
+		format = 'JPEG',
+		options = {'quality': 50},
+        null = True
+        )
+    img_b = ProcessedImageField(
+		upload_to = 'feed_img',
+		processors = [ResizeToFill(730, 730)],
+		format = 'JPEG',
+		options = {'quality': 50},
+        null = True
+        )
 # 수정가능여부
 # 익명여부
     created_at = models.DateTimeField(default=timezone.now)
@@ -43,15 +57,27 @@ class Feed(models.Model):
     def __str__(self):
         return self.title
 
-    # def seed(count): 
-    #     myfake = Faker('ko_KR')
-    #     for i in range(count):
-    #         Feed.objects.create(
-    #             title = myfake.bs(),
-    #             editnow = False,
-    #             content_a = myfake.catch_phrase(),
-    #             content_b = myfake.catch_phrase(),
-    #         )
+    def seed(feed_amount, user_amount): 
+        myfake = Faker('ko_KR')
+        for i in range(feed_amount):
+            uid = random.randrange(1,user_amount)
+            Feed.objects.create(
+                title = myfake.bs(),
+                creator = User.objects.get(id=uid),
+                content_a = myfake.catch_phrase(),
+                content_b = myfake.catch_phrase(),
+                img_a = '/static/feedpage/default_avatar.png',
+                img_b = '/static/feedpage/default_avatar.png',
+            )
+
+        #되는지 다음번 db초기화때 확인필요
+        for j in range(user_amount):
+            for i in range(feed_amount):
+                Upvote.objects.create(
+                    user = User.objects.get(id=j),
+                    feed = Feed.objects.get(id=i),
+                    about_a = myfake.boolean(chance_of_getting_true=40),
+                )
 
 class FeedComment(models.Model):
     reactor = models.ForeignKey(User, null=True, on_delete= models.CASCADE)

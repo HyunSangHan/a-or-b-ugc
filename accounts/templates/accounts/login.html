@@ -7,27 +7,32 @@
 {{ error }}
 {% endif %}
 <form method="post" action="{% url 'login' %}">
-    {% csrf_token %}
-    <p>
-        ID(이메일주소):
-        <input type="text" name="email" value="">
-  	</p>
-  	<p>
-        비밀번호:
-	    <input type="password" name="password" value="">
-  	</p>
-    <input type="hidden" name="next" value="{{next}}" />
-    <input type="submit" value="로그인" />
+  {% csrf_token %}
+  <p>
+      ID(이메일주소):
+      <input type="text" name="email" value="">
+  </p>
+  <p>
+      비밀번호:
+    <input type="password" name="password" value="">
+  </p>
+  <input type="hidden" name="next" value="{{next}}" />
+  <input type="submit" value="로그인" />
 </form>
 
+
+<hr>
+{% load socialaccount %}
+{% providers_media_js %}
+<a href="{% provider_login_url 'facebook' %}">페북 로그인</a><br>
 
 <!--내장 기능 활용 시-->
 {% comment %} <h1>로그인</h1>
 <form method="post" action="{% url 'login' %}">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="hidden" name="next" value="{{next}}" />
-    <input type="submit" value="로그인" />
+  {% csrf_token %}
+  {{ form.as_p }}
+  <input type="hidden" name="next" value="{{next}}" />
+  <input type="submit" value="로그인" />
 </form> {% endcomment %}
 
 

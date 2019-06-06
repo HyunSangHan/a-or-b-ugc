@@ -99,6 +99,8 @@ def edit(request, id):
         feed.title = request.POST['title']
         feed.content_a = request.POST['content_a']
         feed.content_b = request.POST['content_b']
+        feed.img_a = request.FILES.get('img_a', False)
+        feed.img_b = request.FILES.get('img_b', False)
         hash_tag_raw = request.POST['hash_tag_raw']
         hash_tag_all = hash_tag_raw.split("#")
         for hash_tag in hash_tag_all:
