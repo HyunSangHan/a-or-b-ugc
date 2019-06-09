@@ -32,23 +32,41 @@
           <!--A와 B를 함께 두는 행-->
           <div class="each-content">
             <!-- Image card A-->
-            <div class="mr-1perc demo-card-image mdl-card content-img inner" style="background: url('/static/feedpage/default_avatar.png') center / cover;">
+            <div class="mr-1perc demo-card-image mdl-card content-img inner uploaded-a">
               <div class="content-label bg-black">
                 <strong>A / </strong>
-                <input type="text" class="w-80 font-15 feed-input-border font-white bg-black" placeholder=" 내용(21자 이내)" name="content_a" maxlength="21" required>
+                <input type="text" class="w-80 font-15 feed-input-border font-white bg-black content_a" placeholder=" 내용(21자 이내)" name="content_a" maxlength="21" required>
+              </div>
+              <div class="flex-center w-100 h-100">
+                <img src="/static/feedpage/empty_content_img.png" alt="empty-image" style="width: 40%;">
               </div>
             </div>
             <!-- Image card B-->
-            <div class="ml-1perc demo-card-image mdl-card content-img inner" >
+            <div class="ml-1perc demo-card-image mdl-card content-img inner uploaded-b" >
               <div class="content-label bg-black">
                 <strong>B / </strong>
-                <input type="text" class="w-80 font-15 feed-input-border font-white bg-black" placeholder=" 내용(21자 이내)" name="content_b" maxlength="21" required>
+                <input type="text" class="w-80 font-15 feed-input-border font-white bg-black content_b" placeholder=" 내용(21자 이내)" name="content_b" maxlength="21" required>
               </div>
-              {% comment %} <input name="img_b" class="h-100 m-auto font-14" type="file" accept="image/*" required/> <br /> {% endcomment %}
+              <div class="flex-center w-100 h-100">
+                <img src="/static/feedpage/empty_content_img.png" alt="empty-image" style="width: 40%;">
+              </div>
             </div>
           </div>
-          <input name="img_a" type="file" accept="image/*" required/> <br />
-          <input name="img_b" type="file" accept="image/*" required/> <br />
+
+
+
+          <div class="flex-center" style="height: 80px; width: 80px; background-color: grey;">
+            <label for="img_a" style="height: 80px; width: 80px;">
+              A업로드
+            </label>
+            <input id="img_a" class="upload-hidden upload-a" name="img_a" type="file" accept="image/*" required/> <br />
+          </div>
+          <div class="flex-center" style="height: 80px; width: 80px; background-color: grey;">
+            <label for="img_b" style="height: 80px; width: 80px;">
+              B업로드
+            </label>
+            <input id="img_b" class="upload-hidden upload-b" name="img_b" type="file" accept="image/*" required/>
+          </div>
           <br>
           <button type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
             Submit
@@ -59,14 +77,3 @@
   </div> 
 </div>
 {% endblock content %}
-
-
-{% comment %} 
-                        <!--테스트영역-->
-                        <div class="filebox">
-                          <label for="ex_file">업로드</label>
-                          <input name="img_b" type="file" id="ex_file" accept="image/*" required>
-                        </div>
-                        <!--테스트영역-->
-
-{% endcomment %}

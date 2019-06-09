@@ -7,7 +7,7 @@ from django.db.models import Q
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from operator import attrgetter
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 import urllib
 import json
 from .reuse_function import make_notification
@@ -180,23 +180,28 @@ def delete_comment(request, id, cid):
 
 def upvote_comment(request, id, cid):
     # if request.method == 'POST':
-    c = FeedComment.objects.get(id=cid)
-    upvote_list = c.commentupvote_set.filter(user_id = request.user.id)
-    if upvote_list.count() > 0:
-        c.commentupvote_set.get(user_id = request.user.id).delete()
+    if request.is_ajax:
+        c = FeedComment.objects.get(id=cid)
+        upvote_list = c.commentupvote_set.filter(user_id = request.user.id)
+        context = {}
+        if upvote_list.count() > 0:
+            c.commentupvote_set.get(user_id = request.user.id).delete()
+            context['btn_name'] = 'favorite_border'
+        else:
+            CommentUpvote.objects.create(user_id = request.user.id, feedcomment_id = cid)
+            context['btn_name'] = 'favorite'
+            make_notification(5, cid, request.user.id)
+
+        c.total_upvote = c.commentupvote_set.count()
+        c.save()
+        context['total_upvote'] = c.total_upvote
+        return JsonResponse(context)
     else:
-        CommentUpvote.objects.create(user_id = request.user.id, feedcomment_id = cid)
-        # 노티 만들기
-        make_notification(5, cid, request.user.id)
-
-    c.total_upvote = c.commentupvote_set.count()
-    c.save()
-
-    try:
-        next = request.META['HTTP_REFERER']
-    except:
-        next = '/feeds/'
-    return redirect('%s'%next)
+        try:
+            next = request.META['HTTP_REFERER']
+        except:
+            next = '/feeds/'
+        return redirect('%s'%next)
 
 # 리팩토링 필요하겠음
 def feed_upvote_a(request, pk):

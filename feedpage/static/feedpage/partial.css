@@ -1,8 +1,15 @@
+.filebox .upload-display { display: inline-block; margin-right: 5px; margin-bottom: 0; }
+.filebox .upload-thumb-wrap { /* 추가될 이미지를 감싸는 요소 */ display: inline-block; width: 54px; padding: 2px; vertical-align: middle; border: 1px solid #ddd; border-radius: 5px; background-color: #fff; }
+.filebox .upload-display img { /* 추가될 이미지 */ display: block; max-width: 100%; width: 100% \9; height: auto; }
+.upload-hidden {
+  display: none;
+}
+
 .toggle-comments {
     cursor: pointer;
   }
 
-.all-comments, .comment-heart-btn-on, .comment-heart-btn-off {
+.all-comments {
   display: none;
 }
 
@@ -151,6 +158,10 @@
 
 .more-btn > div {
   margin-right: 20px !important;
+}
+
+.more-btn >i:hover {
+  cursor: pointer;
 }
 
 .more-info > div {

@@ -199,19 +199,13 @@
                   {% endif %} {% endcomment %}
                   {% get_comment_upvote_tf feed.id comment_a.id user.id as comment_upvote_tf %}
                   {% if user.is_authenticated %}
-                    {% if comment_upvote_tf %}
-                      <div class="ml-auto more-btn">
-                        <a href="/feeds/{{ feed.id }}/comments/{{ comment_a.id }}/upvote">
-                          <i class="material-icons comment-heart v-center m-auto link-grey font-red ml-1">favorite</i>
-                        </a>
-                      </div>
-                    {% else %}
-                      <div class="ml-auto more-btn">
-                        <a href="/feeds/{{ feed.id }}/comments/{{ comment_a.id }}/upvote">
-                          <i class="material-icons comment-heart v-center m-auto link-grey ml-1">favorite_border</i>
-                        </a>
-                      </div>
-                    {% endif %}
+                    <div class="ml-auto more-btn comment-heart-btn" data-feedid="{{ feed.id }}" data-commentid="{{ comment_a.id }}">
+                      {% if comment_upvote_tf %}
+                        <i class="material-icons comment-heart v-center m-auto link-grey font-red ml-1">favorite</i>
+                      {% else %}
+                        <i class="material-icons comment-heart v-center m-auto link-grey ml-1">favorite_border</i>
+                      {% endif %}
+                    </div>
                   {% endif %}
                 </div>
               <!--B베스트댓글-->
@@ -225,45 +219,13 @@
                     {% endif %} {% endcomment %}
                   {% get_comment_upvote_tf feed.id comment_b.id user.id as comment_upvote_tf %}
                   {% if user.is_authenticated %}
-                    {% if comment_upvote_tf %}
-                      <div class="ml-auto more-btn">
-                        <a href="/feeds/{{ feed.id }}/comments/{{ comment_b.id }}/upvote">
-                          <i class="material-icons comment-heart v-center m-auto link-grey font-red ml-1">favorite</i>
-                        </a>
-                      </div>
-                    {% else %}
-                      <div class="ml-auto more-btn">
-                        <a href="/feeds/{{ feed.id }}/comments/{{ comment_b.id }}/upvote">
-                          <i class="material-icons comment-heart v-center m-auto link-grey ml-1">favorite_border</i>
-                        </a>
-                      </div>
-                    {% endif %}
-
-                    <!--AJAX 실패한 케이스-->
-                    {% comment %} {% if comment_upvote_tf %}
-                      <div class="ml-auto more-btn comment-heart-btn-on">
-                        <a href="/feeds/{{ feed.id }}/comments/{{ comment_b.id }}/upvote" class="comment-heart-btn">
-                          <i class="material-icons comment-heart v-center m-auto link-grey font-red ml-1">favorite</i>
-                        </a>
-                      </div>
-                      <div class="ml-auto more-btn comment-heart-btn-off">
-                        <a href="/feeds/{{ feed.id }}/comments/{{ comment_b.id }}/upvote" class="comment-heart-btn">
-                          <i class="material-icons comment-heart v-center m-auto link-grey ml-1">favorite_border</i>
-                        </a>
-                      </div>
-                    {% else %}
-                      <div class="ml-auto more-btn comment-heart-btn-off">
-                        <a href="/feeds/{{ feed.id }}/comments/{{ comment_b.id }}/upvote" class="comment-heart-btn">
-                          <i class="material-icons comment-heart v-center m-auto link-grey ml-1">favorite_border</i>
-                        </a>
-                      </div>
-                      <div class="ml-auto more-btn comment-heart-btn-on">
-                        <a href="/feeds/{{ feed.id }}/comments/{{ comment_b.id }}/upvote" class="comment-heart-btn">
-                          <i class="material-icons comment-heart v-center m-auto link-grey font-red ml-1 comment-heart-btn-off">favorite</i>
-                        </a>
-                      </div>
-                    {% endif %} {% endcomment %}
-
+                    <div class="ml-auto more-btn comment-heart-btn" data-feedid="{{ feed.id }}" data-commentid="{{ comment_b.id }}">
+                      {% if comment_upvote_tf %}
+                        <i class="material-icons comment-heart v-center m-auto link-grey font-red ml-1">favorite</i>
+                      {% else %}
+                        <i class="material-icons comment-heart v-center m-auto link-grey ml-1">favorite_border</i>
+                      {% endif %}
+                    </div>
                   {% endif %}
                 </div>
               {% endif %}
@@ -292,19 +254,13 @@
                       {% endif %} {% endcomment %}
                     {% get_comment_upvote_tf feed.id c.id user.id as comment_upvote_tf %}
                     {% if user.is_authenticated %}
-                      {% if comment_upvote_tf %}
-                        <div class="ml-auto more-btn">
-                          <a href="/feeds/{{ feed.id }}/comments/{{ c.id }}/upvote">
-                            <i class="material-icons comment-heart v-center m-auto link-grey font-red ml-1">favorite</i>
-                          </a>
-                        </div>
-                      {% else %}
-                        <div class="ml-auto more-btn">
-                          <a href="/feeds/{{ feed.id }}/comments/{{ c.id }}/upvote">
-                            <i class="material-icons comment-heart v-center m-auto link-grey ml-1">favorite_border</i>
-                          </a>
-                        </div>
-                      {% endif %}
+                      <div class="ml-auto more-btn comment-heart-btn" data-feedid="{{ feed.id }}" data-commentid="{{ c.id }}">
+                        {% if comment_upvote_tf %}
+                          <i class="material-icons comment-heart v-center m-auto link-grey font-red ml-1">favorite</i>
+                        {% else %}
+                          <i class="material-icons comment-heart v-center m-auto link-grey ml-1">favorite_border</i>
+                        {% endif %}
+                      </div>
                     {% endif %}
                   </div>
                 {% endfor %}
