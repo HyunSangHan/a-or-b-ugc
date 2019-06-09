@@ -14,6 +14,83 @@ $(document).ready(() => {
   //클립보드에 복사
   $('.element').CopyToClipboard();
 
+  // 신고하기
+  $('.report-js').on('click', function(event) {
+    if (confirm('정말 신고하실 건가요?')) {
+      const $this = $(this);
+      const fid = $this.attr("data-feedid");
+      $.ajax({
+        url: `/feeds/${fid}/report`,
+        type: "GET",
+        dataType: "json",
+        success: function (data) {
+          console.log(data.total_report);
+          console.log(data.report_before);
+          if (data.report_before === 0) {
+            console.log('정상적으로 신고되었습니다.');
+            $this.addClass('font-lightgrey');
+          } else {
+            alert('이미 신고하셨습니다.');
+            console.log('이미 신고하셨습니다.');
+          }
+          // $this.text(data.total_report);
+        },
+        error: function(response, status, error) {
+          alert('error');
+          console.log(response, status, error);
+        },
+        complete: function(response) {
+          console.log(response);
+        },
+      });
+    }
+  });
+
+  // 구독하기 -> 수정 필요할 가능성 존재
+  $('.subscribe-js').on('click', function(event) {
+    const $this = $(this);
+    const creatorid = $this.attr("data-creatorid");
+    $.ajax({
+      url: `/feeds/${creatorid}/follow`,
+      type: "GET",
+      dataType: "json",
+      success: function (data) {
+        $this.text(data.message);
+      },
+      error: function(response, status, error) {
+        alert('error');
+        console.log(response, status, error);
+      },
+      complete: function(response) {
+        console.log(response);
+      },
+    });
+  });
+
+  // 글 삭제
+  $('.delete-feed-js').on('click', function(event) {
+    if (confirm('정말 삭제하실 건가요?')) {
+      const $this = $(this);
+      const fid = $this.attr("data-feedid");
+      $.ajax({
+        url: `/feeds/${fid}/delete`,
+        type: "GET",
+        dataType: "json",
+        success: function (data) {
+          console.log(data);
+          $this.parent().parent().parent().parent().parent().remove();
+        },
+        error: function(response, status, error) {
+          alert('error');
+          console.log(response, status, error);
+        },
+        complete: function(response) {
+          console.log(response);
+        },
+      });
+    }
+  });
+
   // 댓글 하트
   $('.comment-heart-btn').on('click', function(event) {
     const $this = $(this);

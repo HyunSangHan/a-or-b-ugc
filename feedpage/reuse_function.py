@@ -32,7 +32,7 @@ def make_notification(noti_type, fid, uid):
     elif noti_type == 6: #구독
         noti_from = Profile.objects.get(user_id=uid)
         noti_to = Profile.objects.get(user_id=fid)
-        follow = Follow.objects.get(follow_to=noti_from, follow_from=noti_to)
+        follow = Follow.objects.get(follow_from=noti_from, follow_to=noti_to)
         Notification.objects.create(follow=follow, noti_from=noti_from, noti_to=noti_to, noti_type=noti_type)
     elif noti_type == 7: #구독새글 (서비스 커지면 이부분이 가장 부하를 줄 수 있겠음)
         feed = Feed.objects.get(id=fid)

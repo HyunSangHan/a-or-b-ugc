@@ -30,23 +30,21 @@
                   <div data-clipboard-text="localhost:8000/feeds/{{ feed.id }}" onclick="return alert('콘텐츠의 주소가 클립보드에 복사되었습니다.')">공유하기</div>
                   {% if user.is_authenticated %}
                     {% if request.user != feed.creator %}
-                      <div>
-                        <a href = "/feeds/{{ feed.creator.id }}/follow/" class="link-black">
+                      <div class="subscribe-js" data-creatorid="{{ feed.creator.id }}">
+                        {% comment %} <a href = "/feeds/{{ feed.creator.id }}/follow/" class="link-black"> {% endcomment %}
                           {% if request.user.profile not in feed.creator.profile.follows.all %}
                             구독하기
                           {% else %}
                             구독취소
                           {% endif %}
-                        </a>
+                        {% comment %} </a> {% endcomment %}
                       </div>
                       <div>
                         {% get_report_tf feed.id user.id as report_tf %}
                         {% if report_tf %}
                           <span class="font-lightgrey" onclick="return alert('이미 신고하셨습니다.')">신고하기</span>
                         {% else %}
-                          <a href="/feeds/{{ feed.id }}/report/" onclick="return confirm('정말 신고하실 건가요?')" class="link-black">
-                            신고하기
-                          </a>
+                          <span class="report-js" data-feedid="{{ feed.id }}">신고하기</span>
                         {% endif %}
       {% comment %} <span>신고({{feed.report_set.count }}건)</span> {% endcomment %}
                       </div>
@@ -60,9 +58,9 @@
                         {% endif %}                                
                       </div>
                       <div>
-                        <a href="/feeds/{{ feed.id }}/delete/" onclick="return confirm('정말 삭제하실 건가요?')" class="link-black">
+                        <span class="delete-feed-js" data-feedid="{{ feed.id }}">
                           삭제하기
-                        </a>
+                        </span>
                       </div>
                     {% endif %}
                   {% endif %}

@@ -82,16 +82,22 @@ def show(request, id):
 
 def delete(request, id):
     feed = Feed.objects.get(id=id)
-    if feed.creator == request.user:
-        feed.delete()
-        next = request.META['HTTP_REFERER']
+    if request.is_ajax:
+        if feed.creator == request.user:
+            feed.delete()
+        context = {'message': 'Deleted'}
+        return JsonResponse(context)
     else:
-        print("비정상적인 수정 접근 시도")
-        try:
+        if feed.creator == request.user:
+            feed.delete()
             next = request.META['HTTP_REFERER']
-        except:
-            next = '/feeds/'
-    return redirect('%s'%next)
+        else:
+            print("비정상적인 수정 접근 시도")
+            try:
+                next = request.META['HTTP_REFERER']
+            except:
+                next = '/feeds/'
+        return redirect('%s'%next)
 
 def edit(request, id):
     feed = Feed.objects.get(id=id)
@@ -257,41 +263,68 @@ def feed_upvote_b(request, pk):
     return redirect('%s'%next)
 
 def follow_manager(request, pk):
-    follow_from = Profile.objects.get(user_id = request.user.id)
-    follow_to = Profile.objects.get(user_id = pk)
-    following_already = Follow.objects.filter(follow_from=follow_from, follow_to=follow_to)
-
-    if following_already.count() > 0:
-        following_already.first().delete()
+    if request.is_ajax:
+        follow_from = Profile.objects.get(user_id = request.user.id)
+        follow_to = Profile.objects.get(user_id = pk)
+        print(follow_from)
+        print(follow_to)
+        following_already = Follow.objects.filter(follow_from=follow_from, follow_to=follow_to)
+        print(following_already.count())
+        if following_already.count() > 0:
+            following_already.first().delete()
+            context = {'message': '구독하기'}
+        else:
+            Follow.objects.create(follow_from=follow_from, follow_to=follow_to)
+            context = {'message': '구독취소'}
+            # 노티 만들기
+            make_notification(6, pk, request.user.id)
+        return JsonResponse(context)
     else:
-        Follow.objects.create(follow_from=follow_from, follow_to=follow_to)
-        # 노티 만들기
-        make_notification(6, pk, request.user.id)
-
-
-    try:
-        next = request.META['HTTP_REFERER']
-    except:
-        next = '/feeds/'
-    return redirect('%s'%next)
+        # follow_from = Profile.objects.get(user_id = request.user.id)
+        # follow_to = Profile.objects.get(user_id = pk)
+        # following_already = Follow.objects.filter(follow_from=follow_from, follow_to=follow_to)
+        # if following_already.count() > 0:
+        #     following_already.first().delete()
+        # else:
+        #     Follow.objects.create(follow_from=follow_from, follow_to=follow_to)
+        #     # 노티 만들기
+        #     make_notification(6, pk, request.user.id)
+        try:
+            next = request.META['HTTP_REFERER']
+        except:
+            next = '/feeds/'
+        return redirect('%s'%next)
 
 def report(request, pk):
-    # if request.method == 'POST':    
     feed = Feed.objects.get(id = pk)
-    report_count = feed.report_set.filter(user_id = request.user.id).count()
-    if report_count == 0:
-        Report.objects.create(user_id = request.user.id, feed_id = feed.id)
-        # 노티 만들기
-        make_notification(3, pk, request.user.id)
-    elif report_count > 9:
-        # 노티만들기
-        make_notification(4, pk, request.user.id)
+    report_count_mine = feed.report_set.filter(user_id = request.user.id).count()
+    report_count = Report.objects.filter(feed_id = feed.id).count()
+    if request.is_ajax:
+        if report_count_mine == 0:
+            Report.objects.create(user_id = request.user.id, feed_id = feed.id)
+            context = {'total_report': report_count+1, 'report_before': 0}
+            # 노티 만들기
+            if report_count > 9:
+                make_notification(4, pk, request.user.id)
+            else:
+                make_notification(3, pk, request.user.id)
+        else: 
+            context = {'total_report': report_count, 'report_before': 1}
+        return JsonResponse(context)
 
-    try:
-        next = request.META['HTTP_REFERER']
-    except:
-        next = '/feeds/'
-    return redirect('%s'%next)
+    else:
+        if report_count_mine == 0:
+            Report.objects.create(user_id = request.user.id, feed_id = feed.id)
+            # 노티 만들기
+            if report_count > 9:
+                make_notification(4, pk, request.user.id)
+            else:
+                make_notification(3, pk, request.user.id)
+        try:
+            next = request.META['HTTP_REFERER']
+        except:
+            next = '/feeds/'
+        return redirect('%s'%next)
 
 def statistics(request, id):
     if request.method == "POST":
