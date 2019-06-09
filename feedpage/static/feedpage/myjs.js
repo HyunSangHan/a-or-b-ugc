@@ -134,22 +134,28 @@ $(document).ready(() => {
       },
       dataType: 'json',
       success: function(data) {
-        console.log(data);
-        const str = `
-<div>
-  <div class="comment w-100 v-center mtb-1 inline-flex">
-    <div class="sideicon norm"> ${data.comment.upvote_side} </div>
-    <div class="font-11 v-center mtb-auto comment-reactor"><strong>${data.comment.reactor}</strong></div>
-    <div class="font-14 v-center mtb-auto comment-content ellipsis">${data.comment.content}</div>
-    <div class="ml-auto more-btn">
-      <a href="/feeds/${id}/comments/${data.comment.id}/upvote">
-        <i class="material-icons comment-heart v-center m-auto link-grey ml-1">favorite_border</i>
-      </a>
-    </div>
-  </div>
-</div>`;
+        var side = ``;
+        if (data.comment.upvote_side === 1) {
+          side = `<div class="sideicon norm"> A </div>`;
+        } else if (data.comment.upvote_side === 2) {
+          side = `<div class="sideicon norm"> B </div>`;
+        }
+
         const $comments = $this.parent().parent().siblings('.comment-wrap');
-        $comments.append(str);
+        $comments.append(`
+          <div>
+            <div class="comment w-100 v-center mtb-1 inline-flex">
+            `+side+`
+              <div class="font-11 v-center mtb-auto comment-reactor"><strong>${data.comment.reactor}</strong></div>
+              <div class="font-14 v-center mtb-auto comment-content ellipsis">${data.comment.content}</div>
+              <div class="ml-auto more-btn">
+                <a href="/feeds/${id}/comments/${data.comment.id}/upvote">
+                  <i class="material-icons comment-heart v-center m-auto link-grey ml-1">favorite_border</i>
+                </a>
+              </div>
+            </div>
+          </div>
+        `);
         $this.siblings('.comment-input').val('');
       },
       error: function(response, status, error) {
