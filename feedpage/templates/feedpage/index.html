@@ -95,8 +95,8 @@
             <!--A와 B를 함께 두는 행-->
             <div class="each-content">
               <!-- Image card A-->
-              <div class="mr-1perc demo-card-image mdl-card content-img" style="background: url('{{ feed.img_a.url }}') center / cover;">
-                <a href="/feeds/{{ feed.id }}/upvote_a" class="w-100 h-100">
+              <div class="mr-1perc demo-card-image mdl-card content-img content-a-js" style="background: url('{{ feed.img_a.url }}') center / cover;" data-feedid="{{ feed.id }}" data-feedside="a">
+                {% comment %} <a href="/feeds/{{ feed.id }}/upvote_a" class="w-100 h-100"> {% endcomment %}
                   {% get_upvote_color feed.id user.id as choice %}
                   <!--lose일때 A 라벨링-->
                   {% if choice == "B" %}
@@ -134,11 +134,11 @@
                       </div>
                     {% endif %}
                   {% endif %}
-                </a>
+                {% comment %} </a> {% endcomment %}
               </div>
               <!-- Image card B-->
-              <div class="ml-1perc demo-card-image mdl-card content-img" style="background: url('{{ feed.img_b.url }}') center / cover;">
-                <a href="/feeds/{{ feed.id }}/upvote_b" class="w-100 h-100">
+              <div class="ml-1perc demo-card-image mdl-card content-img content-b-js" style="background: url('{{ feed.img_b.url }}') center / cover;" data-feedid="{{ feed.id }}" data-feedside="b">
+                {% comment %} <a href="/feeds/{{ feed.id }}/upvote_b" class="w-100 h-100"> {% endcomment %}
 
                   <!--lose일때 B 라벨링-->
                   {% if choice == "A" %}
@@ -177,7 +177,7 @@
                       </div>
                     {% endif %}
                   {% endif %}
-                </a>
+                {% comment %} </a> {% endcomment %}
               </div>
             </div>
 

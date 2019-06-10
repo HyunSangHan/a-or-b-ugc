@@ -209,58 +209,150 @@ def upvote_comment(request, id, cid):
             next = '/feeds/'
         return redirect('%s'%next)
 
+
 # 리팩토링 필요하겠음
 def feed_upvote_a(request, pk):
-    # if request.method == 'POST':
-    # 포스트로 안날려도 되나????????
-
-    # feed id로 한번 필터링하고(정확히는, 불러오고)
     feed = Feed.objects.get(id = pk)
-    # user id로 한번 더 필터링하고
-    try:
+    if request.is_ajax:
         upvote_list = feed.upvote_set.filter(user_id = request.user.id)
-        feedcomment_list = feed.feedcomment_set.filter(reactor_id = request.user.id)
+        upvote_total = feed.upvote_set.count() + 1
+        upvote_a = feed.upvote_set.filter(about_a=True).count() + 1
+        upvote_perc_a = "{:.0f}".format((upvote_a / upvote_total)*100)
+        upvote_b = feed.upvote_set.filter(about_a=False).count()
+        upvote_perc_b = "{:.0f}".format((upvote_b / upvote_total)*100)
         if upvote_list.count() > 0:
             if upvote_list.first().about_a:
                 feed.upvote_set.get(user_id = request.user.id).delete()
+                upvote_a -= 2
+                context = {
+                    'upvote_after': 0,
+                    'upvote_before': 1,
+                    'upvote_a': upvote_a,
+                    'perc_a': upvote_perc_a,
+                    'upvote_b': upvote_b,
+                    'perc_b': upvote_perc_b
+                    }
             else:
+                upvote_b -= 1
+                upvote_total -= 1
+                upvote_perc_a = "{:.0f}".format((upvote_a / upvote_total)*100)
+                upvote_perc_b = "{:.0f}".format((upvote_b / upvote_total)*100)
                 feed.upvote_set.get(user_id = request.user.id).delete()
                 Upvote.objects.create(user_id = request.user.id, feed_id = feed.id, about_a = True)
+                context = {
+                    'upvote_after': 1,
+                    'upvote_before': 2,
+                    'upvote_a': upvote_a,
+                    'perc_a': upvote_perc_a,
+                    'upvote_b': upvote_b,
+                    'perc_b': upvote_perc_b
+                    }
         else:
             Upvote.objects.create(user_id = request.user.id, feed_id = feed.id, about_a = True)
             # 노티 만들기
             make_notification(1, pk, request.user.id)
+            context = {
+                'upvote_after': 1,
+                'upvote_before': 0,
+                'upvote_a': upvote_a,
+                'perc_a': upvote_perc_a,
+                'upvote_b': upvote_b,
+                'perc_b': upvote_perc_b
+                }
+        return JsonResponse(context)
+
+    else:
         try:
-            next = request.META['HTTP_REFERER']
+            upvote_list = feed.upvote_set.filter(user_id = request.user.id)
+            # feedcomment_list = feed.feedcomment_set.filter(reactor_id = request.user.id)
+            if upvote_list.count() > 0:
+                if upvote_list.first().about_a:
+                    feed.upvote_set.get(user_id = request.user.id).delete()
+                else:
+                    feed.upvote_set.get(user_id = request.user.id).delete()
+                    Upvote.objects.create(user_id = request.user.id, feed_id = feed.id, about_a = True)
+            else:
+                Upvote.objects.create(user_id = request.user.id, feed_id = feed.id, about_a = True)
+                # 노티 만들기
+                make_notification(1, pk, request.user.id)
+            try:
+                next = request.META['HTTP_REFERER']
+            except:
+                next = '/feeds/'
         except:
-            next = '/feeds/'
-    except:
-        next = '/accounts/login'
-    return redirect('%s'%next)
+            next = '/accounts/login'
+        return redirect('%s'%next)
 
 def feed_upvote_b(request, pk):
-    # if request.method == 'POST':
     feed = Feed.objects.get(id = pk)
-    try:
+    if request.is_ajax:
         upvote_list = feed.upvote_set.filter(user_id = request.user.id)
-        feedcomment_list = feed.feedcomment_set.filter(reactor_id = request.user.id)
+        upvote_total = feed.upvote_set.count() + 1
+        upvote_a = feed.upvote_set.filter(about_a=True).count()
+        upvote_perc_a = "{:.0f}".format((upvote_a / upvote_total)*100)
+        upvote_b = feed.upvote_set.filter(about_a=False).count() +1
+        upvote_perc_b = "{:.0f}".format((upvote_b / upvote_total)*100)
         if upvote_list.count() > 0:
-            if upvote_list.first().about_a: 
+            if upvote_list.first().about_a:
                 feed.upvote_set.get(user_id = request.user.id).delete()
+                upvote_a -= 1
+                upvote_total -= 1
+                upvote_perc_a = "{:.0f}".format((upvote_a / upvote_total)*100)
+                upvote_perc_b = "{:.0f}".format((upvote_b / upvote_total)*100)
                 Upvote.objects.create(user_id = request.user.id, feed_id = feed.id, about_a = False)
+                context = {
+                    'upvote_after': 2,
+                    'upvote_before': 1,
+                    'upvote_a': upvote_a,
+                    'perc_a': upvote_perc_a,
+                    'upvote_b': upvote_b,
+                    'perc_b': upvote_perc_b
+                    }
             else:
                 feed.upvote_set.get(user_id = request.user.id).delete()
+                upvote_b -= 2
+                context = {
+                    'upvote_after': 0,
+                    'upvote_before': 2,
+                    'upvote_a': upvote_a,
+                    'perc_a': upvote_perc_a,
+                    'upvote_b': upvote_b,
+                    'perc_b': upvote_perc_b
+                    }
         else:
             Upvote.objects.create(user_id = request.user.id, feed_id = feed.id, about_a = False)
             # 노티 만들기
             make_notification(1, pk, request.user.id)
+            context = {
+                'upvote_after': 2,
+                'upvote_before': 0,
+                'upvote_a': upvote_a,
+                'perc_a': upvote_perc_a,
+                'upvote_b': upvote_b,
+                'perc_b': upvote_perc_b
+                }
+        return JsonResponse(context)
+    else:
         try:
-            next = request.META['HTTP_REFERER']
+            upvote_list = feed.upvote_set.filter(user_id = request.user.id)
+            feedcomment_list = feed.feedcomment_set.filter(reactor_id = request.user.id)
+            if upvote_list.count() > 0:
+                if upvote_list.first().about_a: 
+                    feed.upvote_set.get(user_id = request.user.id).delete()
+                    Upvote.objects.create(user_id = request.user.id, feed_id = feed.id, about_a = False)
+                else:
+                    feed.upvote_set.get(user_id = request.user.id).delete()
+            else:
+                Upvote.objects.create(user_id = request.user.id, feed_id = feed.id, about_a = False)
+                # 노티 만들기
+                make_notification(1, pk, request.user.id)
+            try:
+                next = request.META['HTTP_REFERER']
+            except:
+                next = '/feeds/'
         except:
-            next = '/feeds/'
-    except:
-        next = '/accounts/login'
-    return redirect('%s'%next)
+            next = '/accounts/login'
+        return redirect('%s'%next)
 
 def follow_manager(request, pk):
     if request.is_ajax:

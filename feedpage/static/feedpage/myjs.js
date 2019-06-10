@@ -14,6 +14,133 @@ $(document).ready(() => {
   //클립보드에 복사
   $('.element').CopyToClipboard();
 
+  // 투표하기
+  $('.content-a-js, .content-b-js').on('click', function(event) {
+    const $this = $(this);
+    const siblingA = $this.siblings('.content-a-js')
+    const siblingB = $this.siblings('.content-b-js')
+    const fid = $this.attr("data-feedid");
+    const side = $this.attr("data-feedside");
+    console.log(side + " clicked")
+    $.ajax({
+      url: `/feeds/${fid}/upvote_${side}`,
+      type: "GET",
+      dataType: "json",
+      success: function (data) {
+        var upvote_before = data.upvote_before;
+        var upvote_after = data.upvote_after;
+        var clicked = `
+        <div class="content-result-bg flex-center w-100 h-100 bg-black">
+        </div>
+        `;
+        var unclicked = `
+        <div class="content-result-bg flex-center w-100 h-100 bg-grey op-7">
+        </div>
+        `;
+        var resultA = `
+        <div class="content-result flex-center w-100 h-100">
+          <div class="mt-3">
+            <span class="content-result-perc">`+data.perc_a+`</span>%
+            <div class="w-100 mt-2" style="text-align: center;">
+              ( `+data.upvote_a+` )
+            </div>
+          </div>
+        </div>
+        `;
+        var resultB = `
+        <div class="content-result flex-center w-100 h-100">
+          <div class="mt-3">
+            <span class="content-result-perc">`+data.perc_b+`</span>%
+            <div class="w-100 mt-2" style="text-align: center;">
+              ( `+data.upvote_b+` )
+            </div>
+          </div>
+        </div>
+        `;
+        if (upvote_after === 1) {
+          if (upvote_before === 0) {
+            $this.prepend(resultA);
+            $this.prepend(clicked);
+            siblingB.children('.content-label').toggleClass('bg-black');
+            siblingB.children('.content-label').toggleClass('bg-grey');
+            siblingB.prepend(resultB);
+            siblingB.prepend(unclicked);
+          } else if (upvote_before === 1) {
+            $this.children('.content-result').remove();
+            $this.children('.content-result-bg').remove();
+            siblingB.children('.content-label').toggleClass('bg-black');
+            siblingB.children('.content-label').toggleClass('bg-grey');
+            siblingB.children('.content-result').remove();
+            siblingB.children('.content-result-bg').remove();
+          } else if (upvote_before === 2) {
+            $this.children('.content-result').remove();
+            $this.children('.content-result-bg').remove();
+            siblingB.children('.content-result').remove();
+            siblingB.children('.content-result-bg').remove();
+            $this.children('.bg-grey').addClass('bg-black');
+            $this.children('.bg-grey').removeClass('bg-grey');
+            $this.prepend(resultA);
+            $this.prepend(clicked);
+            siblingB.children('.content-label').removeClass('bg-black');
+            siblingB.children('.content-label').addClass('bg-grey');
+            siblingB.prepend(resultB);
+            siblingB.prepend(unclicked);
+          }
+        } else if (upvote_after === 2) {
+          if (upvote_before === 0) {
+            $this.prepend(resultB);
+            $this.prepend(clicked);
+            siblingA.children('.content-label').toggleClass('bg-black');
+            siblingA.children('.content-label').toggleClass('bg-grey');
+            siblingA.prepend(resultA);
+            siblingA.prepend(unclicked);
+          } else if (upvote_before === 1) {
+            $this.children('.content-result').remove();
+            $this.children('.content-result-bg').remove();
+            siblingA.children('.content-result').remove();
+            siblingA.children('.content-result-bg').remove();
+            $this.children('.bg-grey').addClass('bg-black');
+            $this.children('.bg-grey').removeClass('bg-grey');
+            $this.prepend(resultB);
+            $this.prepend(clicked);
+            siblingA.children('.content-label').removeClass('bg-black');
+            siblingA.children('.content-label').addClass('bg-grey');
+            siblingA.prepend(resultA);
+            siblingA.prepend(unclicked);
+          } else if (upvote_before === 2) {
+            $this.children('.content-result').remove();
+            $this.children('.content-result-bg').remove();
+            siblingA.children('.content-label').toggleClass('bg-black');
+            siblingA.children('.content-label').toggleClass('bg-grey');
+            siblingA.children('.content-result').remove();
+            siblingA.children('.content-result-bg').remove();
+          }
+
+        } else {
+          $this.children('.content-result').remove();
+          $this.children('.content-result-bg').remove();
+          siblingA.children('.bg-grey').addClass('bg-black');
+          siblingA.children('.bg-grey').removeClass('bg-grey');
+          siblingA.children('.content-result').remove();
+          siblingA.children('.content-result-bg').remove();
+          siblingB.children('.bg-grey').addClass('bg-black');
+          siblingB.children('.bg-grey').removeClass('bg-grey');
+          siblingB.children('.content-result').remove();
+          siblingB.children('.content-result-bg').remove();
+      }
+      },
+      error: function(response, status, error) {
+        alert('error');
+        console.log(response, status, error);
+      },
+      complete: function(response) {
+      },
+    });
+  });
+
+
+
+
   // 신고하기
   $('.report-js').on('click', function(event) {
     if (confirm('정말 신고하실 건가요?')) {
@@ -91,7 +218,7 @@ $(document).ready(() => {
     }
   });
 
-  // 댓글 하트
+  // 댓글 하트(좋아요)
   $('.comment-heart-btn').on('click', function(event) {
     const $this = $(this);
     const fid = $this.attr("data-feedid");
@@ -148,10 +275,8 @@ $(document).ready(() => {
             `+side+`
               <div class="font-11 v-center mtb-auto comment-reactor"><strong>${data.comment.reactor}</strong></div>
               <div class="font-14 v-center mtb-auto comment-content ellipsis">${data.comment.content}</div>
-              <div class="ml-auto more-btn">
-                <a href="/feeds/${id}/comments/${data.comment.id}/upvote">
-                  <i class="material-icons comment-heart v-center m-auto link-grey ml-1">favorite_border</i>
-                </a>
+              <div class="ml-auto more-btn comment-heart-btn" data-feedid="${id}" data-commentid="${data.comment.id}">
+                <i class="material-icons comment-heart v-center m-auto link-grey ml-1">favorite_border</i>
               </div>
             </div>
           </div>
