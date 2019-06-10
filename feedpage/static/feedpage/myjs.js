@@ -176,13 +176,15 @@ $(document).ready(() => {
   // 구독하기 -> 수정 필요할 가능성 존재
   $('.subscribe-js').on('click', function(event) {
     const $this = $(this);
-    const creatorid = $this.attr("data-creatorid");
+    // const creatorId = $this.data('creatorid') 
+    const creatorId = $this.attr("data-creatorid");
+    const thisCreator = $('.subscribe-js[data-creatorid="'+creatorId+'"]')
     $.ajax({
-      url: `/feeds/${creatorid}/follow`,
+      url: `/feeds/${creatorId}/follow`,
       type: "GET",
       dataType: "json",
       success: function (data) {
-        $this.text(data.message);
+        thisCreator.text(data.message);
       },
       error: function(response, status, error) {
         alert('error');
@@ -277,7 +279,7 @@ $(document).ready(() => {
               <div class="font-14 v-center mtb-auto comment-content ellipsis">${data.comment.content}</div>
               <div class="ml-auto more-btn comment-heart-btn" data-feedid="${id}" data-commentid="${data.comment.id}">
                 <i class="material-icons comment-heart v-center m-auto link-grey ml-1">favorite_border</i>
-              </div>
+              </div
             </div>
           </div>
         `);
