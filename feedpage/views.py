@@ -433,7 +433,12 @@ def creator(request, creator_name):
     if creators.count() > 0:
         creator = creators.first()
         feeds = Feed.objects.filter(creator=creator).order_by('-updated_at', '-created_at')
-        return render(request, 'feedpage/creator.html', {'feeds': feeds, 'creator': creator})
+        has_feeds = False
+        if len(feeds) == 0:
+            has_feeds = False
+        else:
+            has_feeds = True
+        return render(request, 'feedpage/creator.html', {'has_feeds': has_feeds, 'feeds': feeds, 'creator': creator})
     else:
         try:
             next = request.META['HTTP_REFERER']
@@ -450,7 +455,18 @@ def mysubscribe(request):
         feeds = feeds + list(my_sub_user.feed_set.all())
     feeds = sorted(feeds , key = lambda x: x.updated_at, reverse=True)
 
-    return render(request, 'feedpage/mysubscribe.html', {'feeds': feeds, 'my_subs': my_subs})
+    has_subs, has_feeds = False, False
+
+    if len(my_subs) == 0:
+        has_subs = False
+    else:
+        has_subs = True
+        if len(feeds) == 0:
+            has_feeds = False
+        else:
+            has_feeds = True
+
+    return render(request, 'feedpage/mysubscribe.html', {'feeds': feeds, 'my_subs': my_subs, 'has_subs': has_subs, 'has_feeds': has_feeds})
 
 def myupload(request):
     feeds = Feed.objects.filter(creator_id=request.user.id).order_by('-updated_at', '-created_at')
@@ -475,5 +491,13 @@ def mynotification(request):
 
     profile.notichecked_at = timezone.now()
     profile.save()
-    return render(request, 'feedpage/mynotification.html', {'noti': noti, 'noti_unchecked': noti_unchecked, 'noti_checked': noti_checked})
+
+    has_noti = False
+
+    if len(noti) == 0:
+        has_noti = False
+    else:
+        has_noti = True
+
+    return render(request, 'feedpage/mynotification.html', {'has_noti':has_noti, 'noti': noti, 'noti_unchecked': noti_unchecked, 'noti_checked': noti_checked})
 

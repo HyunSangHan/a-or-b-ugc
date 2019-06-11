@@ -176,7 +176,6 @@ $(document).ready(() => {
   // 구독하기 -> 수정 필요할 가능성 존재
   $('.subscribe-js').on('click', function(event) {
     const $this = $(this);
-    // const creatorId = $this.data('creatorid') 
     const creatorId = $this.attr("data-creatorid");
     const thisCreator = $('.subscribe-js[data-creatorid="'+creatorId+'"]')
     $.ajax({
@@ -222,6 +221,7 @@ $(document).ready(() => {
 
   // 댓글 하트(좋아요)
   $('.comment-heart-btn').on('click', function(event) {
+    console.log("click heart");
     const $this = $(this);
     const fid = $this.attr("data-feedid");
     const cid = $this.attr("data-commentid");
@@ -272,14 +272,12 @@ $(document).ready(() => {
 
         const $comments = $this.parent().parent().siblings('.comment-wrap');
         $comments.append(`
-          <div>
-            <div class="comment w-100 v-center mtb-1 inline-flex">
-            `+side+`
-              <div class="font-11 v-center mtb-auto comment-reactor"><strong>${data.comment.reactor}</strong></div>
-              <div class="font-14 v-center mtb-auto comment-content ellipsis">${data.comment.content}</div>
-              <div class="ml-auto more-btn comment-heart-btn" data-feedid="${id}" data-commentid="${data.comment.id}">
-                <i class="material-icons comment-heart v-center m-auto link-grey ml-1">favorite_border</i>
-              </div
+          <div class="comment w-100 v-center mtb-1 inline-flex">
+          `+side+`
+            <div class="font-11 v-center mtb-auto comment-reactor"><strong>${data.comment.reactor}</strong></div>
+            <div class="font-14 v-center mtb-auto comment-content ellipsis">${data.comment.content}</div>
+            <div class="ml-auto more-btn comment-heart-btn" data-feedid="${id}" data-commentid="${data.comment.id}">
+              <i class="material-icons comment-heart v-center m-auto link-grey ml-1">favorite_border</i>
             </div>
           </div>
         `);
@@ -329,7 +327,7 @@ $(document).ready(() => {
     if(window.FileReader && $this[0].files[0]){
       content_a = document.getElementsByClassName('content_a')[0].value;
     }
-    var eachContent = $this.parent().parent().children('.each-content');
+    var eachContent = $this.parent().parent();
     eachContent.children('.uploaded-a').remove();
     if(window.FileReader && $this[0].files[0]){
       // if () {  
@@ -338,11 +336,15 @@ $(document).ready(() => {
           img_a = e.target.result;
           eachContent.prepend(`
             <div class="mr-1perc demo-card-image mdl-card content-img inner uploaded-a" style="background: url('`+img_a+`') center / cover;">
-              <div class="content-label bg-black">
-                <strong>A / </strong>
-                <input type="text" class="w-80 font-15 feed-input-border font-white bg-black content_a" value="`+content_a+`" placeholder=" 내용(21자 이내)" name="content_a" maxlength="21" required>
-              </div>
+              <label for="img_a" style="height: 100%; width: 100%;">
+                <div class="content-label bg-black">
+                  <strong>A / </strong>
+                  <input type="text" class="w-80 font-15 feed-input-border font-white bg-black content_a" value="`+content_a+`" placeholder=" 내용(21자 이내)" name="content_a" maxlength="21" required>
+                </div>
+                </label>
+              <input id="img_a" class="upload-hidden upload-a" name="img_a" type="file" accept="image/*" required/>
             </div>
+
           `); 
         // }
       }
@@ -371,7 +373,7 @@ $(document).ready(() => {
     if(window.FileReader && $this[0].files[0]){
       content_b = document.getElementsByClassName('content_b')[0].value;
     }
-    var eachContent = $this.parent().parent().children('.each-content');
+    var eachContent = $this.parent().parent();
     eachContent.children('.uploaded-b').remove();
     if(window.FileReader && $this[0].files[0]){
       // if () {  
@@ -380,10 +382,13 @@ $(document).ready(() => {
           img_b = e.target.result;
           eachContent.append(`
             <div class="ml-1perc demo-card-image mdl-card content-img inner uploaded-b" style="background: url('`+img_b+`') center / cover;">
+              <label for="img_b" style="height: 100%; width: 100%;">
               <div class="content-label bg-black">
-                <strong>B / </strong>
-                <input type="text" class="w-80 font-15 feed-input-border font-white bg-black content_b" value="`+content_b+`" placeholder=" 내용(21자 이내)" name="content_b" maxlength="21" required>
-              </div>
+                  <strong>B / </strong>
+                  <input type="text" class="w-80 font-15 feed-input-border font-white bg-black content_b" value="`+content_b+`" placeholder=" 내용(21자 이내)" name="content_b" maxlength="21" required>
+                </div>
+              </label>
+              <input id="img_b" class="upload-hidden upload-b" name="img_b" type="file" accept="image/*" required/>
             </div>
           `); 
         // }

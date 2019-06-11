@@ -5,6 +5,11 @@
 {% block content %}
   <div class="mdl-grid container">
     <div class="mdl-cell--12-col m-auto contents noti">
+      {% if not has_noti %}
+        <div class="h-100 w-100 flex-center font-13">
+          도착한 알림이 없습니다.
+        </div>
+      {% endif %}
       <div class="contents-margin">
 
         <!--unchecked-->
