@@ -219,8 +219,9 @@ $(document).ready(() => {
     }
   });
 
+
   // 댓글 하트(좋아요)
-  $('.comment-heart-btn').on('click', function(event) {
+  $(document).on('click', '.comment-heart-btn', function() {
     console.log("click heart");
     const $this = $(this);
     const fid = $this.attr("data-feedid");
