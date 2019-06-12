@@ -157,21 +157,22 @@ def get_bestcomment_b(fid):
 
 # best댓글 제외한 댓글 전체 다 뽑아내기(index용)
 @register.simple_tag
-def get_ordered_comment_remain(fid):
+def get_ordered_comment_rest(fid):
     feed = Feed.objects.get(id=fid)
-    comments_a_all = feed.feedcomment_set.filter(upvote_side=1)
-    comments_a = comments_a_all.order_by('-total_upvote', 'created_at')
-    comments_a_first = comments_a[1:]
-    comments_b_all = feed.feedcomment_set.filter(upvote_side=2)
-    comments_b = comments_b_all.order_by('-total_upvote', 'created_at')
-    comments_b_first = comments_b[1:]
-    comments_etc_all = feed.feedcomment_set.filter(upvote_side=0)
+    a_is_best = feed.feedcomment_set.filter(upvote_side=1).exclude(total_upvote=0).count()
+    b_is_best = feed.feedcomment_set.filter(upvote_side=2).exclude(total_upvote=0).count()
+    comments_a, comments_b = [], []
+    if a_is_best > 0 and b_is_best > 0:
+        comments_a = list(feed.feedcomment_set.filter(upvote_side=1).order_by('-total_upvote', 'created_at')[1:])
+        comments_b = list(feed.feedcomment_set.filter(upvote_side=2).order_by('-total_upvote', 'created_at')[1:])
+    else:
+        comments_a = list(feed.feedcomment_set.filter(upvote_side=1).order_by('-total_upvote', 'created_at'))
+        comments_b = list(feed.feedcomment_set.filter(upvote_side=2).order_by('-total_upvote', 'created_at'))
+    comments_etc = list(feed.feedcomment_set.filter(upvote_side=0))
+    comments_all = comments_a + comments_b + comments_etc
+    comments_all = sorted(comments_all, key=lambda x: x.created_at)
+    comments = sorted(comments_all, key=lambda x: x.total_upvote, reverse=True)
 
-    comments_a.exclude(pk__in=list(comments_a_first)).delete()
-    comments_b.exclude(pk__in=list(comments_b_first)).delete()
-    comments_all = comments_a + comments_b + comments_etc_all
-    #댓글 랭킹로직: [1순위] 좋아요 많이받은순 / [2순위] 오래된순. 나중에는 각자 선택할 수 있게끔 구현 필요
-    comments = comments_all.order_by('-total_upvote', 'created_at')
     return comments
 
 # 내 댓글만 뽑아내기(index용)

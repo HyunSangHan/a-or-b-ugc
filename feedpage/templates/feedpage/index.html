@@ -253,14 +253,26 @@
               {% endif %}
             </div>
             <!--show 안으로 들어갈 부분(전체댓글)-->
-            {% if feed.feedcomment_set.count > 100 %}
+            {% if feed.feedcomment_set.count > 60 %}
               <a href="/feeds/{{ feed.id }}">
-                <div class="font-12 link-light-black font-light mt-2">댓글 {{feed.feedcomment_set.count}}개 모두 보기</div>
+                <div class="font-12 link-light-black font-light mt-2">
+                  {% if comment_a and comment_b %}
+                    댓글 {{feed.feedcomment_set.count|add:"-2"}}개 더보기
+                  {% else %}
+                    댓글 {{feed.feedcomment_set.count}}개 더보기
+                  {% endif %}
+                </div>
               </a>
             {% elif feed.feedcomment_set.count != 0 %}
-              <div class="font-12 link-light-black font-light mt-2 toggle-comments">댓글 {{feed.feedcomment_set.count}}개 모두 보기</div>
+              <div class="font-12 link-light-black font-light mt-2 toggle-comments">
+                {% if comment_a and comment_b %}
+                  댓글 {{feed.feedcomment_set.count|add:"-2"}}개 더보기
+                {% else %}
+                  댓글 {{feed.feedcomment_set.count}}개 더보기
+                {% endif %}
+              </div>
               <div class="all-comments">
-                {% get_ordered_comment feed.id as comments %}
+                {% get_ordered_comment_rest feed.id as comments %}
                 {% for c in comments %}
                   {% get_side feed.id c.id as side %}
                   <div class="comment w-100 v-center mtb-1 inline-flex">
