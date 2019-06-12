@@ -186,7 +186,7 @@
                 <div class="comment w-100 v-center mt-1 inline-flex">
                   <div class="sideicon best">A / BEST</div>
                   <div class="font-11 v-center mtb-auto comment-reactor"><strong>{{ comment_a.reactor }}</strong></div>
-                  <div class="font-14 v-center mtb-auto comment-content">{{ comment_a.content }}</div>
+                  <div class="font-14 v-center mtb-auto comment-content ellipsis">{{ comment_a.content }}</div>
                   {% get_comment_upvote_tf feed.id comment_a.id user.id as comment_upvote_tf %}
                   {% if user.is_authenticated %}
                     <div class="ml-auto more-btn comment-heart-btn" data-feedid="{{ feed.id }}" data-commentid="{{ comment_a.id }}">
@@ -196,6 +196,22 @@
                         <i class="material-icons comment-heart v-center m-auto link-grey ml-1">favorite_border</i>
                       {% endif %}
                     </div>
+                  {% endif %}
+                </div>
+                <div class="comment-heart-num-row comment-heart-num-row-hide">
+                  {% if comment_a.total_upvote > 0 %}
+                    {% if comment_upvote_tf %}
+                      <div class="font-red font-mid comment-heart-num">
+                        x{{comment_a.total_upvote}}
+                      </div>
+                    {% else %}
+                      <div class="font-grey comment-heart-num">
+                        x{{comment_a.total_upvote}}
+                      </div>
+                    {% endif %} 
+                  {% else %}
+                    <div class="comment-heart-num">
+                    </div> 
                   {% endif %}
                 </div>
               <!--B베스트댓글-->
@@ -216,6 +232,22 @@
                         <i class="material-icons comment-heart v-center m-auto link-grey ml-1">favorite_border</i>
                       {% endif %}
                     </div>
+                  {% endif %}
+                </div>
+                <div class="comment-heart-num-row comment-heart-num-row-hide">
+                  {% if comment_b.total_upvote > 0 %}
+                    {% if comment_upvote_tf %}
+                      <div class="font-red font-mid comment-heart-num">
+                        x{{comment_b.total_upvote}}
+                      </div>
+                    {% else %}
+                      <div class="font-grey comment-heart-num">
+                        x{{comment_b.total_upvote}}
+                      </div>
+                    {% endif %} 
+                  {% else %}
+                    <div class="comment-heart-num">
+                    </div> 
                   {% endif %}
                 </div>
               {% endif %}
@@ -246,6 +278,22 @@
                         {% else %}
                           <i class="material-icons comment-heart v-center m-auto link-grey ml-1">favorite_border</i>
                         {% endif %}
+                      </div>
+                    {% endif %}
+                  </div>
+                  <div class="comment-heart-num-row">
+                    {% if c.total_upvote > 0 %}
+                      {% if comment_upvote_tf %}
+                        <div class="font-red font-mid comment-heart-num">
+                          x{{c.total_upvote}}
+                        </div>
+                      {% else %}
+                        <div class="font-grey comment-heart-num">
+                          x{{c.total_upvote}}
+                        </div>
+                      {% endif %} 
+                    {% else %}
+                      <div class="comment-heart-num">
                       </div>
                     {% endif %}
                   </div>

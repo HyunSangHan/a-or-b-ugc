@@ -155,6 +155,25 @@ def get_bestcomment_b(fid):
             return comment_b
     return
 
+# best댓글 제외한 댓글 전체 다 뽑아내기(index용)
+@register.simple_tag
+def get_ordered_comment_remain(fid):
+    feed = Feed.objects.get(id=fid)
+    comments_a_all = feed.feedcomment_set.filter(upvote_side=1)
+    comments_a = comments_a_all.order_by('-total_upvote', 'created_at')
+    comments_a_first = comments_a[1:]
+    comments_b_all = feed.feedcomment_set.filter(upvote_side=2)
+    comments_b = comments_b_all.order_by('-total_upvote', 'created_at')
+    comments_b_first = comments_b[1:]
+    comments_etc_all = feed.feedcomment_set.filter(upvote_side=0)
+
+    comments_a.exclude(pk__in=list(comments_a_first)).delete()
+    comments_b.exclude(pk__in=list(comments_b_first)).delete()
+    comments_all = comments_a + comments_b + comments_etc_all
+    #댓글 랭킹로직: [1순위] 좋아요 많이받은순 / [2순위] 오래된순. 나중에는 각자 선택할 수 있게끔 구현 필요
+    comments = comments_all.order_by('-total_upvote', 'created_at')
+    return comments
+
 # 내 댓글만 뽑아내기(index용)
 @register.simple_tag
 def get_my_comment(fid, uid):

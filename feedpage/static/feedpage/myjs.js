@@ -3,6 +3,7 @@ $(document).ready(() => {
   $('.toggle-comments').on('click', function(event) {
     const $this = $(this);
     $this.siblings('.all-comments').slideDown();
+    $this.prev().children('.comment-heart-num-row-hide').fadeIn();
     $this.hide();
   });
 
@@ -138,9 +139,6 @@ $(document).ready(() => {
     });
   });
 
-
-
-
   // 신고하기
   $('.report-js').on('click', function(event) {
     if (confirm('정말 신고하실 건가요?')) {
@@ -224,6 +222,8 @@ $(document).ready(() => {
   $(document).on('click', '.comment-heart-btn', function() {
     console.log("click heart");
     const $this = $(this);
+    const $heart = $this.children('.comment-heart');
+    const $heartNum = $this.parent().next().children('.comment-heart-num');
     const fid = $this.attr("data-feedid");
     const cid = $this.attr("data-commentid");
 
@@ -232,9 +232,21 @@ $(document).ready(() => {
       type: "GET",
       dataType: "json",
       success: function (data) {
-        console.log(data);
-        $this.children('.comment-heart').text(data.btn_name);
-        $this.children('.comment-heart').toggleClass('font-red');
+        btnName = data.btn_name;
+        totalUpvote = data.total_upvote;
+        console.log(btnName);
+        console.log(totalUpvote);
+        $heart.text(data.btn_name);
+        $heart.toggleClass('font-red');
+        $heartNum.toggleClass('font-red');
+        $heartNum.toggleClass('font-grey');
+        if (btnName === 'favorite' && totalUpvote === 1) {
+          $heartNum.text('x' + totalUpvote);
+        } else if (btnName === 'favorite_border' && totalUpvote === 0) {
+          $heartNum.text('');
+        } else {
+          $heartNum.text('x' + totalUpvote);
+        }
       },
       error: function(response, status, error) {
         alert('error');
@@ -328,42 +340,26 @@ $(document).ready(() => {
     if(window.FileReader && $this[0].files[0]){
       content_a = document.getElementsByClassName('content_a')[0].value;
     }
-    var eachContent = $this.parent().parent();
-    eachContent.children('.uploaded-a').remove();
+    var eachContent = $this.parent();
     if(window.FileReader && $this[0].files[0]){
-      // if () {  
-        var reader = new FileReader();
-        reader.onload = function(e) {
-          img_a = e.target.result;
-          eachContent.prepend(`
-            <div class="mr-1perc demo-card-image mdl-card content-img inner uploaded-a" style="background: url('`+img_a+`') center / cover;">
-              <label for="img_a" style="height: 100%; width: 100%;">
-                <div class="content-label bg-black">
-                  <strong>A / </strong>
-                  <input type="text" class="w-80 font-15 feed-input-border font-white bg-black content_a" value="`+content_a+`" placeholder=" 내용(21자 이내)" name="content_a" maxlength="21" required>
-                </div>
-                </label>
-              <input id="img_a" class="upload-hidden upload-a" name="img_a" type="file" accept="image/*" required/>
-            </div>
-
-          `); 
-        // }
+      eachContent.children('.uploaded-a').remove();
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        img_a = e.target.result;
+        eachContent.prepend(`
+          <div class="mr-1perc demo-card-image mdl-card content-img inner uploaded-a" style="background: url('`+img_a+`') center / cover;">
+            <label for="img_a" style="height: 100%; width: 100%;">
+              <div class="content-label bg-black">
+                <strong>A / </strong>
+                <input type="text" class="w-80 font-15 feed-input-border font-white bg-black content_a" value="`+content_a+`" placeholder=" 내용(21자 이내)" name="content_a" maxlength="21" required>
+              </div>
+            </label>
+          </div>
+        `); 
       }
       reader.readAsDataURL($this[0].files[0]);
     } else {
       console.log('cancel editing the photo A');
-      // $(this)[0].select();
-      // $(this)[0].blur();
-      eachContent.prepend(`
-        <div class="mr-1perc demo-card-image mdl-card content-img inner uploaded-a" style="background: url('`+img_a+`') center / cover;">
-          <div class="content-label bg-black">
-            <strong>A / </strong>
-            <input type="text" class="w-80 font-15 feed-input-border font-white bg-black content_a" value="`+content_a+`" placeholder=" 내용(21자 이내)" name="content_a" maxlength="21" required>
-          </div>
-        </div>
-      `);
-      // var img = $(this).siblings('.upload-display').find('img');
-      // img[0].style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(enable='true',sizingMethod='scale',src=\""+imgSrc+"\")";
     }
   });
 
@@ -374,37 +370,26 @@ $(document).ready(() => {
     if(window.FileReader && $this[0].files[0]){
       content_b = document.getElementsByClassName('content_b')[0].value;
     }
-    var eachContent = $this.parent().parent();
-    eachContent.children('.uploaded-b').remove();
+    var eachContent = $this.parent();
     if(window.FileReader && $this[0].files[0]){
-      // if () {  
-        var reader = new FileReader();
-        reader.onload = function(e) {
-          img_b = e.target.result;
-          eachContent.append(`
-            <div class="ml-1perc demo-card-image mdl-card content-img inner uploaded-b" style="background: url('`+img_b+`') center / cover;">
-              <label for="img_b" style="height: 100%; width: 100%;">
+      eachContent.children('.uploaded-b').remove();
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        img_b = e.target.result;
+        eachContent.append(`
+          <div class="ml-1perc demo-card-image mdl-card content-img inner uploaded-b" style="background: url('`+img_b+`') center / cover;">
+            <label for="img_b" style="height: 100%; width: 100%;">
               <div class="content-label bg-black">
-                  <strong>B / </strong>
-                  <input type="text" class="w-80 font-15 feed-input-border font-white bg-black content_b" value="`+content_b+`" placeholder=" 내용(21자 이내)" name="content_b" maxlength="21" required>
-                </div>
-              </label>
-              <input id="img_b" class="upload-hidden upload-b" name="img_b" type="file" accept="image/*" required/>
-            </div>
-          `); 
-        // }
+                <strong>B / </strong>
+                <input type="text" class="w-80 font-15 feed-input-border font-white bg-black content_b" value="`+content_b+`" placeholder=" 내용(21자 이내)" name="content_b" maxlength="21" required>
+              </div>
+            </label>
+          </div>
+        `); 
       }
       reader.readAsDataURL($this[0].files[0]);
     } else {
       console.log('cancel editing the photo B');
-      eachContent.append(`
-        <div class="ml-1perc demo-card-image mdl-card content-img inner uploaded-b" style="background: url('`+img_b+`') center / cover;">
-          <div class="content-label bg-black">
-            <strong>B / </strong>
-            <input type="text" class="w-80 font-15 feed-input-border font-white bg-black content_b" value="`+content_b+`" placeholder=" 내용(21자 이내)" name="content_b" maxlength="21" required>
-          </div>
-        </div>
-        `); 
       }
   });
 

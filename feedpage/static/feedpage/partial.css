@@ -9,7 +9,7 @@
     cursor: pointer;
   }
 
-.all-comments {
+.all-comments, .comment-heart-num-row-hide {
   display: none;
 }
 
@@ -309,6 +309,14 @@
 .comment-heart {
   font-size: 16px !important;
   margin-bottom: 6px;
+}
+
+.comment-heart-num-row {
+  font-size: 10px !important;
+  margin-right: 2px;
+  margin-top: -11px;
+  text-align: right;
+  height: 16px;
 }
 
 .comment-input-wrap {
