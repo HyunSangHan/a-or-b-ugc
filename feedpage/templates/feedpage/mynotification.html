@@ -3,10 +3,10 @@
 <!--1피드투표/2피드댓글/3신고/4신고숨김/5댓글좋아요/6구독/7구독새글-->
 
 {% block content %}
-  <div class="mdl-grid container">
-    <div class="mdl-cell--12-col m-auto contents noti">
+  <div class="container">
+    <div class="m-auto contents noti">
       {% if not has_noti %}
-        <div class="h-100 w-100 flex-center font-13">
+        <div class="vh-80 w-100 flex-center font-13">
           도착한 알림이 없습니다.
         </div>
       {% endif %}

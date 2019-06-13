@@ -3,13 +3,13 @@
 
 {% block content %}
 
-<div class="mdl-grid container relative">
+<div class="container relative">
   {% if request.user.profile.image.url != "/media/False" %}
     <div class="creator-img" style="background: url('{{ request.user.profile.image.url }}') center / cover;"></div>
   {% else %}
     <div class="creator-img" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
   {% endif %}
-  <div class="mdl-cell--12-col m-auto black-creator">
+  <div class="m-auto black-creator">
     <div class="contents-margin">
       <div class="creator-name-card">
         <div class="creator-name ellipsis">
@@ -30,7 +30,7 @@
   </div>
 </div>
 </div>
-<div class="mdl-grid container">
+<div class="container">
 <!--투탭-->
   <div class="page-content-two-tabs w-100">
     <div class="page-content-tab">
@@ -45,7 +45,7 @@
     </div>
   </div>
 <!--피드 나오는 영역-->
-  <div class="mdl-cell--12-col m-auto contents">
+  <div class="m-auto contents">
     <div class="contents-margin">
       {% for upvote in upvotes %}
         {% if upvote.feed.check_visible %}

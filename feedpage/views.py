@@ -13,13 +13,13 @@ import json
 from .reuse_function import make_notification
 from django.utils import timezone
 
-###니드 로그인 기능 리다이렉트 구현 필요
+#TODO: 니드 로그인 기능 리다이렉트 구현 필요
 
 def index(request): 
     # print(HashTag.objects.all())
     keyword = request.GET.get('keyword', '')
     feeds_all = Feed.objects.all().order_by('-updated_at', '-created_at')
-#검색기능 추후 보완 필요
+#TODO: 검색기능 추후 보완 필요
     if keyword: 
         #필드에서 피드 뽑아오기
         feeds_by_field = list(feeds_all.filter(Q(title__icontains=keyword) | Q(content_a__icontains=keyword) | Q(content_b__icontains=keyword)))
@@ -29,7 +29,7 @@ def index(request):
         for tag in tags:
             feeds_by_hashtag = feeds_by_hashtag + list(tag.tagged_feeds.all())
         feeds_all = list(set(feeds_by_field + feeds_by_hashtag))
-#페이지네이션과의 파라미터 조화 필요
+#TODO: 페이지네이션과의 파라미터 조화 필요
 
     paginator = Paginator(feeds_all, 8)
     page_num = request.GET.get('page')
@@ -65,8 +65,8 @@ def new(request):
             else:
                 tag = HashTag.objects.create(tag=hash_tag)
                 TagRelation.objects.create(hash_tag=tag, feed=feed)
-# 공백이면 빼는 로직도 필요(당장 / below)
-# 왜 이거 안됨? => [에러메시지] invalid literal for int() with base 10: ''
+#TODO: 공백이면 빼는 로직도 필요(당장 / below)
+#TODO: 왜 이거 안됨? => [에러메시지] invalid literal for int() with base 10: ''
 # print(TagRelation.objects.filter(hash_tag="").count())
 # TagRelation.objects.get(hash_tag="").delete()
         # 노티 만들기
@@ -136,7 +136,7 @@ def edit(request, id):
         return redirect('%s'%next)
 
 def delete_tag(request, fid, tid):
-    #되고 있는 것인지 확인 필요
+    #TODO: 되고 있는 것인지 확인 필요
     ####################################
     if request.method == 'DELETE':
         tag = HashTag.objects.get(feed_id=fid, tag_id=tid)
@@ -210,7 +210,7 @@ def upvote_comment(request, id, cid):
         return redirect('%s'%next)
 
 
-# 리팩토링 필요하겠음
+#TODO: 리팩토링 필요하겠음
 def feed_upvote_a(request, pk):
     feed = Feed.objects.get(id = pk)
     if request.is_ajax:

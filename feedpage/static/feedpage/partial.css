@@ -358,6 +358,9 @@
 
 .creator-name-card {
   margin-top: 13px;
+  position: absolute;
+  width: 78%;
+  left: 22px;
   color: white;
 }
 

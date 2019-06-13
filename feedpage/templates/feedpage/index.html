@@ -2,8 +2,8 @@
 {% load custom_tags %}
 <!--언젠간 지표 트래킹도 구현하고 싶다-->
 {% block content %}
-<div class="mdl-grid container">
-  <div class="mdl-cell--12-col m-auto contents">
+<div class="container">
+  <div class="m-auto contents">
     {% if is_searched and search_result_num != 0 %}
       <p>{{ search_result_num }}개의 검색결과가 있습니다.</p>
       <hr>
@@ -185,7 +185,11 @@
               <!--A베스트댓글-->
                 <div class="comment w-100 v-center mt-1 inline-flex">
                   <div class="sideicon best">A / BEST</div>
-                  <div class="font-11 v-center mtb-auto comment-reactor"><strong>{{ comment_a.reactor }}</strong></div>
+                  <div class="font-11 v-center mtb-auto comment-reactor">
+                    <a href="/feeds/creator/{{comment_a.reactor.username}}">
+                      <strong>{{ comment_a.reactor }}</strong>
+                    </a>
+                  </div>
                   <div class="font-14 v-center mtb-auto comment-content ellipsis">{{ comment_a.content }}</div>
                   {% get_comment_upvote_tf feed.id comment_a.id user.id as comment_upvote_tf %}
                   {% if user.is_authenticated %}
@@ -217,7 +221,11 @@
               <!--B베스트댓글-->
                 <div class="comment w-100 v-center mtb-1 inline-flex">
                   <div class="sideicon best">B / BEST</div>
-                  <div class="font-11 v-center mtb-auto comment-reactor"><strong>{{ comment_b.reactor }}</strong></div>
+                  <div class="font-11 v-center mtb-auto comment-reactor">
+                    <a href="/feeds/creator/{{comment_b.reactor.username}}">
+                      <strong>{{ comment_b.reactor }}</strong>
+                    </a>
+                  </div>
                   <div class="font-14 v-center mtb-auto comment-content ellipsis">{{ comment_b.content }}</div>
                     {% comment %} {{ comment_a.total_upvote }}
                     {% if comment_a.reactor == user %}
@@ -266,7 +274,9 @@
             {% elif feed.feedcomment_set.count != 0 %}
               <div class="font-12 link-light-black font-light mt-2 toggle-comments">
                 {% if comment_a and comment_b %}
-                  댓글 {{feed.feedcomment_set.count|add:"-2"}}개 더보기
+                  {% if feed.feedcomment_set.count > 2 %}
+                    댓글 {{feed.feedcomment_set.count|add:"-2"}}개 더보기
+                  {% endif %}
                 {% else %}
                   댓글 {{feed.feedcomment_set.count}}개 더보기
                 {% endif %}
@@ -280,7 +290,11 @@
                       <div class="sideicon norm"> {{ side }} </div>
                     {% endif %}
   
-                    <div class="font-11 v-center mtb-auto comment-reactor"><strong>{{ c.reactor }}</strong></div>
+                    <div class="font-11 v-center mtb-auto comment-reactor">
+                    <a href="/feeds/creator/{{c.reactor.username}}">
+                      <strong>{{ c.reactor }}</strong>
+                    </a>
+                    </div>
                     <div class="font-14 v-center mtb-auto comment-content ellipsis">{{ c.content }}</div>
                     {% get_comment_upvote_tf feed.id c.id user.id as comment_upvote_tf %}
                     {% if user.is_authenticated %}

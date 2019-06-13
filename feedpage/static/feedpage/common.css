@@ -221,6 +221,10 @@ label, label > div:hover {
   height: 100% !important;
 }
 
+.vh-80 {
+  height: 80vh !important;
+}
+
 .w-100 {
   width: 100% !important;
 }

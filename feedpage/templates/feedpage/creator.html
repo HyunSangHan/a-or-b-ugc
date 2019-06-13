@@ -3,13 +3,13 @@
 
 {% block content %}
 
-<div class="mdl-grid container relative">
+<div class="container relative">
   {% if creator.profile.image.url != "/media/False" %}
     <div class="creator-img" style="background: url('{{ creator.profile.image.url }}') center / cover;"></div>
   {% else %}
     <div class="creator-img" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
   {% endif %}
-  <div class="mdl-cell--12-col m-auto black-creator">
+  <div class="m-auto black-creator">
     <div class="contents-margin">
       <div class="creator-name-card">
         <div class="creator-name ellipsis">
@@ -54,7 +54,7 @@
 </div>
 </div>
 <!--피드 나오는 영역-->
-<div class="mdl-grid container">
+<div class="container">
 <!--투탭-->
   {% if request.user == creator %}
     <div class="page-content-two-tabs w-100">
@@ -72,7 +72,7 @@
   {% endif %}
 <!--피드 나오는 영역 / 피드 없을 때-->
   {% if not has_feeds %}
-    <div class="mdl-cell--12-col m-auto contents" style="margin-right: -14px; min-height: 40vh;">
+    <div class="m-auto contents" style="margin-right: -14px; min-height: 40vh;">
       <div class="contents-margin w-100 h-100 flex-center font-13">
         <div class="text-center">
           아직 작성하신 글이 없습니다.<br>
@@ -84,7 +84,7 @@
     </div>
   {% else %}
 <!--피드 나오는 영역 / 피드 있을 때 -->
-    <div class="mdl-cell--12-col m-auto contents" style="min-height: 40vh;">
+    <div class="m-auto contents" style="min-height: 40vh;">
       <div class="contents-margin">
         {% for feed in feeds %}
           {% if feed.check_visible %}
