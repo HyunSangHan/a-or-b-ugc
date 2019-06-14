@@ -449,3 +449,7 @@
   height: 100%;
   z-index: 1;
 } */
+
+.img-srch-btn :hover {
+  cursor: pointer;
+}

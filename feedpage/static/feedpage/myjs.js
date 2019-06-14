@@ -393,4 +393,37 @@ $(document).ready(() => {
       }
   });
 
+
+  // 이미지검색
+  $(document).on('click', '.img-srch-btn', function() {
+    console.log("image search!");
+    const $this = $(this);
+    const keyword = $('.content_a').val();
+    const csrfmiddlewaretoken = $this.data('csrfmiddlewaretoken');
+
+    console.log(keyword);
+    console.log("===================");
+
+    // const $heart = $this.children('.comment-heart');
+    // const $heartNum = $this.parent().next().children('.comment-heart-num');
+    // const fid = $this.attr("data-feedid");
+    // const cid = $this.attr("data-commentid");
+    $.ajax({
+      type: 'POST',
+      url: `/feeds/new/image_search/`,
+      data: {
+        csrfmiddlewaretoken: csrfmiddlewaretoken,
+        keyword: keyword
+      },
+      dataType: 'json',
+      success: function(data) {
+        console.log(data);
+      },
+      error: function(response,  status,  error) {
+        console.log(response, status, error);
+      }
+    });
+  });
+
+
 })

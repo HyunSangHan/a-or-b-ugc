@@ -12,6 +12,8 @@ import urllib
 import json
 from .reuse_function import make_notification
 from django.utils import timezone
+import os
+import sys
 
 #TODO: 니드 로그인 기능 리다이렉트 구현 필요
 
@@ -501,3 +503,31 @@ def mynotification(request):
 
     return render(request, 'feedpage/mynotification.html', {'has_noti':has_noti, 'noti': noti, 'noti_unchecked': noti_unchecked, 'noti_checked': noti_checked})
 
+def image_search(request): # 새로운 함수 추가
+    client_id = ''
+    client_secret = ''
+    print(request)
+    print("=========1==========")
+    text = request.POST['keyword']
+
+    enc_text = urllib.parse.quote(text)
+    print("=========2==========")
+    url = "https://openapi.naver.com/v1/search/image?query=" + enc_text
+
+    image_search_request = urllib.request.Request(url)
+    image_search_request.add_header('X-Naver-Client-Id', client_id)
+    image_search_request.add_header('X-Naver-Client-Secret', client_secret)
+    print("=========3==========")
+    response = urllib.request.urlopen(image_search_request)
+    print("=========4==========")
+
+    if response.getcode() == 200:
+        image_response = response.read().decode('utf-8')
+        image_response = json.loads(image_response)
+        context = {
+            'result': image_response
+        }
+    else:
+    	print('Error Code: ' + response.getcode())
+
+    return JsonResponse(context)
