@@ -415,13 +415,14 @@ $(document).ready(() => {
           console.log(data);
           $eachResult.children('.each-search-result-js').remove();
           for (var i=0; i<20; i++) {
+            thb = data.result.items[i].thumbnail.replace('&type=b150','');
             $eachResult.prepend(`
-              <img src=`+data.result.items[i].thumbnail+` alt="image_search" class="each-srch-result each-search-result-js">
+              <img src=`+thb+` alt="image_search" class="each-srch-result each-search-result-js">
             `)
           };
 
         },
-        error: function(response,  status,  error) {
+        error: function(response, status,  error) {
           console.log(response, status, error);
         }
       });

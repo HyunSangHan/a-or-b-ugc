@@ -504,6 +504,7 @@ def mynotification(request):
 
     return render(request, 'feedpage/mynotification.html', {'has_noti':has_noti, 'noti': noti, 'noti_unchecked': noti_unchecked, 'noti_checked': noti_checked})
 
+#이미지 추천기능
 def image_search(request):
     client_id = IMG_CLIENT_ID
     client_secret = IMG_CLIENT_KEY
