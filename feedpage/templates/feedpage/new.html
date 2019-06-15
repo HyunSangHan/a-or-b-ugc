@@ -16,18 +16,16 @@
             </div>
           </div>
           <div class="inline-flex v-center mt-1 mb-2">
-            <a href="/accounts/profile/" class="link-grey">
-              <div class="inline-flex">
-                {% if user.profile.image.url != "/media/False" %}
-                  <div class="user-face" style="background: url('{{ user.profile.image.url }}') center / cover;"></div>
-                {% else %}
-                  <div class="user-face" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
-                {% endif %}
-                <span class="font-12 ml-1">
-                  {{user.username}}
-                </span>
-              </div>
-            </a>
+            <div class="inline-flex font-grey">
+              {% if user.profile.image.url != "/media/False" %}
+                <div class="user-face" style="background: url('{{ user.profile.image.url }}') center / cover;"></div>
+              {% else %}
+                <div class="user-face" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
+              {% endif %}
+              <span class="font-12 ml-1">
+                {{user.username}}
+              </span>
+            </div>
           </div>
           <!--A와 B를 함께 두는 행-->
           <div class="each-content">
@@ -72,25 +70,15 @@
               </label>
             </div>
           </div>
-
-
-
-
-          {% comment %} <div class="flex-center" style="height: 80px; width: 80px; background-color: grey;">
-            <label for="img_a" style="height: 80px; width: 80px;">
-              A업로드
-            </label>
-            <input id="img_a" class="upload-hidden upload-a" name="img_a" type="file" accept="image/*" required/> <br />
+          <div class="img-srch-btn" data-csrfmiddlewaretoken="{{csrf_token}}">
+            <div>
+              [beta] 이미지 추천 >
+            </div>
           </div>
-          <div class="flex-center" style="height: 80px; width: 80px; background-color: grey;">
-            <label for="img_b" style="height: 80px; width: 80px;">
-              B업로드
-            </label>
-            <input id="img_b" class="upload-hidden upload-b" name="img_b" type="file" accept="image/*" required/>
+          <div class="each-srch-result-wrap hr-scroll">
+            <div class="each-srch-result-list img-srch-result-js">
+            </div>
           </div>
-          <br> {% endcomment %}
-
-
           <button type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect w-100 mt-3">
             Submit
           </button>

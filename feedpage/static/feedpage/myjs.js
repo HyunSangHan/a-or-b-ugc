@@ -340,7 +340,7 @@ $(document).ready(() => {
     if(window.FileReader && $this[0].files[0]){
       content_a = document.getElementsByClassName('content_a')[0].value;
     }
-    var eachContent = $this.parent();
+    const eachContent = $this.parent();
     if(window.FileReader && $this[0].files[0]){
       eachContent.children('.uploaded-a').remove();
       var reader = new FileReader();
@@ -370,7 +370,7 @@ $(document).ready(() => {
     if(window.FileReader && $this[0].files[0]){
       content_b = document.getElementsByClassName('content_b')[0].value;
     }
-    var eachContent = $this.parent();
+    const eachContent = $this.parent();
     if(window.FileReader && $this[0].files[0]){
       eachContent.children('.uploaded-b').remove();
       var reader = new FileReader();
@@ -392,5 +392,63 @@ $(document).ready(() => {
       console.log('cancel editing the photo B');
       }
   });
+
+
+  // 이미지검색
+  $(document).on('click', '.img-srch-btn', function() {
+    const $this = $(this);
+    const $eachResult = $this.siblings('.each-srch-result-wrap').children('.img-srch-result-js')
+    const keyword = $('.content_b').val();
+    const csrfmiddlewaretoken = $this.data('csrfmiddlewaretoken');
+
+    console.log("keyword: "+ keyword);
+    if (keyword !== "") {
+      $.ajax({
+        type: 'POST',
+        url: `/feeds/new/image_search/`,
+        data: {
+          csrfmiddlewaretoken: csrfmiddlewaretoken,
+          keyword: keyword
+        },
+        dataType: 'json',
+        success: function(data) {
+          console.log(data);
+          $eachResult.children('.each-search-result-js').remove();
+          for (var i=0; i<20; i++) {
+            $eachResult.prepend(`
+              <img src=`+data.result.items[i].thumbnail+` alt="image_search" class="each-srch-result each-search-result-js">
+            `)
+          };
+
+        },
+        error: function(response,  status,  error) {
+          console.log(response, status, error);
+        }
+      });
+    } else {
+      console.log("there is no keyword");
+    }
+  });
+
+    // 이미지클릭 시(test ver.)
+  $(document).on('click', '.each-search-result-js', function() {
+    const $this = $(this);
+    const eachContent = $this.parent().parent().siblings('.each-content');
+    var img = $this.attr('src');
+    console.log(img);
+    content_b = document.getElementsByClassName('content_b')[0].value;
+    eachContent.children('.uploaded-b').remove();
+    eachContent.append(`
+        <div class="ml-1perc demo-card-image mdl-card content-img inner uploaded-b" style="background: url('`+img+`') center / cover;">
+          <label for="img_b" style="height: 100%; width: 100%;">
+            <div class="content-label bg-black">
+              <strong>B / </strong>
+              <input type="text" class="w-80 font-15 feed-input-border font-white bg-black content_b" value="`+content_b+`" placeholder=" 내용(21자 이내)" name="content_b" maxlength="21" required>
+            </div>
+          </label>
+        </div>
+      `); 
+  });
+
 
 })

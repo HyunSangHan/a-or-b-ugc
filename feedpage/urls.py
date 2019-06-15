@@ -23,4 +23,6 @@ urlpatterns = [
     path('mysubscribe/', views.mysubscribe, name='mysubscribe'), 
     path('myreaction/', views.myreaction, name='myreaction'), 
     path('mynotification/', views.mynotification, name='mynotification'), 
+    path('new/image_search/', views.image_search, name='image_search'),
+
 ]
