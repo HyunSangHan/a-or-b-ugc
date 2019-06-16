@@ -85,7 +85,7 @@ def show(request, id):
 
 def delete(request, id):
     feed = Feed.objects.get(id=id)
-    if request.is_ajax:
+    if request.is_ajax():
         if feed.creator == request.user:
             feed.delete()
         context = {'message': 'Deleted'}
@@ -148,37 +148,48 @@ def delete_tag(request, fid, tid):
 
 def create_comment(request, id):
     if request.method == 'POST':
-        upvote_list = Upvote.objects.filter(feed_id=id, user_id=request.user.id)
-        if upvote_list.count() > 0:
-            if upvote_list.first().about_a:
-                upvote_side = 1
+        if request.is_ajax():
+            upvote_list = Upvote.objects.filter(feed_id=id, user_id=request.user.id)
+            if upvote_list.count() > 0:
+                if upvote_list.first().about_a:
+                    upvote_side = 1
+                else:
+                    upvote_side = 2
             else:
-                upvote_side = 2
-        else:
-            upvote_side = 0
-        content = request.POST['content']
-        FeedComment.objects.create(feed_id=id, content=content, reactor=request.user, upvote_side=upvote_side)
-        new_comment = FeedComment.objects.latest('id')
-        context = {
-            'comment': {
-                'id': new_comment.id,
-                'reactor': new_comment.reactor.username,
-                'content': new_comment.content,
-                'upvote_side': new_comment.upvote_side,
+                upvote_side = 0
+            content = request.POST['content']
+            FeedComment.objects.create(feed_id=id, content=content, reactor=request.user, upvote_side=upvote_side)
+            new_comment = FeedComment.objects.latest('id')
+            context = {
+                'comment': {
+                    'id': new_comment.id,
+                    'reactor': new_comment.reactor.username,
+                    'content': new_comment.content,
+                    'upvote_side': new_comment.upvote_side,
+                }
             }
-        }
-        # 노티 만들기
-        make_notification(2, id, request.user.id)
-        return JsonResponse(context)
-    else: 
-        try:
-            next = request.META['HTTP_REFERER']
-        except:
-            next = '/feeds/'
-        return redirect('%s'%next)
+            make_notification(2, id, request.user.id)
+            return JsonResponse(context)
+        else:
+            upvote_list = Upvote.objects.filter(feed_id=id, user_id=request.user.id)
+            if upvote_list.count() > 0:
+                if upvote_list.first().about_a:
+                    upvote_side = 1
+                else:
+                    upvote_side = 2
+            else:
+                upvote_side = 0
+            content = request.POST['content']
+            FeedComment.objects.create(feed_id=id, content=content, reactor=request.user, upvote_side=upvote_side)
+            make_notification(2, id, request.user.id)
+    try:
+        next = request.META['HTTP_REFERER']
+    except:
+        next = '/feeds/'
+    return redirect('%s'%next)
 
 def delete_comment(request, id, cid):
-    if request.is_ajax and request.method == 'POST':
+    if request.is_ajax() and request.method == 'POST':
         context = {}
         c = FeedComment.objects.get(id=cid)
         c.delete()
@@ -191,7 +202,7 @@ def delete_comment(request, id, cid):
 
 def upvote_comment(request, id, cid):
     # if request.method == 'POST':
-    if request.is_ajax:
+    if request.is_ajax():
         c = FeedComment.objects.get(id=cid)
         upvote_list = c.commentupvote_set.filter(user_id = request.user.id)
         context = {}
@@ -218,7 +229,7 @@ def upvote_comment(request, id, cid):
 #TODO: 리팩토링 필요하겠음
 def feed_upvote_a(request, pk):
     feed = Feed.objects.get(id = pk)
-    if request.is_ajax:
+    if request.is_ajax():
         upvote_list = feed.upvote_set.filter(user_id = request.user.id)
         upvote_total = feed.upvote_set.count() + 1
         upvote_a = feed.upvote_set.filter(about_a=True).count() + 1
@@ -290,7 +301,7 @@ def feed_upvote_a(request, pk):
 
 def feed_upvote_b(request, pk):
     feed = Feed.objects.get(id = pk)
-    if request.is_ajax:
+    if request.is_ajax():
         upvote_list = feed.upvote_set.filter(user_id = request.user.id)
         upvote_total = feed.upvote_set.count() + 1
         upvote_a = feed.upvote_set.filter(about_a=True).count()
@@ -360,7 +371,7 @@ def feed_upvote_b(request, pk):
         return redirect('%s'%next)
 
 def follow_manager(request, pk):
-    if request.is_ajax:
+    if request.is_ajax():
         follow_from = Profile.objects.get(user_id = request.user.id)
         follow_to = Profile.objects.get(user_id = pk)
         print(follow_from)
@@ -377,15 +388,15 @@ def follow_manager(request, pk):
             make_notification(6, pk, request.user.id)
         return JsonResponse(context)
     else:
-        # follow_from = Profile.objects.get(user_id = request.user.id)
-        # follow_to = Profile.objects.get(user_id = pk)
-        # following_already = Follow.objects.filter(follow_from=follow_from, follow_to=follow_to)
-        # if following_already.count() > 0:
-        #     following_already.first().delete()
-        # else:
-        #     Follow.objects.create(follow_from=follow_from, follow_to=follow_to)
-        #     # 노티 만들기
-        #     make_notification(6, pk, request.user.id)
+        follow_from = Profile.objects.get(user_id = request.user.id)
+        follow_to = Profile.objects.get(user_id = pk)
+        following_already = Follow.objects.filter(follow_from=follow_from, follow_to=follow_to)
+        if following_already.count() > 0:
+            following_already.first().delete()
+        else:
+            Follow.objects.create(follow_from=follow_from, follow_to=follow_to)
+            # 노티 만들기
+            make_notification(6, pk, request.user.id)
         try:
             next = request.META['HTTP_REFERER']
         except:
@@ -396,7 +407,7 @@ def report(request, pk):
     feed = Feed.objects.get(id = pk)
     report_count_mine = feed.report_set.filter(user_id = request.user.id).count()
     report_count = Report.objects.filter(feed_id = feed.id).count()
-    if request.is_ajax:
+    if request.is_ajax():
         if report_count_mine == 0:
             Report.objects.create(user_id = request.user.id, feed_id = feed.id)
             context = {'total_report': report_count+1, 'report_before': 0}
@@ -479,7 +490,12 @@ def myupload(request):
 
 def myreaction(request):
     upvotes = request.user.upvote_set.all().order_by('-created_at')
-    return render(request, 'feedpage/myreaction.html', {'upvotes': upvotes})
+    has_upvotes = False
+    if len(upvotes) == 0:
+        has_upvotes = False
+    else:
+        has_upvotes = True
+    return render(request, 'feedpage/myreaction.html', {'upvotes': upvotes, 'has_upvotes': has_upvotes})
 
 def mynotification(request):
     noti = Notification.objects.filter(noti_to=request.user.profile, is_mine=False).order_by('-created_at')
