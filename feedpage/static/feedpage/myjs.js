@@ -414,11 +414,13 @@ $(document).ready(() => {
         success: function(data) {
           console.log(data);
           $eachResult.children('.each-search-result-js').remove();
-          for (var i=0; i<20; i++) {
-            thb = data.result.items[i].thumbnail.replace('&type=b150','');
-            $eachResult.prepend(`
-              <img src=`+thb+` alt="image_search" class="each-srch-result each-search-result-js">
-            `)
+          for (var i=0; i<40; i++) {
+            if (data.result.items[i].sizeheight / data.result.items[i].sizewidth > 0.75) {
+              thb = data.result.items[i].thumbnail.replace('&type=b150','');
+              $eachResult.append(`
+                <img src=`+thb+` alt="image_search" class="each-srch-result each-search-result-js">
+              `)
+            }
           };
 
         },
@@ -436,7 +438,6 @@ $(document).ready(() => {
     const $this = $(this);
     const eachContent = $this.parent().parent().siblings('.each-content');
     var img = $this.attr('src');
-    console.log(img);
     content_b = document.getElementsByClassName('content_b')[0].value;
     eachContent.children('.uploaded-b').remove();
     eachContent.append(`
