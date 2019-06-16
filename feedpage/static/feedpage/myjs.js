@@ -370,6 +370,17 @@ $(document).ready(() => {
       }
   });
 
+  //검색 버튼 나오기
+  $('.mdl-textfield__input').on('input',
+    function(event) {
+      const $this = $(this);
+      if ($this.val().length !== 0) {
+        $this.siblings('.search-btn').removeClass('invisible');
+        }
+      else {
+        $this.siblings('.search-btn').addClass('invisible');
+      }
+  });
 
   //인풋 너비 다르게 하기 코드
   // $('.feed-input-border').on('keydown',

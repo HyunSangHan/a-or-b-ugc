@@ -27,6 +27,22 @@
   box-shadow: 0 1px 8px 0 rgba(0,0,0,0.03), 0 -7px 2px -2px rgba(0,0,0,.2), 0 0px 0px 0 rgba(0,0,0,.12) !important;
 }
 
+.search-wrap {
+  border-bottom: 1px solid lightgrey;
+}
+
+.search-input {
+  width: calc(100% - 28px) !important;
+  border-bottom: none !important;
+}
+
+.search-btn {
+  position: absolute;
+  top: 3px;
+  right: -6px;
+  font-size: 14px;
+}
+
 .service-title {
   padding-right: 20px;
   text-align: center;
@@ -349,15 +365,7 @@
   z-index: 100;
 }
 
-.comment-submit-now {
-  position: absolute;
-  top: 25px;
-  right: -6px;
-  font-size: 14px;
-  font-weight: 700;
-}
-
-.comment-submit {
+.comment-submit-now, .comment-submit {
   position: absolute;
   top: 25px;
   right: -6px;
