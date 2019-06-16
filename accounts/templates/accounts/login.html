@@ -25,7 +25,7 @@
 {% load socialaccount %}
 {% providers_media_js %}
 <a href="{% provider_login_url 'facebook' %}">페북 로그인</a><br>
-
+<a href="{% provider_login_url 'kakao' %}">카톡 로그인</a><br>
 <!--내장 기능 활용 시-->
 {% comment %} <h1>로그인</h1>
 <form method="post" action="{% url 'login' %}">
