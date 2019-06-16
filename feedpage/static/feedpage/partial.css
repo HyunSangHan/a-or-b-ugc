@@ -169,9 +169,6 @@
   letter-spacing: 2px;
 }
 
-.content-result-num {
-}
-
 .w-more-btn {
   width: calc(100% + 14px);
 }
@@ -277,6 +274,20 @@
   text-align: center;
   margin-top: 5px;
   color: #666;
+}
+
+.subs-btn {
+  /* width: 20%;
+  max-width: 150px; */
+  width: 73px;
+  height: 32px;
+  padding: 5px 0 7px;
+  margin-top: 15px;
+  font-weight: 500;
+  font-size: 13px;
+  border-radius: 16px;
+  border: 1px solid white !important;
+  letter-spacing: -0.3px;
 }
 
 .sideicon {
@@ -413,20 +424,6 @@
   margin-top: -13px;
 }
 
-.subs-btn {
-  /* width: 20%;
-  max-width: 150px; */
-  width: 73px;
-  height: 32px;
-  padding: 5px 0 7px;
-  margin-top: 15px;
-  font-weight: 500;
-  font-size: 13px;
-  border-radius: 16px;
-  border: 1px solid white !important;
-  letter-spacing: -0.3px;
-}
-
 .subs-check-icon {
   margin: -2px -1px 0 2px
 }
@@ -515,4 +512,19 @@
 
 .each-srch-result:last-child {
   padding-right: 0px;
+}
+
+.float-btn {
+  position: fixed;
+  z-index: 100;
+  right: 4%;
+  bottom: 4%;
+  width: 90px;
+  height: 32px;
+  padding: 5px 0 7px;
+  margin-top: 15px;
+  font-weight: 500;
+  font-size: 13px;
+  border-radius: 32px;
+  letter-spacing: -0.3px;
 }

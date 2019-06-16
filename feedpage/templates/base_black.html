@@ -25,6 +25,7 @@
           <!-- Title -->
           <!-- Add spacer, to align navigation to the right -->
           <div class="mdl-layout-spacer service-title">
+            <a href="/feeds" class="link-white font-13"></a>
           </div>
           <form action="/feeds/" method="get">
             <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable mdl-textfield--floating-label mdl-textfield--align-right">
@@ -39,33 +40,6 @@
           </form>
         </div>
       </header>
-      <div class="mdl-layout__drawer">
-        {% if user.is_authenticated %}
-          <a href="{% url 'profile' %}">
-            <span class="mdl-layout-title sidebar-profile">
-              {% if user.profile.image.url != "/media/False" %}
-                <div class="user-face-big" style="background: url('{{ user.profile.image.url }}') center / cover;"></div>
-              {% else %}
-                <div class="user-face-big" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
-              {% endif %}
-              <div class="sidebar-username ellipsis">{{user.username}}</div>
-              <div>
-                <i class="material-icons" style="margin-left:6px; font-size:14px; color:#666;">arrow_forward_ios</i>
-              </div>
-            </span>
-          </a>
-          <nav class="mdl-navigation">
-            <a class="mdl-navigation__link" href="{% url 'profile' %}">프로필수정</a>
-            <a class="mdl-navigation__link" href="{% url 'event' %}">공지사항</a>
-            <a class="mdl-navigation__link" href="{% url 'logout' %}">로그아웃</a>
-          </nav>
-        {% else %}
-          <nav class="mdl-navigation">
-            <a class="mdl-navigation__link" href="{% url 'login' %}">로그인</a>
-            <a class="mdl-navigation__link" href="{% url 'signup' %}">회원가입</a>
-          </nav>
-        {% endif %}
-      </div>
       <main class="mdl-layout__content mt--1">
         <div class="page-content-black mdl-layout__content bg-black w-100 font-white">
 
@@ -76,6 +50,7 @@
       </main>
     </div>
 
+    <!--navigation bar-->
     {% if user.is_authenticated %}
       <div class="nav-bar-wrap">
         <a href="/feeds/">
@@ -95,12 +70,12 @@
         </a>
         <a href="/feeds/mynotification">
           <div>
-          {% get_noti_amount user.id as noti_amount %}
-          {% if noti_amount == 0 %}
-            <i class="material-icons-outlined" style="font-size: 29px; margin-right: -2px;">notifications_none</i>
-          {% else %}
-            <div class="material-icons mdl-badge mdl-badge--overlap" style="font-size: 28px; margin-top: px; margin-right: -3px;" data-badge="{{noti_amount}}">notifications_none</div>
-          {% endif%}
+            {% get_noti_amount user.id as noti_amount %}
+            {% if noti_amount == 0 %}
+              <i class="material-icons-outlined" style="font-size: 29px; margin-right: -2px;">notifications_none</i>
+            {% else %}
+              <div class="material-icons mdl-badge mdl-badge--overlap" style="font-size: 28px; margin-top: px; margin-right: -3px;" data-badge="{{noti_amount}}">notifications_none</div>
+            {% endif%}
           </div>
         </a>
         <a href="/feeds/creator/{{ request.user.username }}/">
@@ -109,6 +84,14 @@
           {% else %}
             <div class="user-face-nav mb-1" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
           {% endif %}
+        </a>
+      </div>
+    {% else%}
+      <div class="float-btn flex-center bg-black">
+        <a href="/accounts/login">
+          <div class="w-100 h-100 font-white letter-space font-15">
+            참여하기
+          </div>
         </a>
       </div>
     {% endif %}
