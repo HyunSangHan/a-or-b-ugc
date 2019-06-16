@@ -334,6 +334,10 @@ label, label > div:hover {
   color: #9B9B9B;
 }
 
+.link-white {
+  color: #fff;
+}
+
 .bg-white {
   background-color: white !important;
 }

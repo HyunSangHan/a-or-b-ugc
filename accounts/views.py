@@ -35,7 +35,8 @@ def signup(request):
 
 def logout(request):
     auth.logout(request)
-    return redirect('/feeds/')
+    next = '/feeds/'
+    return redirect('%s'%next)
 
 def login(request):
     if request.method == 'POST':
