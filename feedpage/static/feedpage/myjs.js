@@ -217,7 +217,6 @@ $(document).ready(() => {
     }
   });
 
-
   // 댓글 하트(좋아요)
   $(document).on('click', '.comment-heart-btn', function() {
     console.log("click heart");
@@ -257,6 +256,38 @@ $(document).ready(() => {
       },
     });
   });
+
+  // 댓글 삭제
+  $(document).on('click', '.comment-clear', function(event) {
+    if (confirm('정말 삭제하실 건가요?')) {
+      const $this = $(this);
+      const id = $this.data('feedid');
+      const cid = $this.data('commentid');
+      const csrfmiddlewaretoken = $this.data('csrfmiddlewaretoken');
+      $.ajax({
+        type: "POST",
+        url: `/feeds/${id}/comments/${cid}/`,
+        data: {
+          csrfmiddlewaretoken: csrfmiddlewaretoken,
+          id: id,
+          cid: cid
+        },
+        dataType: "json",
+        success: function (data) {
+          $this.parent().next().remove();
+          $this.parent().remove();
+        },
+        error: function(response, status, error) {
+          alert('error');
+          console.log(response, status, error);
+        },
+        complete: function(response) {
+          console.log(response);
+        },
+      });
+    }
+  });
+
 
     // 댓글 달기
   $('.comment-submit').on('click', function(event) {

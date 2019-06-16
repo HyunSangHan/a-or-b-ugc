@@ -145,6 +145,14 @@ label, label > div:hover {
   word-wrap:normal !important;
 }
 
+.ellipsis-span{
+  text-overflow:ellipsis;
+  -o-text-overflow:ellipsis;
+  overflow:hidden;
+  white-space:nowrap;
+  word-wrap:normal !important;
+}
+
 .mt--2 {
   margin-top: -8px;
 }

@@ -178,9 +178,11 @@ def create_comment(request, id):
         return redirect('%s'%next)
 
 def delete_comment(request, id, cid):
-    if request.method == 'POST':
+    if request.is_ajax and request.method == 'POST':
+        context = {}
         c = FeedComment.objects.get(id=cid)
         c.delete()
+        return JsonResponse(context)
     try:
         next = request.META['HTTP_REFERER']
     except:
