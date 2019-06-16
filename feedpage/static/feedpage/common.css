@@ -270,6 +270,11 @@ label, label > div:hover {
   font-family: "Noto Sans KR", sans-serif !important;
 }
 
+.font-16 {
+  font-size: 16px;
+  font-family: "Noto Sans KR", sans-serif !important;
+}
+
 .font-25 {
   font-size: 25px !important;
 }
