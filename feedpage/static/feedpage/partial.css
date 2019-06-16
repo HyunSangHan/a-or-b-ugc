@@ -411,6 +411,10 @@
   position: relative;
 }
 
+.each-noti:first-child {
+  padding-top: 16px;
+}
+
 .noti-content-ml {
   margin-left: 10px;
 }

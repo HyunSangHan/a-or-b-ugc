@@ -31,7 +31,6 @@
                   {% if user.is_authenticated %}
                     {% if request.user != feed.creator %}
                       <div class="subscribe-js" data-creatorid="{{ feed.creator.id }}">
-                        {% comment %} <a href = "/feeds/{{ feed.creator.id }}/follow/" class="link-black"> {% endcomment %}
                           {% if request.user.profile not in feed.creator.profile.follows.all %}
                             구독하기
                           {% else %}

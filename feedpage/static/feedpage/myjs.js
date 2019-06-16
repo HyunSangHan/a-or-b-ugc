@@ -283,8 +283,8 @@ $(document).ready(() => {
           side = `<div class="sideicon norm"> B </div>`;
         }
 
-        const $comments = $this.parent().parent().siblings('.comment-wrap');
-        $comments.append(`
+        const $comments = $this.parent().parent().siblings('.all-comments');
+        $comments.after(`
           <div class="comment w-100 v-center mtb-1 inline-flex">
           `+side+`
             <div class="font-11 v-center mtb-auto comment-reactor"><strong>${data.comment.reactor}</strong></div>
