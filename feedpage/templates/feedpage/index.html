@@ -256,7 +256,7 @@
               {% endif %}
             </div>
             <!--show 안으로 들어갈 부분(전체댓글)-->
-            {% if feed.feedcomment_set.count > 60 %}
+            {% if feed.feedcomment_set.count > 6 %}
               <a href="/feeds/{{ feed.id }}">
                 <div class="font-12 link-light-black font-light mt-2">
                   {% if comment_a and comment_b %}
@@ -330,6 +330,7 @@
                 {% endfor %}
               </div>
             {% endif %}
+            <div class="new-comments"></div>
             <!-- 댓글쓰기 창 -->
             {% if user.is_authenticated %}
               <form action="/feeds/{{ feed.id }}/comments/" method="POST">

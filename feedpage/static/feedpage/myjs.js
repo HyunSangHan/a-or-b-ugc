@@ -314,12 +314,15 @@ $(document).ready(() => {
           side = `<div class="sideicon norm"> B </div>`;
         }
 
-        const $comments = $this.parent().parent().siblings('.all-comments');
-        $comments.after(`
+        const $comments = $this.parent().parent().siblings('.new-comments');
+        $comments.append(`
           <div class="comment w-100 v-center mtb-1 inline-flex">
           `+side+`
             <div class="font-11 v-center mtb-auto comment-reactor"><strong>${data.comment.reactor}</strong></div>
-            <div class="font-14 v-center mtb-auto comment-content ellipsis">${data.comment.content}</div>
+            <div class="font-14 v-center mtb-auto comment-content ellipsis-span">${data.comment.content}</div>
+            <span class="comment-clear" data-feedid="${id}" data-commentid="${data.comment.id}" data-csrfmiddlewaretoken="`+csrfmiddlewaretoken+`">
+              <i class="material-icons" style="font-size: 16px; color: grey;">clear</i>
+            </span>
             <div class="ml-auto more-btn comment-heart-btn" data-feedid="${id}" data-commentid="${data.comment.id}">
               <i class="material-icons comment-heart v-center m-auto link-grey ml-1">favorite_border</i>
             </div>
