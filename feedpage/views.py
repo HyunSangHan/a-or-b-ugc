@@ -388,15 +388,15 @@ def follow_manager(request, pk):
             make_notification(6, pk, request.user.id)
         return JsonResponse(context)
     else:
-        # follow_from = Profile.objects.get(user_id = request.user.id)
-        # follow_to = Profile.objects.get(user_id = pk)
-        # following_already = Follow.objects.filter(follow_from=follow_from, follow_to=follow_to)
-        # if following_already.count() > 0:
-        #     following_already.first().delete()
-        # else:
-        #     Follow.objects.create(follow_from=follow_from, follow_to=follow_to)
-        #     # 노티 만들기
-        #     make_notification(6, pk, request.user.id)
+        follow_from = Profile.objects.get(user_id = request.user.id)
+        follow_to = Profile.objects.get(user_id = pk)
+        following_already = Follow.objects.filter(follow_from=follow_from, follow_to=follow_to)
+        if following_already.count() > 0:
+            following_already.first().delete()
+        else:
+            Follow.objects.create(follow_from=follow_from, follow_to=follow_to)
+            # 노티 만들기
+            make_notification(6, pk, request.user.id)
         try:
             next = request.META['HTTP_REFERER']
         except:
@@ -490,7 +490,12 @@ def myupload(request):
 
 def myreaction(request):
     upvotes = request.user.upvote_set.all().order_by('-created_at')
-    return render(request, 'feedpage/myreaction.html', {'upvotes': upvotes})
+    has_upvotes = False
+    if len(upvotes) == 0:
+        has_upvotes = False
+    else:
+        has_upvotes = True
+    return render(request, 'feedpage/myreaction.html', {'upvotes': upvotes, 'has_upvotes': has_upvotes})
 
 def mynotification(request):
     noti = Notification.objects.filter(noti_to=request.user.profile, is_mine=False).order_by('-created_at')

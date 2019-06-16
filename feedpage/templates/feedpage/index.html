@@ -31,12 +31,11 @@
                   {% if user.is_authenticated %}
                     {% if request.user != feed.creator %}
                       <div class="subscribe-js" data-creatorid="{{ feed.creator.id }}">
-                          {% if request.user.profile not in feed.creator.profile.follows.all %}
-                            구독하기
-                          {% else %}
-                            구독취소
-                          {% endif %}
-                        {% comment %} </a> {% endcomment %}
+                        {% if request.user.profile not in feed.creator.profile.follows.all %}
+                          구독하기
+                        {% else %}
+                          구독취소
+                        {% endif %}
                       </div>
                       <div>
                         {% get_report_tf feed.id user.id as report_tf %}
@@ -199,6 +198,12 @@
                         <i class="material-icons comment-heart v-center m-auto link-grey ml-1">favorite_border</i>
                       {% endif %}
                     </div>
+                  {% else %}
+                    <a href="/accounts/login/">
+                      <div class="ml-auto more-btn">
+                        <i class="material-icons comment-heart v-center m-auto link-grey ml-1">favorite_border</i>
+                      </div>
+                    </a>
                   {% endif %}
                 </div>
                 <div class="comment-heart-num-row comment-heart-num-row-hide">
@@ -235,6 +240,12 @@
                         <i class="material-icons comment-heart v-center m-auto link-grey ml-1">favorite_border</i>
                       {% endif %}
                     </div>
+                  {% else %}
+                    <a href="/accounts/login/">
+                      <div class="ml-auto more-btn">
+                        <i class="material-icons comment-heart v-center m-auto link-grey ml-1">favorite_border</i>
+                      </div>
+                    </a>
                   {% endif %}
                 </div>
                 <div class="comment-heart-num-row comment-heart-num-row-hide">
@@ -309,6 +320,12 @@
                           <i class="material-icons comment-heart v-center m-auto link-grey ml-1">favorite_border</i>
                         {% endif %}
                       </div>
+                    {% else %}
+                      <div class="ml-auto more-btn">
+                        <a href="/accounts/login/" onclick="return alert('로그인이 필요한 서비스입니다.')">
+                          <i class="material-icons comment-heart v-center m-auto link-grey ml-1">favorite_border</i>
+                        </a>
+                      </div>
                     {% endif %}
                   </div>
                   <div class="comment-heart-num-row">
@@ -352,13 +369,22 @@
     </div>
 
     {% if search_result_num == 0 %}
-      <div>검색결과가 없습니다.
-        {% if user.is_authenticated %}
-        <a href="/feeds/new">작성하기 버튼</a>을 눌러 <strong>{{ keyword }}</strong>에 대한 
-        첫번째 글을 작성해보세요!
-        {% else %}
-        첫번째 글을 <a href="/feeds/new">작성해보세요!</a>
-        {% endif %}
+      <div class="vh-80 w-100 flex-center text-center">
+        <div>
+          <div style="font-size: 22px;">
+            <strong>
+              검색결과가 없습니다.
+            </strong>
+          </div>
+          <div class="font-13 mt-2">
+            {% if user.is_authenticated %}
+              <a href="/feeds/new">작성하기 버튼</a>을 눌러 <u><strong>{{ keyword }}</strong></u>에 대한 
+              첫번째 글을 작성해보세요!
+            {% else %}
+              첫번째 글을 <a href="/feeds/new">작성해보세요!</a>
+            {% endif %}
+          </div>
+        </div>
       </div>
     {% else %}
       {% if feeds.has_previous %}

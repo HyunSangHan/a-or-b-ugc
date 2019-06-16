@@ -131,7 +131,8 @@ $(document).ready(() => {
       }
       },
       error: function(response, status, error) {
-        alert('error');
+        window.location.href = "/accounts/login";
+        alert('로그인이 필요한 서비스입니다.');
         console.log(response, status, error);
       },
       complete: function(response) {
@@ -171,7 +172,7 @@ $(document).ready(() => {
     }
   });
 
-  // 구독하기 -> 수정 필요할 가능성 존재
+  // TODO:구독하기 -> 수정 필요할 가능성 존재
   $('.subscribe-js').on('click', function(event) {
     const $this = $(this);
     const creatorId = $this.attr("data-creatorid");
