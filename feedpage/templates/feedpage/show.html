@@ -51,9 +51,9 @@
                     {% endif %}                                
                   </div>
                   <div>
-                    <span class="delete-feed-js" data-feedid="{{ feed.id }}">
+                    <a href="/feeds/{{ feed.id }}/delete" class="link-black" onclick="return confirm('정말 삭제하실 건가요?')">
                       삭제하기
-                    </span>
+                    </a>
                   </div>
                 {% endif %}
               {% endif %}
