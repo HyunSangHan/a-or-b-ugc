@@ -277,7 +277,7 @@
                 {% endif %}
               </div>
               <div class="all-comments">
-                {% get_ordered_comment_rest feed.id as comments %}
+                {% get_ordered_comment_rest feed.id True as comments %}
                 {% for c in comments %}
                   {% get_side feed.id c.id as side %}
                   <div class="comment w-100 v-center mtb-1 inline-flex">
@@ -296,7 +296,7 @@
                     <!--댓글삭제-->
                     {% if c.reactor == user %}
                       <span class="comment-clear" data-feedid="{{ feed.id }}" data-commentid="{{ c.id }}" data-csrfmiddlewaretoken="{{ csrf_token }}">
-                        <i class="material-icons" style="font-size: 16px; color: grey;">clear</i>
+                        <i class="material-icons" style="font-size: 13px; color: grey;">clear</i>
                       </span>
                     {% endif %}
                     <!--댓글삭제 끝-->
@@ -337,7 +337,7 @@
                 {% csrf_token %}
                 <div class="comment-input-wrap mdl-textfield mdl-js-textfield mdl-textfield--floating-label w-100">
                   <input class="mdl-textfield__input comment-input" type="text" id="feedcomment" name="content" placeholder="댓글을 입력하세요.">
-                  <input type="submit" class="comment-submit invisible" data-feedid="{{ feed.id }}" data-csrfmiddlewaretoken="{{ csrf_token }}" value="댓글달기">
+                  <input type="submit" class="comment-submit comment-submit-now invisible" data-feedid="{{ feed.id }}" data-csrfmiddlewaretoken="{{ csrf_token }}" value="댓글달기">
                 </div>
               </form> 
             {% else %}

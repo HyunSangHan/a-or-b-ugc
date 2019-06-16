@@ -157,7 +157,7 @@ def get_bestcomment_b(fid):
 
 # best댓글 제외한 댓글 전체 다 뽑아내기(index용)
 @register.simple_tag
-def get_ordered_comment_rest(fid):
+def get_ordered_comment_rest(fid, is_index):
     feed = Feed.objects.get(id=fid)
     a_is_best = feed.feedcomment_set.filter(upvote_side=1).exclude(total_upvote=0).count()
     b_is_best = feed.feedcomment_set.filter(upvote_side=2).exclude(total_upvote=0).count()
@@ -170,8 +170,10 @@ def get_ordered_comment_rest(fid):
         comments_b = list(feed.feedcomment_set.filter(upvote_side=2).order_by('-total_upvote', 'created_at'))
     comments_etc = list(feed.feedcomment_set.filter(upvote_side=0))
     comments_all = comments_a + comments_b + comments_etc
-    comments_all = sorted(comments_all, key=lambda x: x.created_at)
-    comments = sorted(comments_all, key=lambda x: x.total_upvote, reverse=True)
+    comments_all = sorted(comments_all, key=lambda x: x.created_at, reverse=True)
+    if is_index:
+        comments_all = sorted(comments_all, key=lambda x: x.total_upvote, reverse=True)
+    comments = comments_all
 
     return comments
 
