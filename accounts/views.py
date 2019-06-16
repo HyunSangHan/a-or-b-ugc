@@ -35,7 +35,11 @@ def signup(request):
 
 def logout(request):
     auth.logout(request)
-    return redirect('/feeds/')
+    try:
+        next = request.META['HTTP_REFERER']
+    except:
+        next = '/feeds/'
+    return redirect('%s'%next)
 
 def login(request):
     if request.method == 'POST':
