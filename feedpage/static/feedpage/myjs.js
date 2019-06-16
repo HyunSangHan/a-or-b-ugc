@@ -217,7 +217,6 @@ $(document).ready(() => {
     }
   });
 
-
   // 댓글 하트(좋아요)
   $(document).on('click', '.comment-heart-btn', function() {
     console.log("click heart");
@@ -257,6 +256,38 @@ $(document).ready(() => {
       },
     });
   });
+
+  // 댓글 삭제
+  $(document).on('click', '.comment-clear', function(event) {
+    if (confirm('정말 삭제하실 건가요?')) {
+      const $this = $(this);
+      const id = $this.data('feedid');
+      const cid = $this.data('commentid');
+      const csrfmiddlewaretoken = $this.data('csrfmiddlewaretoken');
+      $.ajax({
+        type: "POST",
+        url: `/feeds/${id}/comments/${cid}/`,
+        data: {
+          csrfmiddlewaretoken: csrfmiddlewaretoken,
+          id: id,
+          cid: cid
+        },
+        dataType: "json",
+        success: function (data) {
+          $this.parent().next().remove();
+          $this.parent().remove();
+        },
+        error: function(response, status, error) {
+          alert('error');
+          console.log(response, status, error);
+        },
+        complete: function(response) {
+          console.log(response);
+        },
+      });
+    }
+  });
+
 
     // 댓글 달기
   $('.comment-submit').on('click', function(event) {
@@ -414,14 +445,17 @@ $(document).ready(() => {
         success: function(data) {
           console.log(data);
           $eachResult.children('.each-search-result-js').remove();
-          for (var i=0; i<20; i++) {
-            $eachResult.prepend(`
-              <img src=`+data.result.items[i].thumbnail+` alt="image_search" class="each-srch-result each-search-result-js">
-            `)
+          for (var i=0; i<40; i++) {
+            if (data.result.items[i].sizeheight / data.result.items[i].sizewidth > 0.75) {
+              thb = data.result.items[i].thumbnail.replace('&type=b150','');
+              $eachResult.append(`
+                <img src=`+thb+` alt="image_search" class="each-srch-result each-search-result-js">
+              `)
+            }
           };
 
         },
-        error: function(response,  status,  error) {
+        error: function(response, status,  error) {
           console.log(response, status, error);
         }
       });
@@ -435,7 +469,6 @@ $(document).ready(() => {
     const $this = $(this);
     const eachContent = $this.parent().parent().siblings('.each-content');
     var img = $this.attr('src');
-    console.log(img);
     content_b = document.getElementsByClassName('content_b')[0].value;
     eachContent.children('.uploaded-b').remove();
     eachContent.append(`

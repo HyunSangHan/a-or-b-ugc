@@ -306,6 +306,14 @@
   margin-top: -2px;
 }
 
+.comment-clear {
+  margin: 1px -2px 0 2px;
+}
+
+.comment-clear > i:hover{
+  cursor: pointer;
+}
+
 .comment-heart {
   font-size: 16px !important;
   margin-bottom: 6px;
@@ -438,18 +446,26 @@
 }
 
 .img-srch-btn {
-  /* border: 1px solid lightgrey; */
   width: 200px;
   height: 20px;
   margin-top: 10px;
+  font-size: 15px;
 }
 
-.img-srch-btn > div:hover {
+.img-srch-btn > span:hover {
   cursor: pointer;
 }
 
+/* .img-srch-btn-bg {
+  position: absolute;
+  width: 125px;
+  height: 14px;
+  margin-top: -10px;
+  background-color: rgb(240,240,240);
+} */
+
 .each-srch-result-wrap {
-  width: calc(100% + 10px);
+  width: 100%;
   display: flex;
   padding: 9px 0;
   margin: 5px 0 5px -5px;
@@ -458,11 +474,15 @@
 
 .each-srch-result-list {
   display: flex;
-  width: 92.15%;
+  width: 97%;
   margin: 0 auto;
 }
 
 .each-srch-result {
   height: 120px;
   padding-right: 10px;
+}
+
+.each-srch-result:last-child {
+  padding-right: 0px;
 }

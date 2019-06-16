@@ -227,10 +227,6 @@
                     </a>
                   </div>
                   <div class="font-14 v-center mtb-auto comment-content ellipsis">{{ comment_b.content }}</div>
-                    {% comment %} {{ comment_a.total_upvote }}
-                    {% if comment_a.reactor == user %}
-                    [MY]
-                    {% endif %} {% endcomment %}
                   {% get_comment_upvote_tf feed.id comment_b.id user.id as comment_upvote_tf %}
                   {% if user.is_authenticated %}
                     <div class="ml-auto more-btn comment-heart-btn" data-feedid="{{ feed.id }}" data-commentid="{{ comment_b.id }}">
@@ -291,11 +287,20 @@
                     {% endif %}
   
                     <div class="font-11 v-center mtb-auto comment-reactor">
-                    <a href="/feeds/creator/{{c.reactor.username}}">
-                      <strong>{{ c.reactor }}</strong>
-                    </a>
+                      <a href="/feeds/creator/{{c.reactor.username}}">
+                        <strong>{{ c.reactor }}</strong>
+                      </a>
                     </div>
-                    <div class="font-14 v-center mtb-auto comment-content ellipsis">{{ c.content }}</div>
+                    <div class="font-14 v-center mtb-auto comment-content ellipsis-span">
+                      <span>{{ c.content }}</span>
+                    </div>
+                    <!--댓글삭제-->
+                    {% if c.reactor == user %}
+                      <span class="comment-clear" data-feedid="{{ feed.id }}" data-commentid="{{ c.id }}" data-csrfmiddlewaretoken="{{ csrf_token }}">
+                        <i class="material-icons" style="font-size: 16px; color: grey;">clear</i>
+                      </span>
+                    {% endif %}
+                    <!--댓글삭제 끝-->
                     {% get_comment_upvote_tf feed.id c.id user.id as comment_upvote_tf %}
                     {% if user.is_authenticated %}
                       <div class="ml-auto more-btn comment-heart-btn" data-feedid="{{ feed.id }}" data-commentid="{{ c.id }}">

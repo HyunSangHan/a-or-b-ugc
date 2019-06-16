@@ -178,9 +178,11 @@ def create_comment(request, id):
         return redirect('%s'%next)
 
 def delete_comment(request, id, cid):
-    if request.method == 'POST':
+    if request.is_ajax and request.method == 'POST':
+        context = {}
         c = FeedComment.objects.get(id=cid)
         c.delete()
+        return JsonResponse(context)
     try:
         next = request.META['HTTP_REFERER']
     except:
@@ -504,17 +506,19 @@ def mynotification(request):
 
     return render(request, 'feedpage/mynotification.html', {'has_noti':has_noti, 'noti': noti, 'noti_unchecked': noti_unchecked, 'noti_checked': noti_checked})
 
+#이미지 추천기능
 def image_search(request):
-    client_id = IMG_CLIENT_ID
-    client_secret = IMG_CLIENT_KEY
+    CLIENT_ID = IMG_CLIENT_ID
+    CLIENT_SECRET = IMG_CLIENT_KEY
+    DISPLAY_NUM = "40"
     text = request.POST['keyword']
 
     enc_text = urllib.parse.quote(text)
-    url = "https://openapi.naver.com/v1/search/image?display=20&query=" + enc_text
+    url = "https://openapi.naver.com/v1/search/image?display="+ DISPLAY_NUM +"&query=" + enc_text
 
     image_search_request = urllib.request.Request(url)
-    image_search_request.add_header('X-Naver-Client-Id', client_id)
-    image_search_request.add_header('X-Naver-Client-Secret', client_secret)
+    image_search_request.add_header('X-Naver-Client-Id', CLIENT_ID)
+    image_search_request.add_header('X-Naver-Client-Secret', CLIENT_SECRET)
     response = urllib.request.urlopen(image_search_request)
 
     if response.getcode() == 200:
