@@ -148,6 +148,11 @@ STATIC_URL = '/static/'
 STATIC_ROOT =  os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = (
 	os.path.join(BASE_DIR, 'feedpage', 'static'),
+	# os.path.join(BASE_DIR, 'accounts', 'static'),
+)
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
 
 LOGIN_REDIRECT_URL = "/feeds/"

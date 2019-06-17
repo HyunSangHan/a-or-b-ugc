@@ -528,3 +528,8 @@
   border-radius: 32px;
   letter-spacing: -0.3px;
 }
+
+.login-title {
+  font-size: 35px;
+  font-weight: 500;
+}

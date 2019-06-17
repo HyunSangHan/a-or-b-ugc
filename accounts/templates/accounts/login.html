@@ -1,8 +1,13 @@
 {% extends 'base.html' %}
 
-{% block content %}
+{% load staticfiles %}
+{% load custom_tags %}
+{% load socialaccount %}
 
-<h1>Log in</h1>
+{% block content %}
+{% providers_media_js %}
+
+{% comment %} <h1>Log in</h1>
 {% if error %}
 {{ error }}
 {% endif %}
@@ -18,22 +23,24 @@
   </p>
   <input type="hidden" name="next" value="{{next}}" />
   <input type="submit" value="로그인" />
-</form>
-
-
-<hr>
-{% load socialaccount %}
-{% providers_media_js %}
-<a href="{% provider_login_url 'facebook' %}">페북 로그인</a><br>
-<a href="{% provider_login_url 'kakao' %}">카톡 로그인</a><br>
-<!--내장 기능 활용 시-->
-{% comment %} <h1>로그인</h1>
-<form method="post" action="{% url 'login' %}">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <input type="hidden" name="next" value="{{next}}" />
-  <input type="submit" value="로그인" />
 </form> {% endcomment %}
 
 
-{% endblock %}
+
+<div class="container-full">
+  <div class="flex-center">
+    <div>
+      <div class="login-title mb-2 m-auto">Login</div>
+      <div class="font-lightgrey font-12 mb-2 m-auto">간편하게 로그인해서 둘중에 하나 골라주세요</div>
+      <a href="{% provider_login_url 'facebook' %}">
+        <div class="m-auto">페북 로그인</div>
+      </a>
+      <a href="{% provider_login_url 'kakao' %}">
+        <div class="m-auto">카톡 로그인</div>
+      </a>
+  </div>
+  </div>
+</div>
+
+
+{% endblock content %}
