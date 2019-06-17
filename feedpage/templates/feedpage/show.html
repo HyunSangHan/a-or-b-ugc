@@ -16,11 +16,6 @@
               <i class="material-icons">more_vert</i>
             </button>
             <div class="more-info">
-              <div>
-                <a href="/feeds/{{ feed.id }}" class="link-black">
-                  <strong>더보기</strong>
-                </a>
-              </div>
   <!--배포 이후에 수정할 부분-->
               <div data-clipboard-text="localhost:8000/feeds/{{ feed.id }}" onclick="return alert('콘텐츠의 주소가 클립보드에 복사되었습니다.')">공유하기</div>
               {% if user.is_authenticated %}

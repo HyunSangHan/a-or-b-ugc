@@ -27,6 +27,22 @@
   box-shadow: 0 1px 8px 0 rgba(0,0,0,0.03), 0 -7px 2px -2px rgba(0,0,0,.2), 0 0px 0px 0 rgba(0,0,0,.12) !important;
 }
 
+.search-wrap {
+  border-bottom: 1px solid lightgrey;
+}
+
+.search-input {
+  width: calc(100% - 28px) !important;
+  border-bottom: none !important;
+}
+
+.search-btn {
+  position: absolute;
+  top: 3px;
+  right: -6px;
+  font-size: 14px;
+}
+
 .service-title {
   padding-right: 20px;
   text-align: center;
@@ -358,17 +374,10 @@
   position: fixed;
   bottom: 50px;
   z-index: 100;
+  opacity: 0.9;
 }
 
-.comment-submit-now {
-  position: absolute;
-  top: 25px;
-  right: -6px;
-  font-size: 14px;
-  font-weight: 700;
-}
-
-.comment-submit {
+.comment-submit-now, .comment-submit {
   position: absolute;
   top: 25px;
   right: -6px;
@@ -511,7 +520,7 @@
   z-index: 100;
   right: 4%;
   bottom: 4%;
-  width: 90px;
+  width: 100px;
   height: 32px;
   padding: 5px 0 7px;
   margin-top: 15px;
@@ -519,4 +528,9 @@
   font-size: 13px;
   border-radius: 32px;
   letter-spacing: -0.3px;
+}
+
+.login-title {
+  font-size: 35px;
+  font-weight: 500;
 }

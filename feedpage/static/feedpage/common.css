@@ -66,6 +66,11 @@ label, label > div:hover {
   margin-right: auto;
 }
 
+.container-full {
+  width: 100vw;
+  height: 100vh;
+}
+
 .relative {
   position: relative;
 }

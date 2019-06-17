@@ -1,8 +1,13 @@
 {% extends 'base.html' %}
 
-{% block content %}
+{% load staticfiles %}
+{% load custom_tags %}
+{% load socialaccount %}
 
-<h1>Log in</h1>
+{% block content %}
+{% providers_media_js %}
+
+{% comment %} <h1>Log in</h1>
 {% if error %}
 {{ error }}
 {% endif %}
@@ -18,22 +23,55 @@
   </p>
   <input type="hidden" name="next" value="{{next}}" />
   <input type="submit" value="로그인" />
-</form>
-
-
-<hr>
-{% load socialaccount %}
-{% providers_media_js %}
-<a href="{% provider_login_url 'facebook' %}">페북 로그인</a><br>
-
-<!--내장 기능 활용 시-->
-{% comment %} <h1>로그인</h1>
-<form method="post" action="{% url 'login' %}">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <input type="hidden" name="next" value="{{next}}" />
-  <input type="submit" value="로그인" />
 </form> {% endcomment %}
+<div class="container">
+  <div class="m-auto contents">
+    <div class="contents-margin">
+      <li class="each-li">
+        <div class="inline-flex w-more-btn">
+          <h2 class="link-black">선호하는 간편로그인은?</h2>
+        </div>
+        <div class="letter-space">
+          <span class="font-13 font-light">
+            #회원가입 #로그인 #클릭한번에 #소셜로그인
+          </span>
+        </div>
+        <div class="inline-flex v-center mt-1 mb-2">
+          <div class="inline-flex">
+            <div class="user-face" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
+            <span class="font-12 ml-1 font-grey">
+              운영자 · 1개월 전
+            </span>
+          </div>
+        </div>
+        <!--A와 B를 함께 두는 행-->
+        <div class="each-content mb-2">
+          <!-- Image card A-->
+          <a href="{% provider_login_url 'facebook' %}" class="mr-1perc demo-card-image mdl-card content-img" style="background: url('/static/feedpage/facebook_icon.jpg') center / cover;">
+            <div>
+              <div class="content-label bg-black">
+                <strong>A /</strong> 페이스북로그인
+              </div>
+            </div>
+          </a>
+          <!-- Image card B-->
+          <a href="{% provider_login_url 'kakao' %}" class="ml-1perc demo-card-image mdl-card content-img" style="background: url('/static/feedpage/kakao_icon.png') center / cover;">
+            <div class="content-label bg-black">
+              <strong>B /</strong> 카카오로그인
+            </div>
+          </a>
+        </div>
+        <!--베스트댓글같은공지-->
+        <div class="comment w-100 v-center mt-3 inline-flex">
+          <div class="sideicon best">NOTICE</div>
+          <div class="font-14 v-center mtb-auto comment-content">
+            <span>Facebook 또는 Kakao 중 선호하시는 서비스를 누르시면, 그를 통해 소셜로그인이 됩니다.<span>
+          </div>
+        </div>
+        <!-- 댓글 코드 끝 -->
+      </li>
+    </div>
+  </div>
+</div>
 
-
-{% endblock %}
+{% endblock content %}

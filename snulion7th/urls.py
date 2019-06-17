@@ -18,8 +18,8 @@ from django.urls import path, include
 # import feedpage.views
 from django.conf.urls import include
 import accounts.views
-from django.conf import settings #추가(wiki에 없음)
-from django.conf.urls.static import static #추가(wiki에 없음)
+from django.conf import settings 
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -32,5 +32,4 @@ urlpatterns = [
     # path('accounts/signup/', accounts.views.signup, name='signup'),
 ]
 
-#추가(wiki에 없음)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
