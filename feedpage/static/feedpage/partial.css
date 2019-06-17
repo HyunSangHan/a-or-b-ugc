@@ -374,6 +374,7 @@
   position: fixed;
   bottom: 50px;
   z-index: 100;
+  opacity: 0.9;
 }
 
 .comment-submit-now, .comment-submit {
@@ -519,7 +520,7 @@
   z-index: 100;
   right: 4%;
   bottom: 4%;
-  width: 90px;
+  width: 100px;
   height: 32px;
   padding: 5px 0 7px;
   margin-top: 15px;
