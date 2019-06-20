@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load custom_tags %}
 
-{% block content %}
+{% comment %} {% block content %}
   <h1>수정하기</h1>
   <a href="/feeds">메인으로 돌아가기</a>
   <form action="/feeds/{{feed.id}}/edit/" method="POST">
@@ -27,7 +27,6 @@
 
 
 
-    {% comment %}
     tag 삭제를 어떻게 구현한담??? 이거 폼태그 안에 폼태그가 있어서인지, 태그삭제가 되지 않고 수정하기 submit이 되어 POST가 날아가는데...
 
     {{tag.id}}
@@ -36,7 +35,6 @@
       <button type="submit">X</button>
       </form>
       
-      {% endcomment %}
     &nbsp&nbsp
     {% endfor %}
   </form>
@@ -88,9 +86,9 @@
 {% endif %}
 
 {% endblock content %}
-{% comment %} 
+
 {% extends 'base.html' %}
-{% load custom_tags %}
+{% load custom_tags %} {% endcomment %}
 
 {% block content %}
 
@@ -101,7 +99,7 @@
         {% csrf_token %} 
         <li class="each-li">
           <div class="w-100">
-            <input class="content-title w-100 feed-input-border" name="title" placeholder="제목을 입력하세요(30자 이내)" maxlength="30" required/>
+            <input class="content-title w-100 feed-input-border" name="title" placeholder="제목을 입력하세요(30자 이내)"  value="{{feed.title}}" maxlength="30" required/>
             <div class="font-13 font-light">
               <input class="font-13 font-light letter-space w-100 feed-input-border" type="text" id="hash_tag" name="hash_tag_raw" placeholder="#으로 #구분하여 #한단어씩 #해시태그를 #입력하세요" />
             </div>
@@ -121,42 +119,22 @@
           <!--A와 B를 함께 두는 행-->
           <div class="each-content">
             <!-- Image card A-->
-            <div class="mr-1perc demo-card-image mdl-card content-img inner uploaded-a">
-              <div class="content-label bg-black">
-                <strong>A / </strong>
-                <input type="text" class="w-80 font-15 feed-input-border font-white bg-black content_a" placeholder=" 내용(21자 이내)" name="content_a" maxlength="21" required>
-              </div>
+            <div class="mr-1perc demo-card-image mdl-card content-img inner uploaded-a" style="background: url('{{ feed.img_a.url }}') center / cover;">
               <label for="img_a" style="height: 100%; width: 100%;">
-                <div class="flex-center w-100 h-100">
-                  <div class="mt-4">
-                    <div>
-                      <img src="/static/feedpage/empty_content_img.png" alt="empty-image" style="width: 20%;">
-                    </div>
-                    <div class="font-grey font-13 mt-2">
-                      A 이미지
-                    </div>
-                  </div>
+                <div class="content-label bg-black">
+                  <strong>A / </strong>
+                  <input type="text" class="w-80 font-15 feed-input-border font-white bg-black content_a" value="{{ feed.content_a }}" placeholder=" 내용(21자 이내)" name="content_a" maxlength="21" required>
                 </div>
               </label>
             </div>
             <input id="img_a" class="upload-hidden upload-a" name="img_a" type="file" accept="image/*" required/>
             <!-- Image card B-->
             <input id="img_b" class="upload-hidden upload-b" name="img_b" type="file" accept="image/*" required/>
-            <div class="ml-1perc demo-card-image mdl-card content-img inner uploaded-b" >
-              <div class="content-label bg-black">
-                <strong>B / </strong>
-                <input type="text" class="w-80 font-15 feed-input-border font-white bg-black content_b" placeholder=" 내용(21자 이내)" name="content_b" maxlength="21" required>
-              </div>
+            <div class="ml-1perc demo-card-image mdl-card content-img inner uploaded-b" style="background: url('{{ feed.img_b.url }}') center / cover;">
               <label for="img_b" style="height: 100%; width: 100%;">
-                <div class="flex-center w-100 h-100">
-                  <div class="mt-4">
-                    <div>
-                      <img src="/static/feedpage/empty_content_img.png" alt="empty-image" style="width: 20%;">
-                    </div>
-                    <div class="font-grey font-13 mt-2">
-                      B 이미지
-                    </div>
-                  </div>
+                <div class="content-label bg-black">
+                  <strong>B / </strong>
+                  <input type="text" class="w-80 font-15 feed-input-border font-white bg-black content_b" value="{{ feed.content_b }}" placeholder=" 내용(21자 이내)" name="content_b" maxlength="21" required>
                 </div>
               </label>
             </div>
@@ -165,7 +143,6 @@
             <span>
               [beta] 이미지 추천 >
             </span>
-            {% comment %} <div class="img-srch-btn-bg"></div> {% endcomment %}
           </div>
           <div class="each-srch-result-wrap hr-scroll">
             <div class="each-srch-result-list img-srch-result-js">
@@ -224,4 +201,4 @@
     </a>
   </div>
 {% endif %}
-{% endblock content %} {% endcomment %}
+{% endblock content %}

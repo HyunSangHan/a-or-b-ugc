@@ -93,7 +93,7 @@ def delete(request, id):
     else:
         if feed.creator == request.user:
             feed.delete()
-            next = request.META['HTTP_REFERER']
+            next = '/feeds/'
         else:
             print("비정상적인 수정 접근 시도")
             try:
