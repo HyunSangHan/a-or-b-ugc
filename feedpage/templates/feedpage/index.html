@@ -386,14 +386,15 @@
           </div>
         </div>
       </div>
-    {% else %}
+      <!--페이지네이션-->
+    {% comment %} {% else %}
       {% if feeds.has_previous %}
       <a href="?page=1">First</a>
       <a href="?page={{feeds.previous_page_number}}">Previous</a>
       {% endif %}
       <span>{{feeds.number}}</span>
       <span>of</span>
-      <span>{{feeds.paginator.num_pages}}</span>
+      <span>{{feeds.paginator.num_pages}}</span> {% endcomment %}
     {% endif %}
 
     {% if feeds.has_next %}

@@ -3,60 +3,61 @@
 
 {% block content %}
 
-<div class="container relative">
-  {% if creator.profile.image.url != "/media/False" %}
-    <div class="creator-img" style="background: url('{{ creator.profile.image.url }}') center / cover;"></div>
-  {% else %}
-    <div class="creator-img" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
-  {% endif %}
-  <div class="m-auto black-creator">
-    <div class="contents-margin">
-      <div class="creator-name-card">
-        <div class="creator-name ellipsis">
-          {{ creator.username }}
-        </div>
-        <div class="creator-subs-num">
-          구독자 {{ creator.profile.follow_to.all.count }}명
-        </div>
-        <div>
-          {% if user.is_authenticated %}
-            {% if request.user != creator %}
-              {% if request.user.profile not in creator.profile.follows.all %}
-                <a href = "/feeds/{{ creator.id }}/follow/">
-                  <button class="subs-btn bg-black font-white">
-                    구독하기
+<div class="page-content-black mdl-layout__content bg-black w-100 font-white">
+  <div class="container relative">
+    {% if creator.profile.image.url != "/media/False" %}
+      <div class="creator-img" style="background: url('{{ creator.profile.image.url }}') center / cover;"></div>
+    {% else %}
+      <div class="creator-img" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
+    {% endif %}
+    <div class="m-auto black-creator">
+      <div class="contents-margin">
+        <div class="creator-name-card">
+          <div class="creator-name ellipsis">
+            {{ creator.username }}
+          </div>
+          <div class="creator-subs-num">
+            구독자 {{ creator.profile.follow_to.all.count }}명
+          </div>
+          <div>
+            {% if user.is_authenticated %}
+              {% if request.user != creator %}
+                {% if request.user.profile not in creator.profile.follows.all %}
+                  <a href = "/feeds/{{ creator.id }}/follow/">
+                    <button class="subs-btn bg-black font-white">
+                      구독하기
+                    </button>
+                  </a>
+                {% else %}
+                  <a href = "/feeds/{{ creator.id }}/follow/">
+                    <button class="subs-btn bg-white flex-center" style="padding-left: 2px;">
+                      <div class="flex-center" style="margin-top: 3px;">
+                        <div>구독중</div>
+                        <div class="subs-check-icon">
+                          <img src='/static/feedpage/checkicon.png' alt="check_icon" style="width: 14px;">
+                        </div>
+                      </div>
+                    </button>
+                  </a>
+                {% endif %}
+              {% else %}
+                <a href = "/accounts/profile/">
+                  <button class="subs-btn bg-black font-white" style="width: 87px; font-weight: 300;">
+                    프로필 수정
                   </button>
                 </a>
-              {% else %}
-                <a href = "/feeds/{{ creator.id }}/follow/">
-                  <button class="subs-btn bg-white flex-center" style="padding-left: 2px;">
-                    <div class="flex-center" style="margin-top: 3px;">
-                      <div>구독중</div>
-                      <div class="subs-check-icon">
-                        <img src='/static/feedpage/checkicon.png' alt="check_icon" style="width: 14px;">
-                      </div>
-                    </div>
+                <a href = "/accounts/logout/">
+                  <button class="subs-btn bg-black font-white ml-2" style="width: 87px; font-weight: 300;">
+                    로그아웃
                   </button>
                 </a>
               {% endif %}
-            {% else %}
-              <a href = "/accounts/profile/">
-                <button class="subs-btn bg-black font-white" style="width: 87px; font-weight: 300;">
-                  프로필 수정
-                </button>
-              </a>
-              <a href = "/accounts/logout/">
-                <button class="subs-btn bg-black font-white ml-2" style="width: 87px; font-weight: 300;">
-                  로그아웃
-                </button>
-              </a>
             {% endif %}
-          {% endif %}
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 </div>
 <!--피드 나오는 영역-->
 <div class="container">

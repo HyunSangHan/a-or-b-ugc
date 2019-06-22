@@ -429,6 +429,31 @@
   margin: -2px -1px 0 2px
 }
 
+.version-status {
+  margin-top: 13px;
+  position: absolute;
+  width: 78%;
+  top: 120px;
+  left: 22px;
+  color: white;
+}
+
+.version-status > div:hover {
+  cursor: pointer;
+}
+
+.qmark {
+  display: flex;
+  justify-content: center; 
+  align-items: center; 
+  width:12px; 
+  height:12px; 
+  border-radius: 50%; 
+  margin: 4px 0 0 4px; 
+  font-size: 8px; 
+  border: 1px solid white;
+}
+
 .each-noti {
   padding-top: 8px;
   padding-bottom: 8px;

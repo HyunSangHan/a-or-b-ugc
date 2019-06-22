@@ -20,8 +20,10 @@ class Profile(models.Model):
 		format = 'JPEG',
 		# options = {'quality': 50},
         blank = True,
-        null = True
+        null = True,
+        # default='static/feedpage/default_avatar.png'
         )
+    image_url = models.URLField(blank=True, null=True)
     created_at = models.DateTimeField(default=timezone.now)
     notichecked_at = models.DateTimeField(default=timezone.now)
     left_level = models.IntegerField(
@@ -42,6 +44,9 @@ class Profile(models.Model):
 #7 해외
 #8 기타
     recent_login = models.DateTimeField(default=timezone.now)
+    likes_iphone = models.BooleanField(blank=True, null=True)
+    is_premium = models.BooleanField(default=False)
+
 
     def __str__(self):
         return self.user.username
@@ -56,6 +61,8 @@ class Profile(models.Model):
             birthday = myfake.date_this_century(before_today=True, after_today=False)
             politics = random.randrange(1,6)
             region = random.randrange(1,9)
+            likes_iphone = myfake.boolean(chance_of_getting_true=50)
+            is_premium = True
 
             user = User.objects.create_user(
                 username = username,
@@ -70,6 +77,8 @@ class Profile(models.Model):
             profile.region = region
             profile.major = "예체능"
             profile.recent_login = timezone.now()
+            profile.likes_iphone = likes_iphone
+            profile.is_premium = is_premium
             profile.save()
 
 

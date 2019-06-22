@@ -19,7 +19,6 @@
     <script type="text/javascript" src="https://milankyncl.github.io/jquery-copy-to-clipboard/jquery.copy-to-clipboard.js"></script>
   </head>
   <body>
-    {% comment %} <div class="transp-bg"></div> {% endcomment %}
     <!-- Always shows a header, even in smaller screens. -->
     <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
       <header class="mdl-layout__header bg-black header-shadow">
@@ -43,12 +42,8 @@
         </div>
       </header>
       <main class="mdl-layout__content mt--1">
-        <div class="page-content-black mdl-layout__content bg-black w-100 font-white">
-
-          {% block content %}
-          {% endblock %}
-          
-        </div>
+        {% block content %}
+        {% endblock %}
       </main>
     </div>
 
