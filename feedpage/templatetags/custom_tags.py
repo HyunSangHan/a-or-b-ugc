@@ -1,7 +1,7 @@
 from django import template
 from feedpage.models import Feed, FeedComment, Upvote, HashTag, TagRelation, Report, Notification
 register = template.Library()
-from datetime import datetime, timedelta
+from datetime import datetime#, timedelta
 from django.utils import timezone
 
 @register.simple_tag
@@ -15,7 +15,7 @@ def get_deltatime(pk, type_id):
         deltatime = nowtime-notitime
     delta_second = deltatime.seconds
     delta_day = deltatime.days
-
+    deltatime_view = ""
     if delta_day == 0:
         if delta_second < 10:
             deltatime_view = "방금전"

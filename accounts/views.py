@@ -35,7 +35,7 @@ def signup(request):
 
 def logout(request):
     auth.logout(request)
-    next = '/feeds/'
+    next = '/accounts/login'
     return redirect('%s'%next)
 
 def login(request):
@@ -63,36 +63,50 @@ def login(request):
 def profile(request):
     # auth.login(request, user)
     if request.method == 'POST':
+    #하나씩만 입력해도 되도록.
         user = request.user
         profile = user.profile
-        current_password = request.POST['current_password']
-        password1 = request.POST['password1']
-        password2 = request.POST['password2']
-
-        if user.check_password(current_password) and (password1 == password2) :
-            # good case
-            if password1 != '':
-                user.set_password(password1)
-            user.username = request.POST['username']
-            user.save()
-            profile.birthday = request.POST['birthday']
-            profile.is_male = request.POST['gender']
-            profile.left_level = request.POST['politics']
-            profile.region = request.POST['region']
-            profile.major = request.POST['major']
-            profile.save()
-            update_session_auth_hash(request, request.user)
-            return redirect('/feeds')
-        else:
-            # for error message
-            if user.check_password(current_password) == False :
-                error_msg = 'Check your current password'
-            elif password1 != password2 :
-                error_msg = 'Check your new password'
-            else :
-                error_msg = 'Unexpected error! Please tell us about this error case'
-            return render(request, 'accounts/profile.html', {'profile': profile, 'error': error_msg})
+        user.username = request.POST['username']
+        user.save()
+        profile.birthday = request.POST['birthday']
+        profile.is_male = request.POST['gender']
+        profile.left_level = request.POST['politics']
+        profile.region = request.POST['region']
+        profile.major = request.POST['major']
+        profile.likes_iphone = request.POST['likes_iphone']
+        profile.is_premium = True
+        profile.save()
+        update_session_auth_hash(request, request.user)
+        return redirect('/feeds/creator')
     else:
         user = request.user
+        social_user = user.socialaccount_set.first()
+        social_data = social_user.extra_data
         profile = user.profile
+        #첫 로그인인 경우로 조건문 걸어주고
+        ## 안된거
+        # birthday, is_male, image,
+        # left_level, major, 
+        # region, likes_iphone, is_premium
+        # print(social_user.get_avatar_url())
+        ## 된거
+        # image_url, created_at, 
+        profile.image_url = social_user.get_avatar_url()
+        profile.created_at = social_user.date_joined
+
+        # profile.birthday = request.POST['birthday']
+
+        # if social_data['kakao_account']['gender'] == "male":
+        #     profile.is_male = True
+        # else:
+        #     profile.is_male = False
+
+        # profile.is_male = request.POST['gender']
+
+        profile.save()
+        print(social_user.extra_data)
+        # print(social_user.extra_data['properties'])
+        # profile
+
+
         return render(request, 'accounts/profile.html', {'profile': profile}) #for GET method

@@ -8,6 +8,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 import random
 from imagekit.models import ProcessedImageField
 from imagekit.processors import Thumbnail, ResizeToFill
+from allauth.account.signals import user_signed_up
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -20,17 +21,19 @@ class Profile(models.Model):
 		format = 'JPEG',
 		# options = {'quality': 50},
         blank = True,
-        null = True
+        null = True,
+        # default='static/feedpage/default_avatar.png'
         )
+    image_url = models.URLField(blank=True, null=True)
     created_at = models.DateTimeField(default=timezone.now)
     notichecked_at = models.DateTimeField(default=timezone.now)
     left_level = models.IntegerField(
-        default=3,
+        null=True,
         validators=[MaxValueValidator(5), MinValueValidator(1)]
     )
-    major = models.CharField(default="기타", max_length=3)
+    major = models.CharField(max_length=3)
     region = models.IntegerField(
-        default=8,
+        null=True,
         validators=[MaxValueValidator(8), MinValueValidator(1)]
     )
 #1 서울/경기
@@ -42,6 +45,9 @@ class Profile(models.Model):
 #7 해외
 #8 기타
     recent_login = models.DateTimeField(default=timezone.now)
+    likes_iphone = models.BooleanField(blank=True, null=True)
+    is_premium = models.BooleanField(default=False)
+
 
     def __str__(self):
         return self.user.username
@@ -56,6 +62,8 @@ class Profile(models.Model):
             birthday = myfake.date_this_century(before_today=True, after_today=False)
             politics = random.randrange(1,6)
             region = random.randrange(1,9)
+            likes_iphone = myfake.boolean(chance_of_getting_true=50)
+            is_premium = True
 
             user = User.objects.create_user(
                 username = username,
@@ -70,6 +78,8 @@ class Profile(models.Model):
             profile.region = region
             profile.major = "예체능"
             profile.recent_login = timezone.now()
+            profile.likes_iphone = likes_iphone
+            profile.is_premium = is_premium
             profile.save()
 
 
@@ -94,3 +104,25 @@ def create_user_profile(sender, instance, created, **kwargs):
 def save_user_profile(sender, instance, **kwargs):  
     instance.profile.save()
     # 합쳐질지 확인 필요
+
+@receiver(user_signed_up)
+def populate_profile(sociallogin, user, **kwargs):    
+    profile = user.profile
+
+    if sociallogin.account.provider == 'facebook':
+        user_data = user.socialaccount_set.filter(provider='facebook')[0].extra_data
+        picture_url = "http://graph.facebook.com/" + sociallogin.account.uid + "/picture?type=large"            
+        # picture_url = user.socialaccount_set.first().get_avatar_url()
+        profile.image_url = picture_url
+        profile.save()
+
+    elif sociallogin.account.provider == 'kakao':
+        user_data = user.socialaccount_set.filter(provider='kakao')[0].extra_data
+        picture_url = user.socialaccount_set.first().get_avatar_url()
+        gender = user_data['kakao_account']['gender']
+        if gender == 'male':
+            profile.is_male = True
+        elif gender == 'female':
+            profile.is_male = False
+        profile.image_url = picture_url
+        profile.save()

@@ -1,84 +1,118 @@
-{% extends 'base.html' %}
-{% load staticfiles %}
+{% extends 'base_black.html' %}
 {% load custom_tags %}
 
 {% block content %}
-
-<h1>Profile Edit</h1>
-{% if error %}
-{{ error }}
-{% endif %}
-
-<form action='{% url "profile" %}' method='POST'>
-    {% csrf_token %}
-    <p>
-        이메일주소(ID) : {{ profile.user.email}}
-    </p>
-    <p>
-        현재 비번 : 
-        <input name='current_password' type='password' value='' required/>
-    </p>
-    <p>
-        새로운 비번 : 
-        <input name='password1' type='password' value='' />
-    </p>
-    <p>
-        새로운 비번 확인 : 
-        <input name='password2' type='password' value='' />
-    </p>
-    <p>
-        닉네임 : 
-        <input name='username' type='text' value='{{ profile.user.username }}' />
-    </p>
-    <p>
-        성별 :
-        <input type='radio' id='genderChoice1' name='gender' value=True required> 
-        <label for='genderChoice1'>남성</label>
-        <input type='radio' id='genderChoice2' name='gender' value=False> 
-        <label for='genderChoice2'>여성</label>
-    </p>
-    <p> 
-        생년월일 : <input type='date' name='birthday' value='{{ profile.birthday|date:"Y-m-d"}}'/> <br/>
-    </p>
-    <p>
-        배경지역 :
-        <select name='region' required>
-            <option disabled selected value> -- 선택하세요 -- </option>
-            <option value="1">서울/경기</option>
-            <option value="2">강원</option>
-            <option value="3">충청</option>
-            <option value="4">호남</option>
-            <option value="5">영남</option>
-            <option value="6">제주</option>
-            <option value="7">해외</option>
-            <option value="8">기타</option>
-        </select>
-    </p>
-    <p>
-        전공분야 :
-        <input type='radio' id='majorChoice1' name='major' value='문과' required> 
-        <label for='majorChoice1'>문과</label>
-        <input type='radio' id='majorChoice2' name='major' value='이과'> 
-        <label for='majorChoice2'>이과</label>
-        <input type='radio' id='majorChoice3' name='major' value='예체능'> 
-        <label for='majorChoice3'>예체능</label>
-        <input type='radio' id='majorChoice4' name='major' value='기타'> 
-        <label for='majorChoice4'>기타</label>
-    </p>
-    <p>
-        정치성향 :
-        <select name='politics' required>
-            <option disabled selected value> -- 선택하세요 -- </option>
-            <option value="5">진보</option>
-            <option value="4">중도진보</option>
-            <option value="3">중도</option>
-            <option value="2">중도보수</option>
-            <option value="1">보수</option>
-        </select>
-    </p>
-    <input type='submit' value='정보 수정하기' />
-</form>
-
+{% comment %} {{ user.socialaccount_set.first.get_avatar_url }} {% endcomment %}
+<div class="page-content-black mdl-layout__content bg-black w-100 font-white">
+  <div class="container relative">
+    {% comment %} {% if profile.image.url != "/media/False" %} {% endcomment %}
+      <div class="creator-img" style="background: url('{{ profile.image_url }}') center / cover;">
+        <div class="photo-edit-btn">
+          <i class="material-icons" style="font-size: 13px;" onclick="return alert('아직 기능 개발중')">photo_camera</i>
+        </div>
+      </div>
+    {% comment %} {% else %}
+      <div class="creator-img" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
+    {% endif %} {% endcomment %}
+    <div class="m-auto black-creator">
+      <div class="contents-margin">
+        <div class="creator-name-card">
+          <div class="creator-name ellipsis">
+            {{ request.user.username }}
+          </div>
+          <div class="creator-subs-num">
+            {{ profile.user.email}}
+          </div>
+        </div>
+        <div class="version-status flex">
+          현재 Lite version입니다. <div class="qmark" onclick="return alert('프로필을 모두 채우고 Premium version으로 업그레이드 해보세요. 시원시원하게 상세 통계까지 확인할 수 있습니다.')">?</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div class="m-auto contents">
+    <div class="contents-margin">
+      {% if error %}
+      {{ error }}
+      {% endif %}
+      <form action='{% url "profile" %}' method='POST'>
+          {% csrf_token %}
+          <p>
+              이메일주소(ID) : {{ profile.user.email}}
+          </p>
+          <p>
+              닉네임 : 
+              <input name='username' type='text' value='{{ profile.user.username }}' />
+          </p>
+          <p>
+              성별 :
+              <input type='radio' id='genderChoice1' name='gender' value=True required> 
+              <label for='genderChoice1'>남성</label>
+              <input type='radio' id='genderChoice2' name='gender' value=False> 
+              <label for='genderChoice2'>여성</label>
+          </p>
+          <p> 
+              생년월일 : <input type='date' name='birthday' value='{{ profile.birthday|date:"Y-m-d"}}'/> <br/>
+          </p>
+          <p>
+              배경지역 :
+              <select name='region' required>
+                  <option disabled selected value> -- 선택하세요 -- </option>
+                  <option value="1">서울/경기</option>
+                  <option value="2">강원</option>
+                  <option value="3">충청</option>
+                  <option value="4">호남</option>
+                  <option value="5">영남</option>
+                  <option value="6">제주</option>
+                  <option value="7">해외</option>
+                  <option value="8">기타</option>
+              </select>
+          </p>
+          <p>
+              전공분야 :
+              <input type='radio' id='majorChoice1' name='major' value='문과' required> 
+              <label for='majorChoice1'>문과</label>
+              <input type='radio' id='majorChoice2' name='major' value='이과'> 
+              <label for='majorChoice2'>이과</label>
+              <input type='radio' id='majorChoice3' name='major' value='예체능'> 
+              <label for='majorChoice3'>예체능</label>
+              <input type='radio' id='majorChoice4' name='major' value='기타'> 
+              <label for='majorChoice4'>기타</label>
+          </p>
+          <p>
+              정치성향 :
+              <select name='politics' required>
+                  <option disabled selected value> -- 선택하세요 -- </option>
+                  <option value="5">진보</option>
+                  <option value="4">중도진보</option>
+                  <option value="3">중도</option>
+                  <option value="2">중도보수</option>
+                  <option value="1">보수</option>
+              </select>
+          </p>
+          <p>폰: 아이폰 / 안드로이드</p>
+          <p>종교: 개신교 / 천주교 / 불교 / 원불교 / 기타  </p>
+          {% comment %} <p>
+              아이폰 좋아함? :
+              <input type='radio' id='genderChoice1' name='gender' value=True required> 
+              <label for='genderChoice1'>남성</label>
+              <input type='radio' id='genderChoice2' name='gender' value=False> 
+              <label for='genderChoice2'>여성</label>
+          </p>
+          <p>
+              종교 :
+              <input type='radio' id='genderChoice1' name='gender' value=True required> 
+              <label for='genderChoice1'>남성</label>
+              <input type='radio' id='genderChoice2' name='gender' value=False> 
+              <label for='genderChoice2'>여성</label>
+          </p> {% endcomment %}
+          <input type='submit' value='정보 수정하기' />
+      </form>
+    </div>
+  </div>
+</div>
 
 <!--navigation bar-->
 {% if user.is_authenticated %}
@@ -125,5 +159,4 @@
     </a>
   </div>
 {% endif %}
-
-{% endblock %}
+{% endblock content %}

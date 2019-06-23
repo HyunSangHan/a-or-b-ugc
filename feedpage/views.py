@@ -32,9 +32,10 @@ def index(request):
         for tag in tags:
             feeds_by_hashtag = feeds_by_hashtag + list(tag.tagged_feeds.all())
         feeds_all = list(set(feeds_by_field + feeds_by_hashtag))
+        feeds_all = sorted(feeds_all, key=lambda x: x.updated_at, reverse=True)
 #TODO: 페이지네이션과의 파라미터 조화 필요
 
-    paginator = Paginator(feeds_all, 8)
+    paginator = Paginator(feeds_all, 10)
     page_num = request.GET.get('page')
     feeds = paginator.get_page(page_num)
     search_result_num = len(feeds_all)

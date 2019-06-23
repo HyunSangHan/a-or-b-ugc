@@ -66,8 +66,8 @@ class Feed(models.Model):
                 creator = User.objects.get(id=uid),
                 content_a = myfake.catch_phrase(),
                 content_b = myfake.catch_phrase(),
-                img_a = '/static/feedpage/default_avatar.png',
-                img_b = '/static/feedpage/default_avatar.png',
+                img_a = '/static/feedpage/facebook_icon.png',
+                img_b = '/static/feedpage/kakao_icon.png',
             )
 
         #되는지 다음번 db초기화때 확인필요
@@ -89,7 +89,7 @@ class FeedComment(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
-        return str(self.id)
+        return str(self.content)
 
 class TagRelation(models.Model):
     feed = models.ForeignKey(Feed, on_delete=models.CASCADE)
