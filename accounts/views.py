@@ -35,7 +35,7 @@ def signup(request):
 
 def logout(request):
     auth.logout(request)
-    next = '/feeds/'
+    next = '/accounts/login'
     return redirect('%s'%next)
 
 def login(request):

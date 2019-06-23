@@ -454,6 +454,22 @@
   border: 1px solid white;
 }
 
+.photo-edit-btn {
+  width: 24px;
+  display: flex;
+  height: 24px;
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid white;
+  background-color: black;
+  color: white;
+  top: 70px;
+  right: 0;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
 .each-noti {
   padding-top: 8px;
   padding-bottom: 8px;
