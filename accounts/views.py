@@ -88,25 +88,9 @@ def profile(request):
         # birthday, is_male, image,
         # left_level, major, 
         # region, likes_iphone, is_premium
-        # print(social_user.get_avatar_url())
-        ## 된거
-        # image_url, created_at, 
-        profile.image_url = social_user.get_avatar_url()
-        profile.created_at = social_user.date_joined
-
-        # profile.birthday = request.POST['birthday']
-
-        # if social_data['kakao_account']['gender'] == "male":
-        #     profile.is_male = True
-        # else:
-        #     profile.is_male = False
-
-        # profile.is_male = request.POST['gender']
-
         profile.save()
         print(social_user.extra_data)
         # print(social_user.extra_data['properties'])
-        # profile
 
 
         return render(request, 'accounts/profile.html', {'profile': profile}) #for GET method

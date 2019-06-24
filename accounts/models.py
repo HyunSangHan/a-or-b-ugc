@@ -13,8 +13,8 @@ from allauth.account.signals import user_signed_up
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     follows = models.ManyToManyField('self', through = 'Follow', blank=True, symmetrical=False)
-    birthday = models.DateField(blank=True, null=True)
-    is_male = models.BooleanField(blank=True, null=True)
+    birthday = models.DateField(null=True)
+    is_male = models.BooleanField(null=True)
     image = ProcessedImageField(
 		upload_to = 'profile_img',
 		processors = [ResizeToFill(60, 60)],
@@ -45,7 +45,7 @@ class Profile(models.Model):
 #7 해외
 #8 기타
     recent_login = models.DateTimeField(default=timezone.now)
-    likes_iphone = models.BooleanField(blank=True, null=True)
+    likes_iphone = models.BooleanField(null=True)
     is_premium = models.BooleanField(default=False)
 
 

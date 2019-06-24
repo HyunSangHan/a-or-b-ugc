@@ -89,6 +89,22 @@ label, label > div:hover {
   align-items: center;
 }
 
+.flex-end {
+  display: -webkit-flex !important;
+  display: -ms-flexbox !important;
+  display: flex !important;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.flex-start {
+  display: -webkit-flex !important;
+  display: -ms-flexbox !important;
+  display: flex !important;
+  justify-content: flex-start;
+  align-items: center;
+}
+
 .v-center {
   vertical-align: middle;
 }
@@ -183,11 +199,15 @@ label, label > div:hover {
 }
 
 .mt-3 {
-  margin-top: 12px !important;;
+  margin-top: 12px !important;
 }
 
 .mt-4 {
-  margin-top: 16px !important;;
+  margin-top: 16px !important;
+}
+
+.mt-7 {
+  margin-top: 28px !important;
 }
 
 .mb-1 {

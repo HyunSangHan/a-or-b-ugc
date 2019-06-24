@@ -418,6 +418,21 @@
   padding-top: 5px;
 }
 
+.creator-name-edit {
+  font-size: 36px;
+  margin-top: -24px;
+  margin-left: -1px;
+  background-color: black;
+  border: none;
+  color: white;
+  font-weight: 700;
+  width: 100%;
+  min-height: 52px;
+  padding-top: 5px;
+  font-family: "Noto Sans KR", sans-serif !important;
+}
+
+
 .creator-subs-num {
   font-size: 14px;
   font-weight: 300;
@@ -574,4 +589,75 @@
 .login-title {
   font-size: 35px;
   font-weight: 500;
+}
+
+.select-form, .date-form {
+  border: 0;
+  width: 100%;
+  height: 40px;
+  background-color: white;
+  font-size: 26px;
+  margin: -16px 0 0 0;
+  font-weight: 800;
+  color: #BBB;
+  font-family: "Noto Sans KR", sans-serif !important;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.radio-form {
+  display: inline-flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 400px;
+}
+
+.radio-form label {
+  border: 0;
+  width: 100%;
+  height: 40px;
+  background-color: white;
+  font-size: 26px;
+  margin: -10px 0 0 0px;
+  font-weight: 800;
+  color: #BBB;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+input[type="radio"] {
+  position: absolute;
+  overflow: hidden;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  opacity: 0;
+}
+
+.each-profile {
+  margin: 20px 0 0 0;
+  /* border-bottom: 0.5px solid grey; */
+}
+
+.radio-form input:checked + label {
+  border: 0;
+  width: 100%;
+  height: 40px;
+  background-color: white;
+  font-size: 26px;
+  /* margin: 0; */
+  font-weight: 800;
+  color: #000;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.each-profile select:checked + label {
+}
+
+.each-profile-ul {
+  border-bottom: 0.5px solid grey;
+  width: 100%;
+  opacity: 0.18;
+  height: 1px;
 }
