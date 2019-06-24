@@ -515,5 +515,17 @@ $(document).ready(() => {
       `); 
   });
 
+  // 프로필수정 페이지에서 select 버튼 바뀔 때
+  $('select').on('change', function() {
+    if ($(this).val()) {
+      return $(this).addClass('font-black');
+    }
+  });
+
+  $('.date-form').on('change', function() {
+    if ($(this).val()) {
+      return $(this).addClass('font-black');
+    }
+  });
 
 })

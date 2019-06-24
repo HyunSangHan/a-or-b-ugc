@@ -591,30 +591,17 @@
   font-weight: 500;
 }
 
-.select-form, .date-form {
-  border: 0;
-  width: 100%;
-  height: 40px;
-  background-color: white;
-  font-size: 26px;
-  margin: -16px 0 0 0;
-  font-weight: 800;
-  color: #BBB;
-  font-family: "Noto Sans KR", sans-serif !important;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-}
-
 .radio-form {
   display: inline-flex;
   justify-content: space-between;
-  width: 100%;
   max-width: 400px;
+  width: 20%;
 }
 
 .radio-form label {
   border: 0;
-  width: 100%;
+  width: 106%;
+  max-width: 125px;
   height: 40px;
   background-color: white;
   font-size: 26px;
@@ -623,9 +610,14 @@
   color: #BBB;
   -webkit-appearance: none;
   -moz-appearance: none;
+  appearance: none;
 }
 
-input[type="radio"] {
+.radio-form .two-lines{
+  line-height: 30px;
+}
+
+.radio-form input[type="radio"] {
   position: absolute;
   overflow: hidden;
   width: 1px;
@@ -636,6 +628,8 @@ input[type="radio"] {
 
 .each-profile {
   margin: 20px 0 0 0;
+  display: inline-flex;
+  width: 100%
   /* border-bottom: 0.5px solid grey; */
 }
 
@@ -650,9 +644,7 @@ input[type="radio"] {
   color: #000;
   -webkit-appearance: none;
   -moz-appearance: none;
-}
-
-.each-profile select:checked + label {
+  appearance: none;
 }
 
 .each-profile-ul {
@@ -660,4 +652,32 @@ input[type="radio"] {
   width: 100%;
   opacity: 0.18;
   height: 1px;
+}
+
+.select-form, .date-form {
+  border: 0;
+  width: 100%;
+  height: 40px;
+  background-color: white;
+  font-size: 26px;
+  margin: -16px 0 0 0;
+  font-weight: 800;
+  color: #BBB;
+  font-family: "Noto Sans KR", sans-serif !important;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.profile-submit-btn {
+  color: white;
+  background-color: black;
+  width: 100px;
+  height: 32px;
+  padding: 7px;
+  margin: 15px auto 40px;
+  font-weight: 500;
+  font-size: 13px;
+  border-radius: 32px;
+  letter-spacing: -0.3px;
 }

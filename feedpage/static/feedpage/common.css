@@ -206,6 +206,10 @@ label, label > div:hover {
   margin-top: 16px !important;
 }
 
+.mt-6 {
+  margin-top: 24px !important;
+}
+
 .mt-7 {
   margin-top: 28px !important;
 }
