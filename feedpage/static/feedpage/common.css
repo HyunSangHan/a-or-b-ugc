@@ -218,6 +218,14 @@ label, label > div:hover {
   margin-top: 28px !important;
 }
 
+.mt-8 {
+  margin-top: 32px !important;
+}
+
+.mt-9 {
+  margin-top: 36px !important;
+}
+
 .mb-1 {
   margin-bottom: 4px;
 }
@@ -317,12 +325,17 @@ label, label > div:hover {
 }
 
 .font-light {
-  font-weight: 400px !important;
+  font-weight: 400 !important;
   font-family: "Noto Sans KR", sans-serif !important;
 }
 
 .font-mid {
-  font-weight: 600px !important;
+  font-weight: 600 !important;
+  font-family: "Noto Sans KR", sans-serif !important;
+}
+
+.font-bold {
+  font-weight: 800 !important;
   font-family: "Noto Sans KR", sans-serif !important;
 }
 

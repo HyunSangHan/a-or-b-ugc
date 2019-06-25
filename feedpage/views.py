@@ -19,6 +19,8 @@ from snulion7th.settings import IMG_CLIENT_ID, IMG_CLIENT_KEY
 #TODO: 니드 로그인 기능 리다이렉트 구현 필요
 
 def index(request): 
+    if request.user.profile.created_at.strftime('%Y/%m/%d %H:%M:%S') == timezone.now().strftime('%Y/%m/%d %H:%M:%S'):
+        return redirect('/accounts/profile/')
     # print(HashTag.objects.all())
     keyword = request.GET.get('keyword', '')
     feeds_all = Feed.objects.all().order_by('-updated_at', '-created_at')

@@ -63,22 +63,75 @@ def login(request):
 def profile(request):
     # auth.login(request, user)
     if request.method == 'POST':
-    #하나씩만 입력해도 되도록.
+    #글자수제한 등등 로직 들어갈 곳
         user = request.user
         profile = user.profile
-        user.username = request.POST['username']
-        user.save()
-        profile.birth = request.POST['birth']
-        profile.is_male = request.POST['gender']
-        profile.left_level = request.POST['politics']
-        profile.region = request.POST['region']
-        profile.religion = request.POST['religion']
-        profile.major = request.POST['major']
-        profile.likes_iphone = request.POST['likes_iphone']
-        profile.is_premium = True
+        done_cnt = 0
+
+        username = request.POST['username']
+        if len(username) > 0:
+            user.username = username
+            user.save()
+            done_cnt += 1
+        else:
+            return redirect('/accounts/profile/')
+
+        birth = request.POST.get('birth')
+        if birth is not None and birth != '' :
+            if int(birth) > 1920 and int(birth) < 2020:
+                profile.birth = birth
+                done_cnt += 1
+            else:
+                return redirect('/accounts/profile/')
+
+        is_male = request.POST.get('gender')
+        if is_male is not None:
+            profile.is_male = is_male
+            done_cnt += 1
+
+        left_level = request.POST.get('politics')
+        if left_level is not None:
+            if int(left_level) > 0 and int(left_level) < 6:
+                profile.left_level = left_level
+                done_cnt += 1
+            else:
+                return redirect('/accounts/profile/')
+
+        region = request.POST.get('region')
+        if region is not None:
+            if int(region) > 0 and int(region) < 9:
+                profile.region = region
+                done_cnt += 1
+            else:
+                return redirect('/accounts/profile/')
+
+        religion = request.POST.get('religion')
+        if religion is not None:
+            if int(religion) > 0 and int(religion) < 9:
+                profile.religion = religion
+                done_cnt += 1
+            else:
+                return redirect('/accounts/profile/')
+
+        major = request.POST.get('major')
+        if major is not None and major != "문과" and major != "이과" and major !="예체능":
+            profile.major = "기타"
+            done_cnt += 1
+        elif major is not None:
+            profile.major = major
+            done_cnt += 1
+
+        likes_iphone = request.POST.get('mobile')
+        if likes_iphone is not None:
+            profile.likes_iphone = likes_iphone
+            done_cnt += 1
+
+        if done_cnt > 7 and profile.is_premium != True:
+            profile.is_premium = True
+
         profile.save()
         update_session_auth_hash(request, request.user)
-        return redirect('/feeds/')
+        return redirect('/accounts/profile/')
     else:
         user = request.user
         social_user = user.socialaccount_set.first()
