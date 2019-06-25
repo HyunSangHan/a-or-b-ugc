@@ -1,4 +1,5 @@
 $(document).ready(() => {
+
   // 댓글 펼치기
   $('.toggle-comments').on('click', function(event) {
     const $this = $(this);
@@ -513,19 +514,6 @@ $(document).ready(() => {
           </label>
         </div>
       `); 
-  });
-
-  // 프로필수정 페이지에서 select 버튼 바뀔 때
-  $('select').on('change', function() {
-    if ($(this).val()) {
-      return $(this).addClass('font-black');
-    }
-  });
-
-  $('.date-form').on('change', function() {
-    if ($(this).val()) {
-      return $(this).addClass('font-black');
-    }
   });
 
 })

@@ -80,7 +80,7 @@ class Profile(models.Model):
 
             profile = user.profile
             profile.is_male = gender
-            profile.birthday = birthday
+            profile.birthday = birth
             profile.left_level = politics
             profile.region = region
             profile.major = "예체능"

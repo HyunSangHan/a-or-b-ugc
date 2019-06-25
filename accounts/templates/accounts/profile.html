@@ -34,7 +34,7 @@
           </div>
           <div class="version-status flex">
             {% if profile.is_premium %}
-              Premium user입니다.
+              Premium user입니다! 
               <div id="is_premuim" class="qmark">?</div>
               <div class="mdl-tooltip mdl-tooltip--large" for="is_premuim" style="line-height: 18px;">아젠다별 상세 통계까지<br>확인할 수 있습니다.</div>
             {% else %}
@@ -56,7 +56,10 @@
               <strong>입력하신 정보는 타인에게 <u>공개되지 않습니다.</u></strong><br>오직 투표결과에 대한 상세통계를 위해서만 <u>익명</u>으로 사용됩니다.<br>안심하고 입력해주세요.
             </div>
           {% endif %}
-        <div class="font-13 mt-7">성별</div>
+        <div class="font-13 mt-7">
+          성별
+          <div id="gender" data-gender="{{ profile.is_male }}"></div>
+        </div>
         <div class="each-profile">
           <div class="radio-form">
             <input type='radio' id='genderChoice1' name='gender' value=True required> 
@@ -94,8 +97,8 @@
           </div>
         </div>
         <div class="each-profile w-100">
-          <select class='select-form' name='region' required>
-            <option disabled selected value> 지역을 선택하세요 </option>
+          <select class='select-form' name='region' data-region='{{ profile.region }}' required>
+            <option disabled selected value> 지역을 선택하세요</option>
             <option value="1">서울/경기</option>
             <option value="2">강원</option>
             <option value="3">충청</option>
@@ -107,7 +110,10 @@
           </select>
         </div>
         <div class="each-profile-ul mt-2"></div>
-        <div class="font-13 mt-7">전공분야</div>
+        <div class="font-13 mt-7">
+          전공분야
+          <div id="major" data-major="{{ profile.major }}"></div>
+        </div>
         <div class="each-profile">
           <div class="radio-form">
             <input type='radio' id='majorChoice1' name='major' value='문과' required> 
@@ -129,7 +135,7 @@
         <div class="each-profile-ul mt-2"></div>
         <div class="font-13 mt-7 flex">
           모바일
-          <div id="mobile" class="qmark-white">?</div>
+          <div id="mobile" data-mobile="{{ profile.likes_iphone }}" class="qmark-white">?</div>
           <div class="mdl-tooltip mdl-tooltip--large mdl-tooltip--right" for="mobile" style="line-height: 18px;">
             아이폰 사용자라면 iOS, <br>그 외에는 Android를 선택
           </div>
@@ -145,7 +151,10 @@
           </div>
         </div>
         <div class="each-profile-ul mt-2"></div>
-        <div class="font-13 mt-7">정치성향</div>
+        <div class="font-13 mt-7">
+          정치성향
+          <div id="politics" data-politics="{{ profile.left_level }}"></div>
+        </div>
         <div class="each-profile">
           <div class="radio-form">
             <input type='radio' id='politicsChoice1' name='politics' value='5' required> 
@@ -169,7 +178,10 @@
           </div>
         </div>
         <div class="each-profile-ul mt-6"></div>
-        <div class="font-13 mt-7">종교철학</div>
+        <div class="font-13 mt-7">
+          종교철학
+          <div id="religion" data-religion="{{ profile.religion }}"></div>
+        </div>
         <div class="each-profile">
           <div class="radio-form" style="width: 25%;">
             <input type='radio' id='religionChoice1' name='religion' value='4' required> 

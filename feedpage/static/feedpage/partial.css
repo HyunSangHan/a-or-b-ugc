@@ -95,7 +95,7 @@
 }
 
 .page-content-black {
-  height: 174px;
+  height: 160px;
   margin-bottom: -12px;
 }
 
@@ -430,6 +430,7 @@
   min-height: 52px;
   padding-top: 5px;
   font-family: "Noto Sans KR", sans-serif !important;
+  outline: none;
 }
 
 
@@ -448,7 +449,7 @@
   margin-top: 13px;
   position: absolute;
   width: 78%;
-  top: 120px;
+  top: 90px;
   left: 22px;
   color: white;
 }
@@ -673,13 +674,14 @@
   height: 40px;
   background-color: white;
   font-size: 26px;
-  margin: -16px 0 0 0;
+  margin: -12px 0 0 0;
   font-weight: 800;
   color: #BBB;
   font-family: "Noto Sans KR", sans-serif !important;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
+  outline: none;
 }
 
 .text-form {
@@ -688,10 +690,11 @@
   height: 40px;
   background-color: white;
   font-size: 26px;
-  margin: -16px 0 0 0;
+  margin: -12px 0 0 0;
   font-weight: 800;
   color: black;
   font-family: "Noto Sans KR", sans-serif !important;
+  outline: none;
 }
 
 .text-form::placeholder {

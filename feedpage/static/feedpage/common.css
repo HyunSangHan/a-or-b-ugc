@@ -11,6 +11,10 @@ header {
   width: 101% !important;
 }
 
+input {
+  outline: none;
+}
+
 h2 {
   font-weight: 900 !important;
   font-size: 24px !important;
