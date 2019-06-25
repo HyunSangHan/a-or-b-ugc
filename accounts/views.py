@@ -68,16 +68,17 @@ def profile(request):
         profile = user.profile
         user.username = request.POST['username']
         user.save()
-        profile.birthday = request.POST['birthday']
+        profile.birth = request.POST['birth']
         profile.is_male = request.POST['gender']
         profile.left_level = request.POST['politics']
         profile.region = request.POST['region']
+        profile.religion = request.POST['religion']
         profile.major = request.POST['major']
         profile.likes_iphone = request.POST['likes_iphone']
         profile.is_premium = True
         profile.save()
         update_session_auth_hash(request, request.user)
-        return redirect('/feeds/creator')
+        return redirect('/feeds/')
     else:
         user = request.user
         social_user = user.socialaccount_set.first()

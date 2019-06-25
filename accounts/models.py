@@ -13,7 +13,10 @@ from allauth.account.signals import user_signed_up
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     follows = models.ManyToManyField('self', through = 'Follow', blank=True, symmetrical=False)
-    birthday = models.DateField(null=True)
+    birth = models.IntegerField(
+        null=True,
+        validators=[MaxValueValidator(2019), MinValueValidator(1920)]
+    )
     is_male = models.BooleanField(null=True)
     image = ProcessedImageField(
 		upload_to = 'profile_img',
@@ -27,6 +30,10 @@ class Profile(models.Model):
     image_url = models.URLField(blank=True, null=True)
     created_at = models.DateTimeField(default=timezone.now)
     notichecked_at = models.DateTimeField(default=timezone.now)
+    religion = models.IntegerField(
+        null=True,
+        validators=[MaxValueValidator(4), MinValueValidator(1)]
+    )
     left_level = models.IntegerField(
         null=True,
         validators=[MaxValueValidator(5), MinValueValidator(1)]
@@ -59,7 +66,7 @@ class Profile(models.Model):
             email = '{}@{}.com'.format(i, i)
             password = '1234' #수정 필요???
             gender = myfake.boolean(chance_of_getting_true=20)
-            birthday = myfake.date_this_century(before_today=True, after_today=False)
+            birth = random.randrange(1970,2000)
             politics = random.randrange(1,6)
             region = random.randrange(1,9)
             likes_iphone = myfake.boolean(chance_of_getting_true=50)
