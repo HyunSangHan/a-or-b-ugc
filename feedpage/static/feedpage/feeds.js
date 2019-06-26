@@ -404,13 +404,13 @@ $(document).ready(() => {
     if(window.FileReader && $this[0].files[0]){
       content_a = document.getElementsByClassName('content_a')[0].value;
     }
-    const eachContent = $this.parent();
+    const $eachContent = $this.parent();
     if(window.FileReader && $this[0].files[0]){
-      eachContent.children('.uploaded-a').remove();
+      $eachContent.children('.uploaded-a').remove();
       var reader = new FileReader();
       reader.onload = function(e) {
         img_a = e.target.result;
-        eachContent.prepend(`
+        $eachContent.prepend(`
           <div class="mr-1perc demo-card-image mdl-card content-img inner uploaded-a" style="background: url('`+img_a+`') center / cover;">
             <label for="img_a" style="height: 100%; width: 100%;">
               <div class="content-label bg-black">
@@ -434,13 +434,13 @@ $(document).ready(() => {
     if(window.FileReader && $this[0].files[0]){
       content_b = document.getElementsByClassName('content_b')[0].value;
     }
-    const eachContent = $this.parent();
+    const $eachContent = $this.parent();
     if(window.FileReader && $this[0].files[0]){
-      eachContent.children('.uploaded-b').remove();
+      $eachContent.children('.uploaded-b').remove();
       var reader = new FileReader();
       reader.onload = function(e) {
         img_b = e.target.result;
-        eachContent.append(`
+        $eachContent.append(`
           <div class="ml-1perc demo-card-image mdl-card content-img inner uploaded-b" style="background: url('`+img_b+`') center / cover;">
             <label for="img_b" style="height: 100%; width: 100%;">
               <div class="content-label bg-black">

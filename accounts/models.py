@@ -9,6 +9,9 @@ import random
 from imagekit.models import ProcessedImageField
 from imagekit.processors import Thumbnail, ResizeToFill
 from allauth.account.signals import user_signed_up
+from urllib.parse import urlparse
+import requests
+from django.core.files.base import ContentFile
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -20,7 +23,7 @@ class Profile(models.Model):
     is_male = models.BooleanField(null=True)
     image = ProcessedImageField(
 		upload_to = 'profile_img',
-		processors = [ResizeToFill(60, 60)],
+		processors = [ResizeToFill(120, 120)],
 		format = 'JPEG',
 		# options = {'quality': 50},
         blank = True,
@@ -118,18 +121,21 @@ def populate_profile(sociallogin, user, **kwargs):
 
     if sociallogin.account.provider == 'facebook':
         user_data = user.socialaccount_set.filter(provider='facebook')[0].extra_data
-        picture_url = "http://graph.facebook.com/" + sociallogin.account.uid + "/picture?type=large"            
+        img_url = "http://graph.facebook.com/" + sociallogin.account.uid + "/picture?type=large"            
         # picture_url = user.socialaccount_set.first().get_avatar_url()
-        profile.image_url = picture_url
-        profile.save()
-
     elif sociallogin.account.provider == 'kakao':
         user_data = user.socialaccount_set.filter(provider='kakao')[0].extra_data
-        picture_url = user.socialaccount_set.first().get_avatar_url()
+        img_url = user.socialaccount_set.first().get_avatar_url()
         gender = user_data['kakao_account']['gender']
         if gender == 'male':
             profile.is_male = True
         elif gender == 'female':
             profile.is_male = False
-        profile.image_url = picture_url
-        profile.save()
+
+    # img_url = 'http://k.kakaocdn.net/dn/qetSh/btqv7QGSbJC/RkWKlkAsfVXTMQlrHUj890/profile_640x640s.jpg'
+    if img_url:
+        name = urlparse(img_url).path.split('/')[-1]
+        response = requests.get(img_url)
+        if response.status_code == 200:
+            profile.image.save(name, ContentFile(response.content), save=True)
+    profile.save()

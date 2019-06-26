@@ -61,13 +61,10 @@ def login(request):
         return redirect('/feeds/')
 
 def profile(request):
-    # auth.login(request, user)
     if request.method == 'POST':
+        done_cnt = 0
     #글자수제한 등등 로직 들어갈 곳
         user = request.user
-        profile = user.profile
-        done_cnt = 0
-
         username = request.POST['username']
         if len(username) > 0:
             user.username = username
@@ -75,6 +72,12 @@ def profile(request):
             done_cnt += 1
         else:
             return redirect('/accounts/profile/')
+
+        profile = user.profile
+
+        profile_image = request.FILES.get('profile_image', False)
+        if profile_image:
+            profile.image = profile_image
 
         birth = request.POST.get('birth')
         if birth is not None and birth != '' :
@@ -143,7 +146,7 @@ def profile(request):
         # left_level, major, 
         # region, likes_iphone, is_premium
         profile.save()
-        print(social_user.extra_data)
+        # print(social_user.extra_data)
         # print(social_user.extra_data['properties'])
 
 

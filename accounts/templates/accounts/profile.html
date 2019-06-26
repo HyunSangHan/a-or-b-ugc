@@ -2,25 +2,20 @@
 {% load custom_tags %}
 
 {% block content %}
-<form action='{% url "profile" %}' method='POST'>
+<form action="{% url 'profile' %}"  method="POST" enctype="multipart/form-data">
   {% csrf_token %}
-
-  {% comment %} {{ user.socialaccount_set.first.get_avatar_url }} {% endcomment %}
   <div class="page-content-black mdl-layout__content bg-black w-100 font-white">
     <div class="container relative">
-      {% comment %} {% if profile.image.url != "/media/False" %} {% endcomment %}
-      {% if profile.image_url is not None %}
-        <div class="creator-img" style="background: url('{{ profile.image_url }}') center / cover;">
+      {% if profile.image is not None %}
+        <div class="creator-img" style="background: url('{{ profile.image.url }}') center / cover;">
       {% else %}
         <div class="creator-img" style="background: url('/static/feedpage/default_avatar.png') center / cover;">
       {% endif %}
-        <div class="photo-edit-btn">
-          <i class="material-icons" style="font-size: 13px;" onclick="return alert('아직 기능 개발중')">photo_camera</i>
+          <label class="photo-edit-btn" for="profile_image">
+            <i class="material-icons" style="font-size: 13px;">photo_camera</i>
+          </label>
         </div>
-      </div>
-      {% comment %} {% else %}
-        <div class="creator-img" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
-      {% endif %} {% endcomment %}
+        <input id="profile_image" class="upload-hidden img-prf" name="profile_image" type="file" accept="image/*" />
       <div class="m-auto black-creator">
         <div class="contents-margin">
           <div class="creator-name-card">
@@ -56,7 +51,7 @@
         {% endif %}
         {% if not profile.is_premium %}
           <div class="promote-msg">
-            <div class="font-28 mb-3 font-bold">
+            <div class="font-25 mb-3 font-bold">
               "30초면 돼요!"
             </div>
             <div class="font-13 font-grey">

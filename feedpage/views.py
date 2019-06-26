@@ -8,13 +8,15 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from operator import attrgetter
 from django.http import JsonResponse, HttpResponse
-import urllib
 import json
 from .reuse_function import make_notification
 from django.utils import timezone
 import os
 import sys
 from snulion7th.settings import IMG_CLIENT_ID, IMG_CLIENT_KEY
+import urllib
+from urllib.parse import urlparse
+from django.core.files import File
 
 #TODO: 니드 로그인 기능 리다이렉트 구현 필요
 
