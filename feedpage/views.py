@@ -21,7 +21,7 @@ from django.core.files import File
 #TODO: 니드 로그인 기능 리다이렉트 구현 필요
 
 def index(request): 
-    if request.user.is_anonymous == False and request.user.profile.created_at.strftime('%Y/%m/%d %H:%M:%S') == timezone.now().strftime('%Y/%m/%d %H:%M:%S'):
+    if request.user.is_anonymous == False and request.user.profile.is_first_login:
         return redirect('/accounts/profile/')
     # print(HashTag.objects.all())
     keyword = request.GET.get('keyword', '')

@@ -136,10 +136,12 @@ def profile(request):
         update_session_auth_hash(request, request.user)
         return redirect('/accounts/profile/')
     else:
-        user = request.user
+        user = request.user            
         social_user = user.socialaccount_set.first()
-        social_data = social_user.extra_data
+        # social_data = social_user.extra_data
         profile = user.profile
+        if profile.is_first_login:
+            profile.is_first_login = False
         #첫 로그인인 경우로 조건문 걸어주고
         ## 안된거
         # birthday, is_male, image,

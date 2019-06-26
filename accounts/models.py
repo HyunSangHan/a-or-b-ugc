@@ -57,7 +57,7 @@ class Profile(models.Model):
     recent_login = models.DateTimeField(default=timezone.now)
     likes_iphone = models.BooleanField(null=True)
     is_premium = models.BooleanField(default=False)
-
+    is_first_login = models.BooleanField(default=True)
 
     def __str__(self):
         return self.user.username
@@ -73,7 +73,6 @@ class Profile(models.Model):
             politics = random.randrange(1,6)
             region = random.randrange(1,9)
             likes_iphone = myfake.boolean(chance_of_getting_true=50)
-            is_premium = True
 
             user = User.objects.create_user(
                 username = username,
@@ -89,7 +88,8 @@ class Profile(models.Model):
             profile.major = "예체능"
             profile.recent_login = timezone.now()
             profile.likes_iphone = likes_iphone
-            profile.is_premium = is_premium
+            profile.is_premium = True
+            profile.is_first_login = True
             profile.save()
 
 
@@ -122,7 +122,6 @@ def populate_profile(sociallogin, user, **kwargs):
     if sociallogin.account.provider == 'facebook':
         user_data = user.socialaccount_set.filter(provider='facebook')[0].extra_data
         img_url = "http://graph.facebook.com/" + sociallogin.account.uid + "/picture?type=large"            
-        # picture_url = user.socialaccount_set.first().get_avatar_url()
     elif sociallogin.account.provider == 'kakao':
         user_data = user.socialaccount_set.filter(provider='kakao')[0].extra_data
         img_url = user.socialaccount_set.first().get_avatar_url()
@@ -132,7 +131,6 @@ def populate_profile(sociallogin, user, **kwargs):
         elif gender == 'female':
             profile.is_male = False
 
-    # img_url = 'http://k.kakaocdn.net/dn/qetSh/btqv7QGSbJC/RkWKlkAsfVXTMQlrHUj890/profile_640x640s.jpg'
     if img_url:
         name = urlparse(img_url).path.split('/')[-1]
         response = requests.get(img_url)
