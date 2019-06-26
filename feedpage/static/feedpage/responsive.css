@@ -120,6 +120,10 @@
     margin: 7px -5px;
   }
 
+  .promote-msg {
+    text-align: center;
+    margin: 25px 0;
+  }
 }
 
 @media (min-width: 768px) {
