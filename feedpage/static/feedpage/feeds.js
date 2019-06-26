@@ -1,4 +1,5 @@
 $(document).ready(() => {
+
   // 댓글 펼치기
   $('.toggle-comments').on('click', function(event) {
     const $this = $(this);
@@ -514,6 +515,5 @@ $(document).ready(() => {
         </div>
       `); 
   });
-
 
 })

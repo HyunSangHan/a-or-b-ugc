@@ -13,8 +13,11 @@ from allauth.account.signals import user_signed_up
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     follows = models.ManyToManyField('self', through = 'Follow', blank=True, symmetrical=False)
-    birthday = models.DateField(blank=True, null=True)
-    is_male = models.BooleanField(blank=True, null=True)
+    birth = models.IntegerField(
+        null=True,
+        validators=[MaxValueValidator(2019), MinValueValidator(1920)]
+    )
+    is_male = models.BooleanField(null=True)
     image = ProcessedImageField(
 		upload_to = 'profile_img',
 		processors = [ResizeToFill(60, 60)],
@@ -27,11 +30,15 @@ class Profile(models.Model):
     image_url = models.URLField(blank=True, null=True)
     created_at = models.DateTimeField(default=timezone.now)
     notichecked_at = models.DateTimeField(default=timezone.now)
+    religion = models.IntegerField(
+        null=True,
+        validators=[MaxValueValidator(4), MinValueValidator(1)]
+    )
     left_level = models.IntegerField(
         null=True,
         validators=[MaxValueValidator(5), MinValueValidator(1)]
     )
-    major = models.CharField(max_length=3)
+    major = models.CharField(max_length=3, null=True)
     region = models.IntegerField(
         null=True,
         validators=[MaxValueValidator(8), MinValueValidator(1)]
@@ -45,7 +52,7 @@ class Profile(models.Model):
 #7 해외
 #8 기타
     recent_login = models.DateTimeField(default=timezone.now)
-    likes_iphone = models.BooleanField(blank=True, null=True)
+    likes_iphone = models.BooleanField(null=True)
     is_premium = models.BooleanField(default=False)
 
 
@@ -59,7 +66,7 @@ class Profile(models.Model):
             email = '{}@{}.com'.format(i, i)
             password = '1234' #수정 필요???
             gender = myfake.boolean(chance_of_getting_true=20)
-            birthday = myfake.date_this_century(before_today=True, after_today=False)
+            birth = random.randrange(1970,2000)
             politics = random.randrange(1,6)
             region = random.randrange(1,9)
             likes_iphone = myfake.boolean(chance_of_getting_true=50)
@@ -73,7 +80,7 @@ class Profile(models.Model):
 
             profile = user.profile
             profile.is_male = gender
-            profile.birthday = birthday
+            profile.birthday = birth
             profile.left_level = politics
             profile.region = region
             profile.major = "예체능"
