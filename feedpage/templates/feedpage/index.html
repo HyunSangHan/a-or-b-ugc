@@ -106,7 +106,7 @@
                     <strong>A /</strong> {{ feed.content_a}}
                   </div>
                 {% endif %}
-
+                <div class="content-default-bg w-100 h-100"></div>
                 <!--A를 upvote한 경우-->
                 {% if choice != "" %}
                   <!--A 결과 숫자-->
@@ -146,6 +146,7 @@
                     <strong>B /</strong> {{ feed.content_b}}
                   </div>
                 {% endif %}
+                <div class="content-default-bg w-100 h-100"></div>
 
                 <!--B를 upvote한 경우-->
                 {% get_upvote_color feed.id user.id as choice %}
@@ -363,7 +364,9 @@
               <!-- 댓글 코드 끝 -->
           </li>
         {% else %}
-          신고가 10건 이상 접수되어 숨김처리된 게시글입니다.
+          <li class="each-li reported">
+            신고가 10건 이상 접수되어 숨김처리된 게시글입니다.
+          </li>
         {% endif %}
       {% endfor %} 
     </div>

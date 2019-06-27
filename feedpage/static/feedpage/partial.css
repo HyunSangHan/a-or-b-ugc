@@ -94,6 +94,13 @@
   text-align: left;
 }
 
+.each-li.reported {
+  background-color: darkgrey;
+  padding: 100px 0;
+  color: white;
+  text-align: center;
+}
+
 .page-content-black {
   height: 160px;
   margin-bottom: -12px;
@@ -136,8 +143,12 @@
   border-radius: 10px !important;
 }
 
+.content-default-bg {
+  background-color: lightgrey;
+  opacity: 0.1;
+}
+
 .content-img.inner {
-  border: 1px lightgrey solid;
   text-align: center;
 }
 

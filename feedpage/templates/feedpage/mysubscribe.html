@@ -130,6 +130,7 @@
                     <strong>A /</strong> {{ feed.content_a}}
                   </div>
                 {% endif %}
+                <div class="content-default-bg w-100 h-100"></div>
 
                 <!--A를 upvote한 경우-->
                 {% if choice != "" %}
@@ -170,6 +171,7 @@
                     <strong>B /</strong> {{ feed.content_b}}
                   </div>
                 {% endif %}
+                <div class="content-default-bg w-100 h-100"></div>
 
                 <!--B를 upvote한 경우-->
                 {% get_upvote_color feed.id user.id as choice %}

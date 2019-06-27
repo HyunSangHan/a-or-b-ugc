@@ -452,7 +452,7 @@ $(document).ready(() => {
               <strong>B / </strong>
               <input type="text" class="w-80 font-15 feed-input-border font-white bg-black content-b content-js" value="`+content_b+`" placeholder=" 내용(21자 이내)" name="content_b" maxlength="21" required>
             </div>
-            <div class="w-100 h-100 img-menu-on" data-csrfmiddlewaretoken="`+csrfmiddlewaretoken+`">
+            <div class="w-100 h-100 img-menu-on" data-csrfmiddlewaretoken="`+csrfmiddlewaretoken+`" data-aorb="`+aorb+`">
             </div>
           </div>
         `); 
@@ -540,8 +540,8 @@ $(document).ready(() => {
           </div>
           <div class="w-100 h-100 img-menu-on" data-csrfmiddlewaretoken="`+csrfmiddlewaretoken+`" data-aorb="a">
           </div>
+          <input type="hidden" name="img_url_a" value="`+img+`">
         </div>
-        <input type="hidden" name="img_url_a" value="`+img+`">
       `); 
     } else if (aorb==="b") {
       content_b = document.getElementsByClassName('content-b')[0].value;
@@ -554,8 +554,8 @@ $(document).ready(() => {
           </div>
           <div class="w-100 h-100 img-menu-on" data-csrfmiddlewaretoken="`+csrfmiddlewaretoken+`" data-aorb="b">
           </div>
+          <input type="hidden" name="img_url_b" value="`+img+`">
         </div>
-        <input type="hidden" name="img_url_b" value="`+img+`">
       `); 
 
     }

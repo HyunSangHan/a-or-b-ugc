@@ -61,6 +61,23 @@ def new(request):
         img_url_b = request.POST.get('img_url_b')
         img_a = request.FILES.get('img_a')
         img_b = request.FILES.get('img_b')
+
+        if img_url_a is None and img_a is None:
+            print("이미지 A를 누락")
+            try:
+                next = request.META['HTTP_REFERER']
+            except:
+                next = '/feeds/'
+            return redirect('%s'%next)
+
+        if img_url_b is None and img_b is None:
+            print("이미지 B를 누락")
+            try:
+                next = request.META['HTTP_REFERER']
+            except:
+                next = '/feeds/'
+            return redirect('%s'%next)
+
         feed = Feed.objects.create(title=title, content_a=content_a, img_a=img_a, img_b=img_b, content_b=content_b, creator=request.user)
         if img_url_a:
             name = urlparse(img_url_a).path.split('/')[-1]
@@ -94,6 +111,8 @@ def new(request):
         feedid = feed.id
         make_notification(7, feedid, request.user.id)
         return redirect('/feeds')
+    elif request.user.is_anonymous:
+        return redirect('/accounts/login')
     else:
         return render(request, 'feedpage/new.html')
 
@@ -113,7 +132,7 @@ def delete(request, id):
             feed.delete()
             next = '/feeds/'
         else:
-            print("비정상적인 수정 접근 시도")
+            print("비정상적인 삭제 접근 시도")
             try:
                 next = request.META['HTTP_REFERER']
             except:
@@ -123,11 +142,33 @@ def delete(request, id):
 def edit(request, id):
     feed = Feed.objects.get(id=id)
     if request.method == 'POST' and feed.creator == request.user and feed.feedcomment_set.count() == 0 and feed.upvote_set.count() == 0:
-        feed.title = request.POST['title']
-        feed.content_a = request.POST['content_a']
-        feed.content_b = request.POST['content_b']
-        feed.img_a = request.FILES.get('img_a', False)
-        feed.img_b = request.FILES.get('img_b', False)
+        title = request.POST['title']
+        content_a = request.POST['content_a']
+        content_b = request.POST['content_b']
+        img_url_a = request.POST.get('img_url_a')
+        img_url_b = request.POST.get('img_url_b')
+        img_a = request.FILES.get('img_a')
+        img_b = request.FILES.get('img_b')
+
+        feed.title = title
+        feed.content_a = content_a
+        feed.content_b = content_b
+
+        if img_a:
+            feed.img_a = img_a
+        if img_b:
+            feed.img_b = img_b
+        if img_url_a:
+            name = urlparse(img_url_a).path.split('/')[-1]
+            response = requests.get(img_url_a)
+            if response.status_code == 200:
+                feed.img_a.save(name, ContentFile(response.content), save=True)
+        if img_url_b:
+            name = urlparse(img_url_b).path.split('/')[-1]
+            response = requests.get(img_url_b)
+            if response.status_code == 200:
+                feed.img_b.save(name, ContentFile(response.content), save=True)
+
         hash_tag_raw = request.POST['hash_tag_raw']
         hash_tag_all = hash_tag_raw.split("#")
         for hash_tag in hash_tag_all:
@@ -145,6 +186,8 @@ def edit(request, id):
         next = request.POST['next']
         #여기로 보내기 위함=> '/feeds'+'?page='+feeds.number
         return redirect('%s'%next)
+    elif request.user.is_anonymous:
+        return redirect('/accounts/login')
     elif feed.creator == request.user and feed.feedcomment_set.count() == 0 and feed.upvote_set.count() == 0:
         next = request.META['HTTP_REFERER']
         return render(request, 'feedpage/edit.html', {'feed': feed, 'next': next})
@@ -481,6 +524,8 @@ def creator(request, creator_name):
         return redirect('%s'%next)
 
 def mysubscribe(request):
+    if request.user.is_anonymous:
+        return redirect('/accounts/login')
     follow_from = Profile.objects.get(user_id = request.user.id)
     my_subs = Follow.objects.filter(follow_from=follow_from)
     feeds = []
@@ -503,10 +548,14 @@ def mysubscribe(request):
     return render(request, 'feedpage/mysubscribe.html', {'feeds': feeds, 'my_subs': my_subs, 'has_subs': has_subs, 'has_feeds': has_feeds})
 
 def myupload(request):
+    if request.user.is_anonymous:
+        return redirect('/accounts/login')
     feeds = Feed.objects.filter(creator_id=request.user.id).order_by('-updated_at', '-created_at')
     return render(request, 'feedpage/myupload.html', {'feeds': feeds})
 
 def myreaction(request):
+    if request.user.is_anonymous:
+        return redirect('/accounts/login')
     upvotes = request.user.upvote_set.all().order_by('-created_at')
     has_upvotes = False
     if len(upvotes) == 0:
@@ -516,6 +565,8 @@ def myreaction(request):
     return render(request, 'feedpage/myreaction.html', {'upvotes': upvotes, 'has_upvotes': has_upvotes})
 
 def mynotification(request):
+    if request.user.is_anonymous:
+        return redirect('/accounts/login')
     noti = Notification.objects.filter(noti_to=request.user.profile, is_mine=False).order_by('-created_at')
     noti_unchecked = noti.filter(is_checked=False) #지난번기준 미확인알림
     profile = Profile.objects.get(user=request.user)
