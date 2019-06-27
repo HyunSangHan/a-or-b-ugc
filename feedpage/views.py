@@ -16,7 +16,8 @@ import sys
 from snulion7th.settings import IMG_CLIENT_ID, IMG_CLIENT_KEY
 import urllib
 from urllib.parse import urlparse
-from django.core.files import File
+import requests
+from django.core.files.base import ContentFile
 
 #TODO: 니드 로그인 기능 리다이렉트 구현 필요
 
@@ -56,9 +57,21 @@ def new(request):
         title = request.POST['title']
         content_a = request.POST['content_a']
         content_b = request.POST['content_b']
-        img_a = request.FILES.get('img_a', False)
-        img_b = request.FILES.get('img_b', False)
+        img_url_a = request.POST.get('img_url_a')
+        img_url_b = request.POST.get('img_url_b')
+        img_a = request.FILES.get('img_a')
+        img_b = request.FILES.get('img_b')
         feed = Feed.objects.create(title=title, content_a=content_a, img_a=img_a, img_b=img_b, content_b=content_b, creator=request.user)
+        if img_url_a:
+            name = urlparse(img_url_a).path.split('/')[-1]
+            response = requests.get(img_url_a)
+            if response.status_code == 200:
+                feed.img_a.save(name, ContentFile(response.content), save=True)
+        if img_url_b:
+            name = urlparse(img_url_b).path.split('/')[-1]
+            response = requests.get(img_url_b)
+            if response.status_code == 200:
+                feed.img_b.save(name, ContentFile(response.content), save=True)
         #edit도
         # 띄어쓰기 포함도
         # 샾 안넣었을때의 코너케이스도 챙기기 필요

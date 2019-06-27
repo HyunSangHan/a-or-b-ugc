@@ -397,13 +397,16 @@ $(document).ready(() => {
   // var imgTarget = $('.preview-image .upload-hidden'); imgTarget.on('change', function(){ var parent = $(this).parent(); parent.children('.upload-display').remove(); if(window.FileReader){ if (!$(this)[0].files[0].type.match(/image\//)) return; var reader = new FileReader(); reader.onload = function(e){ var src = e.target.result; parent.prepend('<div class="upload-display"><div class="upload-thumb-wrap"><img src="'+src+'" class="upload-thumb"></div></div>'); } reader.readAsDataURL($(this)[0].files[0]); } else { $(this)[0].select(); $(this)[0].blur(); var imgSrc = document.selection.createRange().text; parent.prepend('<div class="upload-display"><div class="upload-thumb-wrap"><img class="upload-thumb"></div></div>'); var img = $(this).siblings('.upload-display').find('img'); img[0].style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(enable='true',sizingMethod='scale',src=\""+imgSrc+"\")"; } });
 
 
-  //for img A
+  //for uploading img A
   var img_a, content_a;
   $('.upload-a').on('change', function() {
     const $this = $(this)
+    const $imgMenuOn = $this.siblings('.uploaded-a').children('.img-menu-on');
+    const csrfmiddlewaretoken = $imgMenuOn.data('csrfmiddlewaretoken');
+    const aorb = $imgMenuOn.data('aorb');
     if(window.FileReader && $this[0].files[0]){
-      content_a = document.getElementsByClassName('content_a')[0].value;
-    }
+      content_a = document.getElementsByClassName('content-a')[0].value;
+    };
     const $eachContent = $this.parent();
     if(window.FileReader && $this[0].files[0]){
       $eachContent.children('.uploaded-a').remove();
@@ -412,12 +415,12 @@ $(document).ready(() => {
         img_a = e.target.result;
         $eachContent.prepend(`
           <div class="mr-1perc demo-card-image mdl-card content-img inner uploaded-a" style="background: url('`+img_a+`') center / cover;">
-            <label for="img_a" style="height: 100%; width: 100%;">
-              <div class="content-label bg-black">
-                <strong>A / </strong>
-                <input type="text" class="w-80 font-15 feed-input-border font-white bg-black content_a" value="`+content_a+`" placeholder=" 내용(21자 이내)" name="content_a" maxlength="21" required>
-              </div>
-            </label>
+            <div class="content-label bg-black">
+              <strong>A / </strong>
+              <input type="text" class="w-80 font-15 feed-input-border font-white bg-black content-a content-js" value="`+content_a+`" placeholder=" 내용(21자 이내)" name="content_a" maxlength="21" required>
+            </div>
+            <div class="w-100 h-100 img-menu-on" data-csrfmiddlewaretoken="`+csrfmiddlewaretoken+`" data-aorb="`+aorb+`">
+            </div>
           </div>
         `); 
       }
@@ -431,8 +434,11 @@ $(document).ready(() => {
   var img_b, content_b;
   $('.upload-b').on('change', function() {
     const $this = $(this)
+    const $imgMenuOn = $this.siblings('.uploaded-b').children('.img-menu-on');
+    const csrfmiddlewaretoken = $imgMenuOn.data('csrfmiddlewaretoken');
+    const aorb = $imgMenuOn.data('aorb');
     if(window.FileReader && $this[0].files[0]){
-      content_b = document.getElementsByClassName('content_b')[0].value;
+      content_b = document.getElementsByClassName('content-b')[0].value;
     }
     const $eachContent = $this.parent();
     if(window.FileReader && $this[0].files[0]){
@@ -442,12 +448,12 @@ $(document).ready(() => {
         img_b = e.target.result;
         $eachContent.append(`
           <div class="ml-1perc demo-card-image mdl-card content-img inner uploaded-b" style="background: url('`+img_b+`') center / cover;">
-            <label for="img_b" style="height: 100%; width: 100%;">
-              <div class="content-label bg-black">
-                <strong>B / </strong>
-                <input type="text" class="w-80 font-15 feed-input-border font-white bg-black content_b" value="`+content_b+`" placeholder=" 내용(21자 이내)" name="content_b" maxlength="21" required>
-              </div>
-            </label>
+            <div class="content-label bg-black">
+              <strong>B / </strong>
+              <input type="text" class="w-80 font-15 feed-input-border font-white bg-black content-b content-js" value="`+content_b+`" placeholder=" 내용(21자 이내)" name="content_b" maxlength="21" required>
+            </div>
+            <div class="w-100 h-100 img-menu-on" data-csrfmiddlewaretoken="`+csrfmiddlewaretoken+`">
+            </div>
           </div>
         `); 
       }
@@ -457,15 +463,31 @@ $(document).ready(() => {
       }
   });
 
+//직접업로드 vs 이미지추천 고르는 메뉴 띄우기
+  $(document).on('click', '.img-menu-on', function() {
+    const $this = $(this);
+    const csrfmiddlewaretoken = $this.data('csrfmiddlewaretoken');
+    const aorb = $this.data('aorb');
 
-  // 이미지검색
+    $this.before(`
+      <div class="content-img-input-bg w-100 h-100 bg-black font-15">
+        <label class="content-img-input-msg-upper font-white flex-center" for="img-`+aorb+`">
+          직접 업로드
+        </label>
+        <div class="content-img-input-msg-lower font-white flex-center img-srch-btn" data-csrfmiddlewaretoken="`+csrfmiddlewaretoken+`">
+          이미지 추천
+        </div>
+      </div>
+    `);
+
+  });
+
+  // 이미지추천
   $(document).on('click', '.img-srch-btn', function() {
     const $this = $(this);
-    const $eachResult = $this.siblings('.each-srch-result-wrap').children('.img-srch-result-js')
-    const keyword = $('.content_b').val();
+    const $eachResult = $this.parent().parent().parent().siblings('.each-srch-result-wrap').children('.img-srch-result-js');
+    const keyword = $this.parent().siblings('.content-label').children('.content-js').val();
     const csrfmiddlewaretoken = $this.data('csrfmiddlewaretoken');
-
-    console.log("keyword: "+ keyword);
     if (keyword !== "") {
       $.ajax({
         type: 'POST',
@@ -476,17 +498,19 @@ $(document).ready(() => {
         },
         dataType: 'json',
         success: function(data) {
+          $eachResult.children('.each-srch-result-js').remove();
+          const aorb = $this.parent().siblings('.img-menu-on').data('aorb');
+          console.log("keyword: "+ keyword + "(for " + aorb + ")");
           console.log(data);
-          $eachResult.children('.each-search-result-js').remove();
           for (var i=0; i<40; i++) {
             if (data.result.items[i].sizeheight / data.result.items[i].sizewidth > 0.75) {
               thb = data.result.items[i].thumbnail.replace('&type=b150','');
               $eachResult.append(`
-                <img src=`+thb+` alt="image_search" class="each-srch-result each-search-result-js">
+                <img src=`+thb+` alt="image_search" class="each-srch-result each-srch-result-js" data-csrfmiddlewaretoken="`+csrfmiddlewaretoken+`" data-aorb="`+aorb+`">
               `)
             }
           };
-
+          $this.parent().hide();
         },
         error: function(response, status,  error) {
           console.log(response, status, error);
@@ -497,23 +521,47 @@ $(document).ready(() => {
     }
   });
 
-    // 이미지클릭 시(test ver.)
-  $(document).on('click', '.each-search-result-js', function() {
+    // 이미지클릭 시 씌워지기
+  $(document).on('click', '.each-srch-result-js', function() {
     const $this = $(this);
-    const eachContent = $this.parent().parent().siblings('.each-content');
+    const $eachContent = $this.parent().parent().siblings('.each-content');
+    const csrfmiddlewaretoken = $this.data('csrfmiddlewaretoken');
+    const aorb = $this.data('aorb');
     var img = $this.attr('src');
-    content_b = document.getElementsByClassName('content_b')[0].value;
-    eachContent.children('.uploaded-b').remove();
-    eachContent.append(`
-        <div class="ml-1perc demo-card-image mdl-card content-img inner uploaded-b" style="background: url('`+img+`') center / cover;">
-          <label for="img_b" style="height: 100%; width: 100%;">
-            <div class="content-label bg-black">
-              <strong>B / </strong>
-              <input type="text" class="w-80 font-15 feed-input-border font-white bg-black content_b" value="`+content_b+`" placeholder=" 내용(21자 이내)" name="content_b" maxlength="21" required>
-            </div>
-          </label>
+
+    if (aorb==="a") {
+      content_a = document.getElementsByClassName('content-a')[0].value;
+      $eachContent.children('.uploaded-a').remove();
+      $eachContent.prepend(`
+        <div class="mr-1perc demo-card-image mdl-card content-img inner uploaded-a" style="background: url('`+img+`') center / cover;">
+          <div class="content-label bg-black">
+            <strong>A / </strong>
+            <input type="text" class="w-80 font-15 feed-input-border font-white bg-black content-a content-js" value="`+content_a+`" placeholder=" 내용(21자 이내)" name="content_a" maxlength="21" required>
+          </div>
+          <div class="w-100 h-100 img-menu-on" data-csrfmiddlewaretoken="`+csrfmiddlewaretoken+`" data-aorb="a">
+          </div>
         </div>
+        <input type="hidden" name="img_url_a" value="`+img+`">
       `); 
+    } else if (aorb==="b") {
+      content_b = document.getElementsByClassName('content-b')[0].value;
+      $eachContent.children('.uploaded-b').remove();
+      $eachContent.append(`
+        <div class="ml-1perc demo-card-image mdl-card content-img inner uploaded-b" style="background: url('`+img+`') center / cover;">
+          <div class="content-label bg-black">
+            <strong>B / </strong>
+            <input type="text" class="w-80 font-15 feed-input-border font-white bg-black content-b content-js" value="`+content_b+`" placeholder=" 내용(21자 이내)" name="content_b" maxlength="21" required>
+          </div>
+          <div class="w-100 h-100 img-menu-on" data-csrfmiddlewaretoken="`+csrfmiddlewaretoken+`" data-aorb="b">
+          </div>
+        </div>
+        <input type="hidden" name="img_url_b" value="`+img+`">
+      `); 
+
+    }
+
+
+
   });
 
 })
