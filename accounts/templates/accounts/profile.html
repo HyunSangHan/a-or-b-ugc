@@ -6,7 +6,7 @@
   {% csrf_token %}
   <div class="page-content-black mdl-layout__content bg-black w-100 font-white">
     <div class="container relative">
-      {% if profile.image is not None %}
+      {% if profile.image.url is not None %}
         <div class="creator-img" style="background: url('{{ profile.image.url }}') center / cover;">
       {% else %}
         <div class="creator-img" style="background: url('/static/feedpage/default_avatar.png') center / cover;">
@@ -248,7 +248,7 @@
       </div>
     </a>
     <a href="/feeds/creator/{{ request.user.username }}/">
-      {% if user.profile.image.url != "/media/False"%}
+      {% if user.profile.image.url is not None %}
         <div class="user-face-nav mb-1" style="background: url('{{ user.profile.image.url }}') center / cover;"></div>
       {% else %}
         <div class="user-face-nav mb-1" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>

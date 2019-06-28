@@ -173,7 +173,6 @@
             {% endif %}
           </div>
         </div>
-
         <!-- 댓글 코드 -->
         <div class="mt-2 w-100 comment-wrap">
           {% get_bestcomment_a feed.id as comment_a %}
@@ -400,7 +399,7 @@
       </div>
     </a>
     <a href="/feeds/creator/{{ request.user.username }}/">
-      {% if user.profile.image.url != "/media/False"%}
+      {% if user.profile.image.url is not None %}
         <div class="user-face-nav mb-1" style="background: url('{{ user.profile.image.url }}') center / cover;"></div>
       {% else %}
         <div class="user-face-nav mb-1" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>

@@ -28,9 +28,8 @@ class Profile(models.Model):
 		# options = {'quality': 50},
         blank = True,
         null = True,
-        # default='static/feedpage/default_avatar.png'
+        # default='/static/feedpage/default_avatar.png'
         )
-    image_url = models.URLField(blank=True, null=True)
     created_at = models.DateTimeField(default=timezone.now)
     notichecked_at = models.DateTimeField(default=timezone.now)
     religion = models.IntegerField(

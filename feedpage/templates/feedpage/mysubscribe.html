@@ -416,7 +416,7 @@
       </div>
     </a>
     <a href="/feeds/creator/{{ request.user.username }}/">
-      {% if user.profile.image.url != "/media/False"%}
+      {% if user.profile.image.url is not None %}
         <div class="user-face-nav mb-1" style="background: url('{{ user.profile.image.url }}') center / cover;"></div>
       {% else %}
         <div class="user-face-nav mb-1" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
