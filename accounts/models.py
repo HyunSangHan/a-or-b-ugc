@@ -58,6 +58,7 @@ class Profile(models.Model):
     likes_iphone = models.BooleanField(null=True)
     is_premium = models.BooleanField(default=False)
     is_first_login = models.BooleanField(default=True)
+    is_facebook = models.BooleanField(null=True)
 
     def __str__(self):
         return self.user.username
@@ -121,7 +122,8 @@ def populate_profile(sociallogin, user, **kwargs):
 
     if sociallogin.account.provider == 'facebook':
         user_data = user.socialaccount_set.filter(provider='facebook')[0].extra_data
-        img_url = "http://graph.facebook.com/" + sociallogin.account.uid + "/picture?type=large"            
+        img_url = "http://graph.facebook.com/" + sociallogin.account.uid + "/picture?type=large"
+        profile.is_facebook = True
     elif sociallogin.account.provider == 'kakao':
         user_data = user.socialaccount_set.filter(provider='kakao')[0].extra_data
         img_url = user.socialaccount_set.first().get_avatar_url()
@@ -130,6 +132,7 @@ def populate_profile(sociallogin, user, **kwargs):
             profile.is_male = True
         elif gender == 'female':
             profile.is_male = False
+        profile.is_facebook = False
 
     if img_url:
         name = urlparse(img_url).path.split('/')[-1]

@@ -92,11 +92,9 @@
             <div class="letter-space">
               {% get_feed_tags feed.id as feed_tags %}
               {% for tag in feed_tags %}
-                {% if tag != feed_tags.first %}
-                  <span class="font-13 font-light">
-                    <a href="/feeds/?keyword={{tag}}" class="link-black">#{{ tag }}</a>
-                  </span>
-                {% endif %}
+                <span class="font-13 font-light">
+                  <a href="/feeds/?keyword={{tag}}" class="link-black">#{{ tag }}</a>
+                </span>
               {% endfor %}
             </div>
             <div class="inline-flex v-center mt-1 mb-2">
@@ -124,13 +122,19 @@
                   <div class="content-label bg-grey">
                     <strong>A /</strong> {{ feed.content_a}}
                   </div>
+                  <div class="content-default-bg-js w-100 h-100"></div>
                 <!--그 외 평소/win일 때 A 라벨링-->
+                {% elif choice == "A" %}
+                  <div class="content-label bg-black">
+                    <strong>A /</strong> {{ feed.content_a}}
+                  </div>
+                  <div class="content-default-bg-js w-100 h-100"></div>
                 {% else %}
                   <div class="content-label bg-black">
                     <strong>A /</strong> {{ feed.content_a}}
                   </div>
+                  <div class="content-default-bg-js content-default-bg w-100 h-100"></div>
                 {% endif %}
-                <div class="content-default-bg w-100 h-100"></div>
 
                 <!--A를 upvote한 경우-->
                 {% if choice != "" %}
@@ -165,13 +169,19 @@
                   <div class="content-label bg-grey">
                     <strong>B /</strong> {{ feed.content_b}}
                   </div>
+                  <div class="content-default-bg-js w-100 h-100"></div>
                 <!--그 외 평소/win일 때 B 라벨링-->
+                {% elif choice == "B" %}
+                  <div class="content-label bg-black">
+                    <strong>B /</strong> {{ feed.content_b}}
+                  </div>
+                  <div class="content-default-bg-js w-100 h-100"></div>
                 {% else %}
                   <div class="content-label bg-black">
                     <strong>B /</strong> {{ feed.content_b}}
                   </div>
+                  <div class="content-default-bg-js content-default-bg w-100 h-100"></div>
                 {% endif %}
-                <div class="content-default-bg w-100 h-100"></div>
 
                 <!--B를 upvote한 경우-->
                 {% get_upvote_color feed.id user.id as choice %}

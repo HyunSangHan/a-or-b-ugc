@@ -18,6 +18,7 @@ import urllib
 from urllib.parse import urlparse
 import requests
 from django.core.files.base import ContentFile
+from collections import OrderedDict
 
 #TODO: 니드 로그인 기능 리다이렉트 구현 필요
 
@@ -89,30 +90,27 @@ def new(request):
             response = requests.get(img_url_b)
             if response.status_code == 200:
                 feed.img_b.save(name, ContentFile(response.content), save=True)
-        #edit도
-        # 띄어쓰기 포함도
-        # 샾 안넣었을때의 코너케이스도 챙기기 필요
-        # replace왜 안먹히지? 확인 필요
         hash_tag_raw = request.POST['hash_tag_raw'].replace(" ", "")
+
         hash_tag_all = hash_tag_raw.split("#")
+        hash_tag_all = list(OrderedDict.fromkeys(hash_tag_all))
+
         for hash_tag in hash_tag_all:
-            ###################################
-            if HashTag.objects.filter(tag=hash_tag).count() > 0:
-                tag = HashTag.objects.get(tag=hash_tag)
-                TagRelation.objects.create(hash_tag=tag, feed=feed)
-            else:
-                tag = HashTag.objects.create(tag=hash_tag)
-                TagRelation.objects.create(hash_tag=tag, feed=feed)
-#TODO: 공백이면 빼는 로직도 필요(당장 / below)
-#TODO: 왜 이거 안됨? => [에러메시지] invalid literal for int() with base 10: ''
-# print(TagRelation.objects.filter(hash_tag="").count())
-# TagRelation.objects.get(hash_tag="").delete()
-        # 노티 만들기
+            if hash_tag != "":
+                if HashTag.objects.filter(tag=hash_tag).count() > 0:
+                    tag = HashTag.objects.get(tag=hash_tag)
+                    TagRelation.objects.create(hash_tag=tag, feed=feed)
+                else:
+                    tag = HashTag.objects.create(tag=hash_tag)
+                    TagRelation.objects.create(hash_tag=tag, feed=feed)
+
         feedid = feed.id
         make_notification(7, feedid, request.user.id)
         return redirect('/feeds')
+
     elif request.user.is_anonymous:
         return redirect('/accounts/login')
+
     else:
         return render(request, 'feedpage/new.html')
 
@@ -125,7 +123,7 @@ def delete(request, id):
     if request.is_ajax():
         if feed.creator == request.user:
             feed.delete()
-        context = {'message': 'Deleted'}
+            context = {}
         return JsonResponse(context)
     else:
         if feed.creator == request.user:
@@ -169,18 +167,20 @@ def edit(request, id):
             if response.status_code == 200:
                 feed.img_b.save(name, ContentFile(response.content), save=True)
 
-        hash_tag_raw = request.POST['hash_tag_raw']
+        hash_tag_raw = request.POST['hash_tag_raw'].replace(" ", "")
+
         hash_tag_all = hash_tag_raw.split("#")
+        hash_tag_all = list(OrderedDict.fromkeys(hash_tag_all))
+
         for hash_tag in hash_tag_all:
-            if HashTag.objects.filter(tag=hash_tag).count() > 0:
-                tag = HashTag.objects.get(tag=hash_tag)
-                if TagRelation.objects.filter(hash_tag=tag, feed=feed).count() == 0:
+            if hash_tag != "":
+                if HashTag.objects.filter(tag=hash_tag).count() > 0:
+                    tag = HashTag.objects.get(tag=hash_tag)
                     TagRelation.objects.create(hash_tag=tag, feed=feed)
-            else:
-                tag = HashTag.objects.create(tag=hash_tag)
-                TagRelation.objects.create(hash_tag=tag, feed=feed)
-        #현재상황: edit을 통해 추가된 태그의 첫번째는 #만이 나오는 게 그대로 나오고 있음. 해시태그 하나씩 삭제가 안됨.(form태그 중첩 이슈로 예상)
-        #나중에는 태그 위치 조절할 수 있는 기능 / 특정 태그 삭제하는 기능 구현 필요
+                else:
+                    tag = HashTag.objects.create(tag=hash_tag)
+                    TagRelation.objects.create(hash_tag=tag, feed=feed)        #나중에는 태그 위치 조절할 수 있는 기능 / 특정 태그 삭제하는 기능 구현 필요
+
         feed.update_date()
         feed.save()
         next = request.POST['next']
@@ -189,7 +189,10 @@ def edit(request, id):
     elif request.user.is_anonymous:
         return redirect('/accounts/login')
     elif feed.creator == request.user and feed.feedcomment_set.count() == 0 and feed.upvote_set.count() == 0:
-        next = request.META['HTTP_REFERER']
+        try:
+            next = request.META['HTTP_REFERER']
+        except:
+            next = '/feeds/'
         return render(request, 'feedpage/edit.html', {'feed': feed, 'next': next})
     else:
         print("비정상적인 수정 접근 시도")
@@ -199,13 +202,24 @@ def edit(request, id):
             next = '/feeds/'
         return redirect('%s'%next)
 
-def delete_tag(request, fid, tid):
-    #TODO: 되고 있는 것인지 확인 필요
-    ####################################
-    if request.method == 'DELETE':
-        tag = HashTag.objects.get(feed_id=fid, tag_id=tid)
-        tag.delete()
-        return redirect(request.META['HTTP_REFERER'])
+def delete_tag(request, id, trid):
+    print(trid)
+    feed = Feed.objects.get(id=id)
+    if feed.creator == request.user:
+        if request.is_ajax():
+            tag = TagRelation.objects.get(id=trid)
+            tag.delete()
+            context = {}
+            return JsonResponse(context)
+        else:
+            tag = TagRelation.objects.get(id=trid)
+            tag.delete()
+    try:
+        next = request.META['HTTP_REFERER']
+    except:
+        next = '/feeds/'
+    return redirect('%s'%next)
+
 
 def create_comment(request, id):
     if request.method == 'POST':
@@ -562,6 +576,7 @@ def myreaction(request):
         has_upvotes = False
     else:
         has_upvotes = True
+
     return render(request, 'feedpage/myreaction.html', {'upvotes': upvotes, 'has_upvotes': has_upvotes})
 
 def mynotification(request):

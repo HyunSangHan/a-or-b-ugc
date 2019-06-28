@@ -19,8 +19,8 @@ $(document).ready(() => {
   // 투표하기
   $('.content-a-js, .content-b-js').on('click', function(event) {
     const $this = $(this);
-    const siblingA = $this.siblings('.content-a-js')
-    const siblingB = $this.siblings('.content-b-js')
+    const $siblingA = $this.siblings('.content-a-js')
+    const $siblingB = $this.siblings('.content-b-js')
     const fid = $this.attr("data-feedid");
     const side = $this.attr("data-feedside");
     console.log(side + " clicked")
@@ -31,6 +31,7 @@ $(document).ready(() => {
       success: function (data) {
         var upvote_before = data.upvote_before;
         var upvote_after = data.upvote_after;
+        console.log(upvote_before +"=>"+ upvote_after);
         var clicked = `
         <div class="content-result-bg flex-center w-100 h-100 bg-black">
         </div>
@@ -61,74 +62,85 @@ $(document).ready(() => {
         `;
         if (upvote_after === 1) {
           if (upvote_before === 0) {
+            $this.children('.content-default-bg-js').removeClass('content-default-bg');
+            $siblingB.children('.content-default-bg-js').removeClass('content-default-bg');
             $this.prepend(resultA);
             $this.prepend(clicked);
-            siblingB.children('.content-label').toggleClass('bg-black');
-            siblingB.children('.content-label').toggleClass('bg-grey');
-            siblingB.prepend(resultB);
-            siblingB.prepend(unclicked);
+            $siblingB.children('.content-label').toggleClass('bg-black');
+            $siblingB.children('.content-label').toggleClass('bg-grey');
+            $siblingB.prepend(resultB);
+            $siblingB.prepend(unclicked);
           } else if (upvote_before === 1) {
+            $this.children('.content-default-bg-js').addClass('content-default-bg');
+            $siblingB.children('.content-default-bg-js').addClass('content-default-bg');
             $this.children('.content-result').remove();
             $this.children('.content-result-bg').remove();
-            siblingB.children('.content-label').toggleClass('bg-black');
-            siblingB.children('.content-label').toggleClass('bg-grey');
-            siblingB.children('.content-result').remove();
-            siblingB.children('.content-result-bg').remove();
+            $siblingB.children('.content-label').toggleClass('bg-black');
+            $siblingB.children('.content-label').toggleClass('bg-grey');
+            $siblingB.children('.content-result').remove();
+            $siblingB.children('.content-result-bg').remove();
           } else if (upvote_before === 2) {
             $this.children('.content-result').remove();
             $this.children('.content-result-bg').remove();
-            siblingB.children('.content-result').remove();
-            siblingB.children('.content-result-bg').remove();
+            $siblingB.children('.content-result').remove();
+            $siblingB.children('.content-result-bg').remove();
             $this.children('.bg-grey').addClass('bg-black');
             $this.children('.bg-grey').removeClass('bg-grey');
             $this.prepend(resultA);
             $this.prepend(clicked);
-            siblingB.children('.content-label').removeClass('bg-black');
-            siblingB.children('.content-label').addClass('bg-grey');
-            siblingB.prepend(resultB);
-            siblingB.prepend(unclicked);
+            $siblingB.children('.content-label').removeClass('bg-black');
+            $siblingB.children('.content-label').addClass('bg-grey');
+            $siblingB.prepend(resultB);
+            $siblingB.prepend(unclicked);
           }
         } else if (upvote_after === 2) {
           if (upvote_before === 0) {
+            $siblingA.children('.content-default-bg-js').removeClass('content-default-bg');
+            $this.children('.content-default-bg-js').removeClass('content-default-bg');
             $this.prepend(resultB);
             $this.prepend(clicked);
-            siblingA.children('.content-label').toggleClass('bg-black');
-            siblingA.children('.content-label').toggleClass('bg-grey');
-            siblingA.prepend(resultA);
-            siblingA.prepend(unclicked);
+            $siblingA.children('.content-label').toggleClass('bg-black');
+            $siblingA.children('.content-label').toggleClass('bg-grey');
+            $siblingA.prepend(resultA);
+            $siblingA.prepend(unclicked);
           } else if (upvote_before === 1) {
             $this.children('.content-result').remove();
             $this.children('.content-result-bg').remove();
-            siblingA.children('.content-result').remove();
-            siblingA.children('.content-result-bg').remove();
+            $siblingA.children('.content-result').remove();
+            $siblingA.children('.content-result-bg').remove();
             $this.children('.bg-grey').addClass('bg-black');
             $this.children('.bg-grey').removeClass('bg-grey');
             $this.prepend(resultB);
             $this.prepend(clicked);
-            siblingA.children('.content-label').removeClass('bg-black');
-            siblingA.children('.content-label').addClass('bg-grey');
-            siblingA.prepend(resultA);
-            siblingA.prepend(unclicked);
+            $siblingA.children('.content-label').removeClass('bg-black');
+            $siblingA.children('.content-label').addClass('bg-grey');
+            $siblingA.prepend(resultA);
+            $siblingA.prepend(unclicked);
           } else if (upvote_before === 2) {
+            $siblingA.children('.content-default-bg-js').addClass('content-default-bg');
+            $this.children('.content-default-bg-js').addClass('content-default-bg');
             $this.children('.content-result').remove();
             $this.children('.content-result-bg').remove();
-            siblingA.children('.content-label').toggleClass('bg-black');
-            siblingA.children('.content-label').toggleClass('bg-grey');
-            siblingA.children('.content-result').remove();
-            siblingA.children('.content-result-bg').remove();
+            $siblingA.children('.content-label').toggleClass('bg-black');
+            $siblingA.children('.content-label').toggleClass('bg-grey');
+            $siblingA.children('.content-result').remove();
+            $siblingA.children('.content-result-bg').remove();
           }
 
         } else {
+          $this.children('.content-default-bg-js').addClass('content-default-bg');
+          $siblingA.children('.content-default-bg-js').addClass('content-default-bg');
+          $siblingB.children('.content-default-bg-js').addClass('content-default-bg');
           $this.children('.content-result').remove();
           $this.children('.content-result-bg').remove();
-          siblingA.children('.bg-grey').addClass('bg-black');
-          siblingA.children('.bg-grey').removeClass('bg-grey');
-          siblingA.children('.content-result').remove();
-          siblingA.children('.content-result-bg').remove();
-          siblingB.children('.bg-grey').addClass('bg-black');
-          siblingB.children('.bg-grey').removeClass('bg-grey');
-          siblingB.children('.content-result').remove();
-          siblingB.children('.content-result-bg').remove();
+          $siblingA.children('.bg-grey').addClass('bg-black');
+          $siblingA.children('.bg-grey').removeClass('bg-grey');
+          $siblingA.children('.content-result').remove();
+          $siblingA.children('.content-result-bg').remove();
+          $siblingB.children('.bg-grey').addClass('bg-black');
+          $siblingB.children('.bg-grey').removeClass('bg-grey');
+          $siblingB.children('.content-result').remove();
+          $siblingB.children('.content-result-bg').remove();
       }
       },
       error: function(response, status, error) {
@@ -417,7 +429,7 @@ $(document).ready(() => {
           <div class="mr-1perc demo-card-image mdl-card content-img inner uploaded-a" style="background: url('`+img_a+`') center / cover;">
             <div class="content-label bg-black">
               <strong>A / </strong>
-              <input type="text" class="w-80 font-15 feed-input-border font-white bg-black content-a content-js" value="`+content_a+`" placeholder=" 내용(21자 이내)" name="content_a" maxlength="21" required>
+              <input type="text" class="w-80 font-15 feed-input-border font-white bg-black content-a content-js" value="`+content_a+`" placeholder=" 내용(21자 이내)" name="content_a" maxlength="21" autocomplete="off" required>
             </div>
             <div class="w-100 h-100 img-menu-on" data-csrfmiddlewaretoken="`+csrfmiddlewaretoken+`" data-aorb="`+aorb+`">
             </div>
@@ -450,7 +462,7 @@ $(document).ready(() => {
           <div class="ml-1perc demo-card-image mdl-card content-img inner uploaded-b" style="background: url('`+img_b+`') center / cover;">
             <div class="content-label bg-black">
               <strong>B / </strong>
-              <input type="text" class="w-80 font-15 feed-input-border font-white bg-black content-b content-js" value="`+content_b+`" placeholder=" 내용(21자 이내)" name="content_b" maxlength="21" required>
+              <input type="text" class="w-80 font-15 feed-input-border font-white bg-black content-b content-js" value="`+content_b+`" placeholder=" 내용(21자 이내)" name="content_b" maxlength="21" autocomplete="off" required>
             </div>
             <div class="w-100 h-100 img-menu-on" data-csrfmiddlewaretoken="`+csrfmiddlewaretoken+`" data-aorb="`+aorb+`">
             </div>
@@ -536,7 +548,7 @@ $(document).ready(() => {
         <div class="mr-1perc demo-card-image mdl-card content-img inner uploaded-a" style="background: url('`+img+`') center / cover;">
           <div class="content-label bg-black">
             <strong>A / </strong>
-            <input type="text" class="w-80 font-15 feed-input-border font-white bg-black content-a content-js" value="`+content_a+`" placeholder=" 내용(21자 이내)" name="content_a" maxlength="21" required>
+            <input type="text" class="w-80 font-15 feed-input-border font-white bg-black content-a content-js" value="`+content_a+`" placeholder=" 내용(21자 이내)" name="content_a" maxlength="21" autocomplete="off" required>
           </div>
           <div class="w-100 h-100 img-menu-on" data-csrfmiddlewaretoken="`+csrfmiddlewaretoken+`" data-aorb="a">
           </div>
@@ -550,18 +562,37 @@ $(document).ready(() => {
         <div class="ml-1perc demo-card-image mdl-card content-img inner uploaded-b" style="background: url('`+img+`') center / cover;">
           <div class="content-label bg-black">
             <strong>B / </strong>
-            <input type="text" class="w-80 font-15 feed-input-border font-white bg-black content-b content-js" value="`+content_b+`" placeholder=" 내용(21자 이내)" name="content_b" maxlength="21" required>
+            <input type="text" class="w-80 font-15 feed-input-border font-white bg-black content-b content-js" value="`+content_b+`" placeholder=" 내용(21자 이내)" name="content_b" maxlength="21" autocomplete="off" required>
           </div>
           <div class="w-100 h-100 img-menu-on" data-csrfmiddlewaretoken="`+csrfmiddlewaretoken+`" data-aorb="b">
           </div>
           <input type="hidden" name="img_url_b" value="`+img+`">
         </div>
       `); 
-
     }
+  });
 
-
-
+  // 해시태그 삭제
+  $(document).on('click', '.delete-tag', function(event) {
+    const $this = $(this);
+    const id = $this.data('feedid');
+    const trid = $this.data('tagrelationid');
+    $.ajax({
+      type: "GET",
+      url: `/feeds/${id}/delete_tag/${trid}/`,
+      dataType: "json",
+      success: function (data) {
+        $this.prev().remove();
+        $this.remove();  
+      },
+      error: function(response, status, error) {
+        alert('error');
+        console.log(response, status, error);
+      },
+      complete: function(response) {
+        console.log(response);
+      },
+    });
   });
 
 })

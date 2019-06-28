@@ -148,7 +148,12 @@
   opacity: 0.1;
 }
 
+.content-default-bg:hover {
+  background-color: black;
+}
+
 .content-img.inner {
+  border: 1px lightgrey solid;
   text-align: center;
 }
 
@@ -755,4 +760,12 @@
 
 .content-img-input-msg-lower {
   height: calc(50% - 19px);
+}
+
+.delete-tag {
+  color: grey; margin-left: -4px;
+}
+
+.delete-tag:hover {
+  cursor: pointer;
 }

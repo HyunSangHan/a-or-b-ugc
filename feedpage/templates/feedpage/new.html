@@ -9,9 +9,9 @@
         {% csrf_token %} 
         <li class="each-li">
           <div class="w-100">
-            <input class="content-title w-100 feed-input-border" name="title" placeholder="제목을 입력하세요(30자 이내)" maxlength="30" required/>
+            <input class="content-title w-100 feed-input-border" name="title" placeholder="제목을 입력하세요(30자 이내)" maxlength="30" autocomplete="off" required/>
             <div class="font-13 font-light">
-              <input class="font-13 font-light letter-space w-100 feed-input-border" type="text" id="hash_tag" name="hash_tag_raw" placeholder="#으로 #구분하여 #한단어씩 #해시태그를 #입력하세요" />
+              <input class="font-13 font-light letter-space w-100 feed-input-border" type="text" id="hash_tag" name="hash_tag_raw" placeholder="#으로 #구분하여 #한단어씩 #해시태그를 #입력하세요" autocomplete="off"/>
             </div>
           </div>
           <div class="inline-flex v-center mt-1 mb-2">
@@ -32,7 +32,7 @@
             <div class="mr-1perc demo-card-image mdl-card content-img inner uploaded-a">
               <div class="content-label bg-black">
                 <strong>A / </strong>
-                <input type="text" class="w-80 font-15 feed-input-border font-white bg-black content-a content-js" placeholder=" 내용(21자 이내)" name="content_a" maxlength="21" required>
+                <input type="text" class="w-80 font-15 feed-input-border font-white bg-black content-a content-js" placeholder=" 내용(21자 이내)" name="content_a" maxlength="21" autocomplete="off" required>
               </div>
               <div class="flex-center w-100 h-100 img-menu-on" data-csrfmiddlewaretoken="{{csrf_token}}" data-aorb="a">
                 <div class="mt-4">
@@ -51,7 +51,7 @@
             <div class="ml-1perc demo-card-image mdl-card content-img inner uploaded-b">
               <div class="content-label bg-black">
                 <strong>B / </strong>
-                <input type="text" class="w-80 font-15 feed-input-border font-white bg-black content-b content-js" placeholder=" 내용(21자 이내)" name="content_b" maxlength="21" required>
+                <input type="text" class="w-80 font-15 feed-input-border font-white bg-black content-b content-js" placeholder=" 내용(21자 이내)" name="content_b" maxlength="21" autocomplete="off" required>
               </div>
               <div class="flex-center w-100 h-100 img-menu-on" data-csrfmiddlewaretoken="{{csrf_token}}" data-aorb="b">
                 <div class="mt-4">
