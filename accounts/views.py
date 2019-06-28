@@ -61,13 +61,10 @@ def login(request):
         return redirect('/feeds/')
 
 def profile(request):
-    # auth.login(request, user)
     if request.method == 'POST':
+        done_cnt = 0
     #글자수제한 등등 로직 들어갈 곳
         user = request.user
-        profile = user.profile
-        done_cnt = 0
-
         username = request.POST['username']
         if len(username) > 0:
             user.username = username
@@ -75,6 +72,12 @@ def profile(request):
             done_cnt += 1
         else:
             return redirect('/accounts/profile/')
+
+        profile = user.profile
+
+        profile_image = request.FILES.get('profile_image', False)
+        if profile_image:
+            profile.image = profile_image
 
         birth = request.POST.get('birth')
         if birth is not None and birth != '' :
@@ -133,17 +136,19 @@ def profile(request):
         update_session_auth_hash(request, request.user)
         return redirect('/accounts/profile/')
     else:
-        user = request.user
+        user = request.user            
         social_user = user.socialaccount_set.first()
-        social_data = social_user.extra_data
+        # social_data = social_user.extra_data
         profile = user.profile
+        if profile.is_first_login:
+            profile.is_first_login = False
         #첫 로그인인 경우로 조건문 걸어주고
         ## 안된거
         # birthday, is_male, image,
         # left_level, major, 
         # region, likes_iphone, is_premium
         profile.save()
-        print(social_user.extra_data)
+        # print(social_user.extra_data)
         # print(social_user.extra_data['properties'])
 
 

@@ -34,7 +34,7 @@ a {
   font-weight: inherit !important;
 }
 
-div > a {
+div > a, span > a {
   text-decoration: none;
   color: black;
 }

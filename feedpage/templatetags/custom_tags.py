@@ -1,5 +1,6 @@
 from django import template
 from feedpage.models import Feed, FeedComment, Upvote, HashTag, TagRelation, Report, Notification
+from accounts.models import Profile
 register = template.Library()
 from datetime import datetime#, timedelta
 from django.utils import timezone
@@ -32,7 +33,7 @@ def get_deltatime(pk, type_id):
             deltatime_view = str(delta_day) + "일전"
         elif delta_day < 365:
             delta_month = deltatime.days // 30
-            dletatime_view = str(delta_month) + "개월전"
+            deltatime_view = str(delta_month) + "개월전"
         else: #delta_day >= 365
             delta_year = deltatime.days // 365
             dletatime_view = str(delta_year) + "일전"
@@ -109,7 +110,7 @@ def get_report_tf(fid, uid):
 @register.simple_tag
 def get_feed_tags(fid):
     try:
-        feed_tags_all = TagRelation.objects.filter(feed_id=fid)
+        feed_tags_all = TagRelation.objects.filter(feed_id=fid).order_by('created_at')
     except:
         feed_tags_all = None
 
@@ -117,9 +118,11 @@ def get_feed_tags(fid):
     # '일단은' 구현했으나, 더 개선된 로직으로 수정 필요
     feed_tags = []
     for feed_tag in feed_tags_all:
-        if feed_tag != feed_tags_all.first():
-            feed_tags.append(str(feed_tag))
-    return list(set(feed_tags))
+        feed_tags.append(feed_tag)
+    # feeds_tags_all = list(set(feed_tags))
+    # feeds_tags_all = sorted(feeds_tags_all, key=lambda x: x.created_at, reverse=False)
+
+    return feed_tags
 
 @register.simple_tag
 def get_comment_upvote_tf(fid, cid, uid):
@@ -211,3 +214,24 @@ def get_noti_amount(uid):
     noti_unchecked = noti.filter(is_checked=False) #지난번기준 미확인알림
     noti_amount_unchecked = noti_unchecked.count()
     return noti_amount_unchecked
+
+#튜토리얼용 - 숫자
+@register.simple_tag
+def get_tutorial_num(typenum):
+    if typenum == 1:
+        return Profile.objects.filter(is_facebook=True).count()
+    else:
+        return Profile.objects.filter(is_facebook=False).count()
+
+#튜토리얼용 - 퍼센트
+@register.simple_tag
+def get_tutorial_perc(typenum):
+    facebook_num = Profile.objects.filter(is_facebook=True).count()
+    kakao_num = Profile.objects.filter(is_facebook=False).count()
+    social_users_num = facebook_num + kakao_num
+    if typenum == 1:
+        return "{:.0f}".format((facebook_num / social_users_num)*100)
+    elif typenum == 2:
+        return "{:.0f}".format((kakao_num / social_users_num)*100)
+    else:
+        return "-"

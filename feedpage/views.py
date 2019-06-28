@@ -8,18 +8,22 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from operator import attrgetter
 from django.http import JsonResponse, HttpResponse
-import urllib
 import json
 from .reuse_function import make_notification
 from django.utils import timezone
 import os
 import sys
 from snulion7th.settings import IMG_CLIENT_ID, IMG_CLIENT_KEY
+import urllib
+from urllib.parse import urlparse
+import requests
+from django.core.files.base import ContentFile
+from collections import OrderedDict
 
 #TODO: 니드 로그인 기능 리다이렉트 구현 필요
 
 def index(request): 
-    if request.user.is_anonymous == False and request.user.profile.created_at.strftime('%Y/%m/%d %H:%M:%S') == timezone.now().strftime('%Y/%m/%d %H:%M:%S'):
+    if request.user.is_anonymous == False and request.user.profile.is_first_login:
         return redirect('/accounts/profile/')
     # print(HashTag.objects.all())
     keyword = request.GET.get('keyword', '')
@@ -54,31 +58,59 @@ def new(request):
         title = request.POST['title']
         content_a = request.POST['content_a']
         content_b = request.POST['content_b']
-        img_a = request.FILES.get('img_a', False)
-        img_b = request.FILES.get('img_b', False)
+        img_url_a = request.POST.get('img_url_a')
+        img_url_b = request.POST.get('img_url_b')
+        img_a = request.FILES.get('img_a')
+        img_b = request.FILES.get('img_b')
+
+        if img_url_a is None and img_a is None:
+            print("이미지 A를 누락")
+            try:
+                next = request.META['HTTP_REFERER']
+            except:
+                next = '/feeds/'
+            return redirect('%s'%next)
+
+        if img_url_b is None and img_b is None:
+            print("이미지 B를 누락")
+            try:
+                next = request.META['HTTP_REFERER']
+            except:
+                next = '/feeds/'
+            return redirect('%s'%next)
+
         feed = Feed.objects.create(title=title, content_a=content_a, img_a=img_a, img_b=img_b, content_b=content_b, creator=request.user)
-        #edit도
-        # 띄어쓰기 포함도
-        # 샾 안넣었을때의 코너케이스도 챙기기 필요
-        # replace왜 안먹히지? 확인 필요
+        if img_url_a:
+            name = urlparse(img_url_a).path.split('/')[-1]
+            response = requests.get(img_url_a)
+            if response.status_code == 200:
+                feed.img_a.save(name, ContentFile(response.content), save=True)
+        if img_url_b:
+            name = urlparse(img_url_b).path.split('/')[-1]
+            response = requests.get(img_url_b)
+            if response.status_code == 200:
+                feed.img_b.save(name, ContentFile(response.content), save=True)
         hash_tag_raw = request.POST['hash_tag_raw'].replace(" ", "")
+
         hash_tag_all = hash_tag_raw.split("#")
+        hash_tag_all = list(OrderedDict.fromkeys(hash_tag_all))
+
         for hash_tag in hash_tag_all:
-            ###################################
-            if HashTag.objects.filter(tag=hash_tag).count() > 0:
-                tag = HashTag.objects.get(tag=hash_tag)
-                TagRelation.objects.create(hash_tag=tag, feed=feed)
-            else:
-                tag = HashTag.objects.create(tag=hash_tag)
-                TagRelation.objects.create(hash_tag=tag, feed=feed)
-#TODO: 공백이면 빼는 로직도 필요(당장 / below)
-#TODO: 왜 이거 안됨? => [에러메시지] invalid literal for int() with base 10: ''
-# print(TagRelation.objects.filter(hash_tag="").count())
-# TagRelation.objects.get(hash_tag="").delete()
-        # 노티 만들기
+            if hash_tag != "":
+                if HashTag.objects.filter(tag=hash_tag).count() > 0:
+                    tag = HashTag.objects.get(tag=hash_tag)
+                    TagRelation.objects.create(hash_tag=tag, feed=feed)
+                else:
+                    tag = HashTag.objects.create(tag=hash_tag)
+                    TagRelation.objects.create(hash_tag=tag, feed=feed)
+
         feedid = feed.id
         make_notification(7, feedid, request.user.id)
         return redirect('/feeds')
+
+    elif request.user.is_anonymous:
+        return redirect('/accounts/login')
+
     else:
         return render(request, 'feedpage/new.html')
 
@@ -91,14 +123,14 @@ def delete(request, id):
     if request.is_ajax():
         if feed.creator == request.user:
             feed.delete()
-        context = {'message': 'Deleted'}
+            context = {}
         return JsonResponse(context)
     else:
         if feed.creator == request.user:
             feed.delete()
             next = '/feeds/'
         else:
-            print("비정상적인 수정 접근 시도")
+            print("비정상적인 삭제 접근 시도")
             try:
                 next = request.META['HTTP_REFERER']
             except:
@@ -108,30 +140,59 @@ def delete(request, id):
 def edit(request, id):
     feed = Feed.objects.get(id=id)
     if request.method == 'POST' and feed.creator == request.user and feed.feedcomment_set.count() == 0 and feed.upvote_set.count() == 0:
-        feed.title = request.POST['title']
-        feed.content_a = request.POST['content_a']
-        feed.content_b = request.POST['content_b']
-        feed.img_a = request.FILES.get('img_a', False)
-        feed.img_b = request.FILES.get('img_b', False)
-        hash_tag_raw = request.POST['hash_tag_raw']
+        title = request.POST['title']
+        content_a = request.POST['content_a']
+        content_b = request.POST['content_b']
+        img_url_a = request.POST.get('img_url_a')
+        img_url_b = request.POST.get('img_url_b')
+        img_a = request.FILES.get('img_a')
+        img_b = request.FILES.get('img_b')
+
+        feed.title = title
+        feed.content_a = content_a
+        feed.content_b = content_b
+
+        if img_a:
+            feed.img_a = img_a
+        if img_b:
+            feed.img_b = img_b
+        if img_url_a:
+            name = urlparse(img_url_a).path.split('/')[-1]
+            response = requests.get(img_url_a)
+            if response.status_code == 200:
+                feed.img_a.save(name, ContentFile(response.content), save=True)
+        if img_url_b:
+            name = urlparse(img_url_b).path.split('/')[-1]
+            response = requests.get(img_url_b)
+            if response.status_code == 200:
+                feed.img_b.save(name, ContentFile(response.content), save=True)
+
+        hash_tag_raw = request.POST['hash_tag_raw'].replace(" ", "")
+
         hash_tag_all = hash_tag_raw.split("#")
+        hash_tag_all = list(OrderedDict.fromkeys(hash_tag_all))
+
         for hash_tag in hash_tag_all:
-            if HashTag.objects.filter(tag=hash_tag).count() > 0:
-                tag = HashTag.objects.get(tag=hash_tag)
-                if TagRelation.objects.filter(hash_tag=tag, feed=feed).count() == 0:
+            if hash_tag != "":
+                if HashTag.objects.filter(tag=hash_tag).count() > 0:
+                    tag = HashTag.objects.get(tag=hash_tag)
                     TagRelation.objects.create(hash_tag=tag, feed=feed)
-            else:
-                tag = HashTag.objects.create(tag=hash_tag)
-                TagRelation.objects.create(hash_tag=tag, feed=feed)
-        #현재상황: edit을 통해 추가된 태그의 첫번째는 #만이 나오는 게 그대로 나오고 있음. 해시태그 하나씩 삭제가 안됨.(form태그 중첩 이슈로 예상)
-        #나중에는 태그 위치 조절할 수 있는 기능 / 특정 태그 삭제하는 기능 구현 필요
+                else:
+                    tag = HashTag.objects.create(tag=hash_tag)
+                    TagRelation.objects.create(hash_tag=tag, feed=feed)        #나중에는 태그 위치 조절할 수 있는 기능 / 특정 태그 삭제하는 기능 구현 필요
+
         feed.update_date()
         feed.save()
         next = request.POST['next']
         #여기로 보내기 위함=> '/feeds'+'?page='+feeds.number
         return redirect('%s'%next)
+    elif request.user.is_anonymous:
+        return redirect('/accounts/login')
     elif feed.creator == request.user and feed.feedcomment_set.count() == 0 and feed.upvote_set.count() == 0:
-        next = request.META['HTTP_REFERER']
+        try:
+            next = request.META['HTTP_REFERER']
+        except:
+            next = '/feeds/'
         return render(request, 'feedpage/edit.html', {'feed': feed, 'next': next})
     else:
         print("비정상적인 수정 접근 시도")
@@ -141,13 +202,24 @@ def edit(request, id):
             next = '/feeds/'
         return redirect('%s'%next)
 
-def delete_tag(request, fid, tid):
-    #TODO: 되고 있는 것인지 확인 필요
-    ####################################
-    if request.method == 'DELETE':
-        tag = HashTag.objects.get(feed_id=fid, tag_id=tid)
-        tag.delete()
-        return redirect(request.META['HTTP_REFERER'])
+def delete_tag(request, id, trid):
+    print(trid)
+    feed = Feed.objects.get(id=id)
+    if feed.creator == request.user:
+        if request.is_ajax():
+            tag = TagRelation.objects.get(id=trid)
+            tag.delete()
+            context = {}
+            return JsonResponse(context)
+        else:
+            tag = TagRelation.objects.get(id=trid)
+            tag.delete()
+    try:
+        next = request.META['HTTP_REFERER']
+    except:
+        next = '/feeds/'
+    return redirect('%s'%next)
+
 
 def create_comment(request, id):
     if request.method == 'POST':
@@ -466,6 +538,8 @@ def creator(request, creator_name):
         return redirect('%s'%next)
 
 def mysubscribe(request):
+    if request.user.is_anonymous:
+        return redirect('/accounts/login')
     follow_from = Profile.objects.get(user_id = request.user.id)
     my_subs = Follow.objects.filter(follow_from=follow_from)
     feeds = []
@@ -488,19 +562,26 @@ def mysubscribe(request):
     return render(request, 'feedpage/mysubscribe.html', {'feeds': feeds, 'my_subs': my_subs, 'has_subs': has_subs, 'has_feeds': has_feeds})
 
 def myupload(request):
+    if request.user.is_anonymous:
+        return redirect('/accounts/login')
     feeds = Feed.objects.filter(creator_id=request.user.id).order_by('-updated_at', '-created_at')
     return render(request, 'feedpage/myupload.html', {'feeds': feeds})
 
 def myreaction(request):
+    if request.user.is_anonymous:
+        return redirect('/accounts/login')
     upvotes = request.user.upvote_set.all().order_by('-created_at')
     has_upvotes = False
     if len(upvotes) == 0:
         has_upvotes = False
     else:
         has_upvotes = True
+
     return render(request, 'feedpage/myreaction.html', {'upvotes': upvotes, 'has_upvotes': has_upvotes})
 
 def mynotification(request):
+    if request.user.is_anonymous:
+        return redirect('/accounts/login')
     noti = Notification.objects.filter(noti_to=request.user.profile, is_mine=False).order_by('-created_at')
     noti_unchecked = noti.filter(is_checked=False) #지난번기준 미확인알림
     profile = Profile.objects.get(user=request.user)
