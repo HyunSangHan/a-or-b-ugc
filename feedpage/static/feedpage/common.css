@@ -195,7 +195,7 @@ label, label > div:hover {
 }
 
 .mtb-1 {
-  margin: 4px 0;
+  margin: 4px 0 !important;
 }
 
 .mt-2 {
@@ -326,6 +326,11 @@ label, label > div:hover {
 
 .font-light {
   font-weight: 400 !important;
+  font-family: "Noto Sans KR", sans-serif !important;
+}
+
+.font-midlight {
+  font-weight: 500 !important;
   font-family: "Noto Sans KR", sans-serif !important;
 }
 

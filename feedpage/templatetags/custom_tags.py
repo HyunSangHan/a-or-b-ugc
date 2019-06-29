@@ -173,7 +173,7 @@ def get_ordered_comment_rest(fid, is_index):
         comments_b = list(feed.feedcomment_set.filter(upvote_side=2).order_by('-total_upvote', 'created_at'))
     comments_etc = list(feed.feedcomment_set.filter(upvote_side=0))
     comments_all = comments_a + comments_b + comments_etc
-    comments_all = sorted(comments_all, key=lambda x: x.created_at, reverse=True)
+    comments_all = sorted(comments_all, key=lambda x: x.created_at, reverse=False)
     if is_index:
         comments_all = sorted(comments_all, key=lambda x: x.total_upvote, reverse=True)
     comments = comments_all

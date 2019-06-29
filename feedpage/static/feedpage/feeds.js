@@ -4,7 +4,7 @@ $(document).ready(() => {
   $('.toggle-comments').on('click', function(event) {
     const $this = $(this);
     $this.siblings('.all-comments').slideDown();
-    $this.prev().children('.comment-heart-num-row-hide').fadeIn();
+    $this.prev().children('.comment').children('.comment-heart-btn').children('.comment-heart-num-hide').fadeIn();
     $this.hide();
   });
 
@@ -236,7 +236,7 @@ $(document).ready(() => {
     console.log("click heart");
     const $this = $(this);
     const $heart = $this.children('.comment-heart');
-    const $heartNum = $this.parent().next().children('.comment-heart-num');
+    const $heartNum = $this.children('.comment-heart-num');
     const fid = $this.attr("data-feedid");
     const cid = $this.attr("data-commentid");
 
@@ -253,6 +253,7 @@ $(document).ready(() => {
         $heart.toggleClass('font-red');
         $heartNum.toggleClass('font-red');
         $heartNum.toggleClass('font-grey');
+        $heartNum.toggleClass('font-midlight');
         if (btnName === 'favorite' && totalUpvote === 1) {
           $heartNum.text('x' + totalUpvote);
         } else if (btnName === 'favorite_border' && totalUpvote === 0) {
@@ -288,8 +289,8 @@ $(document).ready(() => {
         },
         dataType: "json",
         success: function (data) {
-          $this.parent().next().remove();
-          $this.parent().remove();
+          // $this.parent().next().remove();
+          $this.parent().parent().remove();
         },
         error: function(response, status, error) {
           alert('error');
@@ -327,36 +328,54 @@ $(document).ready(() => {
         } else if (data.comment.upvote_side === 2) {
           side = `<div class="sideicon norm"> B </div>`;
         }
+        //show 페이지에서 댓글을 달았을 경우
         if ($('#new-comments')[0]) {
           $('#new-comments')[0].scrollIntoView();
-          $('#new-comments').prepend(`
-          <div class="comment w-100 v-center mtb-1 inline-flex">
-          `+side+`
-            <div class="font-11 v-center mtb-auto comment-reactor"><strong>${data.comment.reactor}</strong></div>
-            <div class="font-14 v-center mtb-auto comment-content ellipsis-span">${data.comment.content}</div>
-            <span class="comment-clear" data-feedid="${id}" data-commentid="${data.comment.id}" data-csrfmiddlewaretoken="`+csrfmiddlewaretoken+`">
-              <i class="material-icons" style="font-size: 16px; color: grey;">clear</i>
-            </span>
-            <div class="ml-auto more-btn comment-heart-btn" data-feedid="${id}" data-commentid="${data.comment.id}">
-              <i class="material-icons comment-heart v-center m-auto link-grey ml-1">favorite_border</i>
-            </div>
-          </div>
-          <div class="comment-heart-num-row"></div>
-          `);
-        } else {
-          const $comments = $this.parent().parent().siblings('.new-comments');
-          $comments.append(`
-            <div class="comment w-100 v-center mtb-1 inline-flex">
-            `+side+`
-              <div class="font-11 v-center mtb-auto comment-reactor"><strong>${data.comment.reactor}</strong></div>
-              <div class="font-14 v-center mtb-auto comment-content ellipsis-span">${data.comment.content}</div>
-              <span class="comment-clear" data-feedid="${id}" data-commentid="${data.comment.id}" data-csrfmiddlewaretoken="`+csrfmiddlewaretoken+`">
-                <i class="material-icons" style="font-size: 16px; color: grey;">clear</i>
-              </span>
-              <div class="ml-auto more-btn comment-heart-btn" data-feedid="${id}" data-commentid="${data.comment.id}">
+          $('#new-comments').append(`
+            <div class="comment norm w-100 v-center mtb-1 inline-flex">
+              <div style="width: calc(100% - 20px);">
+                `+side+`
+                <span class="font-11 v-center mtb-auto comment-reactor">
+                  <strong>${data.comment.reactor}</strong>
+                </span>
+                <span class="font-14 v-center mtb-auto comment-content">
+                  ${data.comment.content}
+                </span>
+                <span class="comment-clear" data-feedid="${id}" data-commentid="${data.comment.id}" data-csrfmiddlewaretoken="`+csrfmiddlewaretoken+`">
+                  <i class="material-icons" style="font-size: 13px; color: grey;">clear</i>
+                </span>
+              </div>
+              <div style="width: 20px;" class="ml-auto comment-heart-btn" data-feedid="${id}" data-commentid="${data.comment.id}">
                 <i class="material-icons comment-heart v-center m-auto link-grey ml-1">favorite_border</i>
+                <div class="font-grey comment-heart-num">
+                </div>
               </div>
             </div>
+          `);
+        } else {
+        //index등 show '외'의 페이지에서 댓글을 달았을 경우
+          const $comments = $this.parent().parent().siblings('.new-comments');
+          $comments.append(`
+
+          <div class="comment norm w-100 v-center mtb-1 inline-flex">
+            <div style="width: calc(100% - 20px);">
+              `+side+`
+              <span class="font-11 v-center mtb-auto comment-reactor" style="margin-left: 0;">
+                <strong>${data.comment.reactor}</strong>
+              </span>
+              <span class="font-14 v-center mtb-auto comment-content">
+                ${data.comment.content}
+              </span>
+              <span class="comment-clear" data-feedid="${id}" data-commentid="${data.comment.id}" data-csrfmiddlewaretoken="`+csrfmiddlewaretoken+`">
+                <i class="material-icons" style="font-size: 13px; color: grey;">clear</i>
+              </span>
+            </div>
+            <div style="width: 20px;" class="ml-auto comment-heart-btn" data-feedid="${id}" data-commentid="${data.comment.id}">
+              <i class="material-icons comment-heart v-center m-auto link-grey ml-1">favorite_border</i>
+              <div class="font-grey comment-heart-num">
+              </div>
+            </div>
+          </div>
           `);
         }
         $this.siblings('.comment-input').val('');
