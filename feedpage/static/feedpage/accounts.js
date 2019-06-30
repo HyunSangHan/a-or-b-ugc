@@ -48,5 +48,56 @@ $(document).ready(() => {
     }
   });
 
+//프로필 수정 제출
+  $(document).on('click', '#profile-submit-btn', function(event) {
+    event.preventDefault();
 
+    const $this = $(this);
+    const csrfmiddlewaretoken = $this.data('csrfmiddlewaretoken');
+    const formData = new FormData($('#profile-form')[0]);
+
+    $.ajax({
+      type: "POST",
+      enctype: 'multipart/form-data',
+      url: `/accounts/profile/`,
+      data: formData,
+      processData: false,
+      contentType: false,
+      cache: false,
+      timeout: 600000,
+      dataType: "json",
+      csrfmiddlewaretoken: csrfmiddlewaretoken,
+      success: function (data) {
+        const isSuccess = data.comment.is_success
+        const isNewPremium = data.comment.is_new_premium
+        const restInfoNum = data.comment.rest_info_num
+        if (isSuccess) {
+          const $lastMsg = $('#last-msg');
+          if (isNewPremium) {
+            $('#promote-msg').remove();
+            $('#last-msg').text('이제, Premium user가 되셨습니다!');
+            $('.version-status').text('Premium user입니다!')
+            setTimeout(function() {
+              location.reload();
+            }, 2000);  
+          } else if (isSuccess == true && restInfoNum > 0) {
+            $lastMsg.text('성공적으로 반영되었습니다! 앞으로 딱 '+restInfoNum+'개만 더 채워주시면 Premium user가 됩니다.');
+            $lastMsg.addClass('font-mid');
+          } else {
+            $lastMsg.text('성공적으로 반영되었습니다!');
+            $lastMsg.addClass('font-mid');            
+          }
+        } else {
+          const $CreatorSub = $('#creator-profile-email');
+          $CreatorSub.addClass('font-red font-mid');
+          $CreatorSub.text('사용할 수 없는 닉네임입니다.');
+          $('.creator-name-edit').focus();
+        }
+      },
+
+      error: function (e) {
+          console.log("ERROR : ", e);
+      }
+    });
   })
+})

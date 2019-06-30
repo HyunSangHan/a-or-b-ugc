@@ -3,7 +3,6 @@ from .models import Feed, FeedComment, HashTag, TagRelation, Upvote, CommentUpvo
 from accounts.models import Profile, Follow
 from django.shortcuts import redirect
 from django.core.paginator import Paginator
-from django.db.models import Q
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from operator import attrgetter
@@ -19,8 +18,7 @@ from urllib.parse import urlparse
 import requests
 from django.core.files.base import ContentFile
 from collections import OrderedDict
-
-#TODO: 니드 로그인 기능 리다이렉트 구현 필요
+import re
 
 def index(request): 
     if request.user.is_anonymous == False and request.user.profile.is_first_login:
@@ -30,6 +28,7 @@ def index(request):
     feeds_all = Feed.objects.all().order_by('-updated_at', '-created_at')
 #TODO: 검색기능 추후 보완 필요
     if keyword: 
+        from django.db.models import Q
         #필드에서 피드 뽑아오기
         feeds_by_field = list(feeds_all.filter(Q(title__icontains=keyword) | Q(content_a__icontains=keyword) | Q(content_b__icontains=keyword)))
         #해시태그에서 피드 뽑아오기
@@ -91,8 +90,8 @@ def new(request):
             if response.status_code == 200:
                 feed.img_b.save(name, ContentFile(response.content), save=True)
         hash_tag_raw = request.POST['hash_tag_raw'].replace(" ", "")
-
-        hash_tag_all = hash_tag_raw.split("#")
+        hash_tag_raw_edit = re.sub('[-=./?:$!@\|"^%*&()}{+]', '', hash_tag_raw)
+        hash_tag_all = hash_tag_raw_edit.split("#")
         hash_tag_all = list(OrderedDict.fromkeys(hash_tag_all))
 
         for hash_tag in hash_tag_all:
@@ -114,8 +113,8 @@ def new(request):
     else:
         return render(request, 'feedpage/new.html')
 
-def show(request, id):
-    feed = Feed.objects.get(uuid=id)
+def show(request, uuid):
+    feed = Feed.objects.get(uuid=uuid)
     return render(request, 'feedpage/show.html', {'feed': feed})    
 
 def delete(request, id):
@@ -137,8 +136,8 @@ def delete(request, id):
                 next = '/feeds/'
         return redirect('%s'%next)
 
-def edit(request, id):
-    feed = Feed.objects.get(id=id)
+def edit(request, uuid):
+    feed = Feed.objects.get(uuid=uuid)
     if request.method == 'POST' and feed.creator == request.user and feed.feedcomment_set.count() == 0 and feed.upvote_set.count() == 0:
         title = request.POST['title']
         content_a = request.POST['content_a']
@@ -168,8 +167,8 @@ def edit(request, id):
                 feed.img_b.save(name, ContentFile(response.content), save=True)
 
         hash_tag_raw = request.POST['hash_tag_raw'].replace(" ", "")
-
-        hash_tag_all = hash_tag_raw.split("#")
+        hash_tag_raw_edit = re.sub('[-=./?:$!@\|"^%*&()}{+]', '', hash_tag_raw)
+        hash_tag_all = hash_tag_raw_edit.split("#")
         hash_tag_all = list(OrderedDict.fromkeys(hash_tag_all))
 
         for hash_tag in hash_tag_all:

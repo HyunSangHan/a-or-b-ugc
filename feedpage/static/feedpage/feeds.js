@@ -330,7 +330,7 @@ $(document).ready(() => {
         }
         //show 페이지에서 댓글을 달았을 경우
         if ($('#new-comments')[0]) {
-          $('#new-comments')[0].scrollIntoView();
+          $('#new-comments')[0].scrollIntoView(true);
           $('#new-comments').append(`
             <div class="comment norm w-100 v-center mtb-1 inline-flex">
               <div style="width: calc(100% - 20px);">

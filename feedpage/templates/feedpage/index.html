@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load custom_tags %}
-<!--언젠간 지표 트래킹도 구현하고 싶다-->
+<!--지표 트래킹도 예정-->
 {% block content %}
 <div class="container">
   <div class="m-auto contents">
@@ -9,6 +9,7 @@
       <hr>
     {% endif %}
     <div class="contents-margin">
+    {{ user.data_joined}}
       {% for feed in feeds %}
         {% if feed.check_visible %}
           <li class="each-li">
@@ -49,7 +50,7 @@
                       <div>
                         {% is_deletable feed.id as is_deletable_feed %}
                         {% if is_deletable_feed %}
-                          <a href="/feeds/{{ feed.id }}/edit" class="link-black">수정하기</a>
+                          <a href="/feeds/{{ feed.uuid }}/edit" class="link-black">수정하기</a>
                         {% else %}
                           <span class="font-lightgrey" onclick="return alert('다른 사용자가 이미 투표/댓글 참여를 한 게시물의 경우, 내용 수정이 불가합니다. 반드시 수정이 필요하다면 삭제 후 재등록해주세요.')">수정하기</span>
                         {% endif %}                                

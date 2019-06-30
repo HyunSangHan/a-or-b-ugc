@@ -5,7 +5,7 @@
 
 <div class="page-content-black mdl-layout__content bg-black w-100 font-white">
   <div class="container relative">
-    {% if creator.profile.image.url != "/media/False" %}
+    {% if creator.profile.image.url is not None %}
       <div class="creator-img" style="background: url('{{ creator.profile.image.url }}') center / cover;"></div>
     {% else %}
       <div class="creator-img" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
@@ -142,7 +142,7 @@
                       <div>
                         {% is_deletable feed.id as is_deletable_feed %}
                         {% if is_deletable_feed %}
-                          <a href="/feeds/{{ feed.id }}/edit" class="link-black">수정하기</a>
+                          <a href="/feeds/{{ feed.uuid }}/edit" class="link-black">수정하기</a>
                         {% else %}
                           <span class="font-lightgrey" onclick="return alert('다른 사용자가 이미 투표/댓글 참여를 한 게시물의 경우, 내용 수정이 불가합니다. 반드시 수정이 필요하다면 삭제 후 재등록해주세요.')">수정하기</span>
                         {% endif %}                                
@@ -168,7 +168,7 @@
             <div class="inline-flex v-center mt-1 mb-2">
               <a href="/feeds/creator/{{feed.creator.username}}" class="link-grey">
                 <div class="inline-flex">
-                  {% if feed.creator.profile.image.url != "/media/False" %}
+                  {% if feed.creator.profile.image.url is not None %}
                     <div class="user-face" style="background: url('{{ feed.creator.profile.image.url }}') center / cover;"></div>
                   {% else %}
                     <div class="user-face" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>

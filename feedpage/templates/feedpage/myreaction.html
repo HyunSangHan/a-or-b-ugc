@@ -4,7 +4,7 @@
 {% block content %}
 <div class="page-content-black mdl-layout__content bg-black w-100 font-white">
   <div class="container relative">
-    {% if request.user.profile.image.url != "/media/False" %}
+    {% if request.user.profile.image.url is not None %}
       <div class="creator-img" style="background: url('{{ request.user.profile.image.url }}') center / cover;"></div>
     {% else %}
       <div class="creator-img" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
@@ -94,7 +94,7 @@
                         <div>
                           {% is_deletable upvote.feed.id as is_deletable_feed %}
                           {% if is_deletable_feed %}
-                            <a href="/feeds/{{ upvote.feed.id }}/edit" class="link-black">수정하기</a>
+                            <a href="/feeds/{{ upvote.feed.uuid }}/edit" class="link-black">수정하기</a>
                           {% else %}
                             <span class="font-lightgrey" onclick="return alert('다른 사용자가 이미 투표/댓글 참여를 한 게시물의 경우, 내용 수정이 불가합니다. 반드시 수정이 필요하다면 삭제 후 재등록해주세요.')">수정하기</span>
                           {% endif %}                                

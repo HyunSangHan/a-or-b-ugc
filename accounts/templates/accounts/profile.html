@@ -2,7 +2,7 @@
 {% load custom_tags %}
 
 {% block content %}
-<form action="{% url 'profile' %}"  method="POST" enctype="multipart/form-data">
+<form id="profile-form" action="{% url 'profile' %}"  method="POST" enctype="multipart/form-data">
   {% csrf_token %}
   <div class="page-content-black mdl-layout__content bg-black w-100 font-white">
     <div class="container relative">
@@ -20,9 +20,9 @@
         <div class="contents-margin">
           <div class="creator-name-card">
             <div class="creator-name ellipsis">
-              <input class="creator-name-edit ellipsis" name='username' type='text' value='{{ profile.user.username }}' maxlength="10" autofocus required/>
+              <input class="creator-name-edit ellipsis" name='username' type='text' value='{{ profile.user.username }}' maxlength="10" pattern="[가-힣a-zA-Z0-9._]{3,15}" oninvalid="return alert('닉네임은 10글자 이하의 한글/영문로만 변경 가능합니다.')" autofocus autocomplete="off" required/>
             </div>
-            <div class="creator-subs-num">
+            <div id="creator-profile-email" class="creator-subs-num">
               {{ profile.user.email}}
             </div>
           </div>
@@ -206,13 +206,13 @@
           </div>
         </div>
         <div class="each-profile-ul mt-6"></div>
-        {% if not profile.is_premium %}
-          <div class="font-13 mt-9">
+        <div id="last-msg" class="font-13 mt-9">
+          {% if not profile.is_premium %}
             <strong>입력하신 정보는 타인에게 <u>공개되지 않습니다.</u></strong><br>오직 투표결과에 대한 상세통계를 위해서만 <u>익명</u>으로 사용됩니다.<br>안심하고 입력해주세요.
-          </div>
-        {% endif %}
+          {% endif %}
+        </div>
         <div class="w-100 flex">
-          <button class="profile-submit-btn" type='submit'>정보 수정하기</button>
+          <button id="profile-submit-btn" class="profile-submit-btn" type='submit' data-csrfmiddlewaretoken="{{ csrf_token }}">정보 수정하기</button>
         </div>
       </div>
     </div>
