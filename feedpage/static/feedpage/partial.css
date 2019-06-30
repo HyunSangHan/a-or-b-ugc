@@ -13,7 +13,7 @@
   display: none;
 }
 
-#new-comments {
+#new-comments, .new-comments {
   margin-top: 3px;
 }
 
@@ -149,7 +149,7 @@
 
 .content-default-bg {
   background-color: lightgrey;
-  opacity: 0.1;
+  opacity: 0.15;
 }
 
 .content-default-bg:hover {
@@ -374,7 +374,7 @@
 
 .comment-content {
   margin-left: 3px;
-  margin-top: 1px;
+  /* margin-top: 1px; */
 }
 
 .comment-clear {

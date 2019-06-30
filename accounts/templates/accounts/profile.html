@@ -20,7 +20,7 @@
         <div class="contents-margin">
           <div class="creator-name-card">
             <div class="creator-name ellipsis">
-              <input class="creator-name-edit ellipsis" name='username' type='text' value='{{ profile.user.username }}' autofocus />
+              <input class="creator-name-edit ellipsis" name='username' type='text' value='{{ profile.user.username }}' maxlength="10" autofocus required/>
             </div>
             <div class="creator-subs-num">
               {{ profile.user.email}}

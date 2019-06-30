@@ -115,7 +115,7 @@ def new(request):
         return render(request, 'feedpage/new.html')
 
 def show(request, id):
-    feed = Feed.objects.get(id=id)
+    feed = Feed.objects.get(uuid=id)
     return render(request, 'feedpage/show.html', {'feed': feed})    
 
 def delete(request, id):

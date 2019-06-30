@@ -57,7 +57,7 @@
           {% if upvote.feed.check_visible %}
             <li class="each-li">
               <div class="inline-flex w-more-btn">
-                <a href="/feeds/{{ upvote.feed.id }}">
+                <a href="/feeds/{{ upvote.feed.uuid }}">
                   <h2 class="link-black">{{ upvote.feed.title }}</h2>
                 </a>
                 <div class="ml-auto more-btn">
@@ -66,12 +66,12 @@
                   </button>
                   <div class="more-info">
                     <div>
-                      <a href="/feeds/{{ upvote.feed.id }}" class="link-black">
+                      <a href="/feeds/{{ upvote.feed.uuid }}" class="link-black">
                         <strong>더보기</strong>
                       </a>
                     </div>
   <!--배포 이후에 수정할 부분-->
-                    <div data-clipboard-text="localhost:8000/feeds/{{ upvote.feed.id }}" onclick="return alert('콘텐츠의 주소가 클립보드에 복사되었습니다.')">공유하기</div>
+                    <div data-clipboard-text="localhost:8000/feeds/{{ upvote.feed.uuid }}" onclick="return alert('콘텐츠의 주소가 클립보드에 복사되었습니다.')">공유하기</div>
                     {% if user.is_authenticated %}
                       {% if request.user != upvote.feed.creator %}
                         <div class="subscribe-js" data-creatorid="{{ upvote.feed.creator.id }}">
@@ -231,7 +231,7 @@
                 </div>
               </div>
               <!-- 댓글 코드 -->
-              <div class="w-100 comment-wrap">
+              <div class="mt-2 w-100 comment-wrap">
                 {% get_bestcomment_a upvote.feed.id as comment_a %}
                 {% get_bestcomment_b upvote.feed.id as comment_b %}
                 {% if comment_a and comment_b %}
@@ -371,7 +371,7 @@
                 {% endif %}
               </div>
               {% if upvote.feed.feedcomment_set.count > 6 %}
-                <a href="/feeds/{{ upvote.feed.id }}">
+                <a href="/feeds/{{ upvote.feed.uuid }}">
                   <div class="font-12 link-light-black font-light mt-2">
                     {% if comment_a and comment_b %}
                       댓글 {{upvote.feed.feedcomment_set.count|add:"-2"}}개 더보기
@@ -475,7 +475,7 @@
                 <form action="/feeds/{{ upvote.feed.id }}/comments/" method="POST">
                   {% csrf_token %}
                   <div class="comment-input-wrap mdl-textfield mdl-js-textfield mdl-textfield--floating-label w-100">
-                    <input class="mdl-textfield__input comment-input" type="text" id="feedcomment" name="content" placeholder="댓글을 입력하세요." autocomplete="off">
+                    <input class="mdl-textfield__input comment-input" type="text" id="feedcomment" name="content" placeholder="댓글을 입력하세요." minlength="2" maxlength="70" autocomplete="off" required />
                     <input type="submit" class="comment-submit comment-submit-now invisible" data-feedid="{{ upvote.feed.id }}" data-csrfmiddlewaretoken="{{ csrf_token }}" value="댓글달기">
                   </div>
                 </form> 
