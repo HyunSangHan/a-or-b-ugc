@@ -9,6 +9,7 @@ from django.utils import timezone
 import random
 from imagekit.models import ProcessedImageField
 from imagekit.processors import Thumbnail, ResizeToFill
+import uuid
 
 class HashTag(models.Model):
     tag = models.TextField(null=True)
@@ -18,10 +19,11 @@ class HashTag(models.Model):
 
 class Feed(models.Model):
     # null, blank 나중에 한번 정리하기
+    uuid = models.UUIDField(primary_key=False, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=30)
     creator = models.ForeignKey(User, null=True, on_delete= models.CASCADE)
-    content_a = models.CharField(max_length=30)
-    content_b = models.CharField(max_length=30)
+    content_a = models.CharField(max_length=21)
+    content_b = models.CharField(max_length=21)
     upvote_users = models.ManyToManyField(User, blank=True, related_name='upvote_feeds', through='Upvote')
     matched_tags = models.ManyToManyField(HashTag, blank=True, related_name='tagged_feeds', through='TagRelation')
     img_a = ProcessedImageField(
@@ -81,7 +83,7 @@ class Feed(models.Model):
 
 class FeedComment(models.Model):
     reactor = models.ForeignKey(User, null=True, on_delete= models.CASCADE)
-    content = models.TextField()
+    content = models.CharField(max_length=70)
     feed = models.ForeignKey(Feed, on_delete=models.CASCADE)
     upvote_side = models.IntegerField(default=0)
     upvote_users = models.ManyToManyField(User, blank=True, related_name='upvote_feedcomments', through='CommentUpvote')

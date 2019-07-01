@@ -12,9 +12,11 @@ from allauth.account.signals import user_signed_up
 from urllib.parse import urlparse
 import requests
 from django.core.files.base import ContentFile
+import uuid
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    # uuid = models.UUIDField(primary_key=False, default=uuid.uuid4, editable=False)
     follows = models.ManyToManyField('self', through = 'Follow', blank=True, symmetrical=False)
     birth = models.IntegerField(
         null=True,

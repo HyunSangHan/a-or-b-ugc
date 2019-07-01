@@ -4,7 +4,7 @@ $(document).ready(() => {
   $('.toggle-comments').on('click', function(event) {
     const $this = $(this);
     $this.siblings('.all-comments').slideDown();
-    $this.prev().children('.comment-heart-num-row-hide').fadeIn();
+    $this.prev().children('.comment').children('.comment-heart-btn').children('.comment-heart-num-hide').fadeIn();
     $this.hide();
   });
 
@@ -29,18 +29,18 @@ $(document).ready(() => {
       type: "GET",
       dataType: "json",
       success: function (data) {
-        var upvote_before = data.upvote_before;
-        var upvote_after = data.upvote_after;
+        const upvote_before = data.upvote_before;
+        const upvote_after = data.upvote_after;
         console.log(upvote_before +"=>"+ upvote_after);
-        var clicked = `
+        const $clicked = `
         <div class="content-result-bg flex-center w-100 h-100 bg-black">
         </div>
         `;
-        var unclicked = `
+        const $unclicked = `
         <div class="content-result-bg flex-center w-100 h-100 bg-grey op-7">
         </div>
         `;
-        var resultA = `
+        const $resultA = `
         <div class="content-result flex-center w-100 h-100">
           <div class="mt-3">
             <span class="content-result-perc">`+data.perc_a+`</span>%
@@ -50,7 +50,7 @@ $(document).ready(() => {
           </div>
         </div>
         `;
-        var resultB = `
+        const $resultB = `
         <div class="content-result flex-center w-100 h-100">
           <div class="mt-3">
             <span class="content-result-perc">`+data.perc_b+`</span>%
@@ -64,12 +64,12 @@ $(document).ready(() => {
           if (upvote_before === 0) {
             $this.children('.content-default-bg-js').removeClass('content-default-bg');
             $siblingB.children('.content-default-bg-js').removeClass('content-default-bg');
-            $this.prepend(resultA);
-            $this.prepend(clicked);
+            $this.prepend($resultA);
+            $this.prepend($clicked);
             $siblingB.children('.content-label').toggleClass('bg-black');
             $siblingB.children('.content-label').toggleClass('bg-grey');
-            $siblingB.prepend(resultB);
-            $siblingB.prepend(unclicked);
+            $siblingB.prepend($resultB);
+            $siblingB.prepend($unclicked);
           } else if (upvote_before === 1) {
             $this.children('.content-default-bg-js').addClass('content-default-bg');
             $siblingB.children('.content-default-bg-js').addClass('content-default-bg');
@@ -86,23 +86,23 @@ $(document).ready(() => {
             $siblingB.children('.content-result-bg').remove();
             $this.children('.bg-grey').addClass('bg-black');
             $this.children('.bg-grey').removeClass('bg-grey');
-            $this.prepend(resultA);
-            $this.prepend(clicked);
+            $this.prepend($resultA);
+            $this.prepend($clicked);
             $siblingB.children('.content-label').removeClass('bg-black');
             $siblingB.children('.content-label').addClass('bg-grey');
-            $siblingB.prepend(resultB);
-            $siblingB.prepend(unclicked);
+            $siblingB.prepend($resultB);
+            $siblingB.prepend($unclicked);
           }
         } else if (upvote_after === 2) {
           if (upvote_before === 0) {
             $siblingA.children('.content-default-bg-js').removeClass('content-default-bg');
             $this.children('.content-default-bg-js').removeClass('content-default-bg');
-            $this.prepend(resultB);
-            $this.prepend(clicked);
+            $this.prepend($resultB);
+            $this.prepend($clicked);
             $siblingA.children('.content-label').toggleClass('bg-black');
             $siblingA.children('.content-label').toggleClass('bg-grey');
-            $siblingA.prepend(resultA);
-            $siblingA.prepend(unclicked);
+            $siblingA.prepend($resultA);
+            $siblingA.prepend($unclicked);
           } else if (upvote_before === 1) {
             $this.children('.content-result').remove();
             $this.children('.content-result-bg').remove();
@@ -110,12 +110,12 @@ $(document).ready(() => {
             $siblingA.children('.content-result-bg').remove();
             $this.children('.bg-grey').addClass('bg-black');
             $this.children('.bg-grey').removeClass('bg-grey');
-            $this.prepend(resultB);
-            $this.prepend(clicked);
+            $this.prepend($resultB);
+            $this.prepend($clicked);
             $siblingA.children('.content-label').removeClass('bg-black');
             $siblingA.children('.content-label').addClass('bg-grey');
-            $siblingA.prepend(resultA);
-            $siblingA.prepend(unclicked);
+            $siblingA.prepend($resultA);
+            $siblingA.prepend($unclicked);
           } else if (upvote_before === 2) {
             $siblingA.children('.content-default-bg-js').addClass('content-default-bg');
             $this.children('.content-default-bg-js').addClass('content-default-bg');
@@ -236,7 +236,7 @@ $(document).ready(() => {
     console.log("click heart");
     const $this = $(this);
     const $heart = $this.children('.comment-heart');
-    const $heartNum = $this.parent().next().children('.comment-heart-num');
+    const $heartNum = $this.children('.comment-heart-num');
     const fid = $this.attr("data-feedid");
     const cid = $this.attr("data-commentid");
 
@@ -253,6 +253,7 @@ $(document).ready(() => {
         $heart.toggleClass('font-red');
         $heartNum.toggleClass('font-red');
         $heartNum.toggleClass('font-grey');
+        $heartNum.toggleClass('font-midlight');
         if (btnName === 'favorite' && totalUpvote === 1) {
           $heartNum.text('x' + totalUpvote);
         } else if (btnName === 'favorite_border' && totalUpvote === 0) {
@@ -288,8 +289,8 @@ $(document).ready(() => {
         },
         dataType: "json",
         success: function (data) {
-          $this.parent().next().remove();
-          $this.parent().remove();
+          // $this.parent().next().remove();
+          $this.parent().parent().remove();
         },
         error: function(response, status, error) {
           alert('error');
@@ -310,65 +311,85 @@ $(document).ready(() => {
     const $this = $(this);
     const id = $this.data('feedid');
     const csrfmiddlewaretoken = $this.data('csrfmiddlewaretoken');
+    const content = $this.siblings('.comment-input').val();
 
-    $.ajax({
-      type: 'POST',
-      url: `/feeds/${id}/comments/`, // 앞 뒤 슬래시 꼭
-      data: {
-        csrfmiddlewaretoken: csrfmiddlewaretoken,
-        id: id,
-        content: $this.siblings('.comment-input').val()
-      },
-      dataType: 'json',
-      success: function(data) {
-        var side = ``;
-        if (data.comment.upvote_side === 1) {
-          side = `<div class="sideicon norm"> A </div>`;
-        } else if (data.comment.upvote_side === 2) {
-          side = `<div class="sideicon norm"> B </div>`;
-        }
-        if ($('#new-comments')[0]) {
-          $('#new-comments')[0].scrollIntoView();
-          $('#new-comments').prepend(`
-          <div class="comment w-100 v-center mtb-1 inline-flex">
-          `+side+`
-            <div class="font-11 v-center mtb-auto comment-reactor"><strong>${data.comment.reactor}</strong></div>
-            <div class="font-14 v-center mtb-auto comment-content ellipsis-span">${data.comment.content}</div>
-            <span class="comment-clear" data-feedid="${id}" data-commentid="${data.comment.id}" data-csrfmiddlewaretoken="`+csrfmiddlewaretoken+`">
-              <i class="material-icons" style="font-size: 16px; color: grey;">clear</i>
-            </span>
-            <div class="ml-auto more-btn comment-heart-btn" data-feedid="${id}" data-commentid="${data.comment.id}">
-              <i class="material-icons comment-heart v-center m-auto link-grey ml-1">favorite_border</i>
-            </div>
-          </div>
-          <div class="comment-heart-num-row"></div>
-          `);
-        } else {
-          const $comments = $this.parent().parent().siblings('.new-comments');
-          $comments.append(`
-            <div class="comment w-100 v-center mtb-1 inline-flex">
-            `+side+`
-              <div class="font-11 v-center mtb-auto comment-reactor"><strong>${data.comment.reactor}</strong></div>
-              <div class="font-14 v-center mtb-auto comment-content ellipsis-span">${data.comment.content}</div>
-              <span class="comment-clear" data-feedid="${id}" data-commentid="${data.comment.id}" data-csrfmiddlewaretoken="`+csrfmiddlewaretoken+`">
-                <i class="material-icons" style="font-size: 16px; color: grey;">clear</i>
-              </span>
-              <div class="ml-auto more-btn comment-heart-btn" data-feedid="${id}" data-commentid="${data.comment.id}">
+    if (content != "") {
+      $.ajax({
+        type: 'POST',
+        url: `/feeds/${id}/comments/`, // 앞 뒤 슬래시 꼭
+        data: {
+          csrfmiddlewaretoken: csrfmiddlewaretoken,
+          id: id,
+          content: content
+        },
+        dataType: 'json',
+        success: function(data) {
+          let side = ``;
+          if (data.comment.upvote_side === 1) {
+            side = `<div class="sideicon norm"> A </div>`;
+          } else if (data.comment.upvote_side === 2) {
+            side = `<div class="sideicon norm"> B </div>`;
+          }
+          //show 페이지에서 댓글을 달았을 경우
+          if ($('#new-comments')[0]) {
+            $('#new-comments-next')[0].scrollIntoView(true);
+            $('#new-comments').append(`
+              <div class="comment norm w-100 v-center mtb-1 inline-flex">
+                <div style="width: calc(100% - 20px);">
+                  `+side+`
+                  <span class="font-11 v-center mtb-auto comment-reactor">
+                    <strong>${data.comment.reactor}</strong>
+                  </span>
+                  <span class="font-14 v-center mtb-auto comment-content">
+                    ${data.comment.content}
+                  </span>
+                  <span class="comment-clear" data-feedid="${id}" data-commentid="${data.comment.id}" data-csrfmiddlewaretoken="`+csrfmiddlewaretoken+`">
+                    <i class="material-icons" style="font-size: 13px; color: grey;">clear</i>
+                  </span>
+                </div>
+                <div style="width: 20px;" class="ml-auto comment-heart-btn" data-feedid="${id}" data-commentid="${data.comment.id}">
+                  <i class="material-icons comment-heart v-center m-auto link-grey ml-1">favorite_border</i>
+                  <div class="font-grey comment-heart-num">
+                  </div>
+                </div>
+              </div>
+            `);
+          } else {
+          //index등 show '외'의 페이지에서 댓글을 달았을 경우
+            const $comments = $this.parent().parent().siblings('.new-comments');
+            $comments.append(`
+            <div class="comment norm w-100 v-center mtb-1 inline-flex">
+              <div style="width: calc(100% - 20px);">
+                `+side+`
+                <span class="font-11 v-center mtb-auto comment-reactor" style="margin-left: 0;">
+                  <strong>${data.comment.reactor}</strong>
+                </span>
+                <span class="font-14 v-center mtb-auto comment-content">
+                  ${data.comment.content}
+                </span>
+                <span class="comment-clear" data-feedid="${id}" data-commentid="${data.comment.id}" data-csrfmiddlewaretoken="`+csrfmiddlewaretoken+`">
+                  <i class="material-icons" style="font-size: 13px; color: grey;">clear</i>
+                </span>
+              </div>
+              <div style="width: 20px;" class="ml-auto comment-heart-btn" data-feedid="${id}" data-commentid="${data.comment.id}">
                 <i class="material-icons comment-heart v-center m-auto link-grey ml-1">favorite_border</i>
+                <div class="font-grey comment-heart-num">
+                </div>
               </div>
             </div>
-          `);
-        }
-        $this.siblings('.comment-input').val('');
-      },
-      error: function(response, status, error) {
-        alert('error');
-        console.log(response, status, error);
-      },
-      complete: function(response) {
-        console.log(response);
-      },
-    });
+            `);
+          }
+          $this.siblings('.comment-input').val('');
+        },
+        error: function(response, status, error) {
+          alert('error');
+          console.log(response, status, error);
+        },
+        complete: function(response) {
+          console.log(response);
+        },
+      });
+    }
   });
 
   //댓글달기 버튼 나오기
@@ -410,7 +431,7 @@ $(document).ready(() => {
 
 
   //for uploading img A
-  var img_a, content_a;
+  let img_a, content_a;
   $('.upload-a').on('change', function() {
     const $this = $(this)
     const $imgMenuOn = $this.siblings('.uploaded-a').children('.img-menu-on');
@@ -422,7 +443,7 @@ $(document).ready(() => {
     const $eachContent = $this.parent();
     if(window.FileReader && $this[0].files[0]){
       $eachContent.children('.uploaded-a').remove();
-      var reader = new FileReader();
+      let reader = new FileReader();
       reader.onload = function(e) {
         img_a = e.target.result;
         $eachContent.prepend(`
@@ -443,7 +464,7 @@ $(document).ready(() => {
   });
 
   //for img B
-  var img_b, content_b;
+  let img_b, content_b;
   $('.upload-b').on('change', function() {
     const $this = $(this)
     const $imgMenuOn = $this.siblings('.uploaded-b').children('.img-menu-on');
@@ -455,7 +476,7 @@ $(document).ready(() => {
     const $eachContent = $this.parent();
     if(window.FileReader && $this[0].files[0]){
       $eachContent.children('.uploaded-b').remove();
-      var reader = new FileReader();
+      let reader = new FileReader();
       reader.onload = function(e) {
         img_b = e.target.result;
         $eachContent.append(`
@@ -514,7 +535,7 @@ $(document).ready(() => {
           const aorb = $this.parent().siblings('.img-menu-on').data('aorb');
           console.log("keyword: "+ keyword + "(for " + aorb + ")");
           console.log(data);
-          for (var i=0; i<40; i++) {
+          for (let i=0; i<40; i++) {
             if (data.result.items[i].sizeheight / data.result.items[i].sizewidth > 0.75) {
               thb = data.result.items[i].thumbnail.replace('&type=b150','');
               $eachResult.append(`
@@ -539,7 +560,7 @@ $(document).ready(() => {
     const $eachContent = $this.parent().parent().siblings('.each-content');
     const csrfmiddlewaretoken = $this.data('csrfmiddlewaretoken');
     const aorb = $this.data('aorb');
-    var img = $this.attr('src');
+    const img = $this.attr('src');
 
     if (aorb==="a") {
       content_a = document.getElementsByClassName('content-a')[0].value;

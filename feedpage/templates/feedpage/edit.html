@@ -5,9 +5,10 @@
 <div class="container">
   <div class="m-auto contents">
     <div class="contents-margin">
-      <form action="/feeds/{{ feed.id }}/edit/" method="POST" enctype="multipart/form-data">
+      <form action="/feeds/{{ feed.uuid }}/edit/" method="POST" enctype="multipart/form-data">
         {% csrf_token %} 
         <li class="each-li">
+          <div class="font-14 font-grey font-mid">수정모드입니다.</div><br>
           <div class="w-100">
             <input class="content-title w-100 feed-input-border" name="title" placeholder="제목을 입력하세요(30자 이내)" value="{{feed.title}}" maxlength="30" autocomplete="off" required/>
             <div class="letter-space">
@@ -27,7 +28,7 @@
           </div>
           <div class="inline-flex v-center mt-1 mb-2">
             <div class="inline-flex font-grey">
-              {% if user.profile.image.url != "/media/False" %}
+              {% if user.profile.image.url is not None %}
                 <div class="user-face" style="background: url('{{ user.profile.image.url }}') center / cover;"></div>
               {% else %}
                 <div class="user-face" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
