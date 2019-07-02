@@ -5,6 +5,7 @@ from feedpage import views
 
 urlpatterns = [
     path('', views.index, name='index'),
+    path('scroll/', views.index_ajax, name='index_ajax'),
     path('new/', views.new, name='new'), 
     path('<uuid:uuid>/', views.show, name='show'), 
     path('<int:id>/delete/', views.delete, name='delete'),

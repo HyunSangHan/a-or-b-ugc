@@ -422,6 +422,7 @@
                     {% endif %}
                   </div>
                 {% endfor %}
+
               </div>
             {% endif %}
             <div class="new-comments"></div>
@@ -444,6 +445,10 @@
           </li>
         {% endif %}
       {% endfor %} 
+      <!--무한스크롤-->
+      <div id="post_list_ajax"></div>
+      <input id="page" type="hidden" value="2">
+      <button id="callmorepost" type="button" class="font-14" data-csrfmiddlewaretoken="{{ csrf_token }}">More Post</button>
     </div>
 
     {% if search_result_num == 0 %}
