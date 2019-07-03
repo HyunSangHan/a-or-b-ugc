@@ -81,39 +81,41 @@
 </div>
 <!--navigation bar-->
 {% if user.is_authenticated %}
-  <div class="nav-bar-wrap">
-    <a href="/feeds/">
-      <div>
-        <i class="material-icons-outlined" style="font-size: 29px;">home</i>
-      </div>
-    </a>
-    <a href="/feeds/mysubscribe/">
-      <div>
-        <i class="material-icons-outlined" style="font-size: 26px; margin-top: 2px;">library_books</i>
-      </div>
-    </a>
-    <a href="/feeds/new">
-      <div>
-        <i class="material-icons-outlined" style="font-size: 29px;">add_circle</i>
-      </div>
-    </a>
-    <a href="/feeds/mynotification">
-      <div>
-        {% get_noti_amount user.id as noti_amount %}
-        {% if noti_amount == 0 %}
-          <i class="material-icons-outlined" style="font-size: 29px; margin-right: -2px;">notifications_none</i>
+  <div class="nav-bar-bg">
+    <div class="nav-bar-wrap">
+      <a href="/feeds/">
+        <div>
+          <i class="material-icons-outlined" style="font-size: 29px;">home</i>
+        </div>
+      </a>
+      <a href="/feeds/mysubscribe/">
+        <div>
+          <i class="material-icons-outlined" style="font-size: 26px; margin-top: 2px;">library_books</i>
+        </div>
+      </a>
+      <a href="/feeds/new">
+        <div>
+          <i class="material-icons-outlined" style="font-size: 29px;">add_circle</i>
+        </div>
+      </a>
+      <a href="/feeds/mynotification">
+        <div>
+          {% get_noti_amount user.id as noti_amount %}
+          {% if noti_amount == 0 %}
+            <i class="material-icons-outlined" style="font-size: 29px; margin-right: -2px;">notifications_none</i>
+          {% else %}
+            <div class="material-icons mdl-badge mdl-badge--overlap" style="font-size: 28px; margin-top: px; margin-right: -3px;" data-badge="{{noti_amount}}">notifications_none</div>
+          {% endif%}
+        </div>
+      </a>
+      <a href="/feeds/creator/{{ request.user.username }}/">
+        {% if user.profile.image.url is not None %}
+          <div class="user-face-nav mb-1" style="background: url('{{ user.profile.image.url }}') center / cover;"></div>
         {% else %}
-          <div class="material-icons mdl-badge mdl-badge--overlap" style="font-size: 28px; margin-top: px; margin-right: -3px;" data-badge="{{noti_amount}}">notifications_none</div>
-        {% endif%}
-      </div>
-    </a>
-    <a href="/feeds/creator/{{ request.user.username }}/">
-      {% if user.profile.image.url is not None %}
-        <div class="user-face-nav mb-1" style="background: url('{{ user.profile.image.url }}') center / cover;"></div>
-      {% else %}
-        <div class="user-face-nav mb-1" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
-      {% endif %}
-    </a>
+          <div class="user-face-nav mb-1" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
+        {% endif %}
+      </a>
+    </div>
   </div>
 {% else%}
   <div class="float-btn flex-center bg-black">
