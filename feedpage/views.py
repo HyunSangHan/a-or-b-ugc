@@ -60,6 +60,8 @@ def new(request):
         img_url_a = request.POST.get('img_url_a')
         img_url_b = request.POST.get('img_url_b')
         img_a = request.FILES.get('img_a')
+        # img_a = request.POST['test_img_a']
+        print(img_a)
         img_b = request.FILES.get('img_b')
 
         if img_url_a is None and img_a is None:

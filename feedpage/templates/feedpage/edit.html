@@ -8,7 +8,7 @@
       <form action="/feeds/{{ feed.uuid }}/edit/" method="POST" enctype="multipart/form-data">
         {% csrf_token %} 
         <li class="each-li">
-          <div class="font-14 font-grey font-mid">수정모드입니다.</div><br>
+          <div class="font-14 font-red font-light">수정모드입니다.</div><br>
           <div class="w-100">
             <input class="content-title w-100 feed-input-border" name="title" placeholder="제목을 입력하세요(30자 이내)" value="{{feed.title}}" maxlength="30" autocomplete="off" required/>
             <div class="letter-space">

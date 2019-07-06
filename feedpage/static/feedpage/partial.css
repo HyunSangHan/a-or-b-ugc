@@ -148,7 +148,7 @@
 }
 
 .content-default-bg {
-  background-color: lightgrey;
+  background-color: grey;
   opacity: 0.05;
 }
 
@@ -323,7 +323,7 @@
 
 .sideicon {
   padding: 4px 0 2px;
-  margin-right: 5px;
+  margin-right: 2px;
   line-height: 12px;
   font-size: 11px;
   text-align: center;
@@ -363,13 +363,12 @@
   margin: 7px 0 0;
 }
 
-.comment-offset {
+.show-buffer {
   margin-bottom: 3%;
 }
 
 .comment-reactor {
   margin-top: 2px;
-  margin-left: -3px !important;
 }
 
 .comment-content {
@@ -802,4 +801,20 @@
 
 .delete-tag:hover {
   cursor: pointer;
+}
+
+.dotted-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(243, 243, 243);
+  border: 1px grey dotted;
+  height: 150px;
+  width: 100%;
+  margin: 10px 0 40px;
+}
+
+.detail-box {
+  width: 100%;
+  margin: 10px 0 40px;
 }

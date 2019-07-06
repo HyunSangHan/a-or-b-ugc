@@ -312,7 +312,7 @@
           {% endif %}
         </div>
         {% if user.is_authenticated %}
-          <div class="comment-offset">
+          <div>
         {% endif %}
           <!--그외댓글-->
           {% get_ordered_comment_rest feed.id False as comments %}
@@ -397,6 +397,24 @@
           </div>
         {% endif %}
           <!-- 댓글 코드 끝 -->
+        <div class="font-mid font-16 font-light">
+          투표결과 상세통계
+        </div>
+        {% if user.profile.is_premium %}
+          <div class="detail-box font-13">
+            결과 들어갈 곳
+          </div>
+        {% else %}
+          <a href="/accounts/profile/">
+            <div class="dotted-box font-13 font-grey">
+              <div class="text-center">
+                Premium user로 업그레이드 하시면 열람 가능합니다.
+              </div>
+            </div>
+          </a>
+        {% endif %}
+        <div class="show-buffer">
+        </div>
       </li>
     </div>
   </div>
