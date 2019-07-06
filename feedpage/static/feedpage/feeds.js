@@ -543,6 +543,10 @@ $(document).ready(() => {
               `)
             }
           };
+          $("img").on("error", function() {
+            $(this).hide();
+            console.log($(this))
+          });
           $this.parent().hide();
         },
         error: function(response, status,  error) {
