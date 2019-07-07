@@ -431,12 +431,12 @@ $(document).ready(() => {
 
 
   //for uploading img A
-  let img_a, content_a;
   $('.upload-a').on('change', function() {
     const $this = $(this)
     const $imgMenuOn = $this.siblings('.uploaded-a').children('.img-menu-on');
     const csrfmiddlewaretoken = $imgMenuOn.data('csrfmiddlewaretoken');
     const aorb = $imgMenuOn.data('aorb');
+    let content_a;
     if(window.FileReader && $this[0].files[0]){
       content_a = document.getElementsByClassName('content-a')[0].value;
     };
@@ -445,7 +445,7 @@ $(document).ready(() => {
       $eachContent.children('.uploaded-a').remove();
       let reader = new FileReader();
       reader.onload = function(e) {
-        img_a = e.target.result;
+        const img_a = e.target.result;
         $eachContent.prepend(`
           <div class="mr-1perc demo-card-image mdl-card content-img inner uploaded-a" style="background: url('`+img_a+`') center / cover;">
             <div class="content-label bg-black">
@@ -464,12 +464,12 @@ $(document).ready(() => {
   });
 
   //for img B
-  let img_b, content_b;
   $('.upload-b').on('change', function() {
     const $this = $(this)
     const $imgMenuOn = $this.siblings('.uploaded-b').children('.img-menu-on');
     const csrfmiddlewaretoken = $imgMenuOn.data('csrfmiddlewaretoken');
     const aorb = $imgMenuOn.data('aorb');
+    let content_b;
     if(window.FileReader && $this[0].files[0]){
       content_b = document.getElementsByClassName('content-b')[0].value;
     }
@@ -478,7 +478,7 @@ $(document).ready(() => {
       $eachContent.children('.uploaded-b').remove();
       let reader = new FileReader();
       reader.onload = function(e) {
-        img_b = e.target.result;
+        const img_b = e.target.result;
         $eachContent.append(`
           <div class="ml-1perc demo-card-image mdl-card content-img inner uploaded-b" style="background: url('`+img_b+`') center / cover;">
             <div class="content-label bg-black">
@@ -619,5 +619,41 @@ $(document).ready(() => {
       },
     });
   });
+
+  $(document).on('click', '.stat-menu-list-each', function() {
+    const $this = $(this);
+    const $menuWrap = $this.parent().parent();
+    const statMenu = $this.data('statmenu');
+    $('.stat-menu-list-each').removeClass('clicked');
+    $this.addClass('clicked');
+  });
+
+
+
+
+  // $(document).on('click', '.stat-menu-list-each', function() {
+  //   const $this = $(this);
+  //   const $menuWrap = $this.parent().parent();
+  //   const statMenu = $this.data('statmenu');
+  //   const id = $this.parent().parent().parent().data('feedid');
+  //   $('.stat-menu-list-each').removeClass('clicked');
+  //   $this.addClass('clicked');
+
+  //   $.ajax({
+  //     type: "GET",
+  //     url: `/feeds/${id}/statistics/`,
+  //     dataType: "json",
+  //     success: function (data) {
+  //       $('.stat-menu-list-each').removeClass('clicked');
+  //       $this.addClass('clicked');
+  //     },
+  //     error: function(response, status,  error) {
+  //       console.log(response, status, error);
+  //     }
+  //   });
+  // });
+
+
+
 
 })

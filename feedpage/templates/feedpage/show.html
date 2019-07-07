@@ -397,12 +397,70 @@
           </div>
         {% endif %}
           <!-- 댓글 코드 끝 -->
-        <div class="font-mid font-16 font-light">
-          투표결과 상세통계
+
+        <div class="stat-title">
+          Detail View
         </div>
         {% if user.profile.is_premium %}
-          <div class="detail-box font-13">
-            결과 들어갈 곳
+          <div class="detail-box" data-feedid="{{feed.id}}">
+          <!--성별, 연령별, 배경지역별, 모바일별, 정치성향별, 종교별-->
+            <div class="stat-menu-list-wrap hr-scroll font-15">
+              <div class="stat-menu-list">
+                <div class="stat-menu-list-each" data-statmenu="gender">
+                  <div class="stat-name">성별</div>
+                </div>
+                <div class="stat-menu-list-each" data-statmenu="birth">
+                  <div class="stat-name">연령대별</div>
+                </div>
+                <div class="stat-menu-list-each" data-statmenu="mobile">
+                  <div class="stat-name">모바일별</div>
+                </div>
+                <div class="stat-menu-list-each" data-statmenu="region">
+                  <div class="stat-name">배경지역별</div>
+                </div>
+                <div class="stat-menu-list-each" data-statmenu="politics">
+                  <div class="stat-name">정치성향별</div>
+                </div>
+                <div class="stat-menu-list-each" data-statmenu="religion">
+                  <div class="stat-name">종교별</div>
+                </div>
+              </div>
+            </div>
+            <div class="stat-menu-second-list-wrap hr-scroll font-13">
+              <div class="stat-menu-list">
+                <div class="stat-menu-second-list-each">
+                  <div class="stat-name">보수</div>
+                </div>
+                <div class="stat-menu-second-list-each">
+                  <div class="stat-name">중도보수</div>
+                </div>
+                <div class="stat-menu-second-list-each">
+                  <div class="stat-name">중도</div>
+                </div>
+                <div class="stat-menu-second-list-each">
+                  <div class="stat-name">중도진보</div>
+                </div>
+                <div class="stat-menu-second-list-each">
+                  <div class="stat-name">진보</div>
+                </div>
+              </div>
+            </div>
+            <div class="stat-detail-result-wrap">
+              <div class="stat-detail-side">
+                <span>A</span>
+                <span>B</span>
+              </div>
+              <div class="stat-detail-graph">
+                <div class="graph-a bg-lightgrey" style="width: 30%;">
+                </div>
+                <div class="graph-b bg-black" style="width: 70%;">
+                </div>
+              </div>
+              <div class="stat-detail-num">
+                <span>30%</span>
+                <span>70%</span>
+              </div>
+            </div>
           </div>
         {% else %}
           <a href="/accounts/profile/">
@@ -417,6 +475,7 @@
         </div>
       </li>
     </div>
+
   </div>
 </div>
 
