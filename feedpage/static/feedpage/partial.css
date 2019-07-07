@@ -824,18 +824,16 @@
   font-weight: 600;
   font-family: "Noto Sans KR", sans-serif !important;
   display: inline-block;
-  padding: 6px;
+  padding: 4px 6px;
   border: 1px solid black;
 }
 
 .stat-menu-list-wrap {
-  width: calc(100% + 10px);
   display: flex;
   border-bottom: 1px rgb(245,245,245) solid;
 }
 
 .stat-menu-second-list-wrap {
-  width: calc(100% + 10px);
   display: flex;
 }
 
@@ -903,7 +901,7 @@
   height: 40px;
   width: 100%;
   background-color: rgb(235,235,235);
-  margin: 20px 0 10px;
+  margin: 20px 0 5px;
 }
 
 .stat-detail-graph .graph-a {

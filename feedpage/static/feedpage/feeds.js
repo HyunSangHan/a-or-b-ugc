@@ -622,36 +622,164 @@ $(document).ready(() => {
 
   $(document).on('click', '.stat-menu-list-each', function() {
     const $this = $(this);
-    const $menuWrap = $this.parent().parent();
+    const $secondMenuWrap = $this.parent().parent().siblings('.stat-menu-second-list-wrap');
     const statMenu = $this.data('statmenu');
+    let $secondMenuNew;
     $('.stat-menu-list-each').removeClass('clicked');
     $this.addClass('clicked');
+    if (statMenu === 'gender') {
+      $secondMenuNew = `
+        <div class="stat-menu-list" data-statmenu="`+statMenu+`">
+          <div class="stat-menu-second-list-each">
+            <div class="stat-name">남성</div>
+          </div>
+          <div class="stat-menu-second-list-each">
+            <div class="stat-name">여성</div>
+          </div>
+        </div>
+      `;
+    } else if (statMenu === 'birth') {
+      $secondMenuNew = `
+        <div class="stat-menu-list" data-statmenu="`+statMenu+`">
+          <div class="stat-menu-second-list-each">
+            <div class="stat-name">10대미만</div>
+          </div>
+          <div class="stat-menu-second-list-each">
+            <div class="stat-name">10대</div>
+          </div>
+          <div class="stat-menu-second-list-each">
+            <div class="stat-name">20대</div>
+          </div>
+          <div class="stat-menu-second-list-each">
+            <div class="stat-name">30대</div>
+          </div>
+          <div class="stat-menu-second-list-each">
+            <div class="stat-name">40대</div>
+          </div>
+          <div class="stat-menu-second-list-each">
+            <div class="stat-name">50대이상</div>
+          </div>
+        </div>
+      `;
+    }  else if (statMenu === 'mobile') {
+      $secondMenuNew = `
+        <div class="stat-menu-list" data-statmenu="`+statMenu+`">
+          <div class="stat-menu-second-list-each">
+            <div class="stat-name">iOS</div>
+          </div>
+          <div class="stat-menu-second-list-each">
+            <div class="stat-name">Android</div>
+          </div>
+        </div>
+      `;
+    }  else if (statMenu === 'region') {
+      $secondMenuNew = `
+        <div class="stat-menu-list" data-statmenu="`+statMenu+`">
+          <div class="stat-menu-second-list-each">
+            <div class="stat-name">서울/경기</div>
+          </div>
+          <div class="stat-menu-second-list-each">
+            <div class="stat-name">강원</div>
+          </div>
+          <div class="stat-menu-second-list-each">
+            <div class="stat-name">충청</div>
+          </div>
+          <div class="stat-menu-second-list-each">
+            <div class="stat-name">호남</div>
+          </div>
+          <div class="stat-menu-second-list-each">
+            <div class="stat-name">영남</div>
+          </div>
+          <div class="stat-menu-second-list-each">
+            <div class="stat-name">제주</div>
+          </div>
+          <div class="stat-menu-second-list-each">
+            <div class="stat-name">국내</div>
+          </div>
+          <div class="stat-menu-second-list-each">
+            <div class="stat-name">해외</div>
+          </div>
+          <div class="stat-menu-second-list-each">
+            <div class="stat-name">기타</div>
+          </div>
+        </div>
+      `;
+    }  else if (statMenu === 'politics') {
+      $secondMenuNew = `
+        <div class="stat-menu-list" data-statmenu="`+statMenu+`">
+          <div class="stat-menu-second-list-each">
+            <div class="stat-name">진보</div>
+          </div>
+          <div class="stat-menu-second-list-each">
+            <div class="stat-name">중도진보</div>
+          </div>
+          <div class="stat-menu-second-list-each">
+            <div class="stat-name">중도</div>
+          </div>
+          <div class="stat-menu-second-list-each">
+            <div class="stat-name">중도보수</div>
+          </div>
+          <div class="stat-menu-second-list-each">
+            <div class="stat-name">보수</div>
+          </div>
+        </div>
+      `;
+    }  else if (statMenu === 'religion') {
+      $secondMenuNew = `
+        <div class="stat-menu-list" data-statmenu="`+statMenu+`">
+          <div class="stat-menu-second-list-each">
+            <div class="stat-name">무교</div>
+          </div>
+          <div class="stat-menu-second-list-each">
+            <div class="stat-name">기독교계열</div>
+          </div>
+          <div class="stat-menu-second-list-each">
+            <div class="stat-name">불교계열</div>
+          </div>
+          <div class="stat-menu-second-list-each">
+            <div class="stat-name">기타</div>
+          </div>
+        </div>
+      `;
+    } 
+    const $secondMenuBefore = $secondMenuWrap.children('.stat-menu-list');
+    $secondMenuBefore.remove();
+    $secondMenuWrap.append($secondMenuNew);
+
+
   });
 
 
 
 
-  // $(document).on('click', '.stat-menu-list-each', function() {
-  //   const $this = $(this);
-  //   const $menuWrap = $this.parent().parent();
-  //   const statMenu = $this.data('statmenu');
-  //   const id = $this.parent().parent().parent().data('feedid');
-  //   $('.stat-menu-list-each').removeClass('clicked');
-  //   $this.addClass('clicked');
+  $(document).on('click', '.stat-menu-second-list-each', function() {
+    const $this = $(this);
+    const clickedStat = $this.children('.stat-name').text();
+    const statMenu = $this.parent().data('statmenu');
+    const id = $this.parent().parent().parent().data('feedid');
+    $('.stat-menu-second-list-each').removeClass('clicked');
+    $this.addClass('clicked');
 
-  //   $.ajax({
-  //     type: "GET",
-  //     url: `/feeds/${id}/statistics/`,
-  //     dataType: "json",
-  //     success: function (data) {
-  //       $('.stat-menu-list-each').removeClass('clicked');
-  //       $this.addClass('clicked');
-  //     },
-  //     error: function(response, status,  error) {
-  //       console.log(response, status, error);
-  //     }
-  //   });
-  // });
+
+    console.log(clickedStat);
+    console.log(statMenu);
+    console.log(id);
+    
+
+
+    $.ajax({
+      type: "GET",
+      url: `/feeds/${id}/statistics/`+statMenu+`/`+clickedStat+`/`,
+      dataType: "json",
+      success: function (data) {
+        console.log(data.count_a);
+        console.log(data.count_b);
+      },
+      error: function(response, status,  error) {
+        console.log(response, status, error);
+      }
+    });
+  });
 
 
 

@@ -510,15 +510,40 @@ def report(request, pk):
             next = '/feeds/'
         return redirect('%s'%next)
 
-def statistics(request, id):
-    if request.method == "POST":
+def statistics(request, pk, stat_menu, stat_name):
+    if request.is_ajax():
+        count_a, count_b = 0, 0
+
+        # if stat_menu == 'gender':
+        #     if stat_name == '남성':
+        #         count_a = Upvote.objects.filter(feed_id = pk, is_male = True, about_a = True).count()
+        #         count_b = Upvote.objects.filter(feed_id = pk, is_male = True, about_a = False).count()
+        #     elif stat_name == '여성':
+        #         count_a = Upvote.objects.filter(feed_id = pk, is_male = False, about_a = True).count()
+        #         count_b = Upvote.objects.filter(feed_id = pk, is_male = False, about_a = False).count()
+        # elif stat_menu == 'birth':
+
+        # elif stat_menu == 'mobile':
+
+        # elif stat_menu == 'region':
+
+        # elif stat_menu == 'politics':
+
+        # elif stat_menu == 'religion':
+        print(pk)
+        print(stat_menu)
+        print(stat_name)
+        context = {
+            'count_a': count_a,
+            'count_b': count_b
+        }
+        return JsonResponse(context)
+    else:
         try:
             next = request.META['HTTP_REFERER']
         except:
             next = '/feeds/'
         return redirect('%s'%next)
-    else:
-        return render(request, 'feedpage/statistics.html', {'test': 'test'})
 
 def creator(request, creator_name):
     creators = User.objects.filter(username=creator_name)
