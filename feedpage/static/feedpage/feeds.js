@@ -661,6 +661,23 @@ $(document).ready(() => {
           </div>
         </div>
       `;
+    }  else if (statMenu === 'major') {
+      $secondMenuNew = `
+        <div class="stat-menu-list" data-statmenu="`+statMenu+`">
+          <div class="stat-menu-second-list-each">
+            <div class="stat-name">문과계열</div>
+          </div>
+          <div class="stat-menu-second-list-each">
+            <div class="stat-name">이과계열</div>
+          </div>
+          <div class="stat-menu-second-list-each">
+            <div class="stat-name">예체능계열</div>
+          </div>
+          <div class="stat-menu-second-list-each">
+            <div class="stat-name">기타</div>
+          </div>
+        </div>
+      `;
     }  else if (statMenu === 'mobile') {
       $secondMenuNew = `
         <div class="stat-menu-list" data-statmenu="`+statMenu+`">
@@ -676,7 +693,7 @@ $(document).ready(() => {
       $secondMenuNew = `
         <div class="stat-menu-list" data-statmenu="`+statMenu+`">
           <div class="stat-menu-second-list-each">
-            <div class="stat-name">서울/경기</div>
+            <div class="stat-name">서울경기</div>
           </div>
           <div class="stat-menu-second-list-each">
             <div class="stat-name">강원</div>
@@ -694,7 +711,7 @@ $(document).ready(() => {
             <div class="stat-name">제주</div>
           </div>
           <div class="stat-menu-second-list-each">
-            <div class="stat-name">국내</div>
+            <div class="stat-name">국내전체</div>
           </div>
           <div class="stat-menu-second-list-each">
             <div class="stat-name">해외</div>
@@ -745,6 +762,7 @@ $(document).ready(() => {
     const $secondMenuBefore = $secondMenuWrap.children('.stat-menu-list');
     $secondMenuBefore.remove();
     $secondMenuWrap.append($secondMenuNew);
+    $('#new-comments-next')[0].scrollIntoView(true);
 
 
   });
@@ -757,23 +775,69 @@ $(document).ready(() => {
     const clickedStat = $this.children('.stat-name').text();
     const statMenu = $this.parent().data('statmenu');
     const id = $this.parent().parent().parent().data('feedid');
+    let $graph = `
+      <div class="stat-detail-result-wrap">
+        <div class="stat-detail-side">
+          <span>A</span>
+          <span>B</span>
+        </div>
+        <div class="stat-detail-graph flex-center font-13">
+          <div class="graph-a flex-center font-16 font-white">
+          </div>
+          <div class="graph-b flex-center font-16 font-white">
+          </div>
+        </div>
+        <div class="stat-detail-num font-light">
+          <span class="perc-a"></span>
+          <span class="perc-b"></span>
+        </div>
+      </div>
+    `;
     $('.stat-menu-second-list-each').removeClass('clicked');
     $this.addClass('clicked');
-
-
     console.log(clickedStat);
     console.log(statMenu);
-    console.log(id);
-    
-
-
     $.ajax({
       type: "GET",
       url: `/feeds/${id}/statistics/`+statMenu+`/`+clickedStat+`/`,
       dataType: "json",
       success: function (data) {
+        $('.stat-detail-result-wrap').remove();
+        $this.parent().parent().after($graph);
+        const total = data.count_a + data.count_b;
+        const $graphBar = $('.stat-detail-result-wrap').children('.stat-detail-graph');
+        const $percentageBar = $('.stat-detail-result-wrap').children('.stat-detail-num');
+        if (total > 0) {
+          const percentageA = (data.count_a / total * 100).toFixed(0);
+          const percentageB = (data.count_b / total * 100).toFixed(0);
+          $graphBar.children('.graph-a').css({"width":""+percentageA+"%"});
+          $graphBar.children('.graph-b').css({"width":""+percentageB+"%"});
+          $percentageBar.children('.perc-a').text(""+percentageA+"%");
+          $percentageBar.children('.perc-b').text(""+percentageB+"%");
+          if (data.count_b == 0) {
+            $graphBar.children('.graph-a').addClass('bg-black');
+            $graphBar.children('.graph-a').text("A만 100%");
+          } else if (data.count_a == 0) {
+            $graphBar.children('.graph-b').addClass('bg-black');
+            $graphBar.children('.graph-b').text("B만 100%");
+          } else {
+            if (data.count_b > data.count_a) {
+              $graphBar.children('.graph-a').addClass('bg-lightgrey');
+              $graphBar.children('.graph-b').addClass('bg-black');
+            } else {
+              $graphBar.children('.graph-a').addClass('bg-black');
+              $graphBar.children('.graph-b').addClass('bg-lightgrey');              
+            }
+          }
+        } else {
+          $graphBar.children('.graph-a').remove();
+          $graphBar.children('.graph-b').remove();
+          $graphBar.text("투표수 1 이상부터 그래프가 나타납니다.");
+        }
+        $('#new-comments-next')[0].scrollIntoView(true);
+        console.log("-------------")
         console.log(data.count_a);
-        console.log(data.count_b);
+        console.log(data.count_b);        
       },
       error: function(response, status,  error) {
         console.log(response, status, error);
