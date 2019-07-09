@@ -620,6 +620,7 @@ $(document).ready(() => {
     });
   });
 
+  //통계 - 1st layer를 클릭 시 2nd layer 펼쳐짐
   $(document).on('click', '.stat-menu-list-each', function() {
     const $this = $(this);
     const $secondMenuWrap = $this.parent().parent().siblings('.stat-menu-second-list-wrap');
@@ -767,9 +768,7 @@ $(document).ready(() => {
 
   });
 
-
-
-
+  //통계 - 2nd layer를 클릭 시 그래프 펼쳐짐
   $(document).on('click', '.stat-menu-second-list-each', function() {
     const $this = $(this);
     const clickedStat = $this.children('.stat-name').text();
@@ -803,10 +802,12 @@ $(document).ready(() => {
       dataType: "json",
       success: function (data) {
         $('.stat-detail-result-wrap').remove();
+        $('.stat-total-info').remove();
         $this.parent().parent().after($graph);
         const total = data.count_a + data.count_b;
         const $graphBar = $('.stat-detail-result-wrap').children('.stat-detail-graph');
         const $percentageBar = $('.stat-detail-result-wrap').children('.stat-detail-num');
+        $this.parent().parent().after(`<div class="stat-total-info font-13 mt-3 text-right">`+total+`명이 투표했습니다.</div>`);
         if (total > 0) {
           const percentageA = (data.count_a / total * 100).toFixed(0);
           const percentageB = (data.count_b / total * 100).toFixed(0);

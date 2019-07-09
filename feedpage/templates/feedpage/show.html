@@ -401,9 +401,24 @@
         <div class="stat-title">
           Detail View
         </div>
-        {% if user.profile.is_premium %}
+        {% if not user.profile.is_premium %}
+          <a href="/accounts/profile/">
+            <div class="dotted-box font-13 font-grey">
+              <div class="text-center">
+                Premium user로 업그레이드 하시면 열람 가능합니다.
+              </div>
+            </div>
+          </a>
+        {% elif choice == "" %}
+          <a href="/feeds/{{ feed.uuid }}/">
+            <div class="dotted-box font-13 font-grey">
+              <div class="text-center">
+                투표 후 새로고침하시면 열람 가능합니다.
+              </div>
+            </div>
+          </a>
+        {% else %}
           <div class="detail-box" data-feedid="{{feed.id}}">
-          <!--성별, 연령별, 배경지역별, 모바일별, 정치성향별, 종교별-->
             <div class="stat-menu-list-wrap hr-scroll font-15">
               <div class="stat-menu-list">
                 <div class="stat-menu-list-each" data-statmenu="gender">
@@ -432,20 +447,11 @@
             <div class="stat-menu-second-list-wrap hr-scroll font-13">
             </div>
           </div>
-        {% else %}
-          <a href="/accounts/profile/">
-            <div class="dotted-box font-13 font-grey">
-              <div class="text-center">
-                Premium user로 업그레이드 하시면 열람 가능합니다.
-              </div>
-            </div>
-          </a>
         {% endif %}
         <div class="show-buffer">
         </div>
       </li>
     </div>
-
   </div>
 </div>
 
