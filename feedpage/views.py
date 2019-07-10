@@ -60,6 +60,8 @@ def new(request):
         img_url_a = request.POST.get('img_url_a')
         img_url_b = request.POST.get('img_url_b')
         img_a = request.FILES.get('img_a')
+        # img_a = request.POST['test_img_a']
+        print(img_a)
         img_b = request.FILES.get('img_b')
 
         if img_url_a is None and img_a is None:
@@ -508,15 +510,119 @@ def report(request, pk):
             next = '/feeds/'
         return redirect('%s'%next)
 
-def statistics(request, id):
-    if request.method == "POST":
+def statistics(request, pk, stat_menu, stat_name):
+    if request.is_ajax():
+        count_a, count_b = 0, 0
+        upvote_a = Upvote.objects.filter(feed_id = pk, about_a = True)
+        upvote_b = Upvote.objects.filter(feed_id = pk, about_a = False)
+        if stat_name == '남성':
+            count_a = upvote_a.filter(user__profile__is_male = True).count()
+            count_b = upvote_b.filter(user__profile__is_male = True).count()
+        elif stat_name == '여성':
+            count_a = upvote_a.filter(user__profile__is_male = False).count()
+            count_b = upvote_b.filter(user__profile__is_male = False).count()
+        elif stat_name == '10대미만':
+            count_a = upvote_a.filter(user__profile__birth__gte = 2010).count()
+            count_b = upvote_b.filter(user__profile__birth__gte = 2010).count()
+        elif stat_name == '10대':
+            count_a = upvote_a.filter(user__profile__birth__gte = 2000, user__profile__birth__lte = 2009).count()
+            count_b = upvote_b.filter(user__profile__birth__gte = 2000, user__profile__birth__lte = 2009).count()
+        elif stat_name == '20대':
+            count_a = upvote_a.filter(user__profile__birth__gte = 1990, user__profile__birth__lte = 1999).count()
+            count_b = upvote_b.filter(user__profile__birth__gte = 1990, user__profile__birth__lte = 1999).count()
+        elif stat_name == '30대':
+            count_a = upvote_a.filter(user__profile__birth__gte = 1980, user__profile__birth__lte = 1989).count()
+            count_b = upvote_b.filter(user__profile__birth__gte = 1980, user__profile__birth__lte = 1989).count()
+        elif stat_name == '40대':
+            count_a = upvote_a.filter(user__profile__birth__gte = 1970, user__profile__birth__lte = 1979).count()
+            count_b = upvote_b.filter(user__profile__birth__gte = 1970, user__profile__birth__lte = 1979).count()
+        elif stat_name == '50대이상':
+            count_a = upvote_a.filter(user__profile__birth__lte = 1969).count()
+            count_b = upvote_b.filter(user__profile__birth__lte = 1969).count()
+        elif stat_name == 'iOS':
+            count_a = upvote_a.filter(user__profile__likes_iphone = True).count()
+            count_b = upvote_b.filter(user__profile__likes_iphone = True).count()
+        elif stat_name == 'Android':
+            count_a = upvote_a.filter(user__profile__likes_iphone = False).count()
+            count_b = upvote_b.filter(user__profile__likes_iphone = False).count()
+        elif stat_name == '서울경기':
+            count_a = upvote_a.filter(user__profile__region = 1).count()
+            count_b = upvote_b.filter(user__profile__region = 1).count()
+        elif stat_name == '강원':
+            count_a = upvote_a.filter(user__profile__region = 2).count()
+            count_b = upvote_b.filter(user__profile__region = 2).count()
+        elif stat_name == '충청':
+            count_a = upvote_a.filter(user__profile__region = 3).count()
+            count_b = upvote_b.filter(user__profile__region = 3).count()
+        elif stat_name == '호남':
+            count_a = upvote_a.filter(user__profile__region = 4).count()
+            count_b = upvote_b.filter(user__profile__region = 4).count()
+        elif stat_name == '영남':
+            count_a = upvote_a.filter(user__profile__region = 5).count()
+            count_b = upvote_b.filter(user__profile__region = 5).count()
+        elif stat_name == '제주':
+            count_a = upvote_a.filter(user__profile__region = 6).count()
+            count_b = upvote_b.filter(user__profile__region = 6).count()
+        elif stat_name == '국내전체':
+            count_a = upvote_a.filter(user__profile__region__lte = 6).count()
+            count_b = upvote_b.filter(user__profile__region__lte = 6).count()
+        elif stat_name == '해외':
+            count_a = upvote_a.filter(user__profile__region = 7).count()
+            count_b = upvote_b.filter(user__profile__region = 7).count()
+        elif stat_name == '기타' and stat_menu == 'region':
+            count_a = upvote_a.filter(user__profile__region = 8).count()
+            count_b = upvote_b.filter(user__profile__region = 8).count()
+        elif stat_name == '진보':
+            count_a = upvote_a.filter(user__profile__left_level = 5).count()
+            count_b = upvote_b.filter(user__profile__left_level = 5).count()
+        elif stat_name == '중도진보':
+            count_a = upvote_a.filter(user__profile__left_level = 4).count()
+            count_b = upvote_b.filter(user__profile__left_level = 4).count()
+        elif stat_name == '중도':
+            count_a = upvote_a.filter(user__profile__left_level = 3).count()
+            count_b = upvote_b.filter(user__profile__left_level = 3).count()
+        elif stat_name == '중도보수':
+            count_a = upvote_a.filter(user__profile__left_level = 2).count()
+            count_b = upvote_b.filter(user__profile__left_level = 2).count()
+        elif stat_name == '보수':
+            count_a = upvote_a.filter(user__profile__left_level = 1).count()
+            count_b = upvote_b.filter(user__profile__left_level = 1).count()
+        elif stat_name == '무교':
+            count_a = upvote_a.filter(user__profile__religion = 4).count()
+            count_b = upvote_b.filter(user__profile__religion = 4).count()
+        elif stat_name == '기독교계열':
+            count_a = upvote_a.filter(user__profile__religion = 3).count()
+            count_b = upvote_b.filter(user__profile__religion = 3).count()
+        elif stat_name == '불교계열':
+            count_a = upvote_a.filter(user__profile__religion = 2).count()
+            count_b = upvote_b.filter(user__profile__religion = 2).count()
+        elif stat_name == '기타' and stat_menu == 'religion':
+            count_a = upvote_a.filter(user__profile__religion = 1).count()
+            count_b = upvote_b.filter(user__profile__religion = 1).count()
+        elif stat_name == '문과계열':
+            count_a = upvote_a.filter(user__profile__major = "문과").count()
+            count_b = upvote_b.filter(user__profile__major = "문과").count()
+        elif stat_name == '이과계열':
+            count_a = upvote_a.filter(user__profile__major = "이과").count()
+            count_b = upvote_b.filter(user__profile__major = "이과").count()
+        elif stat_name == '예체능계열':
+            count_a = upvote_a.filter(user__profile__major = "예체능").count()
+            count_b = upvote_b.filter(user__profile__major = "예체능").count()
+        elif stat_name == '기타' and stat_menu == '전공분야':
+            count_a = upvote_a.filter(user__profile__major = "기타").count()
+            count_b = upvote_b.filter(user__profile__major = "기타").count()
+
+        context = {
+            'count_a': count_a,
+            'count_b': count_b
+        }
+        return JsonResponse(context)
+    else:
         try:
             next = request.META['HTTP_REFERER']
         except:
             next = '/feeds/'
         return redirect('%s'%next)
-    else:
-        return render(request, 'feedpage/statistics.html', {'test': 'test'})
 
 def creator(request, creator_name):
     creators = User.objects.filter(username=creator_name)

@@ -85,7 +85,6 @@ def get_side(fid, cid):
         side = ""
     return side
 
-# 지금은 유효하지 않음
 @register.simple_tag
 def get_upvote_color(fid, uid):
     feed = Feed.objects.get(id=fid)

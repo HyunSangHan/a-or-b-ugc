@@ -312,7 +312,7 @@
           {% endif %}
         </div>
         {% if user.is_authenticated %}
-          <div class="comment-offset">
+          <div>
         {% endif %}
           <!--그외댓글-->
           {% get_ordered_comment_rest feed.id False as comments %}
@@ -392,11 +392,64 @@
             </div>
           {% endfor %}
         <div id="new-comments"></div>
-        <div id="new-comments-next" style="height: 45px;"></div>
+        <div id="new-comments-next" style="height: 80px;"></div>
         {% if user.is_authenticated %}
           </div>
         {% endif %}
           <!-- 댓글 코드 끝 -->
+
+        <div class="stat-title">
+          Detail View
+        </div>
+        {% if not user.profile.is_premium %}
+          <a href="/accounts/profile/">
+            <div class="dotted-box font-13 font-grey">
+              <div class="text-center">
+                Premium user로 업그레이드 하시면 열람 가능합니다.
+              </div>
+            </div>
+          </a>
+        {% elif choice == "" %}
+          <a href="/feeds/{{ feed.uuid }}/">
+            <div class="dotted-box font-13 font-grey">
+              <div class="text-center">
+                투표 후 새로고침하시면 열람 가능합니다.
+              </div>
+            </div>
+          </a>
+        {% else %}
+          <div class="detail-box" data-feedid="{{feed.id}}">
+            <div class="stat-menu-list-wrap hr-scroll font-15">
+              <div class="stat-menu-list">
+                <div class="stat-menu-list-each" data-statmenu="gender">
+                  <div class="stat-name">성별</div>
+                </div>
+                <div class="stat-menu-list-each" data-statmenu="birth">
+                  <div class="stat-name">연령대별</div>
+                </div>
+                <div class="stat-menu-list-each" data-statmenu="major">
+                  <div class="stat-name">전공분야별</div>
+                </div>
+                <div class="stat-menu-list-each" data-statmenu="mobile">
+                  <div class="stat-name">모바일별</div>
+                </div>
+                <div class="stat-menu-list-each" data-statmenu="region">
+                  <div class="stat-name">배경지역별</div>
+                </div>
+                <div class="stat-menu-list-each" data-statmenu="politics">
+                  <div class="stat-name">정치성향별</div>
+                </div>
+                <div class="stat-menu-list-each" data-statmenu="religion">
+                  <div class="stat-name">종교별</div>
+                </div>
+              </div>
+            </div>
+            <div class="stat-menu-second-list-wrap hr-scroll font-13">
+            </div>
+          </div>
+        {% endif %}
+        <div class="show-buffer">
+        </div>
       </li>
     </div>
   </div>
@@ -422,39 +475,41 @@
 {% endif %}
 <!--navigation bar-->
 {% if user.is_authenticated %}
-  <div class="nav-bar-wrap">
-    <a href="/feeds/">
-      <div>
-        <i class="material-icons-outlined" style="font-size: 29px;">home</i>
-      </div>
-    </a>
-    <a href="/feeds/mysubscribe/">
-      <div>
-        <i class="material-icons-outlined" style="font-size: 26px; margin-top: 2px;">library_books</i>
-      </div>
-    </a>
-    <a href="/feeds/new">
-      <div>
-        <i class="material-icons-outlined" style="font-size: 29px;">add_circle_outline</i>
-      </div>
-    </a>
-    <a href="/feeds/mynotification">
-      <div>
-        {% get_noti_amount user.id as noti_amount %}
-        {% if noti_amount == 0 %}
-          <i class="material-icons-outlined" style="font-size: 29px; margin-right: -2px;">notifications_none</i>
+  <div class="nav-bar-bg">
+    <div class="nav-bar-wrap">
+      <a href="/feeds/">
+        <div>
+          <i class="material-icons-outlined" style="font-size: 29px;">home</i>
+        </div>
+      </a>
+      <a href="/feeds/mysubscribe/">
+        <div>
+          <i class="material-icons-outlined" style="font-size: 26px; margin-top: 2px;">library_books</i>
+        </div>
+      </a>
+      <a href="/feeds/new">
+        <div>
+          <i class="material-icons-outlined" style="font-size: 29px;">add_circle_outline</i>
+        </div>
+      </a>
+      <a href="/feeds/mynotification">
+        <div>
+          {% get_noti_amount user.id as noti_amount %}
+          {% if noti_amount == 0 %}
+            <i class="material-icons-outlined" style="font-size: 29px; margin-right: -2px;">notifications_none</i>
+          {% else %}
+            <div class="material-icons mdl-badge mdl-badge--overlap" style="font-size: 28px; margin-top: px; margin-right: -3px;" data-badge="{{noti_amount}}">notifications_none</div>
+          {% endif%}
+        </div>
+      </a>
+      <a href="/feeds/creator/{{ request.user.username }}/">
+        {% if user.profile.image.url is not None %}
+          <div class="user-face-nav mb-1" style="background: url('{{ user.profile.image.url }}') center / cover;"></div>
         {% else %}
-          <div class="material-icons mdl-badge mdl-badge--overlap" style="font-size: 28px; margin-top: px; margin-right: -3px;" data-badge="{{noti_amount}}">notifications_none</div>
-        {% endif%}
-      </div>
-    </a>
-    <a href="/feeds/creator/{{ request.user.username }}/">
-      {% if user.profile.image.url is not None %}
-        <div class="user-face-nav mb-1" style="background: url('{{ user.profile.image.url }}') center / cover;"></div>
-      {% else %}
-        <div class="user-face-nav mb-1" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
-      {% endif %}
-    </a>
+          <div class="user-face-nav mb-1" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
+        {% endif %}
+      </a>
+    </div>
   </div>
 {% else%}
   <div class="float-btn flex-center bg-black">

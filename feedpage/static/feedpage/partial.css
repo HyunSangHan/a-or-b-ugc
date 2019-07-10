@@ -148,8 +148,8 @@
 }
 
 .content-default-bg {
-  background-color: lightgrey;
-  opacity: 0.15;
+  background-color: grey;
+  opacity: 0.05;
 }
 
 .content-default-bg:hover {
@@ -323,7 +323,7 @@
 
 .sideicon {
   padding: 4px 0 2px;
-  margin-right: 5px;
+  margin-right: 2px;
   line-height: 12px;
   font-size: 11px;
   text-align: center;
@@ -363,13 +363,12 @@
   margin: 7px 0 0;
 }
 
-.comment-offset {
+.show-buffer {
   margin-bottom: 3%;
 }
 
 .comment-reactor {
   margin-top: 2px;
-  margin-left: -3px !important;
 }
 
 .comment-content {
@@ -414,7 +413,7 @@
 .comment-input-bg-fix {
   position: fixed;
   bottom: 50px;
-  z-index: 100;
+  z-index: 1;
   opacity: 0.9;
 }
 
@@ -426,13 +425,11 @@
   font-weight: 700;
 }
 
-.nav-bar-wrap {
-  display: -webkit-flex;
-  display: -ms-flexbox;
+.nav-bar-bg {
   display: flex !important;
   display: -webkit-flex !important;
   display: -ms-flexbox !important;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
   position: fixed;
   bottom: -2px;
@@ -441,6 +438,17 @@
   background-color: white;
   z-index: 5;
   box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);
+}
+
+.nav-bar-wrap {
+  display: flex !important;
+  display: -webkit-flex !important;
+  display: -ms-flexbox !important;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  max-width: 768px;
+  background-color: white;
 }
 
 .creator-name-card {
@@ -794,3 +802,120 @@
 .delete-tag:hover {
   cursor: pointer;
 }
+
+.dotted-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(243, 243, 243);
+  border: 1px grey dotted;
+  height: 150px;
+  width: 100%;
+  margin: 10px 0 40px;
+}
+
+.detail-box {
+  width: 100%;
+  margin: 10px 0 40px;
+}
+
+.stat-title {
+  font-size: 16px;
+  font-weight: 600;
+  font-family: "Noto Sans KR", sans-serif !important;
+  display: inline-block;
+  padding: 4px 6px;
+  border: 1px solid black;
+}
+
+.stat-menu-list-wrap {
+  display: flex;
+  border-bottom: 1px rgb(245,245,245) solid;
+}
+
+.stat-menu-second-list-wrap {
+  display: flex;
+}
+
+.stat-menu-list {
+  display: flex;
+  /* margin: 0 auto; */
+}
+
+.stat-menu-list-each {
+  height: auto;
+  padding: 0 10px 10px;
+  color: black;
+}
+
+.stat-menu-list-each.clicked {
+  font-weight: bold;
+  border-bottom: 2px solid;
+  padding: 0 10px 8px;
+}
+
+.stat-menu-second-list-each {
+  height: auto;
+  padding: 0 10px 10px;
+  color: #666;
+}
+
+.stat-menu-second-list-each.clicked {
+  font-weight: bold;
+  color: black;
+}
+
+.stat-menu-list-each:hover, .stat-menu-second-list-each:hover {
+  cursor: pointer;
+}
+
+.stat-name {
+  text-align: center;
+  margin-top: 5px;
+}
+
+.stat-detail-result-wrap {
+  margin-top: 30px;
+  padding-bottom: 30px;
+}
+
+.stat-detail-side, .stat-detail-num {
+  display: flex;
+  justify-content: space-between;
+}
+
+.stat-detail-side > span {
+  font-size: 36px;
+  font-weight: 600;
+  font-family: "Noto Sans KR", sans-serif !important;
+  display: inline-block;
+  padding: 0 5px;
+}
+
+.stat-detail-num > span{
+  display: inline-block;
+  padding: 0 5px;
+}
+
+.stat-detail-graph {
+  position: relative;
+  height: 40px;
+  width: 100%;
+  background-color: rgb(235,235,235);
+  margin: 20px 0 5px;
+}
+
+.stat-detail-graph .graph-a {
+  position: absolute;
+  left: 0;
+  height: 40px;
+  z-index: 1;
+}
+
+.stat-detail-graph .graph-b {
+  position: absolute;
+  right: 0;
+  height: 40px;
+  z-index: 1;
+}
+
