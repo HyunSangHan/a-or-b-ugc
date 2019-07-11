@@ -1,7 +1,6 @@
 from django.db import models
 from faker import Faker
 from django.contrib.auth.models import User 
-from accounts.models import Profile, Follow
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
@@ -40,8 +39,7 @@ class Feed(models.Model):
 		options = {'quality': 50},
         null = True
         )
-# 수정가능여부
-# 익명여부
+    feed_type = models.IntegerField(default=0) # 0:일반, 1:공지, 2:광고
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(default=timezone.now)
 
@@ -127,6 +125,8 @@ class CommentUpvote(models.Model):
         return str(self.feedcomment)
 
 class Notification(models.Model):
+    from accounts.models import Profile, Follow
+
     noti_from = models.ForeignKey(Profile, related_name = 'noti_from', null=True, on_delete= models.CASCADE)
     noti_to = models.ForeignKey(Profile, related_name = 'noti_to', null=True, on_delete= models.CASCADE)
     noti_type = models.IntegerField(default=0)

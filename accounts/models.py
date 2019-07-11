@@ -119,12 +119,16 @@ def save_user_profile(sender, instance, **kwargs):
 
 @receiver(user_signed_up)
 def populate_profile(sociallogin, user, **kwargs):    
+    from feedpage.models import Upvote
+
     profile = user.profile
 
     if sociallogin.account.provider == 'facebook':
         user_data = user.socialaccount_set.filter(provider='facebook')[0].extra_data
         img_url = "http://graph.facebook.com/" + sociallogin.account.uid + "/picture?type=large"
         profile.is_facebook = True
+        Upvote.objects.create(user=user, feed_id=1, about_a=True)
+
     elif sociallogin.account.provider == 'kakao':
         user_data = user.socialaccount_set.filter(provider='kakao')[0].extra_data
         img_url = user.socialaccount_set.first().get_avatar_url()
@@ -134,6 +138,7 @@ def populate_profile(sociallogin, user, **kwargs):
         elif gender == 'female':
             profile.is_male = False
         profile.is_facebook = False
+        Upvote.objects.create(user=user, feed_id=1, about_a=False)
 
     if img_url:
         name = urlparse(img_url).path.split('/')[-1]
@@ -141,3 +146,4 @@ def populate_profile(sociallogin, user, **kwargs):
         if response.status_code == 200:
             profile.image.save(name, ContentFile(response.content), save=True)
     profile.save()
+
