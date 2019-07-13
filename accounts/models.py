@@ -70,8 +70,8 @@ class Profile(models.Model):
             username = myfake.name()
             email = '{}@{}.com'.format(i, i)
             password = '1234' #수정 필요???
-            gender = myfake.boolean(chance_of_getting_true=20)
-            birth = random.randrange(1970,2000)
+            gender = myfake.boolean(chance_of_getting_true=40)
+            birth = random.randrange(1960,2000)
             politics = random.randrange(1,6)
             region = random.randrange(1,9)
             likes_iphone = myfake.boolean(chance_of_getting_true=50)
@@ -93,6 +93,11 @@ class Profile(models.Model):
             profile.is_premium = True
             profile.is_first_login = True
             profile.save()
+
+            from feedpage.models import Upvote
+            for i in range(1,6):
+                about_a = myfake.boolean(chance_of_getting_true=70)
+                Upvote.objects.create(user=user, feed_id=i, about_a=about_a)
 
 
 class Follow(models.Model): 
