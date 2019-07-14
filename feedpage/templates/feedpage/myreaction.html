@@ -56,6 +56,9 @@
         {% if not upvote.feed.creator == user %}
           {% if upvote.feed.check_visible %}
             <li class="each-li">
+              {% if feed.feed_type == 2 %}
+                <div class="ad-btn font-11 flex-center">AD</div>
+              {% endif %}
               <div class="inline-flex w-more-btn">
                 <a href="/feeds/{{ upvote.feed.uuid }}">
                   <h2 class="link-black">{{ upvote.feed.title }}</h2>

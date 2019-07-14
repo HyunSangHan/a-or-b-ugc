@@ -189,6 +189,15 @@
   letter-spacing: 2px;
 }
 
+.ad-btn {
+  margin-right: auto;
+  width: 26px;
+  height: 17px;
+  text-align: center;
+  border: 1px black solid;
+  margin-bottom: 7px;
+}
+
 .w-more-btn {
   width: calc(100% + 14px);
 }

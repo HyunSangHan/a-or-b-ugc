@@ -11,7 +11,7 @@ from imagekit.processors import Thumbnail, ResizeToFill
 import uuid
 
 class HashTag(models.Model):
-    tag = models.TextField(null=True)
+    tag = models.TextField(null=True) #TODO: CharField로 대체 가능
 
     def __str__(self):
         return str(self.tag)
@@ -39,7 +39,7 @@ class Feed(models.Model):
 		options = {'quality': 50},
         null = True
         )
-    feed_type = models.IntegerField(default=0) # 0:일반, 1:공지, 2:광고
+    feed_type = models.IntegerField(default=1) # 0: 튜토리얼, 1:일반, 2:공지, 3:광고
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(default=timezone.now)
 
