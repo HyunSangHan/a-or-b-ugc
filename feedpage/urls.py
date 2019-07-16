@@ -18,7 +18,6 @@ urlpatterns = [
     path('<int:pk>/report/', views.report, name='report'),
     path('<int:pk>/follow/', views.follow_manager, name='follow'),
     path('<int:pk>/statistics/<stat_menu>/<stat_name>/', views.statistics, name='statistics'),
-    path('myupload/', views.myupload, name='myupload'), 
     path('creator/<creator_name>/', views.creator, name='creator'),
     path('mysubscribe/', views.mysubscribe, name='mysubscribe'), 
     path('myreaction/', views.myreaction, name='myreaction'), 

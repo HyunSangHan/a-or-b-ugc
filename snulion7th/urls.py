@@ -18,14 +18,15 @@ from django.urls import path, include
 # import feedpage.views
 from django.conf.urls import include
 import accounts.views
+import feedpage.views
 from django.conf import settings 
 from django.conf.urls.static import static
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('', feedpage.views.index, name='index'),
+    path('', feedpage.views.main, name='main'),
     path('feeds/', include('feedpage.urls')),
-    path('events/', include('eventpage.urls')),
     path('accounts/', include('accounts.urls')),
     path('social_accounts/', include('allauth.urls')),
     # path('accounts/', include('django.contrib.auth.urls')),

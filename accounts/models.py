@@ -73,6 +73,7 @@ class Profile(models.Model):
             gender = myfake.boolean(chance_of_getting_true=40)
             birth = random.randrange(1960,2000)
             politics = random.randrange(1,6)
+            religion = random.randrange(1,4)
             region = random.randrange(1,9)
             likes_iphone = myfake.boolean(chance_of_getting_true=50)
 
@@ -87,6 +88,7 @@ class Profile(models.Model):
             profile.birth = birth
             profile.left_level = politics
             profile.region = region
+            profile.religion = religion
             profile.major = "예체능"
             profile.recent_login = timezone.now()
             profile.likes_iphone = likes_iphone
