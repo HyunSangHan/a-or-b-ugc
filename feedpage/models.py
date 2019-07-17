@@ -11,7 +11,7 @@ from imagekit.processors import Thumbnail, ResizeToFill
 import uuid
 
 class HashTag(models.Model):
-    tag = models.TextField(null=True) #TODO: CharField로 대체 가능
+    tag = models.CharField(blank=True, max_length=100)
 
     def __str__(self):
         return str(self.tag)
@@ -102,7 +102,7 @@ class TagRelation(models.Model):
 class Upvote(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     feed = models.ForeignKey(Feed, on_delete=models.CASCADE)
-    about_a = models.BooleanField(null=True)
+    about_a = models.BooleanField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -127,8 +127,8 @@ class CommentUpvote(models.Model):
 class Notification(models.Model):
     from accounts.models import Profile, Follow
 
-    noti_from = models.ForeignKey(Profile, related_name = 'noti_from', null=True, on_delete= models.CASCADE)
-    noti_to = models.ForeignKey(Profile, related_name = 'noti_to', null=True, on_delete= models.CASCADE)
+    noti_from = models.ForeignKey(Profile, related_name = 'noti_from', blank=True, on_delete= models.CASCADE)
+    noti_to = models.ForeignKey(Profile, related_name = 'noti_to', blank=True, on_delete= models.CASCADE)
     noti_type = models.IntegerField(default=0)
     feed = models.ForeignKey(Feed, null=True, on_delete=models.CASCADE)
     follow = models.ForeignKey(Follow, null=True, on_delete=models.CASCADE)

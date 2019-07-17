@@ -22,7 +22,7 @@ class Profile(models.Model):
         null=True,
         validators=[MaxValueValidator(2019), MinValueValidator(1920)]
     )
-    is_male = models.BooleanField(null=True)
+    is_male = models.BooleanField(blank=True)
     image = ProcessedImageField(
 		upload_to = 'profile_img',
 		processors = [ResizeToFill(120, 120)],
@@ -42,7 +42,7 @@ class Profile(models.Model):
         null=True,
         validators=[MaxValueValidator(5), MinValueValidator(1)]
     )
-    major = models.CharField(max_length=3, null=True)
+    major = models.CharField(max_length=3, blank=True)
     region = models.IntegerField(
         null=True,
         validators=[MaxValueValidator(8), MinValueValidator(1)]
@@ -56,10 +56,10 @@ class Profile(models.Model):
 #7 해외
 #8 기타
     recent_login = models.DateTimeField(default=timezone.now)
-    likes_iphone = models.BooleanField(null=True)
+    likes_iphone = models.BooleanField(blank=True)
     is_premium = models.BooleanField(default=False)
     is_first_login = models.BooleanField(default=True)
-    is_facebook = models.BooleanField(null=True)
+    is_facebook = models.BooleanField(blank=True)
 
     def __str__(self):
         return self.user.username
