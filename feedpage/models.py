@@ -17,7 +17,6 @@ class HashTag(models.Model):
         return str(self.tag)
 
 class Feed(models.Model):
-    # null, blank 나중에 한번 정리하기
     uuid = models.UUIDField(primary_key=False, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=30)
     creator = models.ForeignKey(User, null=True, on_delete= models.CASCADE)
@@ -40,6 +39,7 @@ class Feed(models.Model):
         null = True
         )
     feed_type = models.IntegerField(default=1) # 0: 튜토리얼, 1:일반, 2:공지, 3:광고
+    is_img_view = models.BooleanField(default=True)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(default=timezone.now)
 
@@ -106,7 +106,7 @@ class Upvote(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return str(self.about_a)
+        return f'{str(self.user.username)} choose {str(self.about_a)} in {str(self.feed.title)}'
 
 class Report(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -114,7 +114,7 @@ class Report(models.Model):
     reported_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return str(self.feed)
+        return str(self.feed.title)
 
 class CommentUpvote(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

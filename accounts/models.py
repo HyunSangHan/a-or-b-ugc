@@ -22,7 +22,7 @@ class Profile(models.Model):
         null=True,
         validators=[MaxValueValidator(2019), MinValueValidator(1920)]
     )
-    is_male = models.BooleanField(blank=True)
+    is_male = models.BooleanField(blank=True, null=True)
     image = ProcessedImageField(
 		upload_to = 'profile_img',
 		processors = [ResizeToFill(120, 120)],
@@ -56,27 +56,28 @@ class Profile(models.Model):
 #7 해외
 #8 기타
     recent_login = models.DateTimeField(default=timezone.now)
-    likes_iphone = models.BooleanField(blank=True)
+    likes_iphone = models.BooleanField(blank=True, null=True)
     is_premium = models.BooleanField(default=False)
     is_first_login = models.BooleanField(default=True)
-    is_facebook = models.BooleanField(blank=True)
+    is_facebook = models.BooleanField(default=True)
 
     def __str__(self):
         return self.user.username
 
-    def seed(min_count, max_count):
+    def seed(self, min_count, max_count):
+        NUM_OF_TEST_FEED = 5 #테스트 피드 개수
         myfake = Faker('ko_KR')
         for i in range(min_count, max_count):
             username = myfake.name()
             email = '{}@{}.com'.format(i, i)
             password = '1234' #수정 필요???
             gender = myfake.boolean(chance_of_getting_true=40)
-            birth = random.randrange(1960,2000)
+            birth = random.randrange(1955,2005)
             politics = random.randrange(1,6)
             religion = random.randrange(1,4)
             region = random.randrange(1,9)
             likes_iphone = myfake.boolean(chance_of_getting_true=50)
-
+            is_facebook = myfake.boolean(chance_of_getting_true=50)
             user = User.objects.create_user(
                 username = username,
                 password = password,
@@ -94,10 +95,11 @@ class Profile(models.Model):
             profile.likes_iphone = likes_iphone
             profile.is_premium = True
             profile.is_first_login = True
+            profile.is_facebook = is_facebook
             profile.save()
 
             from feedpage.models import Upvote
-            for i in range(1,6):
+            for i in range(1,NUM_OF_TEST_FEED+1):
                 about_a = myfake.boolean(chance_of_getting_true=70)
                 Upvote.objects.create(user=user, feed_id=i, about_a=about_a)
 
@@ -107,7 +109,7 @@ class Follow(models.Model):
     follow_from = models.ForeignKey(Profile, related_name = 'follow_from', on_delete=models.CASCADE)
 
     def __str__(self):
-        return '{} follows {}'.format(self.follow_from, self.follow_to)
+        return f'{self.follow_from.user.username} follows {self.follow_to.user.username}'
 
 # @receiver(pre_save, sender=User)
 # def password_hashing(instance, **kwargs):
@@ -153,4 +155,3 @@ def populate_profile(sociallogin, user, **kwargs):
         if response.status_code == 200:
             profile.image.save(name, ContentFile(response.content), save=True)
     profile.save()
-
