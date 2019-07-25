@@ -1,7 +1,6 @@
 from django.db import models
 from faker import Faker
 from django.contrib.auth.models import User 
-from accounts.models import Profile, Follow
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
@@ -12,18 +11,17 @@ from imagekit.processors import Thumbnail, ResizeToFill
 import uuid
 
 class HashTag(models.Model):
-    tag = models.TextField(null=True)
+    tag = models.CharField(blank=True, max_length=100)
 
     def __str__(self):
         return str(self.tag)
 
 class Feed(models.Model):
-    # null, blank 나중에 한번 정리하기
     uuid = models.UUIDField(primary_key=False, default=uuid.uuid4, editable=False)
-    title = models.CharField(max_length=30)
+    title = models.CharField(max_length=30, default="")
     creator = models.ForeignKey(User, null=True, on_delete= models.CASCADE)
-    content_a = models.CharField(max_length=21)
-    content_b = models.CharField(max_length=21)
+    content_a = models.CharField(max_length=21, default="")
+    content_b = models.CharField(max_length=21, default="")
     upvote_users = models.ManyToManyField(User, blank=True, related_name='upvote_feeds', through='Upvote')
     matched_tags = models.ManyToManyField(HashTag, blank=True, related_name='tagged_feeds', through='TagRelation')
     img_a = ProcessedImageField(
@@ -40,8 +38,8 @@ class Feed(models.Model):
 		options = {'quality': 50},
         null = True
         )
-# 수정가능여부
-# 익명여부
+    feed_type = models.IntegerField(default=1) # 0: 튜토리얼, 1:일반, 2:공지, 3:광고
+    is_img_view = models.BooleanField(default=True)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(default=timezone.now)
 
@@ -83,7 +81,7 @@ class Feed(models.Model):
 
 class FeedComment(models.Model):
     reactor = models.ForeignKey(User, null=True, on_delete= models.CASCADE)
-    content = models.CharField(max_length=70)
+    content = models.CharField(max_length=70, default="")
     feed = models.ForeignKey(Feed, on_delete=models.CASCADE)
     upvote_side = models.IntegerField(default=0)
     upvote_users = models.ManyToManyField(User, blank=True, related_name='upvote_feedcomments', through='CommentUpvote')
@@ -104,11 +102,11 @@ class TagRelation(models.Model):
 class Upvote(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     feed = models.ForeignKey(Feed, on_delete=models.CASCADE)
-    about_a = models.BooleanField(null=True)
+    about_a = models.BooleanField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return str(self.about_a)
+        return f'{str(self.user.username)} choose {str(self.about_a)} in {str(self.feed.title)}'
 
 class Report(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -116,7 +114,7 @@ class Report(models.Model):
     reported_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return str(self.feed)
+        return str(self.feed.title)
 
 class CommentUpvote(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -127,8 +125,10 @@ class CommentUpvote(models.Model):
         return str(self.feedcomment)
 
 class Notification(models.Model):
-    noti_from = models.ForeignKey(Profile, related_name = 'noti_from', null=True, on_delete= models.CASCADE)
-    noti_to = models.ForeignKey(Profile, related_name = 'noti_to', null=True, on_delete= models.CASCADE)
+    from accounts.models import Profile, Follow
+
+    noti_from = models.ForeignKey(Profile, related_name = 'noti_from', blank=True, on_delete= models.CASCADE)
+    noti_to = models.ForeignKey(Profile, related_name = 'noti_to', blank=True, on_delete= models.CASCADE)
     noti_type = models.IntegerField(default=0)
     feed = models.ForeignKey(Feed, null=True, on_delete=models.CASCADE)
     follow = models.ForeignKey(Follow, null=True, on_delete=models.CASCADE)

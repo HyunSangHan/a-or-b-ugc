@@ -20,6 +20,9 @@ from django.core.files.base import ContentFile
 from collections import OrderedDict
 import re
 
+def main(request):
+    return redirect('/feeds')
+
 def index(request): 
     if request.user.is_anonymous == False and request.user.profile.is_first_login:
         return redirect('/accounts/profile/')

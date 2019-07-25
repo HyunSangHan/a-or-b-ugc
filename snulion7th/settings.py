@@ -53,7 +53,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'feedpage.apps.FeedpageConfig',
-    'eventpage.apps.EventpageConfig',
     'accounts.apps.AccountsConfig',
     'sass_processor',
     'corsheaders',
