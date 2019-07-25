@@ -42,7 +42,7 @@ class Profile(models.Model):
         null=True,
         validators=[MaxValueValidator(5), MinValueValidator(1)]
     )
-    major = models.CharField(max_length=3, blank=True)
+    major = models.CharField(max_length=3, blank=True, default="")
     region = models.IntegerField(
         null=True,
         validators=[MaxValueValidator(8), MinValueValidator(1)]

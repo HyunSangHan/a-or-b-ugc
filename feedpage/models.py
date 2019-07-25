@@ -18,10 +18,10 @@ class HashTag(models.Model):
 
 class Feed(models.Model):
     uuid = models.UUIDField(primary_key=False, default=uuid.uuid4, editable=False)
-    title = models.CharField(max_length=30)
+    title = models.CharField(max_length=30, default="")
     creator = models.ForeignKey(User, null=True, on_delete= models.CASCADE)
-    content_a = models.CharField(max_length=21)
-    content_b = models.CharField(max_length=21)
+    content_a = models.CharField(max_length=21, default="")
+    content_b = models.CharField(max_length=21, default="")
     upvote_users = models.ManyToManyField(User, blank=True, related_name='upvote_feeds', through='Upvote')
     matched_tags = models.ManyToManyField(HashTag, blank=True, related_name='tagged_feeds', through='TagRelation')
     img_a = ProcessedImageField(
@@ -81,7 +81,7 @@ class Feed(models.Model):
 
 class FeedComment(models.Model):
     reactor = models.ForeignKey(User, null=True, on_delete= models.CASCADE)
-    content = models.CharField(max_length=70)
+    content = models.CharField(max_length=70, default="")
     feed = models.ForeignKey(Feed, on_delete=models.CASCADE)
     upvote_side = models.IntegerField(default=0)
     upvote_users = models.ManyToManyField(User, blank=True, related_name='upvote_feedcomments', through='CommentUpvote')
@@ -102,7 +102,7 @@ class TagRelation(models.Model):
 class Upvote(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     feed = models.ForeignKey(Feed, on_delete=models.CASCADE)
-    about_a = models.BooleanField(blank=True)
+    about_a = models.BooleanField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
