@@ -431,6 +431,7 @@ $(document).ready(() => {
 
 
   //for uploading img A
+  let prevFileA;
   $('.upload-a').on('change', function() {
     const $this = $(this)
     const $imgMenuOn = $this.siblings('.uploaded-a').children('.img-menu-on');
@@ -458,12 +459,15 @@ $(document).ready(() => {
         `); 
       }
       reader.readAsDataURL($this[0].files[0]);
+      prevFileA = $this[0].files;
     } else {
+      $this[0].files = prevFileA;
       console.log('cancel editing the photo A');
     }
   });
 
   //for img B
+  let prevFileB;
   $('.upload-b').on('change', function() {
     const $this = $(this)
     const $imgMenuOn = $this.siblings('.uploaded-b').children('.img-menu-on');
@@ -491,7 +495,9 @@ $(document).ready(() => {
         `); 
       }
       reader.readAsDataURL($this[0].files[0]);
+      prevFileB = $this[0].files;
     } else {
+      $this[0].files = prevFileB;
       console.log('cancel editing the photo B');
       }
   });
