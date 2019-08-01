@@ -819,26 +819,33 @@ $(document).ready(() => {
           const percentageB = (data.count_b / total * 100).toFixed(0);
           $graphBar.children('.graph-a').css({"width":""+percentageA+"%"});
           $graphBar.children('.graph-b').css({"width":""+percentageB+"%"});
-          $percentageBar.children('.perc-a').text(""+percentageA+"%");
-          $percentageBar.children('.perc-b').text(""+percentageB+"%");
+          $percentageBar.children('.perc-a').text(""+data.count_a+"명");
+          $percentageBar.children('.perc-b').text(""+data.count_b+"명");
           if (data.count_b == 0) {
-            $graphBar.children('.graph-a').addClass('bg-black');
+            $graphBar.children('.graph-a').addClass('bg-big-win');
+            $graphBar.children('.graph-a').addClass('graph-big-win');
             $graphBar.children('.graph-a').text("A만 100%");
           } else if (data.count_a == 0) {
-            $graphBar.children('.graph-b').addClass('bg-black');
+            $graphBar.children('.graph-b').addClass('bg-big-win');
+            $graphBar.children('.graph-b').addClass('graph-big-win');
             $graphBar.children('.graph-b').text("B만 100%");
           } else {
+            $graphBar.children('.graph-a').addClass('text-left');
+            $graphBar.children('.graph-b').addClass('text-right');
+            $graphBar.children('.graph-a').text(""+percentageA+"%");
+            $graphBar.children('.graph-b').text(""+percentageB+"%");
             if (data.count_b > data.count_a) {
-              $graphBar.children('.graph-a').addClass('bg-lightgrey');
-              $graphBar.children('.graph-b').addClass('bg-black');
+              $graphBar.children('.graph-a').addClass('bg-lose');
+              $graphBar.children('.graph-b').addClass('bg-win');
             } else {
-              $graphBar.children('.graph-a').addClass('bg-black');
-              $graphBar.children('.graph-b').addClass('bg-lightgrey');              
+              $graphBar.children('.graph-a').addClass('bg-win');
+              $graphBar.children('.graph-b').addClass('bg-lose');              
             }
           }
         } else {
           $graphBar.children('.graph-a').remove();
           $graphBar.children('.graph-b').remove();
+          $graphBar.addClass('graph-none');
           $graphBar.text("투표수 1 이상부터 그래프가 나타납니다.");
         }
         $('#new-comments-next')[0].scrollIntoView(true);

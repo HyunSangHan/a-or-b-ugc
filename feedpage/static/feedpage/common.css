@@ -376,6 +376,10 @@ label, label > div:hover {
   text-align: right;
 }
 
+.text-left {
+  text-align: left;
+}
+
 .link-black {
   color: rgba(0,0,0,.87);
   font-weight: 400;
@@ -399,6 +403,10 @@ label, label > div:hover {
 
 .bg-grey {
   background-color: grey !important;
+}
+
+.bg-lightgrey {
+  background-color: lightgrey !important;
 }
 
 .bg-black {
