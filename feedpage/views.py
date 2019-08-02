@@ -632,7 +632,6 @@ def creator(request, creator_name):
     if creators.count() > 0:
         creator = creators.first()
         feeds = Feed.objects.filter(creator=creator).order_by('-updated_at', '-created_at')
-        has_feeds = False
         if len(feeds) == 0:
             has_feeds = False
         else:
@@ -679,7 +678,6 @@ def myreaction(request):
     if request.user.is_anonymous:
         return redirect('/accounts/login')
     upvotes = request.user.upvote_set.all().order_by('-created_at')
-    has_upvotes = False
     if len(upvotes) == 0:
         has_upvotes = False
     else:

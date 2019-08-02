@@ -561,6 +561,7 @@ $(document).ready(() => {
       });
     } else {
       console.log("there is no keyword");
+      alert("이미지 라벨링을 채워주셔야 이미지추천이 가능합니다.");
     }
   });
 
