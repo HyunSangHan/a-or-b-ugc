@@ -18,16 +18,12 @@
           <!-- 1.피드투표 -->
             <li class="each-noti">
               <a href="/feeds/creator/{{ noti.noti_from.user.username }}">
-                {% if noti.noti_from.image.url is not None %}
-                  <div class="user-face-bigger m-0" style="background: url('{{noti.noti_from.image.url}}') center / cover;"></div>
-                {% else %}
-                  <div class="user-face-bigger m-0" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
-                {% endif %}
+                <div class="user-face-bigger m-0" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
               </a>
               <a href="/feeds/{{ noti.feed.uuid }}">
                 <div class="flex-center">
                   <div class="noti-content-ml noti-content-mr font-13 font-black">
-                    <strong>{{noti.noti_from}}</strong>님이 회원님이 업로드한 아젠다에 투표했습니다.
+                    누군가가 회원님이 업로드한 아젠다에 투표했습니다.
                     <div class="font-grey">
                       {% get_deltatime noti.id 2 %}
                     </div>
@@ -201,16 +197,12 @@
           <!-- 1.피드투표 -->
             <li class="each-noti">
               <a href="/feeds/creator/{{ noti.noti_from.user.username }}">
-                {% if noti.noti_from.image.url is not None %}
-                  <div class="user-face-bigger m-0" style="background: url('{{noti.noti_from.image.url}}') center / cover;"></div>
-                {% else %}
-                  <div class="user-face-bigger m-0" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
-                {% endif %}
+                <div class="user-face-bigger m-0" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
               </a>
               <a href="/feeds/{{ noti.feed.uuid }}">
                 <div class="flex-center">
                   <div class="noti-content-ml noti-content-mr font-13 font-grey">
-                    <strong>{{noti.noti_from}}</strong>님이 회원님이 업로드한 아젠다에 투표했습니다.
+                    누군가가 회원님이 업로드한 아젠다에 투표했습니다.
                     <div class="font-grey">
                       {% get_deltatime noti.id 2 %}
                     </div>

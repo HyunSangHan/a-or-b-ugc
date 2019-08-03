@@ -316,8 +316,9 @@ def feed_upvote_a(request, pk):
         upvote_b = feed.upvote_set.filter(about_a=False).count()
         upvote_perc_b = "{:.0f}".format((upvote_b / upvote_total)*100)
         if upvote_list.count() > 0:
+            Notification.objects.filter(feed=feed, noti_from=request.user.profile, noti_to=feed.creator.profile, noti_type=1).delete()
             if upvote_list.first().about_a:
-                feed.upvote_set.get(user_id = request.user.id).delete()
+                feed.upvote_set.filter(user_id = request.user.id).delete()
                 upvote_a -= 2
                 context = {
                     'upvote_after': 0,
@@ -332,7 +333,7 @@ def feed_upvote_a(request, pk):
                 upvote_total -= 1
                 upvote_perc_a = "{:.0f}".format((upvote_a / upvote_total)*100)
                 upvote_perc_b = "{:.0f}".format((upvote_b / upvote_total)*100)
-                feed.upvote_set.get(user_id = request.user.id).delete()
+                feed.upvote_set.filter(user_id = request.user.id).delete()
                 Upvote.objects.create(user_id = request.user.id, feed_id = feed.id, about_a = True)
                 context = {
                     'upvote_after': 1,
@@ -361,10 +362,11 @@ def feed_upvote_a(request, pk):
             upvote_list = feed.upvote_set.filter(user_id = request.user.id)
             # feedcomment_list = feed.feedcomment_set.filter(reactor_id = request.user.id)
             if upvote_list.count() > 0:
+                Notification.objects.filter(feed=feed, noti_from=request.user.profile, noti_to=feed.creator.profile, noti_type=1).delete()
                 if upvote_list.first().about_a:
-                    feed.upvote_set.get(user_id = request.user.id).delete()
+                    feed.upvote_set.filter(user_id = request.user.id).delete()
                 else:
-                    feed.upvote_set.get(user_id = request.user.id).delete()
+                    feed.upvote_set.filter(user_id = request.user.id).delete()
                     Upvote.objects.create(user_id = request.user.id, feed_id = feed.id, about_a = True)
             else:
                 Upvote.objects.create(user_id = request.user.id, feed_id = feed.id, about_a = True)
@@ -388,8 +390,9 @@ def feed_upvote_b(request, pk):
         upvote_b = feed.upvote_set.filter(about_a=False).count() +1
         upvote_perc_b = "{:.0f}".format((upvote_b / upvote_total)*100)
         if upvote_list.count() > 0:
+            Notification.objects.filter(feed=feed, noti_from=request.user.profile, noti_to=feed.creator.profile, noti_type=1).delete()
             if upvote_list.first().about_a:
-                feed.upvote_set.get(user_id = request.user.id).delete()
+                feed.upvote_set.filter(user_id = request.user.id).delete()
                 upvote_a -= 1
                 upvote_total -= 1
                 upvote_perc_a = "{:.0f}".format((upvote_a / upvote_total)*100)
@@ -404,7 +407,7 @@ def feed_upvote_b(request, pk):
                     'perc_b': upvote_perc_b
                     }
             else:
-                feed.upvote_set.get(user_id = request.user.id).delete()
+                feed.upvote_set.filter(user_id = request.user.id).delete()
                 upvote_b -= 2
                 context = {
                     'upvote_after': 0,
@@ -430,13 +433,13 @@ def feed_upvote_b(request, pk):
     else:
         try:
             upvote_list = feed.upvote_set.filter(user_id = request.user.id)
-            feedcomment_list = feed.feedcomment_set.filter(reactor_id = request.user.id)
             if upvote_list.count() > 0:
+                Notification.objects.filter(feed=feed, noti_from=request.user.profile, noti_to=feed.creator.profile, noti_type=1).delete()
                 if upvote_list.first().about_a: 
-                    feed.upvote_set.get(user_id = request.user.id).delete()
+                    feed.upvote_set.filter(user_id = request.user.id).delete()
                     Upvote.objects.create(user_id = request.user.id, feed_id = feed.id, about_a = False)
                 else:
-                    feed.upvote_set.get(user_id = request.user.id).delete()
+                    feed.upvote_set.filter(user_id = request.user.id).delete()
             else:
                 Upvote.objects.create(user_id = request.user.id, feed_id = feed.id, about_a = False)
                 # 노티 만들기
@@ -451,7 +454,7 @@ def feed_upvote_b(request, pk):
 
 def follow_manager(request, pk):
     if request.is_ajax():
-        follow_from = Profile.objects.get(user_id = request.user.id)
+        follow_from = request.user.profile
         follow_to = Profile.objects.get(user_id = pk)
         print(follow_from)
         print(follow_to)
@@ -467,7 +470,7 @@ def follow_manager(request, pk):
             make_notification(6, pk, request.user.id)
         return JsonResponse(context)
     else:
-        follow_from = Profile.objects.get(user_id = request.user.id)
+        follow_from = request.user.profile
         follow_to = Profile.objects.get(user_id = pk)
         following_already = Follow.objects.filter(follow_from=follow_from, follow_to=follow_to)
         if following_already.count() > 0:
@@ -647,7 +650,7 @@ def creator(request, creator_name):
 def mysubscribe(request):
     if request.user.is_anonymous:
         return redirect('/accounts/login')
-    follow_from = Profile.objects.get(user_id = request.user.id)
+    follow_from = request.user.profile
     my_subs = Follow.objects.filter(follow_from=follow_from)
     feeds = []
     for my_sub in my_subs:
@@ -690,7 +693,7 @@ def mynotification(request):
         return redirect('/accounts/login')
     noti = Notification.objects.filter(noti_to=request.user.profile, is_mine=False).order_by('-created_at')
     noti_unchecked = noti.filter(is_checked=False) #지난번기준 미확인알림
-    profile = Profile.objects.get(user=request.user)
+    profile = request.user.profile
     
     for each_noti in noti_unchecked:
         if each_noti.created_at < profile.notichecked_at:
