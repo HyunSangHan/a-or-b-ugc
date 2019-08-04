@@ -1,0 +1,1 @@
+web: gunicorn snulion7th.wsgi --log-file -
