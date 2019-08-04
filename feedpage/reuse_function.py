@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 
 def make_notification(noti_type, fid, uid):
 # tid Cases => 1피드투표/2피드댓글/3신고/4신고숨김/5댓글좋아요/6구독/7구독새글
-    if noti_type == 1 or noti_type == 2: #피드투표
+    if noti_type == 1 or noti_type == 2: #피드투표 or 피드댓글
         feed = Feed.objects.get(id=fid)
         noti_from = Profile.objects.get(user_id = uid)
         noti_to = Profile.objects.get(user = feed.creator)

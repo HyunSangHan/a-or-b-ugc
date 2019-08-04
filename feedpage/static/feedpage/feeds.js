@@ -431,6 +431,7 @@ $(document).ready(() => {
 
 
   //for uploading img A
+  let prevFileA;
   $('.upload-a').on('change', function() {
     const $this = $(this)
     const $imgMenuOn = $this.siblings('.uploaded-a').children('.img-menu-on');
@@ -458,12 +459,15 @@ $(document).ready(() => {
         `); 
       }
       reader.readAsDataURL($this[0].files[0]);
+      prevFileA = $this[0].files;
     } else {
+      $this[0].files = prevFileA;
       console.log('cancel editing the photo A');
     }
   });
 
   //for img B
+  let prevFileB;
   $('.upload-b').on('change', function() {
     const $this = $(this)
     const $imgMenuOn = $this.siblings('.uploaded-b').children('.img-menu-on');
@@ -491,7 +495,9 @@ $(document).ready(() => {
         `); 
       }
       reader.readAsDataURL($this[0].files[0]);
+      prevFileB = $this[0].files;
     } else {
+      $this[0].files = prevFileB;
       console.log('cancel editing the photo B');
       }
   });
@@ -555,6 +561,7 @@ $(document).ready(() => {
       });
     } else {
       console.log("there is no keyword");
+      alert("이미지 라벨링을 채워주셔야 이미지추천이 가능합니다.");
     }
   });
 
@@ -813,26 +820,33 @@ $(document).ready(() => {
           const percentageB = (data.count_b / total * 100).toFixed(0);
           $graphBar.children('.graph-a').css({"width":""+percentageA+"%"});
           $graphBar.children('.graph-b').css({"width":""+percentageB+"%"});
-          $percentageBar.children('.perc-a').text(""+percentageA+"%");
-          $percentageBar.children('.perc-b').text(""+percentageB+"%");
+          $percentageBar.children('.perc-a').text(""+data.count_a+"명");
+          $percentageBar.children('.perc-b').text(""+data.count_b+"명");
           if (data.count_b == 0) {
-            $graphBar.children('.graph-a').addClass('bg-black');
+            $graphBar.children('.graph-a').addClass('bg-big-win');
+            $graphBar.children('.graph-a').addClass('graph-big-win');
             $graphBar.children('.graph-a').text("A만 100%");
           } else if (data.count_a == 0) {
-            $graphBar.children('.graph-b').addClass('bg-black');
+            $graphBar.children('.graph-b').addClass('bg-big-win');
+            $graphBar.children('.graph-b').addClass('graph-big-win');
             $graphBar.children('.graph-b').text("B만 100%");
           } else {
+            $graphBar.children('.graph-a').addClass('text-left');
+            $graphBar.children('.graph-b').addClass('text-right');
+            $graphBar.children('.graph-a').text(""+percentageA+"%");
+            $graphBar.children('.graph-b').text(""+percentageB+"%");
             if (data.count_b > data.count_a) {
-              $graphBar.children('.graph-a').addClass('bg-lightgrey');
-              $graphBar.children('.graph-b').addClass('bg-black');
+              $graphBar.children('.graph-a').addClass('bg-lose');
+              $graphBar.children('.graph-b').addClass('bg-win');
             } else {
-              $graphBar.children('.graph-a').addClass('bg-black');
-              $graphBar.children('.graph-b').addClass('bg-lightgrey');              
+              $graphBar.children('.graph-a').addClass('bg-win');
+              $graphBar.children('.graph-b').addClass('bg-lose');              
             }
           }
         } else {
           $graphBar.children('.graph-a').remove();
           $graphBar.children('.graph-b').remove();
+          $graphBar.addClass('graph-none');
           $graphBar.text("투표수 1 이상부터 그래프가 나타납니다.");
         }
         $('#new-comments-next')[0].scrollIntoView(true);

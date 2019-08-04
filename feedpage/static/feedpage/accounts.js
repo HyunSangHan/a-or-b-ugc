@@ -17,7 +17,9 @@ $(document).ready(() => {
   $regionSelected.attr("selected",true);
   $regionSelected.parent().addClass("font-black");
   $('input:radio[name=gender]:input[value=' + genderValue + ']').attr("checked", true);
-  $('input:radio[name=major]:input[value=' + majorValue + ']').attr("checked", true);
+  if (majorValue !== "") { 
+    $('input:radio[name=major]:input[value=' + majorValue + ']').attr("checked", true);
+  }
   $('input:radio[name=mobile]:input[value=' + mobileValue + ']').attr("checked", true);
   $('input:radio[name=politics]:input[value=' + politicsValue + ']').attr("checked", true);
   $('input:radio[name=religion]:input[value=' + religionValue + ']').attr("checked", true);

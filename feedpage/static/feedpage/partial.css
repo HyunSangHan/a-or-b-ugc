@@ -910,14 +910,17 @@
   position: relative;
   height: 40px;
   width: 100%;
-  background-color: rgb(235,235,235);
+  background-color: rgb(170,170,170);
   margin: 20px 0 5px;
+  border-radius: 20px;
 }
 
 .stat-detail-graph .graph-a {
   position: absolute;
   left: 0;
   height: 40px;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
   z-index: 1;
 }
 
@@ -925,6 +928,30 @@
   position: absolute;
   right: 0;
   height: 40px;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
   z-index: 1;
 }
 
+.graph-none {
+  background-color: rgb(235,235,235) !important;
+  border-radius: 0 !important;
+}
+
+.graph-big-win {
+  border-radius: 20px !important;
+}
+
+.bg-big-win {
+  background-color: rgb(40,40,40);
+}
+
+.bg-win {
+  background-color: rgb(40,40,40);
+  max-width: 90%;
+}
+
+.bg-lose {
+  background-color: rgb(170,170,170);
+  min-width: 10%;
+}
