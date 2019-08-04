@@ -49,15 +49,17 @@
       </a>
     </div>
   </div>
-  <div class="m-auto contents" style="min-height: 40vh; display: flex;">
-    <div class="contents-margin flex-center h-100 w-100">
+  <div class="m-auto contents" style="min-height: 40vh; display: flex !important; display: -webkit-flex !important; display: -ms-flexbox !important;">
+    <div class="contents-margin">
       {% if not has_upvotes %}
+      <div class="flex-center h-100 w-100">
         <div class="text-center font-15">
           아직 투표한 글이 없습니다.<br>
           <a href = "/feeds/">
             <strong>홈으로 돌아가기</strong>
           </a>
         </div>
+      </div>
       {% else %}
         {% for upvote in upvotes %}
         <!--TODO: 이 if문 로직수정필요 -->

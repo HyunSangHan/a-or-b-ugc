@@ -65,7 +65,7 @@
   {% if request.user == creator %}
     <div class="page-content-two-tabs w-100">
       <div class="page-content-tab on">
-        <a href = "/feeds/creator/{{ creator.username }}/" class="w-100 h-100 flex-center">
+        <a href = "/feeds/creator/{{ request.user.username}}/" class="w-100 h-100 flex-center">
           내가 작성한
         </a>
       </div>
@@ -78,7 +78,7 @@
   {% endif %}
 <!--피드 나오는 영역 / 피드 없을 때-->
   {% if not has_feeds %}
-    <div class="m-auto contents" style="min-height: 40vh; display: flex;">
+    <div class="m-auto contents" style="min-height: 40vh; display: flex !important; display: -webkit-flex !important; display: -ms-flexbox !important;">
       <div class="contents-margin w-100 h-100 flex-center font-15">
         {% if creator == user %}
           <div class="text-center">
