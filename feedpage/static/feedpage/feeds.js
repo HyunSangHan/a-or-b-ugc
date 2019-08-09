@@ -21,136 +21,182 @@ $(document).ready(() => {
     const $this = $(this);
     const $siblingA = $this.siblings('.content-a-js')
     const $siblingB = $this.siblings('.content-b-js')
-    const fid = $this.attr("data-feedid");
-    const side = $this.attr("data-feedside");
-    console.log(side + " clicked")
-    $.ajax({
-      url: `/feeds/${fid}/upvote_${side}`,
-      type: "GET",
-      dataType: "json",
-      success: function (data) {
-        const upvote_before = data.upvote_before;
-        const upvote_after = data.upvote_after;
-        console.log(upvote_before +"=>"+ upvote_after);
-        const $clicked = `
-        <div class="content-result-bg flex-center w-100 h-100 bg-black">
-        </div>
-        `;
-        const $unclicked = `
-        <div class="content-result-bg flex-center w-100 h-100 bg-grey op-7">
-        </div>
-        `;
-        const $resultA = `
-        <div class="content-result flex-center w-100 h-100">
-          <div class="mt-3">
-            <span class="content-result-perc">`+data.perc_a+`</span>%
-            <div class="w-100 mt-2" style="text-align: center;">
-              ( `+data.upvote_a+` )
-            </div>
-          </div>
-        </div>
-        `;
-        const $resultB = `
-        <div class="content-result flex-center w-100 h-100">
-          <div class="mt-3">
-            <span class="content-result-perc">`+data.perc_b+`</span>%
-            <div class="w-100 mt-2" style="text-align: center;">
-              ( `+data.upvote_b+` )
-            </div>
-          </div>
-        </div>
-        `;
-        if (upvote_after === 1) {
-          if (upvote_before === 0) {
-            $this.children('.content-default-bg-js').removeClass('content-default-bg');
-            $siblingB.children('.content-default-bg-js').removeClass('content-default-bg');
-            $this.prepend($resultA);
-            $this.prepend($clicked);
-            $siblingB.children('.content-label').toggleClass('bg-black');
-            $siblingB.children('.content-label').toggleClass('bg-grey');
-            $siblingB.prepend($resultB);
-            $siblingB.prepend($unclicked);
-          } else if (upvote_before === 1) {
-            $this.children('.content-default-bg-js').addClass('content-default-bg');
-            $siblingB.children('.content-default-bg-js').addClass('content-default-bg');
-            $this.children('.content-result').remove();
-            $this.children('.content-result-bg').remove();
-            $siblingB.children('.content-label').toggleClass('bg-black');
-            $siblingB.children('.content-label').toggleClass('bg-grey');
-            $siblingB.children('.content-result').remove();
-            $siblingB.children('.content-result-bg').remove();
-          } else if (upvote_before === 2) {
-            $this.children('.content-result').remove();
-            $this.children('.content-result-bg').remove();
-            $siblingB.children('.content-result').remove();
-            $siblingB.children('.content-result-bg').remove();
-            $this.children('.bg-grey').addClass('bg-black');
-            $this.children('.bg-grey').removeClass('bg-grey');
-            $this.prepend($resultA);
-            $this.prepend($clicked);
-            $siblingB.children('.content-label').removeClass('bg-black');
-            $siblingB.children('.content-label').addClass('bg-grey');
-            $siblingB.prepend($resultB);
-            $siblingB.prepend($unclicked);
-          }
-        } else if (upvote_after === 2) {
-          if (upvote_before === 0) {
-            $siblingA.children('.content-default-bg-js').removeClass('content-default-bg');
-            $this.children('.content-default-bg-js').removeClass('content-default-bg');
-            $this.prepend($resultB);
-            $this.prepend($clicked);
-            $siblingA.children('.content-label').toggleClass('bg-black');
-            $siblingA.children('.content-label').toggleClass('bg-grey');
-            $siblingA.prepend($resultA);
-            $siblingA.prepend($unclicked);
-          } else if (upvote_before === 1) {
-            $this.children('.content-result').remove();
-            $this.children('.content-result-bg').remove();
-            $siblingA.children('.content-result').remove();
-            $siblingA.children('.content-result-bg').remove();
-            $this.children('.bg-grey').addClass('bg-black');
-            $this.children('.bg-grey').removeClass('bg-grey');
-            $this.prepend($resultB);
-            $this.prepend($clicked);
-            $siblingA.children('.content-label').removeClass('bg-black');
-            $siblingA.children('.content-label').addClass('bg-grey');
-            $siblingA.prepend($resultA);
-            $siblingA.prepend($unclicked);
-          } else if (upvote_before === 2) {
-            $siblingA.children('.content-default-bg-js').addClass('content-default-bg');
-            $this.children('.content-default-bg-js').addClass('content-default-bg');
-            $this.children('.content-result').remove();
-            $this.children('.content-result-bg').remove();
-            $siblingA.children('.content-label').toggleClass('bg-black');
-            $siblingA.children('.content-label').toggleClass('bg-grey');
-            $siblingA.children('.content-result').remove();
-            $siblingA.children('.content-result-bg').remove();
-          }
+    const fid = $this.data("feedid");
+    const side = $this.data("feedside");
+    const beforeSide = $this.parent().data("beforeside");
+    const beforeNumA = Number($this.parent().children(".content-a-js").data("num-a"));
+    const beforeNumB = Number($this.parent().children(".content-b-js").data("num-b"));
+    let afterNumA, afterNumB, afterPerA, afterPerB;
+    let afterTotalNum = beforeNumA + beforeNumB;
+    const csrfthoken = $this.parent().siblings(".csrf-js").data("csrfmiddlewaretoken");
+    const userIsAuthenticated = (csrfthoken != undefined)
 
-        } else {
+    $siblingA.children('.content-default-bg-js').addClass('content-default-bg');
+    $siblingB.children('.content-default-bg-js').addClass('content-default-bg');
+    $siblingA.children('.content-result').remove();
+    $siblingB.children('.content-result').remove();
+    $siblingA.children('.content-result-bg').remove();
+    $siblingB.children('.content-result-bg').remove();
+
+    const $clicked = `
+    <div class="content-result-bg flex-center w-100 h-100 bg-black">
+    </div>
+    `;
+    const $unclicked = `
+    <div class="content-result-bg flex-center w-100 h-100 bg-grey op-7">
+    </div>
+    `;
+    if (side == "A") {
+      if (beforeSide == "A") {
+        afterNumA = Number(beforeNumA) - 1;
+        afterNumB = Number(beforeNumB);  
+        $this.data("num-a", beforeNumA-1)
+      } else if (beforeSide == "B") {
+        afterNumA = Number(beforeNumA) + 1;
+        afterNumB = Number(beforeNumB) - 1;  
+        $this.data("num-a", beforeNumA+1)
+        $siblingB.data("num-b", beforeNumB-1)
+      } else {
+        afterNumA = Number(beforeNumA) + 1;
+        afterNumB = Number(beforeNumB);
+        $this.data("num-a", beforeNumA+1)
+        afterTotalNum += 1
+      }
+    } else if (side == "B") {
+      if (beforeSide == "A") {
+        afterNumA = Number(beforeNumA) - 1;
+        afterNumB = Number(beforeNumB) + 1;  
+        $siblingA.data("num-a", beforeNumA-1)
+        $this.data("num-b", beforeNumB+1)
+      } else if (beforeSide == "B") {
+        afterNumA = Number(beforeNumA);
+        afterNumB = Number(beforeNumB) - 1;  
+        $this.data("num-b", beforeNumB-1)
+      } else {
+        afterNumA = Number(beforeNumA);
+        afterNumB = Number(beforeNumB) + 1;  
+        $this.data("num-b", beforeNumB+1)
+        afterTotalNum += 1
+      }
+    }
+    afterPerA = (afterNumA/afterTotalNum * 100).toFixed(0);
+    afterPerB = (afterNumB/afterTotalNum * 100).toFixed(0);
+    const $resultA = `
+    <div class="content-result flex-center w-100 h-100">
+      <div class="mt-3">
+        <span class="content-result-perc">`+afterPerA+`</span>%
+        <div class="w-100 mt-2" style="text-align: center;">
+          ( `+afterNumA+` )
+        </div>
+      </div>
+    </div>
+    `;
+    const $resultB = `
+    <div class="content-result flex-center w-100 h-100">
+      <div class="mt-3">
+        <span class="content-result-perc">`+afterPerB+`</span>%
+        <div class="w-100 mt-2" style="text-align: center;">
+          ( `+afterNumB+` )
+        </div>
+      </div>
+    </div>
+    `;
+
+    if (userIsAuthenticated) {
+      // frontend 먼저 반영하는 코드 (성능 이슈 해결을 위해)
+      $siblingA.children('.bg-grey').addClass('bg-black');
+      $siblingB.children('.bg-grey').addClass('bg-black');
+      $siblingA.children('.bg-grey').removeClass('bg-grey');
+      $siblingB.children('.bg-grey').removeClass('bg-grey');
+      if (side === "A") {
+        if (beforeSide === "") {
+          $this.parent().data("beforeside", "A")
+          $this.children('.content-default-bg-js').removeClass('content-default-bg');
+          $siblingB.children('.content-default-bg-js').removeClass('content-default-bg');
+          $this.prepend($resultA);
+          $this.prepend($clicked);
+          $siblingB.children('.content-label').toggleClass('bg-black');
+          $siblingB.children('.content-label').toggleClass('bg-grey');
+          $siblingB.prepend($resultB);
+          $siblingB.prepend($unclicked);
+        } else if (beforeSide === "A") {
+          $this.parent().data("beforeside", "")
           $this.children('.content-default-bg-js').addClass('content-default-bg');
-          $siblingA.children('.content-default-bg-js').addClass('content-default-bg');
           $siblingB.children('.content-default-bg-js').addClass('content-default-bg');
           $this.children('.content-result').remove();
           $this.children('.content-result-bg').remove();
-          $siblingA.children('.bg-grey').addClass('bg-black');
-          $siblingA.children('.bg-grey').removeClass('bg-grey');
-          $siblingA.children('.content-result').remove();
-          $siblingA.children('.content-result-bg').remove();
-          $siblingB.children('.bg-grey').addClass('bg-black');
-          $siblingB.children('.bg-grey').removeClass('bg-grey');
           $siblingB.children('.content-result').remove();
           $siblingB.children('.content-result-bg').remove();
+        } else if (beforeSide === "B") {
+          $this.parent().data("beforeside", "A")
+          $this.children('.content-result').remove();
+          $this.children('.content-result-bg').remove();
+          $siblingB.children('.content-result').remove();
+          $siblingB.children('.content-result-bg').remove();
+          $this.children('.bg-grey').addClass('bg-black');
+          $this.children('.bg-grey').removeClass('bg-grey');
+          $this.prepend($resultA);
+          $this.prepend($clicked);
+          $siblingB.children('.content-label').removeClass('bg-black');
+          $siblingB.children('.content-label').addClass('bg-grey');
+          $siblingB.prepend($resultB);
+          $siblingB.prepend($unclicked);
+        }
+      } else if (side === "B") {
+        if (beforeSide === "") {
+          $this.parent().data("beforeside", "B")
+          $siblingA.children('.content-default-bg-js').removeClass('content-default-bg');
+          $this.children('.content-default-bg-js').removeClass('content-default-bg');
+          $this.prepend($resultB);
+          $this.prepend($clicked);
+          $siblingA.children('.content-label').toggleClass('bg-black');
+          $siblingA.children('.content-label').toggleClass('bg-grey');
+          $siblingA.prepend($resultA);
+          $siblingA.prepend($unclicked);
+        } else if (beforeSide === "A") {
+          $this.parent().data("beforeside", "B")
+          $this.children('.content-result').remove();
+          $this.children('.content-result-bg').remove();
+          $siblingA.children('.content-result').remove();
+          $siblingA.children('.content-result-bg').remove();
+          $this.children('.bg-grey').addClass('bg-black');
+          $this.children('.bg-grey').removeClass('bg-grey');
+          $this.prepend($resultB);
+          $this.prepend($clicked);
+          $siblingA.children('.content-label').removeClass('bg-black');
+          $siblingA.children('.content-label').addClass('bg-grey');
+          $siblingA.prepend($resultA);
+          $siblingA.prepend($unclicked);
+        } else if (beforeSide === "B") {
+          $this.parent().data("beforeside", "")
+          $siblingA.children('.content-default-bg-js').addClass('content-default-bg');
+          $this.children('.content-default-bg-js').addClass('content-default-bg');
+          $this.children('.content-result').remove();
+          $this.children('.content-result-bg').remove();
+          $siblingA.children('.content-result').remove();
+          $siblingA.children('.content-result-bg').remove();
+        }
       }
-      },
-      error: function(response, status, error) {
-        window.location.href = "/accounts/login";
-        alert('로그인이 필요한 서비스입니다.');
-        console.log(response, status, error);
-      },
-      complete: function(response) {
-      },
-    });
+      // backend 실제 반영하는 코드
+      $.ajax({
+        url: `/feeds/${fid}/upvote_${side}`,
+        type: "GET",
+        dataType: "json",
+        success: function (data) {
+          console.log(beforeSide +" => "+side)
+        },
+        error: function(response, status, error) {
+          console.log(response, status, error);
+          console.log("error!!!")
+          window.location.reload();
+        },
+        complete: function(response) {
+        },
+      });
+    } else {
+      alert('로그인이 필요한 서비스입니다.');
+      window.location.href = "/accounts/login";
+    }
   });
 
   // 신고하기
@@ -304,7 +350,7 @@ $(document).ready(() => {
   });
 
 
-    // 댓글 달기
+  // 댓글 달기
   $('.comment-submit-now').on('click', function(event) {
     event.preventDefault();
 
@@ -382,8 +428,9 @@ $(document).ready(() => {
           $this.siblings('.comment-input').val('');
         },
         error: function(response, status, error) {
-          alert('error');
           console.log(response, status, error);
+          alert('error');
+          window.location.reload();
         },
         complete: function(response) {
           console.log(response);

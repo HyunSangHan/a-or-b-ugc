@@ -16,6 +16,9 @@
             {% if feed.feed_type == 2 %}
               <div class="ad-btn font-11 flex-center">AD</div>
             {% endif %}
+            {% if request.user.is_authenticated %}
+              <div class="csrf-js" data-csrfmiddlewaretoken="{{ csrf_token }}"></div>
+            {% endif %}
             <div class="inline-flex w-more-btn">
               <a href="/feeds/{{ feed.uuid }}">
                 <h2 class="link-black">{{ feed.title }}</h2>
@@ -91,11 +94,11 @@
               </a>
               {% comment %} (구독자: {{ feed.creator.profile.follow_to.all.count }}) {% endcomment %}
             </div>
+            {% get_upvote_color feed.id user.id as choice %}
             <!--A와 B를 함께 두는 행-->
-            <div class="each-content">
+            <div class="each-content" data-beforeside="{{ choice }}">
               <!-- Image card A-->
-              <div class="mr-1perc demo-card-image mdl-card content-img content-a-js" style="background: url('{{ feed.img_a.url }}') center / cover;" data-feedid="{{ feed.id }}" data-feedside="a">
-                {% get_upvote_color feed.id user.id as choice %}
+              <div class="mr-1perc demo-card-image mdl-card content-img content-a-js" style="background: url('{{ feed.img_a.url }}') center / cover;" data-feedid="{{ feed.id }}" data-feedside="A" data-num-a="{% get_upvote_a feed.id %}">
                 <!--lose일때 A 라벨링-->
                 {% if choice == "B" %}
                   <div class="content-label bg-grey">
@@ -137,7 +140,7 @@
                 {% endif %}
               </div>
               <!-- Image card B-->
-              <div class="ml-1perc demo-card-image mdl-card content-img content-b-js" style="background: url('{{ feed.img_b.url }}') center / cover;" data-feedid="{{ feed.id }}" data-feedside="b">
+              <div class="ml-1perc demo-card-image mdl-card content-img content-b-js" style="background: url('{{ feed.img_b.url }}') center / cover;" data-feedid="{{ feed.id }}" data-feedside="B" data-num-b="{% get_upvote_b feed.id %}">
 
                 <!--lose일때 B 라벨링-->
                 {% if choice == "A" %}
