@@ -368,6 +368,20 @@
   border: none;
 }
 
+.feed-input-tag {
+  width: 123%;
+  font-size: 16px !important;
+  transform: scale(0.8125);
+  transform-origin: left center;
+}
+
+.feed-input-content {
+  width: 85.3%;
+  font-size: 16px !important;
+  transform: scale(0.9375);
+  transform-origin: left center;
+}
+
 .comment {
   margin: 7px 0 0;
 }
@@ -415,8 +429,10 @@
 .comment-input {
   border-bottom: none !important;
   padding: 8px 0 !important;
-  font-size: 14px !important;
-  width: calc(100% - 57px) !important;
+  font-size: 16px !important;
+  width: calc(114% - 57px) !important;
+  transform: scale(0.875);
+  transform-origin: left center;
 }
 
 .comment-input-bg-fix {
@@ -441,6 +457,8 @@
   justify-content: center;
   align-items: center;
   position: fixed;
+  -webkit-transform: translateZ(0);
+  -webkit-overflow-scrolling: touch;
   bottom: -2px;
   width: 100%;
   height: 50px;
@@ -453,8 +471,6 @@
   display: flex !important;
   display: -webkit-flex !important;
   display: -ms-flexbox !important;
-  -webkit-transform: translateZ(0);
-  -webkit-overflow-scrolling: touch;
   justify-content: space-around;
   align-items: center;
   width: 100%;
