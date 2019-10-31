@@ -680,12 +680,11 @@ def myupload(request):
 def myreaction(request):
     if request.user.is_anonymous:
         return redirect('/accounts/login')
-    upvotes = request.user.upvote_set.all().order_by('-created_at')
+    upvotes = request.user.upvote_set.exclude(feed__creator = request.user).order_by('-created_at')
     if len(upvotes) == 0:
         has_upvotes = False
     else:
         has_upvotes = True
-
     return render(request, 'feedpage/myreaction.html', {'upvotes': upvotes, 'has_upvotes': has_upvotes})
 
 def mynotification(request):

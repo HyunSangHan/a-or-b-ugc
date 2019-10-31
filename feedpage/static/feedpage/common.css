@@ -9,10 +9,13 @@ body {
 header {
   margin-left: -1px !important;
   width: 101% !important;
+  -webkit-transform: translateZ(0);
+  -webkit-overflow-scrolling: touch;
 }
 
 input {
   outline: none;
+  padding: 0;
 }
 
 h2 {

@@ -20,6 +20,7 @@ class Profile(models.Model):
     follows = models.ManyToManyField('self', through = 'Follow', blank=True, symmetrical=False)
     birth = models.IntegerField(
         blank=True,
+        null = True,
         validators=[MaxValueValidator(2019), MinValueValidator(1920)]
     )
     is_male = models.BooleanField(blank=True, null=True)
@@ -36,15 +37,18 @@ class Profile(models.Model):
     notichecked_at = models.DateTimeField(default=timezone.now)
     religion = models.IntegerField(
         blank=True,
+        null = True,
         validators=[MaxValueValidator(4), MinValueValidator(1)]
     )
     left_level = models.IntegerField(
         blank=True,
+        null = True,
         validators=[MaxValueValidator(5), MinValueValidator(1)]
     )
     major = models.CharField(max_length=3, blank=True)
     region = models.IntegerField(
         blank=True,
+        null = True,
         validators=[MaxValueValidator(8), MinValueValidator(1)]
     )
 #1 서울/경기
