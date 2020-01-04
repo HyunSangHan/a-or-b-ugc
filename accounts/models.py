@@ -69,7 +69,7 @@ class Profile(models.Model):
         return self.user.username
 
     def seed(self, min_count, max_count):
-        NUM_OF_TEST_FEED = 5 #테스트 피드 개수
+        NUM_OF_TEST_FEED = 6 #테스트 피드 개수
         myfake = Faker('ko_KR')
         for i in range(min_count, max_count):
             username = myfake.name()
@@ -94,7 +94,7 @@ class Profile(models.Model):
             profile.left_level = politics
             profile.region = region
             profile.religion = religion
-            profile.major = "예체능"
+            profile.major = "이과"
             profile.recent_login = timezone.now()
             profile.likes_iphone = likes_iphone
             profile.is_premium = True
@@ -104,7 +104,7 @@ class Profile(models.Model):
 
             from feedpage.models import Upvote
             for i in range(1,NUM_OF_TEST_FEED+1):
-                about_a = myfake.boolean(chance_of_getting_true=70)
+                about_a = myfake.boolean(chance_of_getting_true=30)
                 Upvote.objects.create(user=user, feed_id=i, about_a=about_a)
 
 
