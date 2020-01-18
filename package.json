@@ -15,6 +15,17 @@
   "bugs": {
     "url": "https://github.com/HyunSangHan/a-or-b-ugc/issues"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,json,css,scss}": [
+      "prettier --write",
+      "git add"
+    ]
+  },
   "homepage": "https://github.com/HyunSangHan/a-or-b-ugc#readme",
   "devDependencies": {
     "@babel/core": "^7.8.3",
