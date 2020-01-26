@@ -341,8 +341,8 @@ $(document).ready(() => {
       type: "GET",
       dataType: "json",
       success: function(data) {
-        btnName = data.btn_name;
-        totalUpvote = data.total_upvote;
+        const btnName = data.btn_name;
+        const totalUpvote = data.total_upvote;
         console.log(btnName);
         console.log(totalUpvote);
         $heart.text(data.btn_name);
@@ -351,11 +351,11 @@ $(document).ready(() => {
         $heartNum.toggleClass("font-grey");
         $heartNum.toggleClass("font-midlight");
         if (btnName === "favorite" && totalUpvote === 1) {
-          $heartNum.text("x" + totalUpvote);
+          $heartNum.text(totalUpvote + "x");
         } else if (btnName === "favorite_border" && totalUpvote === 0) {
           $heartNum.text("");
         } else {
-          $heartNum.text("x" + totalUpvote);
+          $heartNum.text(totalUpvote + "x");
         }
       },
       error: function(response, status, error) {
@@ -434,7 +434,7 @@ $(document).ready(() => {
             $("#new-comments").append(
               `
               <div class="comment norm w-100 v-center mtb-1 inline-flex">
-                <div style="width: calc(100% - 20px);">
+                <div class="comment-width">
                   ` +
                 side +
                 `
@@ -447,7 +447,7 @@ $(document).ready(() => {
                   <span class="comment-clear" data-feedid="${id}" data-commentid="${data.comment.id}" data-csrfmiddlewaretoken="` +
                 csrfmiddlewaretoken +
                 `">
-                    <i class="material-icons" style="font-size: 13px; color: grey;">clear</i>
+                    <i class="material-icons" style="font-size: 13px; color: grey; transform: translateY(4px);">clear</i>
                   </span>
                 </div>
                 <div style="width: 20px;" class="ml-auto comment-heart-btn" data-feedid="${id}" data-commentid="${data.comment.id}">
@@ -467,7 +467,7 @@ $(document).ready(() => {
             $comments.append(
               `
             <div class="comment norm w-100 v-center mtb-1 inline-flex">
-              <div style="width: calc(100% - 20px);">
+              <div class="comment-width">
                 ` +
                 side +
                 `
@@ -480,7 +480,7 @@ $(document).ready(() => {
                 <span class="comment-clear" data-feedid="${id}" data-commentid="${data.comment.id}" data-csrfmiddlewaretoken="` +
                 csrfmiddlewaretoken +
                 `">
-                  <i class="material-icons" style="font-size: 13px; color: grey;">clear</i>
+                  <i class="material-icons" style="font-size: 13px; color: grey; transform: translateY(4px);">clear</i>
                 </span>
               </div>
               <div style="width: 20px;" class="ml-auto comment-heart-btn" data-feedid="${id}" data-commentid="${data.comment.id}">

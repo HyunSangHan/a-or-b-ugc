@@ -228,6 +228,11 @@
   margin-right: 20px !important;
 }
 
+.comment-heart-num {
+  transform: translate(-15px, -12px);
+  margin-bottom: -2px;
+}
+
 .comment-heart-btn {
   margin-bottom: -10px;
 }
@@ -413,6 +418,10 @@
   margin-bottom: 3%;
 }
 
+.comment-width {
+  width: calc(100% - 30px);
+}
+
 .comment-reactor {
   margin-top: 2px;
 }
@@ -431,7 +440,7 @@
 }
 
 .comment-heart {
-  font-size: 16px !important;
+  font-size: 20px !important;
   /* margin-bottom: 6px; */
 }
 /* 
