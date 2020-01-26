@@ -37,7 +37,8 @@ a {
   font-weight: inherit !important;
 }
 
-div > a, span > a {
+div > a,
+span > a {
   text-decoration: none;
   color: black;
 }
@@ -45,17 +46,19 @@ div > a, span > a {
 .hr-scroll {
   white-space: nowrap;
   overflow: overlay;
-  overflow-x: auto
+  overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   -ms-overflow-style: -ms-autohiding-scrollbar;
 }
 
 .hr-scroll::-webkit-scrollbar {
-  display: none; 
+  display: none;
 }
 
 /* delete button's default styling */
-button, input[type="submit"], input[type="reset"] {
+button,
+input[type="submit"],
+input[type="reset"] {
   background: none;
   color: inherit;
   cursor: pointer;
@@ -63,7 +66,8 @@ button, input[type="submit"], input[type="reset"] {
   border: none;
 }
 
-label, label > div:hover {
+label,
+label > div:hover {
   cursor: pointer;
 }
 
@@ -120,7 +124,8 @@ label, label > div:hover {
   display: inline-flex;
 }
 
-.invisible, .none {
+.invisible,
+.none {
   display: none;
 }
 
@@ -151,12 +156,12 @@ label, label > div:hover {
 
 .abs-left {
   position: absolute;
-  left:0;
+  left: 0;
 }
 
 .abs-right {
   position: absolute;
-  right:0;
+  right: 0;
 }
 
 .abs-right--10 {
@@ -164,21 +169,21 @@ label, label > div:hover {
   right: -10px;
 }
 
-.ellipsis{
-  width:100%;
-  text-overflow:ellipsis;
-  -o-text-overflow:ellipsis;
-  overflow:hidden;
-  white-space:nowrap;
-  word-wrap:normal !important;
+.ellipsis {
+  width: 100%;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  word-wrap: normal !important;
 }
 
-.ellipsis-span{
-  text-overflow:ellipsis;
-  -o-text-overflow:ellipsis;
-  overflow:hidden;
-  white-space:nowrap;
-  word-wrap:normal !important;
+.ellipsis-span {
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  word-wrap: normal !important;
 }
 
 .mt--2 {
@@ -384,7 +389,7 @@ label, label > div:hover {
 }
 
 .link-black {
-  color: rgba(0,0,0,.87);
+  color: rgba(0, 0, 0, 0.87);
   font-weight: 400;
 }
 
@@ -393,7 +398,7 @@ label, label > div:hover {
 }
 
 .link-grey {
-  color: #9B9B9B;
+  color: #9b9b9b;
 }
 
 .link-white {
@@ -434,7 +439,7 @@ label, label > div:hover {
   margin: 1%;
 } */
 
-.mdl-button.mdl-js-button.mdl-button--fab.mdl-js-ripple-effect.mdl-button--colored{
+.mdl-button.mdl-js-button.mdl-button--fab.mdl-js-ripple-effect.mdl-button--colored {
   position: fixed;
   z-index: 100;
   bottom: 40px;

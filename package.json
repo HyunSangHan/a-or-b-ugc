@@ -1,0 +1,45 @@
+{
+  "name": "a-or-b-ugc",
+  "version": "1.0.0",
+  "description": "1-person side project for user-generated content platform",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HyunSangHan/a-or-b-ugc.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/HyunSangHan/a-or-b-ugc/issues"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,json,css,scss}": [
+      "prettier --write",
+      "git add"
+    ]
+  },
+  "homepage": "https://github.com/HyunSangHan/a-or-b-ugc#readme",
+  "devDependencies": {
+    "@babel/core": "^7.8.3",
+    "@babel/preset-env": "^7.8.3",
+    "babel-loader": "^8.0.6",
+    "banner-plugin": "^1.0.10",
+    "clean-webpack-plugin": "^3.0.0",
+    "husky": "^4.0.10",
+    "lint-staged": "^9.5.0",
+    "prettier": "^1.19.1",
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10"
+  },
+  "dependencies": {
+    "core-js": "2"
+  }
+}

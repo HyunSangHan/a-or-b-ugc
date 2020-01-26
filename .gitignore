@@ -12,3 +12,8 @@ media
 
 # Secret
 secrets.json
+
+.vscode
+
+**/node_modules
+**/dist
