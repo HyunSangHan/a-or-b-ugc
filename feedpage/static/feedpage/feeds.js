@@ -1,4 +1,46 @@
 $(document).ready(() => {
+  //scroll event
+  $("#call_more_feeds").click(function() {
+    const page = $("#page").val();
+    callMoreFeedsAjax(page);
+    $("#page").val(parseInt(page) + 1);
+  });
+
+  window.addEventListener("scroll", function(e) {
+    last_known_scroll_position = window.scrollY;
+    console.log(last_known_scroll_position);
+  });
+
+  // $(window).scroll(function() {
+  //   var scrollHeight = $(window).scrollTop() + $(window).height();
+  //   console.log(scrollHeight);
+  //   const documentHeight = $(document).height();
+  //   console.log(documentHeight);
+
+  //   if (scrollHeight + 300 >= documentHeight) {
+  //     const page = $("#page").val();
+  //     callMoreFeedsAjax(page);
+  //     $("#page").val(parseInt(page) + 1);
+  //   }
+  // });
+
+  function callMoreFeedsAjax(page) {
+    $.ajax({
+      url: `/feeds/ajax`,
+      type: "GET",
+      data: {
+        page: page
+      },
+      success: addMoreFeedsByAjax,
+      dataType: "html"
+    });
+  }
+
+  function addMoreFeedsByAjax(data) {
+    $("#feed_list_ajax").append(data);
+    console.log("Loaded done");
+  }
+
   // 댓글 펼치기
   $(".toggle-comments").on("click", function(event) {
     const $this = $(this);

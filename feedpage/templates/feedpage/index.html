@@ -435,7 +435,7 @@
               <form action="/feeds/{{ feed.id }}/comments/" method="POST">
                 {% csrf_token %}
                 <div class="comment-input-wrap mdl-textfield mdl-js-textfield mdl-textfield--floating-label w-100">
-                  <input class="mdl-textfield__input comment-input" type="text" id="feedcomment" name="content" placeholder="댓글을 입력하세요." minlength="2" maxlength="70" autocomplete="off" required />
+                  <input class="mdl-textfield__input comment-input" type="text" name="content" placeholder="댓글을 입력하세요." minlength="2" maxlength="70" autocomplete="off" required />
                   <input type="submit" class="comment-submit comment-submit-now invisible" data-feedid="{{ feed.id }}" data-csrfmiddlewaretoken="{{ csrf_token }}" value="댓글달기">
                 </div>
               </form> 
@@ -482,8 +482,13 @@
     {% endif %}
 
     {% if feeds.has_next %}
-      <a href="?page={{feeds.next_page_number}}">Next</a>
-      <a href="?page={{feeds.paginator.num_pages}}">Last</a>
+      {% comment %} <a href="?page={{feeds.next_page_number}}">Next</a>
+      <a href="?page={{feeds.paginator.num_pages}}">Last</a> {% endcomment %}
+      <div id="feed_list_ajax">
+      <!--추가로 불러오는 피드들이 들어갈 곳-->
+      </div>
+      <input id="page" type="hidden" value={{feeds.next_page_number}}>
+      <button id="call_more_feeds" type="button">More Feeds</button>
     {% endif %}
   </div>
 </div>

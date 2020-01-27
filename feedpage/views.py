@@ -43,7 +43,7 @@ def index(request):
         feeds_all = sorted(feeds_all, key=lambda x: x.updated_at, reverse=True)
 #TODO: 페이지네이션과의 파라미터 조화 필요
 
-    paginator = Paginator(feeds_all, 10)
+    paginator = Paginator(feeds_all, 2)
     page_num = request.GET.get('page')
     feeds = paginator.get_page(page_num)
     search_result_num = len(feeds_all)
@@ -54,6 +54,38 @@ def index(request):
     else:
         is_searched = True
     return render(request, 'feedpage/index.html', {'feeds': feeds, 'keyword': keyword, 'page': page_num, 'is_searched': is_searched, 'search_result_num': search_result_num})
+
+def index_ajax(request): 
+    if request.user.is_anonymous == False and request.user.profile.is_first_login:
+        return redirect('/accounts/profile/')
+    # print(HashTag.objects.all())
+    keyword = request.GET.get('keyword', '')
+    feeds_all = Feed.objects.all().order_by('-updated_at', '-created_at')
+#TODO: 검색기능 추후 보완 필요
+    if keyword: 
+        from django.db.models import Q
+        #필드에서 피드 뽑아오기
+        feeds_by_field = list(feeds_all.filter(Q(title__icontains=keyword) | Q(content_a__icontains=keyword) | Q(content_b__icontains=keyword)))
+        #해시태그에서 피드 뽑아오기
+        feeds_by_hashtag = []
+        tags = HashTag.objects.all().filter(Q(tag__icontains=keyword))
+        for tag in tags:
+            feeds_by_hashtag = feeds_by_hashtag + list(tag.tagged_feeds.all())
+        feeds_all = list(set(feeds_by_field + feeds_by_hashtag))
+        feeds_all = sorted(feeds_all, key=lambda x: x.updated_at, reverse=True)
+#TODO: 페이지네이션과의 파라미터 조화 필요
+
+    paginator = Paginator(feeds_all, 2)
+    page_num = request.GET.get('page')
+    feeds = paginator.get_page(page_num)
+    search_result_num = len(feeds_all)
+    if keyword and feeds:
+        is_searched = True
+    elif keyword == "":
+        is_searched = False
+    else:
+        is_searched = True
+    return render(request, 'feedpage/index_ajax.html', {'feeds': feeds, 'keyword': keyword, 'page': page_num, 'is_searched': is_searched, 'search_result_num': search_result_num})
 
 def new(request):
     if request.method == 'POST': # create
