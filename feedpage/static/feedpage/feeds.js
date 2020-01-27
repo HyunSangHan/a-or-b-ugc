@@ -1,18 +1,18 @@
 $(document).ready(() => {
-  //scroll event
-  $("#call_more_feeds").click(function() {
+  $(document).on("click", "#call_more_feeds", function() {
     const page = $("#page").val();
     callMoreFeedsAjax(page);
     $("#page").val(parseInt(page) + 1);
   });
 
+  //scroll event
   window.addEventListener("scroll", function(e) {
     last_known_scroll_position = window.scrollY;
     console.log(last_known_scroll_position);
   });
 
   // $(window).scroll(function() {
-  //   var scrollHeight = $(window).scrollTop() + $(window).height();
+  //   const scrollHeight = $(window).scrollTop() + $(window).height();
   //   console.log(scrollHeight);
   //   const documentHeight = $(document).height();
   //   console.log(documentHeight);
@@ -42,7 +42,7 @@ $(document).ready(() => {
   }
 
   // 댓글 펼치기
-  $(".toggle-comments").on("click", function(event) {
+  $(document).on("click", ".toggle-comments", function() {
     const $this = $(this);
     $this.siblings(".all-comments").slideDown();
     $this
@@ -55,17 +55,14 @@ $(document).ready(() => {
   });
 
   //더보기버튼
-  $(".more-js-btn").on("click", function() {
+  $(document).on("click", ".more-js-btn", function() {
     $(this)
       .next()
       .toggle();
   });
 
-  //클립보드에 복사
-  $(".element").CopyToClipboard();
-
   // 투표하기
-  $(".content-a-js, .content-b-js").on("click", function(event) {
+  $(document).on("click", ".content-a-js, .content-b-js", function(event) {
     const $this = $(this);
     const $siblingA = $this.siblings(".content-a-js");
     const $siblingB = $this.siblings(".content-b-js");
@@ -286,7 +283,7 @@ $(document).ready(() => {
   });
 
   // 신고하기
-  $(".report-js").on("click", function(event) {
+  $(document).on("click", ".report-js", function(event) {
     if (confirm("정말 신고하실 건가요?")) {
       const $this = $(this);
       const fid = $this.attr("data-feedid");
@@ -318,7 +315,7 @@ $(document).ready(() => {
   });
 
   // TODO:구독하기 -> 수정 필요할 가능성 존재
-  $(".subscribe-js").on("click", function(event) {
+  $(document).on("click", ".subscribe-js", function(event) {
     const $this = $(this);
     const creatorId = $this.attr("data-creatorid");
     const thisCreator = $('.subscribe-js[data-creatorid="' + creatorId + '"]');
@@ -340,7 +337,7 @@ $(document).ready(() => {
   });
 
   // 글 삭제
-  $(".delete-feed-js").on("click", function(event) {
+  $(document).on("click", ".delete-feed-js", function(event) {
     if (confirm("정말 삭제하실 건가요?")) {
       const $this = $(this);
       const fid = $this.attr("data-feedid");
@@ -445,7 +442,7 @@ $(document).ready(() => {
   });
 
   // 댓글 달기
-  $(".comment-submit-now").on("click", function(event) {
+  $(document).on("click", ".comment-submit-now", function(event) {
     event.preventDefault();
 
     const $this = $(this);
@@ -549,7 +546,7 @@ $(document).ready(() => {
   });
 
   //댓글달기 버튼 나오기
-  $(".comment-input").on("input", function(event) {
+  $(document).on("input", ".comment-input", function(event) {
     const $this = $(this);
     if ($this.val().length !== 0) {
       $this.siblings(".comment-submit").removeClass("invisible");
@@ -559,7 +556,7 @@ $(document).ready(() => {
   });
 
   //검색 버튼 나오기
-  $(".mdl-textfield__input").on("input", function(event) {
+  $(document).on("input", ".mdl-textfield__input", function(event) {
     const $this = $(this);
     if ($this.val().length !== 0) {
       $this.siblings(".search-btn").removeClass("invisible");
