@@ -5,24 +5,18 @@ $(document).ready(() => {
     $("#page").val(parseInt(page) + 1);
   });
 
-  //scroll event
-  window.addEventListener("scroll", function(e) {
-    last_known_scroll_position = window.scrollY;
-    console.log(last_known_scroll_position);
+  $(window).scroll(function() {
+    const scrollHeight = $(window).scrollTop() + $(window).height();
+    console.log(scrollHeight);
+    const documentHeight = $(document).height();
+    console.log(documentHeight);
+
+    if (scrollHeight + 100 >= documentHeight) {
+      const page = $("#page").val();
+      callMoreFeedsAjax(page);
+      $("#page").val(parseInt(page) + 1);
+    }
   });
-
-  // $(window).scroll(function() {
-  //   const scrollHeight = $(window).scrollTop() + $(window).height();
-  //   console.log(scrollHeight);
-  //   const documentHeight = $(document).height();
-  //   console.log(documentHeight);
-
-  //   if (scrollHeight + 300 >= documentHeight) {
-  //     const page = $("#page").val();
-  //     callMoreFeedsAjax(page);
-  //     $("#page").val(parseInt(page) + 1);
-  //   }
-  // });
 
   function callMoreFeedsAjax(page) {
     $.ajax({

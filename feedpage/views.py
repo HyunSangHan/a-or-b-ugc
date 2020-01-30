@@ -20,6 +20,8 @@ from django.core.files.base import ContentFile
 from collections import OrderedDict
 import re
 
+NUM_PER_PAGE = 2
+
 def main(request):
     return redirect('/feeds')
 
@@ -43,7 +45,7 @@ def index(request):
         feeds_all = sorted(feeds_all, key=lambda x: x.updated_at, reverse=True)
 #TODO: 페이지네이션과의 파라미터 조화 필요
 
-    paginator = Paginator(feeds_all, 2)
+    paginator = Paginator(feeds_all, NUM_PER_PAGE)
     page_num = request.GET.get('page')
     feeds = paginator.get_page(page_num)
     search_result_num = len(feeds_all)
@@ -75,7 +77,7 @@ def index_ajax(request):
         feeds_all = sorted(feeds_all, key=lambda x: x.updated_at, reverse=True)
 #TODO: 페이지네이션과의 파라미터 조화 필요
 
-    paginator = Paginator(feeds_all, 2)
+    paginator = Paginator(feeds_all, NUM_PER_PAGE)
     page_num = request.GET.get('page')
     feeds = paginator.get_page(page_num)
     search_result_num = len(feeds_all)
