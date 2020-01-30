@@ -5,9 +5,7 @@
   }
 
   .contents {
-    padding-bottom: 50px;
-    padding-left: 3%;
-    padding-right: 3%;
+    padding: 80px 3% 50px;
   }
 
   .comments-input-w {
@@ -63,7 +61,7 @@
 
 @media (min-width: 576px) {
   .contents {
-    padding: 30px;
+    padding: 70px 40px 40px;
   }
 
   .comments-input-w {
@@ -74,10 +72,6 @@
   }
   .contents.noti {
     padding-top: 10px !important;
-  }
-
-  .container {
-    max-width: 576px;
   }
 
   .more-info {
@@ -130,7 +124,7 @@
 
 @media (min-width: 768px) {
   .contents {
-    padding: 40px;
+    padding: 100px 40px 40px;
   }
 
   .comments-input-w {

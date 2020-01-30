@@ -1,4 +1,5 @@
 $(document).ready(() => {
+  // 무한 스크롤 관련
   $(document).on("click", "#call_more_feeds", function() {
     const page = $("#page").val();
     callMoreFeedsAjax(page);
@@ -34,6 +35,23 @@ $(document).ready(() => {
     $("#feed_list_ajax").append(data);
     console.log("Loaded done");
   }
+
+  // 검색창
+  $(document).on(
+    "click",
+    "label.mdl-button.mdl-js-button.mdl-button--icon",
+    function() {
+      const $this = $(this);
+      $this.parent().toggleClass("mdl-textfield--expandable");
+      $this
+        .siblings(".mdl-textfield__expandable-holder")
+        .toggleClass("search-wrap");
+      $this
+        .siblings(".mdl-textfield__expandable-holder")
+        .children(".search-input")
+        .toggleClass("none");
+    }
+  );
 
   // 댓글 펼치기
   $(document).on("click", ".toggle-comments", function() {
@@ -725,7 +743,10 @@ $(document).ready(() => {
               data.result.items[i].sizeheight / data.result.items[i].sizewidth >
               0.75
             ) {
-              thb = data.result.items[i].thumbnail.replace("&type=b150", "");
+              const thb = data.result.items[i].thumbnail.replace(
+                "&type=b150",
+                ""
+              );
               $eachResult.append(
                 `
                 <img src=` +
@@ -767,7 +788,7 @@ $(document).ready(() => {
     const img = $this.attr("src");
 
     if (aorb === "a") {
-      content_a = document.getElementsByClassName("content-a")[0].value;
+      const content_a = document.getElementsByClassName("content-a")[0].value;
       $eachContent.children(".uploaded-a").remove();
       $eachContent.prepend(
         `
@@ -791,7 +812,7 @@ $(document).ready(() => {
       `
       );
     } else if (aorb === "b") {
-      content_b = document.getElementsByClassName("content-b")[0].value;
+      const content_b = document.getElementsByClassName("content-b")[0].value;
       $eachContent.children(".uploaded-b").remove();
       $eachContent.append(
         `
