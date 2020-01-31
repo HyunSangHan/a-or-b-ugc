@@ -4,11 +4,12 @@ body {
   background-color: rgb(250, 250, 250);
   letter-spacing: -0.3px;
   font-family: "Noto Sans KR", sans-serif !important;
+  margin: 0;
 }
 
 header {
   margin-left: -1px !important;
-  width: 101% !important;
+  width: 100% !important;
   -webkit-transform: translateZ(0);
   -webkit-overflow-scrolling: touch;
   top: 0;
@@ -424,7 +425,7 @@ label > div:hover {
   background-color: black !important;
 }
 
-/* MDL */
+/* MDL custom area */
 
 .demo-card-image > .mdl-card__actions {
   height: 52px;
@@ -438,10 +439,6 @@ label > div:hover {
   font-weight: 500;
 }
 
-/* .demo-card-image.mdl-card.mdl-shadow--2dp {
-  margin: 1%;
-} */
-
 .mdl-button.mdl-js-button.mdl-button--fab.mdl-js-ripple-effect.mdl-button--colored {
   position: fixed;
   z-index: 100;
@@ -449,21 +446,6 @@ label > div:hover {
   right: 20px;
 }
 
-/* 나중에 덮어씌웠으면 하는 부분 */
-/* .comment-label:after {
-  background-color: black !important;
-  bottom: 20px;
-  content: '';
-  height: 2px;
-  left: 45%;
-  position: absolute;
-  transition-duration: .2s;
-  transition-timing-function: cubic-bezier(.4,0,.2,1);
-  visibility: hidden;
-  width: 10px;
-} */
-
-/* custom area(below) */
 .mdl-card {
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -481,22 +463,6 @@ label > div:hover {
   background: #fff;
   border-radius: 2px;
   box-sizing: border-box;
-}
-
-.layout__content {
-}
-
-.mdl-tooltip {
-  &.mdl-tooltip--large {
-  }
-
-  .mdl-tooltip--right {
-  }
-}
-
-.mdl-badge {
-  &.mdl-badge--overlap {
-  }
 }
 
 .mdl-textfield {
@@ -517,18 +483,6 @@ label > div:hover {
       min-height: 32px;
     }
   }
-
-  &.mdl-js-textfield {
-  }
-
-  &.mdl-textfield--floating-label {
-  }
-
-  &.mdl-textfield--align-right {
-  }
-}
-
-.mdl-textfield__expandable-holder {
 }
 
 .mdl-button {
@@ -559,9 +513,6 @@ label > div:hover {
   line-height: 36px;
   vertical-align: middle;
 
-  &.mdl-js-button {
-  }
-
   &.mdl-button--icon {
     border-radius: 50%;
     font-size: 24px;
@@ -578,9 +529,6 @@ label > div:hover {
 }
 
 .mdl-layout {
-  &.mdl-js-layout {
-  }
-
   &.mdl-layout--fixed-header {
     .mdl-layout__header {
       -webkit-flex-shrink: 0;
@@ -622,9 +570,6 @@ label > div:hover {
   }
 }
 
-.mdl-layout__content {
-}
-
 .mdl-layout-spacer {
   -webkit-flex-grow: 1;
   -ms-flex-positive: 1;
@@ -635,7 +580,4 @@ label > div:hover {
   background: rgba(158, 158, 158, 0.2);
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2),
     0 1px 5px 0 rgba(0, 0, 0, 0.12);
-
-  &.mdl-js-ripple-effect {
-  }
 }

@@ -464,7 +464,7 @@
 
 .comment-input-wrap {
   border-bottom: 3px solid black;
-  height: 55px;
+  height: 48px;
 }
 
 .comment-input {
@@ -487,8 +487,8 @@
 .comment-submit-now,
 .comment-submit {
   position: absolute;
-  top: 25px;
-  right: -6px;
+  top: 18px;
+  right: 0;
   font-size: 14px;
   font-weight: 700;
 }
