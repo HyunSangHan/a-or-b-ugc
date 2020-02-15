@@ -8,6 +8,10 @@
     padding: 80px 3% 50px;
   }
 
+  .contents.my {
+    padding: 20px 3% 50px;
+  }
+
   .comments-input-w {
     padding-left: 3%;
     padding-right: 3%;
@@ -46,11 +50,10 @@
     width: 100% !important;
     height: 50px;
     padding: 0 !important;
-    margin-bottom: -11px;
+    margin-bottom: 4px;
     display: inline-flex;
     background-color: white;
     padding: 5px;
-    margin: 7px -5px;
   }
 
   .promote-msg {
@@ -64,6 +67,10 @@
     padding: 70px 40px 40px;
   }
 
+  .contents.my {
+    padding: 25px 40px 40px;
+  }
+
   .comments-input-w {
     padding-left: 30px;
     padding-right: 30px;
@@ -71,7 +78,7 @@
     padding-bottom: 9px;
   }
   .contents.noti {
-    padding-top: 10px !important;
+    padding-top: 70px !important;
   }
 
   .more-info {
@@ -106,14 +113,13 @@
   }
 
   .page-content-two-tabs {
-    width: calc(100% + 10px) !important;
+    width: 100% !important;
     height: 50px;
     padding: 0 !important;
-    margin-bottom: -11px;
+    margin-bottom: 4px;
     display: inline-flex;
     background-color: white;
     padding: 5px;
-    margin: 7px -5px;
   }
 
   .promote-msg {
@@ -127,6 +133,10 @@
     padding: 100px 40px 40px;
   }
 
+  .contents.my {
+    padding: 30px 40px 40px;
+  }
+
   .comments-input-w {
     padding-left: 40px;
     padding-right: 40px;
@@ -135,7 +145,7 @@
   }
 
   .contents.noti {
-    padding-top: 10px !important;
+    padding-top: 70px !important;
   }
 
   .container {
@@ -164,13 +174,12 @@
   }
 
   .page-content-two-tabs {
-    width: calc(100% + 10px) !important;
-    height: 50px;
+    width: 100% !important;
+    height: 70px;
     padding: 0 !important;
-    margin-bottom: -11px;
+    margin-bottom: 4px;
     display: inline-flex;
     background-color: white;
     padding: 5px;
-    margin: 7px -5px;
   }
 }

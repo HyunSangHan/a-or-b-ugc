@@ -9,6 +9,7 @@
     <title>A/B</title>
     <meta property="og:title" content="A/B" />
     <meta property="og:description" content="What is your choice?" />
+    <link rel="shortcut icon" href="{% static 'favicon.png' %}"/>
     <link rel="stylesheet" href="{% static 'dist/common.css' %}" />
     <link rel="stylesheet" href="{% static 'feedpage/partial.css' %}" />
     <link rel="stylesheet" href="{% static 'feedpage/responsive.css' %}" />
@@ -20,7 +21,7 @@
   <body>
     <!-- Always shows a header, even in smaller screens. -->
     <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-      <header class="mdl-layout__header bg-black header-shadow">
+      <header class="mdl-layout__header bg-black header-shadow fix">
         <div class="mdl-layout__header-row">
           <!-- Title -->
           <!-- Add spacer, to align navigation to the right -->
@@ -40,7 +41,7 @@
           </form>
         </div>
       </header>
-      <main class="mdl-layout__content mt--1">
+      <main class="mdl-layout__content w-100 mt-16">
         {% block content %}
         {% endblock %}
       </main>

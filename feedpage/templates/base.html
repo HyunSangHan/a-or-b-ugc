@@ -13,7 +13,7 @@
     <meta property="og:image:height" content="200" />
     <meta property="og:image:type" content="image/ipg" /> {% endcomment %}
     <meta property="og:description" content="What is your choice?" />
-
+    <link rel="shortcut icon" href="{% static 'favicon.png' %}"/>
     <link rel="stylesheet" href="{% static 'dist/common.css' %}" />
     <link rel="stylesheet" href="{% static 'feedpage/partial.css' %}" />
     <link rel="stylesheet" href="{% static 'feedpage/responsive.css' %}" />
@@ -26,7 +26,7 @@
     {% comment %} <div class="transp-bg"></div> {% endcomment %}
     <!-- Always shows a header, even in smaller screens. -->
     <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-      <header class="mdl-layout__header bg-white header-shadow">
+      <header class="mdl-layout__header bg-white header-shadow fix">
         <div class="mdl-layout__header-row">
           <!-- Title -->
           <!-- Add spacer, to align navigation to the right -->
