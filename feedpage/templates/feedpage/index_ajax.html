@@ -1,7 +1,5 @@
-{% load custom_tags %}
-<script type="text/javascript" src="https://milankyncl.github.io/jquery-copy-to-clipboard/jquery.copy-to-clipboard.js"></script>
-
-{% if feeds %}
+{% load custom_tags %}{% if feeds %}
+  <script type="text/javascript" src="https://milankyncl.github.io/jquery-copy-to-clipboard/jquery.copy-to-clipboard.js"></script>
   <div class="contents-margin">
     {% for feed in feeds %}
       {% if feed.check_visible %}
@@ -443,8 +441,4 @@
         </li>
       {% endif %}
     {% endfor %}
-  </div>
-{% else %}
-  <!--추후 삭제-->
-  <p>No more data!</p>
-{% endif %}
+  </div>{% endif %}

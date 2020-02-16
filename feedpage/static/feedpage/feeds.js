@@ -33,6 +33,9 @@ $(document).ready(() => {
 
   function addMoreFeedsByAjax(data) {
     $("#feed_list_ajax").append(data);
+    if (data === "") {
+      $("#call-more-feeds").remove();
+    }
     console.log("Loaded done");
   }
 

@@ -78,15 +78,21 @@ def index_ajax(request):
 #TODO: 페이지네이션과의 파라미터 조화 필요
 
     paginator = Paginator(feeds_all, NUM_PER_PAGE)
-    page_num = request.GET.get('page')
+    page_num = int(request.GET.get('page'))
     feeds = paginator.get_page(page_num)
     search_result_num = len(feeds_all)
+
     if keyword and feeds:
         is_searched = True
     elif keyword == "":
         is_searched = False
     else:
         is_searched = True
+
+    import math
+    page_num_max = math.ceil(search_result_num / 2)
+    if page_num > page_num_max:
+        feeds = None
     return render(request, 'feedpage/index_ajax.html', {'feeds': feeds, 'keyword': keyword, 'page': page_num, 'is_searched': is_searched, 'search_result_num': search_result_num})
 
 def new(request):
