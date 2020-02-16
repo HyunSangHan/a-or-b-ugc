@@ -1,5 +1,12 @@
 $(document).ready(() => {
   // 무한 스크롤 관련
+  const typeURLArr = {
+    index: "/feeds/ajax/",
+    mysubscribe: "/feeds/mysubscribe/ajax/",
+    myreaction: "/feeds/myreaction/ajax/",
+    mynotification: "/feeds/mynotification/ajax/"
+  };
+
   $(document).on("click", "#call-more-feeds", function() {
     const pageType = $("#page-type").val();
     const page = $("#page").val();
@@ -38,10 +45,6 @@ $(document).ready(() => {
       $("#page").val(parseInt(page) + 1);
     }
   });
-
-  const typeURLArr = {
-    index: "/feeds/ajax/"
-  };
 
   function getURLByType(type, user) {
     if (type === "creator") {

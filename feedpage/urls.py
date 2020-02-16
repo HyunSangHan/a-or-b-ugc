@@ -22,7 +22,10 @@ urlpatterns = [
     path('creator/<creator_name>/', views.creator, name='creator'),
     path('creator/<creator_name>/ajax/', views.creator_ajax, name='creator_ajax'),
     path('mysubscribe/', views.mysubscribe, name='mysubscribe'), 
+    path('mysubscribe/ajax/', views.mysubscribe_ajax, name='mysubscribe_ajax'), 
     path('myreaction/', views.myreaction, name='myreaction'), 
+    path('myreaction/ajax/', views.myreaction_ajax, name='myreaction_ajax'), 
     path('mynotification/', views.mynotification, name='mynotification'), 
+    path('mynotification/ajax/', views.mynotification_ajax, name='mynotification_ajax'), 
     path('new/image_search/', views.image_search, name='image_search'),
 ]

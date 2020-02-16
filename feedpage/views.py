@@ -745,11 +745,8 @@ def mysubscribe(request):
 
     return render(request, 'feedpage/mysubscribe.html', {'feeds': feeds, 'my_subs': my_subs, 'has_subs': has_subs, 'has_feeds': has_feeds})
 
-def myupload(request):
-    if request.user.is_anonymous:
-        return redirect('/accounts/login')
-    feeds = Feed.objects.filter(creator_id=request.user.id).order_by('-updated_at', '-created_at')
-    return render(request, 'feedpage/myupload.html', {'feeds': feeds})
+def mysubscribe_ajax(request):
+    return
 
 def myreaction(request):
     if request.user.is_anonymous:
@@ -760,6 +757,9 @@ def myreaction(request):
     else:
         has_upvotes = True
     return render(request, 'feedpage/myreaction.html', {'upvotes': upvotes, 'has_upvotes': has_upvotes})
+
+def myreaction_ajax(request):
+    return
 
 def mynotification(request):
     if request.user.is_anonymous:
@@ -787,6 +787,9 @@ def mynotification(request):
         has_noti = True
 
     return render(request, 'feedpage/mynotification.html', {'has_noti':has_noti, 'noti': noti, 'noti_unchecked': noti_unchecked, 'noti_checked': noti_checked})
+
+def mynotification_ajax(request):
+    return
 
 #이미지 추천기능
 def image_search(request):
