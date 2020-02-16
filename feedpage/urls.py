@@ -20,6 +20,7 @@ urlpatterns = [
     path('<int:pk>/follow/', views.follow_manager, name='follow'),
     path('<int:pk>/statistics/<stat_menu>/<stat_name>/', views.statistics, name='statistics'),
     path('creator/<creator_name>/', views.creator, name='creator'),
+    path('creator/<creator_name>/ajax/', views.creator_ajax, name='creator_ajax'),
     path('mysubscribe/', views.mysubscribe, name='mysubscribe'), 
     path('myreaction/', views.myreaction, name='myreaction'), 
     path('mynotification/', views.mynotification, name='mynotification'), 

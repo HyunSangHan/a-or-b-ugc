@@ -1,8 +1,18 @@
 $(document).ready(() => {
   // 무한 스크롤 관련
   $(document).on("click", "#call-more-feeds", function() {
+    const pageType = $("#page-type").val();
     const page = $("#page").val();
-    callMoreFeedsAjax(page);
+    const pageNumMax = $("#page-num-max").val();
+    const creatorName = $("#creator-name").val();
+    const isLastPage = page == pageNumMax;
+
+    if (page < pageNumMax || isLastPage) {
+      callMoreFeedsAjax(pageType, page, creatorName);
+      if (isLastPage) {
+        $("#call-more-feeds").remove();
+      }
+    }
     $("#page").val(parseInt(page) + 1);
   });
 
@@ -13,15 +23,38 @@ $(document).ready(() => {
     console.log(documentHeight);
 
     if (scrollHeight + 100 >= documentHeight) {
+      const pageType = $("#page-type").val();
       const page = $("#page").val();
-      callMoreFeedsAjax(page);
+      const pageNumMax = $("#page-num-max").val();
+      const creatorName = $("#creator-name").val();
+      const isLastPage = page == pageNumMax;
+
+      if (page < pageNumMax || isLastPage) {
+        callMoreFeedsAjax(pageType, page, creatorName);
+        if (isLastPage) {
+          $("#call-more-feeds").remove();
+        }
+      }
       $("#page").val(parseInt(page) + 1);
     }
   });
 
-  function callMoreFeedsAjax(page) {
+  const typeURLArr = {
+    index: "/feeds/ajax/"
+  };
+
+  function getURLByType(type, user) {
+    if (type === "creator") {
+      // 예외케이스
+      return `/feeds/creator/${user}/ajax/`;
+    }
+    return typeURLArr[type];
+  }
+
+  function callMoreFeedsAjax(pageType, page, creator) {
+    const targetURL = getURLByType(pageType, creator);
     $.ajax({
-      url: `/feeds/ajax`,
+      url: targetURL,
       type: "GET",
       data: {
         page: page
@@ -32,9 +65,8 @@ $(document).ready(() => {
   }
 
   function addMoreFeedsByAjax(data) {
-    $("#feed_list_ajax").append(data);
-    if (data === "") {
-      $("#call-more-feeds").remove();
+    if (data !== "") {
+      $("#feed-list-ajax").append(data);
     }
     console.log("Loaded done");
   }

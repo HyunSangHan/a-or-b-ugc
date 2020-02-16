@@ -19,6 +19,7 @@ import requests
 from django.core.files.base import ContentFile
 from collections import OrderedDict
 import re
+import math
 
 NUM_PER_PAGE = 2
 
@@ -48,14 +49,17 @@ def index(request):
     paginator = Paginator(feeds_all, NUM_PER_PAGE)
     page_num = request.GET.get('page')
     feeds = paginator.get_page(page_num)
+
     search_result_num = len(feeds_all)
+    page_num_max = math.ceil(search_result_num / NUM_PER_PAGE)
+    print(page_num_max)
     if keyword and feeds:
         is_searched = True
     elif keyword == "":
         is_searched = False
     else:
         is_searched = True
-    return render(request, 'feedpage/index.html', {'feeds': feeds, 'keyword': keyword, 'page': page_num, 'is_searched': is_searched, 'search_result_num': search_result_num})
+    return render(request, 'feedpage/index.html', {'feeds': feeds, 'keyword': keyword, 'page': page_num, 'is_searched': is_searched, 'page_num_max': page_num_max})
 
 def index_ajax(request): 
     if request.user.is_anonymous == False and request.user.profile.is_first_login:
@@ -89,11 +93,10 @@ def index_ajax(request):
     else:
         is_searched = True
 
-    import math
-    page_num_max = math.ceil(search_result_num / 2)
+    page_num_max = math.ceil(search_result_num / NUM_PER_PAGE)
     if page_num > page_num_max:
         feeds = None
-    return render(request, 'feedpage/index_ajax.html', {'feeds': feeds, 'keyword': keyword, 'page': page_num, 'is_searched': is_searched, 'search_result_num': search_result_num})
+    return render(request, 'feedpage/index_ajax.html', {'feeds': feeds, 'page': page_num})
 
 def new(request):
     if request.method == 'POST': # create
@@ -674,12 +677,43 @@ def creator(request, creator_name):
     creators = User.objects.filter(username=creator_name)
     if creators.count() > 0:
         creator = creators.first()
-        feeds = Feed.objects.filter(creator=creator).order_by('-updated_at', '-created_at')
+        feeds_all = Feed.objects.filter(creator=creator).order_by('-updated_at', '-created_at')
+        result_num = len(feeds_all)
+        paginator = Paginator(feeds_all, NUM_PER_PAGE)
+        page_num = request.GET.get('page')
+        feeds = paginator.get_page(page_num)
+        page_num_max = math.ceil(result_num / NUM_PER_PAGE)
         if len(feeds) == 0:
             has_feeds = False
         else:
             has_feeds = True
-        return render(request, 'feedpage/creator.html', {'has_feeds': has_feeds, 'feeds': feeds, 'creator': creator})
+        return render(request, 'feedpage/creator.html', {'has_feeds': has_feeds, 'feeds': feeds, 'creator': creator, 'page_num_max': page_num_max})
+    else:
+        try:
+            next = request.META['HTTP_REFERER']
+        except:
+            next = '/feeds/'
+        return redirect('%s'%next)
+
+def creator_ajax(request, creator_name):
+    creators = User.objects.filter(username=creator_name)
+    if creators.count() > 0:
+        creator = creators.first()
+        feeds_all = Feed.objects.filter(creator=creator).order_by('-updated_at', '-created_at')
+        paginator = Paginator(feeds_all, NUM_PER_PAGE)
+        page_num = int(request.GET.get('page'))
+        feeds = paginator.get_page(page_num)
+        result_num = len(feeds_all)
+        if result_num == 0:
+            has_feeds = False
+        else:
+            has_feeds = True
+
+        page_num_max = math.ceil(result_num / 2)
+        if page_num > page_num_max:
+            feeds = None
+
+        return render(request, 'feedpage/creator_ajax.html', {'has_feeds': has_feeds, 'feeds': feeds, 'creator': creator, 'page': page_num})
     else:
         try:
             next = request.META['HTTP_REFERER']
