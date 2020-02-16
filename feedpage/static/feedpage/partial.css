@@ -1023,3 +1023,8 @@
   background-color: rgb(170, 170, 170);
   min-width: 10%;
 }
+
+#call-more-feeds {
+  width: 100%;
+  transform: translateY(-20px);
+}

@@ -1,6 +1,6 @@
 $(document).ready(() => {
   // 무한 스크롤 관련
-  $(document).on("click", "#call_more_feeds", function() {
+  $(document).on("click", "#call-more-feeds", function() {
     const page = $("#page").val();
     callMoreFeedsAjax(page);
     $("#page").val(parseInt(page) + 1);
