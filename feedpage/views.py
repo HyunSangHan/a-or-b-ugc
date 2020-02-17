@@ -22,6 +22,7 @@ import re
 import math
 
 NUM_PER_PAGE = 2
+IMG_SEARCH_DISPLAY_NUM = 40
 
 def main(request):
     return redirect('/feeds')
@@ -795,11 +796,10 @@ def mynotification_ajax(request):
 def image_search(request):
     CLIENT_ID = IMG_CLIENT_ID
     CLIENT_SECRET = IMG_CLIENT_KEY
-    DISPLAY_NUM = "40"
     text = request.POST['keyword']
 
     enc_text = urllib.parse.quote(text)
-    url = "https://openapi.naver.com/v1/search/image?display="+ DISPLAY_NUM +"&query=" + enc_text
+    url = "https://openapi.naver.com/v1/search/image?display="+ str(IMG_SEARCH_DISPLAY_NUM) +"&query=" + enc_text
 
     image_search_request = urllib.request.Request(url)
     image_search_request.add_header('X-Naver-Client-Id', CLIENT_ID)
