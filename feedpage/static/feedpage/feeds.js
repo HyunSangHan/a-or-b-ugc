@@ -70,8 +70,8 @@ $(document).ready(() => {
   function addMoreFeedsByAjax(data) {
     if (data !== "") {
       $("#feed-list-ajax").append(data);
+      console.log("Loaded done");
     }
-    console.log("Loaded done");
   }
 
   // 검색창

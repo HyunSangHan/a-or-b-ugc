@@ -53,7 +53,7 @@
                       <strong>더보기</strong>
                     </a>
                   </div>
-<!--배포 이후에 수정할 부분-->
+                <!--TODO: 배포 이후에 수정할 부분-->
                   <div data-clipboard-text="localhost:8000/feeds/{{ feed.uuid }}" onclick="return alert('콘텐츠의 주소가 클립보드에 복사되었습니다.')">공유하기</div>
                   {% if user.is_authenticated %}
                     {% if request.user != feed.creator %}
@@ -472,6 +472,15 @@
           신고가 10건 이상 접수되어 숨김처리된 게시글입니다.
         {% endif %}
       {% endfor %}
+      {% if feeds.has_next %}
+        <div id="feed-list-ajax">
+        <!--추가로 불러오는 피드들이 들어갈 곳-->
+        </div>
+        <input id="page-num-max" type="hidden" value={{page_num_max}}>
+        <input id="page-type" type="hidden" value="mysunscribe">
+        <input id="page" type="hidden" value={{feeds.next_page_number}}>
+        <button id="call-more-feeds" type="button">Loading...</button>
+      {% endif %}
     </div>
   </div>
 </div>

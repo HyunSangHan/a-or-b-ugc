@@ -369,6 +369,13 @@
             </li>
           {% endif %}
         {% endfor %}
+        <div id="feed-list-ajax">
+        <!--추가로 불러오는 피드들이 들어갈 곳-->
+        </div>
+        <input id="page-num-max" type="hidden" value={{page_num_max}}>
+        <input id="page-type" type="hidden" value="mynotification">
+        <input id="page" type="hidden" value={{noti_checked.next_page_number}}>
+        <button id="call-more-feeds" type="button">Loading...</button>
       </div>
     </div>
   </div>
