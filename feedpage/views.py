@@ -731,7 +731,13 @@ def mysubscribe(request):
     for my_sub in my_subs:
         my_sub_user = my_sub.follow_to.user
         feeds = feeds + list(my_sub_user.feed_set.all())
-    feeds = sorted(feeds , key = lambda x: x.updated_at, reverse=True)
+    feeds_all = sorted(feeds , key = lambda x: x.updated_at, reverse=True)
+
+    paginator = Paginator(feeds_all, NUM_PER_PAGE)
+    page_num = request.GET.get('page')
+    feeds = paginator.get_page(page_num)
+    result_num = len(feeds_all)
+    page_num_max = math.ceil(result_num / NUM_PER_PAGE)
 
     has_subs, has_feeds = False, False
 
@@ -744,10 +750,28 @@ def mysubscribe(request):
         else:
             has_feeds = True
 
-    return render(request, 'feedpage/mysubscribe.html', {'feeds': feeds, 'my_subs': my_subs, 'has_subs': has_subs, 'has_feeds': has_feeds})
+    return render(request, 'feedpage/mysubscribe.html', {'feeds': feeds, 'my_subs': my_subs, 'has_subs': has_subs, 'has_feeds': has_feeds, 'page': page_num, 'page_num_max': page_num_max})
 
 def mysubscribe_ajax(request):
-    return
+    if request.user.is_anonymous:
+        return redirect('/accounts/login')
+    follow_from = request.user.profile
+    my_subs = Follow.objects.filter(follow_from=follow_from)
+    feeds = []
+    for my_sub in my_subs:
+        my_sub_user = my_sub.follow_to.user
+        feeds = feeds + list(my_sub_user.feed_set.all())
+    feeds_all = sorted(feeds , key = lambda x: x.updated_at, reverse=True)
+
+    paginator = Paginator(feeds_all, NUM_PER_PAGE)
+    page_num = int(request.GET.get('page'))
+    feeds = paginator.get_page(page_num)
+    result_num = len(feeds_all)
+    page_num_max = math.ceil(result_num / NUM_PER_PAGE)
+    if page_num > page_num_max:
+        feeds = None
+
+    return render(request, 'feedpage/mysubscribe_ajax.html', {'feeds': feeds, 'page': page_num, 'page_num_max': page_num_max})
 
 def myreaction(request):
     if request.user.is_anonymous:
