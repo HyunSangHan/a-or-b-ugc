@@ -5,7 +5,7 @@
   }
 
   .contents {
-    padding: 80px 3% 50px;
+    padding: 80px 3% 60px;
   }
 
   .contents.my {
@@ -64,7 +64,7 @@
 
 @media (min-width: 576px) {
   .contents {
-    padding: 70px 40px 40px;
+    padding: 70px 40px 60px;
   }
 
   .contents.my {

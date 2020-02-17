@@ -13,8 +13,8 @@ $(document).ready(() => {
     const pageNumMax = $("#page-num-max").val();
     const creatorName = $("#creator-name").val();
     const isLastPage = page == pageNumMax;
-
-    if (page < pageNumMax || isLastPage) {
+    console.log(parseInt(page) < parseInt(pageNumMax) || isLastPage);
+    if (parseInt(page) < parseInt(pageNumMax) || isLastPage) {
       callMoreFeedsAjax(pageType, page, creatorName);
       if (isLastPage) {
         $("#call-more-feeds").remove();
@@ -32,9 +32,8 @@ $(document).ready(() => {
       const page = $("#page").val();
       const pageNumMax = $("#page-num-max").val();
       const creatorName = $("#creator-name").val();
-      const isLastPage = page == pageNumMax;
-
-      if (page < pageNumMax || isLastPage) {
+      const isLastPage = page !== undefined && page === pageNumMax;
+      if (parseInt(page) < parseInt(pageNumMax) || isLastPage) {
         callMoreFeedsAjax(pageType, page, creatorName);
         if (isLastPage) {
           $("#call-more-feeds").remove();

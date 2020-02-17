@@ -710,7 +710,7 @@ def creator_ajax(request, creator_name):
         else:
             has_feeds = True
 
-        page_num_max = math.ceil(result_num / 2)
+        page_num_max = math.ceil(result_num / NUM_PER_PAGE)
         if page_num > page_num_max:
             feeds = None
 
@@ -757,7 +757,7 @@ def myreaction(request):
     page_num = request.GET.get('page')
     upvotes = paginator.get_page(page_num)
     result_num = len(upvotes_all)
-    page_num_max = math.ceil(result_num / 2)
+    page_num_max = math.ceil(result_num / NUM_PER_PAGE)
 
     if len(upvotes) == 0:
         has_upvotes = False
@@ -773,12 +773,13 @@ def myreaction_ajax(request):
     page_num = int(request.GET.get('page'))
     upvotes = paginator.get_page(page_num)
     result_num = len(upvotes_all)
-    page_num_max = math.ceil(result_num / 2)
+    page_num_max = math.ceil(result_num / NUM_PER_PAGE)
     if page_num > page_num_max:
         upvotes = None
     return render(request, 'feedpage/myreaction_ajax.html', {'upvotes': upvotes, 'page': page_num, 'page_num_max': page_num_max})
 
 def mynotification(request):
+    NUM_PER_PAGE_NOTI = 20 if NUM_PER_PAGE < 10 else NUM_PER_PAGE
     if request.user.is_anonymous:
         return redirect('/accounts/login')
     noti = Notification.objects.filter(noti_to=request.user.profile, is_mine=False).order_by('-created_at')
@@ -791,10 +792,16 @@ def mynotification(request):
             each_noti.save()
 
     noti_unchecked = noti.filter(is_checked=False) #새로운기준 확인알림
-    noti_checked = noti.filter(is_checked=True)
+    noti_checked_all = noti.filter(is_checked=True)
 
     profile.notichecked_at = timezone.now()
     profile.save()
+
+    paginator = Paginator(noti_checked_all, NUM_PER_PAGE_NOTI)
+    page_num = request.GET.get('page')
+    noti_checked = paginator.get_page(page_num)
+    result_num = len(noti_checked_all)
+    page_num_max = math.ceil(result_num / NUM_PER_PAGE_NOTI)
 
     has_noti = False
 
@@ -802,11 +809,25 @@ def mynotification(request):
         has_noti = False
     else:
         has_noti = True
-
-    return render(request, 'feedpage/mynotification.html', {'has_noti':has_noti, 'noti': noti, 'noti_unchecked': noti_unchecked, 'noti_checked': noti_checked})
+    print(noti_checked)
+    return render(request, 'feedpage/mynotification.html', {'has_noti':has_noti, 'noti': noti, 'noti_unchecked': noti_unchecked, 'noti_checked': noti_checked, 'page': page_num, 'page_num_max': page_num_max})
 
 def mynotification_ajax(request):
-    return
+    NUM_PER_PAGE_NOTI = 20 if NUM_PER_PAGE < 10 else NUM_PER_PAGE
+    if request.user.is_anonymous:
+        return redirect('/accounts/login')
+    noti_checked_all = Notification.objects.filter(noti_to=request.user.profile, is_mine=False, is_checked=True).order_by('-created_at')
+    paginator = Paginator(noti_checked_all, NUM_PER_PAGE_NOTI)
+    page_num = int(request.GET.get('page'))
+    print(page_num)
+    noti_checked = paginator.get_page(page_num)
+    result_num = len(noti_checked_all)
+    page_num_max = math.ceil(result_num / NUM_PER_PAGE_NOTI)
+    if page_num > page_num_max:
+        noti_checked = None
+    print(noti_checked)
+
+    return render(request, 'feedpage/mynotification_ajax.html', {'noti_checked': noti_checked, 'page': page_num, 'page_num_max': page_num_max})
 
 #이미지 추천기능
 def image_search(request):
