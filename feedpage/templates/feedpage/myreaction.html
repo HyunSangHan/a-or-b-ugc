@@ -51,16 +51,7 @@
   </div>
   <div class="m-auto contents my" style="min-height: 40vh; display: flex !important; display: -webkit-flex !important; display: -ms-flexbox !important;">
     <div class="contents-margin">
-      {% if not has_upvotes %}
-      <div class="flex-center h-100 w-100">
-        <div class="text-center font-15">
-          아직 투표한 글이 없습니다.<br>
-          <a href = "/feeds/">
-            <strong>홈으로 돌아가기</strong>
-          </a>
-        </div>
-      </div>
-      {% else %}
+      {% if has_upvotes %}
         {% for upvote in upvotes %}
           {% if upvote.feed.check_visible %}
             <li class="each-li">
@@ -501,6 +492,7 @@
             신고가 10건 이상 접수되어 숨김처리된 게시글입니다.
           {% endif %}
         {% endfor %}
+        {% if upvotes.has_next %}
         <div id="feed-list-ajax">
         <!--추가로 불러오는 피드들이 들어갈 곳-->
         </div>
@@ -508,6 +500,16 @@
         <input id="page-type" type="hidden" value="myreaction">
         <input id="page" type="hidden" value={{upvotes.next_page_number}}>
         <button id="call-more-feeds" type="button">Loading...</button>
+        {% endif %}
+      {% else %}
+        <div class="flex-center h-100 w-100">
+          <div class="text-center font-15">
+            아직 투표한 글이 없습니다.<br>
+            <a href = "/feeds/">
+              <strong>홈으로 돌아가기</strong>
+            </a>
+          </div>
+        </div>
       {% endif %}
     </div>
   </div>

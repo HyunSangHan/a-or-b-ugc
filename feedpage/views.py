@@ -783,7 +783,7 @@ def myreaction(request):
     result_num = len(upvotes_all)
     page_num_max = math.ceil(result_num / NUM_PER_PAGE)
 
-    if len(upvotes) == 0:
+    if len(upvotes_all) == 0:
         has_upvotes = False
     else:
         has_upvotes = True
