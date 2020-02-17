@@ -25,9 +25,7 @@ $(document).ready(() => {
 
   $(window).scroll(function() {
     const scrollHeight = $(window).scrollTop() + $(window).height();
-    console.log(scrollHeight);
     const documentHeight = $(document).height();
-    console.log(documentHeight);
 
     if (scrollHeight + 100 >= documentHeight) {
       const pageType = $("#page-type").val();

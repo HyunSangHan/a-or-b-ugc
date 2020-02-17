@@ -688,7 +688,7 @@ def creator(request, creator_name):
             has_feeds = False
         else:
             has_feeds = True
-        return render(request, 'feedpage/creator.html', {'has_feeds': has_feeds, 'feeds': feeds, 'creator': creator, 'page_num_max': page_num_max})
+        return render(request, 'feedpage/creator.html', {'has_feeds': has_feeds, 'feeds': feeds, 'creator': creator, 'page': page_num, 'page_num_max': page_num_max})
     else:
         try:
             next = request.META['HTTP_REFERER']
@@ -752,15 +752,31 @@ def mysubscribe_ajax(request):
 def myreaction(request):
     if request.user.is_anonymous:
         return redirect('/accounts/login')
-    upvotes = request.user.upvote_set.exclude(feed__creator = request.user).order_by('-created_at')
+    upvotes_all = request.user.upvote_set.exclude(feed__creator = request.user).order_by('-created_at')
+    paginator = Paginator(upvotes_all, NUM_PER_PAGE)
+    page_num = request.GET.get('page')
+    upvotes = paginator.get_page(page_num)
+    result_num = len(upvotes_all)
+    page_num_max = math.ceil(result_num / 2)
+
     if len(upvotes) == 0:
         has_upvotes = False
     else:
         has_upvotes = True
-    return render(request, 'feedpage/myreaction.html', {'upvotes': upvotes, 'has_upvotes': has_upvotes})
+    return render(request, 'feedpage/myreaction.html', {'upvotes': upvotes, 'page': page_num, 'page_num_max': page_num_max, 'has_upvotes': has_upvotes})
 
 def myreaction_ajax(request):
-    return
+    if request.user.is_anonymous:
+        return redirect('/accounts/login')
+    upvotes_all = request.user.upvote_set.exclude(feed__creator = request.user).order_by('-created_at')
+    paginator = Paginator(upvotes_all, NUM_PER_PAGE)
+    page_num = int(request.GET.get('page'))
+    upvotes = paginator.get_page(page_num)
+    result_num = len(upvotes_all)
+    page_num_max = math.ceil(result_num / 2)
+    if page_num > page_num_max:
+        upvotes = None
+    return render(request, 'feedpage/myreaction_ajax.html', {'upvotes': upvotes, 'page': page_num, 'page_num_max': page_num_max})
 
 def mynotification(request):
     if request.user.is_anonymous:
