@@ -19,6 +19,10 @@ import requests
 from django.core.files.base import ContentFile
 from collections import OrderedDict
 import re
+import math
+
+NUM_PER_PAGE = 2
+IMG_SEARCH_DISPLAY_NUM = 40
 
 def main(request):
     return redirect('/feeds')
@@ -43,17 +47,57 @@ def index(request):
         feeds_all = sorted(feeds_all, key=lambda x: x.updated_at, reverse=True)
 #TODO: 페이지네이션과의 파라미터 조화 필요
 
-    paginator = Paginator(feeds_all, 10)
+    paginator = Paginator(feeds_all, NUM_PER_PAGE)
     page_num = request.GET.get('page')
     feeds = paginator.get_page(page_num)
+
     search_result_num = len(feeds_all)
+    page_num_max = math.ceil(search_result_num / NUM_PER_PAGE)
+    print(page_num_max)
     if keyword and feeds:
         is_searched = True
     elif keyword == "":
         is_searched = False
     else:
         is_searched = True
-    return render(request, 'feedpage/index.html', {'feeds': feeds, 'keyword': keyword, 'page': page_num, 'is_searched': is_searched, 'search_result_num': search_result_num})
+    return render(request, 'feedpage/index.html', {'feeds': feeds, 'keyword': keyword, 'page': page_num, 'is_searched': is_searched, 'page_num_max': page_num_max})
+
+def index_ajax(request): 
+    if request.user.is_anonymous == False and request.user.profile.is_first_login:
+        return redirect('/accounts/profile/')
+    # print(HashTag.objects.all())
+    keyword = request.GET.get('keyword', '')
+    feeds_all = Feed.objects.all().order_by('-updated_at', '-created_at')
+#TODO: 검색기능 추후 보완 필요
+    if keyword: 
+        from django.db.models import Q
+        #필드에서 피드 뽑아오기
+        feeds_by_field = list(feeds_all.filter(Q(title__icontains=keyword) | Q(content_a__icontains=keyword) | Q(content_b__icontains=keyword)))
+        #해시태그에서 피드 뽑아오기
+        feeds_by_hashtag = []
+        tags = HashTag.objects.all().filter(Q(tag__icontains=keyword))
+        for tag in tags:
+            feeds_by_hashtag = feeds_by_hashtag + list(tag.tagged_feeds.all())
+        feeds_all = list(set(feeds_by_field + feeds_by_hashtag))
+        feeds_all = sorted(feeds_all, key=lambda x: x.updated_at, reverse=True)
+#TODO: 페이지네이션과의 파라미터 조화 필요
+
+    paginator = Paginator(feeds_all, NUM_PER_PAGE)
+    page_num = int(request.GET.get('page'))
+    feeds = paginator.get_page(page_num)
+    search_result_num = len(feeds_all)
+
+    if keyword and feeds:
+        is_searched = True
+    elif keyword == "":
+        is_searched = False
+    else:
+        is_searched = True
+
+    page_num_max = math.ceil(search_result_num / NUM_PER_PAGE)
+    if page_num > page_num_max:
+        feeds = None
+    return render(request, 'feedpage/index_ajax.html', {'feeds': feeds, 'page': page_num})
 
 def new(request):
     if request.method == 'POST': # create
@@ -634,12 +678,43 @@ def creator(request, creator_name):
     creators = User.objects.filter(username=creator_name)
     if creators.count() > 0:
         creator = creators.first()
-        feeds = Feed.objects.filter(creator=creator).order_by('-updated_at', '-created_at')
+        feeds_all = Feed.objects.filter(creator=creator).order_by('-updated_at', '-created_at')
+        result_num = len(feeds_all)
+        paginator = Paginator(feeds_all, NUM_PER_PAGE)
+        page_num = request.GET.get('page')
+        feeds = paginator.get_page(page_num)
+        page_num_max = math.ceil(result_num / NUM_PER_PAGE)
         if len(feeds) == 0:
             has_feeds = False
         else:
             has_feeds = True
-        return render(request, 'feedpage/creator.html', {'has_feeds': has_feeds, 'feeds': feeds, 'creator': creator})
+        return render(request, 'feedpage/creator.html', {'has_feeds': has_feeds, 'feeds': feeds, 'creator': creator, 'page': page_num, 'page_num_max': page_num_max})
+    else:
+        try:
+            next = request.META['HTTP_REFERER']
+        except:
+            next = '/feeds/'
+        return redirect('%s'%next)
+
+def creator_ajax(request, creator_name):
+    creators = User.objects.filter(username=creator_name)
+    if creators.count() > 0:
+        creator = creators.first()
+        feeds_all = Feed.objects.filter(creator=creator).order_by('-updated_at', '-created_at')
+        paginator = Paginator(feeds_all, NUM_PER_PAGE)
+        page_num = int(request.GET.get('page'))
+        feeds = paginator.get_page(page_num)
+        result_num = len(feeds_all)
+        if result_num == 0:
+            has_feeds = False
+        else:
+            has_feeds = True
+
+        page_num_max = math.ceil(result_num / NUM_PER_PAGE)
+        if page_num > page_num_max:
+            feeds = None
+
+        return render(request, 'feedpage/creator_ajax.html', {'has_feeds': has_feeds, 'feeds': feeds, 'creator': creator, 'page': page_num})
     else:
         try:
             next = request.META['HTTP_REFERER']
@@ -656,7 +731,13 @@ def mysubscribe(request):
     for my_sub in my_subs:
         my_sub_user = my_sub.follow_to.user
         feeds = feeds + list(my_sub_user.feed_set.all())
-    feeds = sorted(feeds , key = lambda x: x.updated_at, reverse=True)
+    feeds_all = sorted(feeds , key = lambda x: x.updated_at, reverse=True)
+
+    paginator = Paginator(feeds_all, NUM_PER_PAGE)
+    page_num = request.GET.get('page')
+    feeds = paginator.get_page(page_num)
+    result_num = len(feeds_all)
+    page_num_max = math.ceil(result_num / NUM_PER_PAGE)
 
     has_subs, has_feeds = False, False
 
@@ -669,25 +750,60 @@ def mysubscribe(request):
         else:
             has_feeds = True
 
-    return render(request, 'feedpage/mysubscribe.html', {'feeds': feeds, 'my_subs': my_subs, 'has_subs': has_subs, 'has_feeds': has_feeds})
+    return render(request, 'feedpage/mysubscribe.html', {'feeds': feeds, 'my_subs': my_subs, 'has_subs': has_subs, 'has_feeds': has_feeds, 'page': page_num, 'page_num_max': page_num_max})
 
-def myupload(request):
+def mysubscribe_ajax(request):
     if request.user.is_anonymous:
         return redirect('/accounts/login')
-    feeds = Feed.objects.filter(creator_id=request.user.id).order_by('-updated_at', '-created_at')
-    return render(request, 'feedpage/myupload.html', {'feeds': feeds})
+    follow_from = request.user.profile
+    my_subs = Follow.objects.filter(follow_from=follow_from)
+    feeds = []
+    for my_sub in my_subs:
+        my_sub_user = my_sub.follow_to.user
+        feeds = feeds + list(my_sub_user.feed_set.all())
+    feeds_all = sorted(feeds , key = lambda x: x.updated_at, reverse=True)
+
+    paginator = Paginator(feeds_all, NUM_PER_PAGE)
+    page_num = int(request.GET.get('page'))
+    feeds = paginator.get_page(page_num)
+    result_num = len(feeds_all)
+    page_num_max = math.ceil(result_num / NUM_PER_PAGE)
+    if page_num > page_num_max:
+        feeds = None
+
+    return render(request, 'feedpage/mysubscribe_ajax.html', {'feeds': feeds, 'page': page_num, 'page_num_max': page_num_max})
 
 def myreaction(request):
     if request.user.is_anonymous:
         return redirect('/accounts/login')
-    upvotes = request.user.upvote_set.exclude(feed__creator = request.user).order_by('-created_at')
-    if len(upvotes) == 0:
+    upvotes_all = request.user.upvote_set.exclude(feed__creator = request.user).order_by('-created_at')
+    paginator = Paginator(upvotes_all, NUM_PER_PAGE)
+    page_num = request.GET.get('page')
+    upvotes = paginator.get_page(page_num)
+    result_num = len(upvotes_all)
+    page_num_max = math.ceil(result_num / NUM_PER_PAGE)
+
+    if len(upvotes_all) == 0:
         has_upvotes = False
     else:
         has_upvotes = True
-    return render(request, 'feedpage/myreaction.html', {'upvotes': upvotes, 'has_upvotes': has_upvotes})
+    return render(request, 'feedpage/myreaction.html', {'upvotes': upvotes, 'page': page_num, 'page_num_max': page_num_max, 'has_upvotes': has_upvotes})
+
+def myreaction_ajax(request):
+    if request.user.is_anonymous:
+        return redirect('/accounts/login')
+    upvotes_all = request.user.upvote_set.exclude(feed__creator = request.user).order_by('-created_at')
+    paginator = Paginator(upvotes_all, NUM_PER_PAGE)
+    page_num = int(request.GET.get('page'))
+    upvotes = paginator.get_page(page_num)
+    result_num = len(upvotes_all)
+    page_num_max = math.ceil(result_num / NUM_PER_PAGE)
+    if page_num > page_num_max:
+        upvotes = None
+    return render(request, 'feedpage/myreaction_ajax.html', {'upvotes': upvotes, 'page': page_num, 'page_num_max': page_num_max})
 
 def mynotification(request):
+    NUM_PER_PAGE_NOTI = 20 if NUM_PER_PAGE < 10 else NUM_PER_PAGE
     if request.user.is_anonymous:
         return redirect('/accounts/login')
     noti = Notification.objects.filter(noti_to=request.user.profile, is_mine=False).order_by('-created_at')
@@ -700,10 +816,16 @@ def mynotification(request):
             each_noti.save()
 
     noti_unchecked = noti.filter(is_checked=False) #새로운기준 확인알림
-    noti_checked = noti.filter(is_checked=True)
+    noti_checked_all = noti.filter(is_checked=True)
 
     profile.notichecked_at = timezone.now()
     profile.save()
+
+    paginator = Paginator(noti_checked_all, NUM_PER_PAGE_NOTI)
+    page_num = request.GET.get('page')
+    noti_checked = paginator.get_page(page_num)
+    result_num = len(noti_checked_all)
+    page_num_max = math.ceil(result_num / NUM_PER_PAGE_NOTI)
 
     has_noti = False
 
@@ -711,18 +833,34 @@ def mynotification(request):
         has_noti = False
     else:
         has_noti = True
+    print(noti_checked)
+    return render(request, 'feedpage/mynotification.html', {'has_noti':has_noti, 'noti': noti, 'noti_unchecked': noti_unchecked, 'noti_checked': noti_checked, 'page': page_num, 'page_num_max': page_num_max})
 
-    return render(request, 'feedpage/mynotification.html', {'has_noti':has_noti, 'noti': noti, 'noti_unchecked': noti_unchecked, 'noti_checked': noti_checked})
+def mynotification_ajax(request):
+    NUM_PER_PAGE_NOTI = 20 if NUM_PER_PAGE < 10 else NUM_PER_PAGE
+    if request.user.is_anonymous:
+        return redirect('/accounts/login')
+    noti_checked_all = Notification.objects.filter(noti_to=request.user.profile, is_mine=False, is_checked=True).order_by('-created_at')
+    paginator = Paginator(noti_checked_all, NUM_PER_PAGE_NOTI)
+    page_num = int(request.GET.get('page'))
+    print(page_num)
+    noti_checked = paginator.get_page(page_num)
+    result_num = len(noti_checked_all)
+    page_num_max = math.ceil(result_num / NUM_PER_PAGE_NOTI)
+    if page_num > page_num_max:
+        noti_checked = None
+    print(noti_checked)
+
+    return render(request, 'feedpage/mynotification_ajax.html', {'noti_checked': noti_checked, 'page': page_num, 'page_num_max': page_num_max})
 
 #이미지 추천기능
 def image_search(request):
     CLIENT_ID = IMG_CLIENT_ID
     CLIENT_SECRET = IMG_CLIENT_KEY
-    DISPLAY_NUM = "40"
     text = request.POST['keyword']
 
     enc_text = urllib.parse.quote(text)
-    url = "https://openapi.naver.com/v1/search/image?display="+ DISPLAY_NUM +"&query=" + enc_text
+    url = "https://openapi.naver.com/v1/search/image?display="+ str(IMG_SEARCH_DISPLAY_NUM) +"&query=" + enc_text
 
     image_search_request = urllib.request.Request(url)
     image_search_request.add_header('X-Naver-Client-Id', CLIENT_ID)

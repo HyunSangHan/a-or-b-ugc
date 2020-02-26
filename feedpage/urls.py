@@ -5,6 +5,7 @@ from feedpage import views
 
 urlpatterns = [
     path('', views.index, name='index'),
+    path('ajax/', views.index_ajax, name='index_ajax'),
     path('new/', views.new, name='new'), 
     path('<uuid:uuid>/', views.show, name='show'), 
     path('<int:id>/delete/', views.delete, name='delete'),
@@ -19,8 +20,12 @@ urlpatterns = [
     path('<int:pk>/follow/', views.follow_manager, name='follow'),
     path('<int:pk>/statistics/<stat_menu>/<stat_name>/', views.statistics, name='statistics'),
     path('creator/<creator_name>/', views.creator, name='creator'),
+    path('creator/<creator_name>/ajax/', views.creator_ajax, name='creator_ajax'),
     path('mysubscribe/', views.mysubscribe, name='mysubscribe'), 
+    path('mysubscribe/ajax/', views.mysubscribe_ajax, name='mysubscribe_ajax'), 
     path('myreaction/', views.myreaction, name='myreaction'), 
+    path('myreaction/ajax/', views.myreaction_ajax, name='myreaction_ajax'), 
     path('mynotification/', views.mynotification, name='mynotification'), 
+    path('mynotification/ajax/', views.mynotification_ajax, name='mynotification_ajax'), 
     path('new/image_search/', views.image_search, name='image_search'),
 ]

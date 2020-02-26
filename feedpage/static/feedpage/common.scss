@@ -4,13 +4,16 @@ body {
   background-color: rgb(250, 250, 250);
   letter-spacing: -0.3px;
   font-family: "Noto Sans KR", sans-serif !important;
+  margin: 0;
 }
 
 header {
-  margin-left: -1px !important;
-  width: 101% !important;
-  -webkit-transform: translateZ(0);
-  -webkit-overflow-scrolling: touch;
+  width: 100% !important;
+  &.fix {
+    position: fixed;
+    top: 0;
+    z-index: 2;
+  }
 }
 
 input {
@@ -126,7 +129,7 @@ label > div:hover {
 
 .invisible,
 .none {
-  display: none;
+  display: none !important;
 }
 
 .letter-space {
@@ -232,6 +235,10 @@ label > div:hover {
 
 .mt-9 {
   margin-top: 36px !important;
+}
+
+.mt-16 {
+  margin-top: 64px !important;
 }
 
 .mb-1 {
@@ -421,7 +428,10 @@ label > div:hover {
   background-color: black !important;
 }
 
-/* MDL */
+/* MDL custom area */
+
+.mdl-layout__container {
+}
 
 .demo-card-image > .mdl-card__actions {
   height: 52px;
@@ -435,10 +445,6 @@ label > div:hover {
   font-weight: 500;
 }
 
-/* .demo-card-image.mdl-card.mdl-shadow--2dp {
-  margin: 1%;
-} */
-
 .mdl-button.mdl-js-button.mdl-button--fab.mdl-js-ripple-effect.mdl-button--colored {
   position: fixed;
   z-index: 100;
@@ -446,16 +452,170 @@ label > div:hover {
   right: 20px;
 }
 
-/* 나중에 덮어씌웠으면 하는 부분 */
-/* .comment-label:after {
-  background-color: black !important;
-  bottom: 20px;
-  content: '';
-  height: 2px;
-  left: 45%;
-  position: absolute;
-  transition-duration: .2s;
-  transition-timing-function: cubic-bezier(.4,0,.2,1);
-  visibility: hidden;
-  width: 10px;
-} */
+.mdl-card {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  font-size: 16px;
+  font-weight: 400;
+  min-height: 200px;
+  overflow: hidden;
+  width: 330px;
+  z-index: 1;
+  position: relative;
+  background: #fff;
+  border-radius: 2px;
+  box-sizing: border-box;
+}
+
+.mdl-textfield {
+  &.is-upgraded {
+    display: flex;
+    // display: inline-block;
+    position: relative;
+    font-size: 16px;
+    box-sizing: border-box;
+    // width: 300px;
+    max-width: 100%;
+    margin: 20px 0 0;
+
+    &.mdl-textfield--expandable {
+      min-width: 32px;
+      width: auto;
+      min-height: 32px;
+    }
+  }
+}
+
+.mdl-button {
+  background: 0 0;
+  border: none;
+  border-radius: 2px;
+  color: #000;
+  position: relative;
+  height: 36px;
+  margin: 0;
+  min-width: 64px;
+  padding: 0 16px;
+  display: inline-block;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0;
+  overflow: hidden;
+  will-change: box-shadow;
+  transition: box-shadow 0.2s cubic-bezier(0.4, 0, 1, 1),
+    background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  outline: none;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+  line-height: 36px;
+  vertical-align: middle;
+
+  &.mdl-button--icon {
+    border-radius: 50%;
+    font-size: 24px;
+    height: 32px;
+    margin-left: 0;
+    margin-right: 0;
+    min-width: 32px;
+    width: 32px;
+    padding: 0;
+    overflow: hidden;
+    color: inherit;
+    line-height: normal;
+  }
+}
+
+.mdl-layout {
+  &.mdl-layout--fixed-header {
+    .mdl-layout__header {
+      -webkit-flex-shrink: 0;
+      -ms-flex-negative: 0;
+      flex-shrink: 0;
+
+      .mdl-layout__header-row {
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-flex-direction: row;
+        -ms-flex-direction: row;
+        flex-direction: row;
+        -webkit-flex-wrap: nowrap;
+        -ms-flex-wrap: nowrap;
+        flex-wrap: nowrap;
+        -webkit-flex-shrink: 0;
+        -ms-flex-negative: 0;
+        flex-shrink: 0;
+        box-sizing: border-box;
+        -webkit-align-self: stretch;
+        -ms-flex-item-align: stretch;
+        align-self: stretch;
+        -webkit-align-items: center;
+        -ms-flex-align: center;
+        align-items: center;
+        height: 64px;
+        margin: 0;
+        padding: 0 7% 0 calc(7% + 32px);
+      }
+    }
+  }
+}
+
+.mdl-layout__content {
+  -ms-flex: 0 1 auto;
+  position: relative;
+  // display: inline-block;
+  // overflow-y: auto;
+  // overflow-x: hidden;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  z-index: 1;
+  -webkit-overflow-scrolling: touch;
+}
+
+.mdl-layout-spacer {
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+}
+
+.mdl-button--raised {
+  background: rgba(158, 158, 158, 0.2);
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2),
+    0 1px 5px 0 rgba(0, 0, 0, 0.12);
+}
+
+.mdl-tooltip {
+  -webkit-transform: scale(0);
+  transform: scale(0);
+  -webkit-transform-origin: top center;
+  transform-origin: top center;
+  z-index: 999;
+  background: rgba(97, 97, 97, 0.9);
+  border-radius: 2px;
+  color: #fff;
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 14px;
+  max-width: 170px;
+  position: fixed;
+  top: -500px;
+  left: -500px;
+  padding: 8px;
+  text-align: center;
+
+  &.mdl-tooltip--large {
+    line-height: 14px;
+    font-size: 14px;
+    padding: 16px;
+  }
+}

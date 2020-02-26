@@ -53,7 +53,7 @@
                       <strong>더보기</strong>
                     </a>
                   </div>
-<!--배포 이후에 수정할 부분-->
+                <!--TODO: 배포 이후에 수정할 부분-->
                   <div data-clipboard-text="localhost:8000/feeds/{{ feed.uuid }}" onclick="return alert('콘텐츠의 주소가 클립보드에 복사되었습니다.')">공유하기</div>
                   {% if user.is_authenticated %}
                     {% if request.user != feed.creator %}
@@ -221,7 +221,7 @@
               {% if comment_a and comment_b %}
               <!--A베스트댓글-->
                 <div class="comment w-100 v-center mtb-1 inline-flex">
-                  <div style="width: calc(100% - 20px);">
+                  <div class="comment-width">
                     <span class="sideicon best">A / BEST</span>
                     <span class="font-11 v-center mtb-auto comment-reactor">
                       <a href="/feeds/creator/{{comment_a.reactor.username}}">
@@ -234,7 +234,7 @@
                   <!--댓글삭제-->
                     {% if comment_a.reactor == user %}
                       <span class="comment-clear" data-feedid="{{ feed.id }}" data-commentid="{{ comment_a.id }}" data-csrfmiddlewaretoken="{{ csrf_token }}">
-                        <i class="material-icons" style="font-size: 13px; color: grey;">clear</i>
+                        <i class="material-icons" style="font-size: 13px; color: grey; transform: translateY(4px);">clear</i>
                       </span>
                     {% endif %}
                   <!--댓글삭제 끝-->
@@ -250,11 +250,11 @@
                       {% if comment_a.total_upvote > 0 %}
                         {% if comment_upvote_tf %}
                           <div class="font-red font-midlight comment-heart-num comment-heart-num-hide">
-                            x{{comment_a.total_upvote}}
+                            {{comment_a.total_upvote}}x
                           </div>
                         {% else %}
                           <div class="font-grey comment-heart-num comment-heart-num-hide">
-                            x{{comment_a.total_upvote}}
+                            {{comment_a.total_upvote}}x
                           </div>
                         {% endif %} 
                       {% else %}
@@ -270,11 +270,11 @@
                     {% if comment_a.total_upvote > 0 %}
                       {% if comment_upvote_tf %}
                         <div class="font-red font-midlight comment-heart-num comment-heart-num-hide">
-                          x{{comment_a.total_upvote}}
+                          {{comment_a.total_upvote}}x
                         </div>
                       {% else %}
                         <div class="font-grey comment-heart-num comment-heart-num-hide">
-                          x{{comment_a.total_upvote}}
+                          {{comment_a.total_upvote}}x
                         </div>
                       {% endif %} 
                     {% else %}
@@ -289,7 +289,7 @@
                 
               <!--B베스트댓글-->
                 <div class="comment w-100 v-center mtb-1 inline-flex">
-                  <div style="width: calc(100% - 20px);">
+                  <div class="comment-width">
                     <span class="sideicon best">B / BEST</span>
                     <span class="font-11 v-center mtb-auto comment-reactor">
                       <a href="/feeds/creator/{{comment_b.reactor.username}}">
@@ -302,7 +302,7 @@
                   <!--댓글삭제-->
                     {% if comment_b.reactor == user %}
                       <span class="comment-clear" data-feedid="{{ feed.id }}" data-commentid="{{ comment_b.id }}" data-csrfmiddlewaretoken="{{ csrf_token }}">
-                        <i class="material-icons" style="font-size: 13px; color: grey;">clear</i>
+                        <i class="material-icons" style="font-size: 13px; color: grey; transform: translateY(4px);">clear</i>
                       </span>
                     {% endif %}
                   <!--댓글삭제 끝-->
@@ -318,11 +318,11 @@
                       {% if comment_b.total_upvote > 0 %}
                         {% if comment_upvote_tf %}
                           <div class="font-red font-midlight comment-heart-num comment-heart-num-hide">
-                            x{{comment_b.total_upvote}}
+                            {{comment_b.total_upvote}}x
                           </div>
                         {% else %}
                           <div class="font-grey comment-heart-num comment-heart-num-hide">
-                            x{{comment_b.total_upvote}}
+                            {{comment_b.total_upvote}}x
                           </div>
                         {% endif %} 
                       {% else %}
@@ -338,11 +338,11 @@
                     {% if comment_b.total_upvote > 0 %}
                       {% if comment_upvote_tf %}
                         <div class="font-red font-midlight comment-heart-num comment-heart-num-hide">
-                          x{{comment_b.total_upvote}}
+                          {{comment_b.total_upvote}}x
                         </div>
                       {% else %}
                         <div class="font-grey comment-heart-num comment-heart-num-hide">
-                          x{{comment_b.total_upvote}}
+                          {{comment_b.total_upvote}}x
                         </div>
                       {% endif %} 
                     {% else %}
@@ -380,7 +380,7 @@
                 {% for c in comments %}
                   {% get_side feed.id c.id as side %}
                   <div class="comment norm w-100 v-center inline-flex">
-                    <div style="width: calc(100% - 20px);">
+                    <div class="comment-width">
                       {% if side != ""%}
                         <span class="sideicon norm"> {{ side }} </span>
                         <span class="font-11 v-center mtb-auto comment-reactor">
@@ -401,7 +401,7 @@
                     <!--댓글삭제-->
                       {% if c.reactor == user %}
                         <span class="comment-clear" data-feedid="{{ feed.id }}" data-commentid="{{ c.id }}" data-csrfmiddlewaretoken="{{ csrf_token }}">
-                          <i class="material-icons" style="font-size: 13px; color: grey;">clear</i>
+                          <i class="material-icons" style="font-size: 13px; color: grey; transform: translateY(4px);">clear</i>
                         </span>
                       {% endif %}
                     <!--댓글삭제 끝-->
@@ -417,11 +417,11 @@
                         {% if c.total_upvote > 0 %}
                           {% if comment_upvote_tf %}
                             <div class="font-red font-midlight comment-heart-num">
-                              x{{c.total_upvote}}
+                              {{c.total_upvote}}x
                             </div>
                           {% else %}
                             <div class="font-grey comment-heart-num">
-                              x{{c.total_upvote}}
+                              {{c.total_upvote}}x
                             </div>
                           {% endif %} 
                         {% else %}
@@ -437,11 +437,11 @@
                       {% if c.total_upvote > 0 %}
                         {% if c.upvote_tf %}
                           <div class="font-red font-midlight comment-heart-num">
-                            x{{c.total_upvote}}
+                            {{c.total_upvote}}x
                           </div>
                         {% else %}
                           <div class="font-grey comment-heart-num">
-                            x{{c.total_upvote}}
+                            {{c.total_upvote}}x
                           </div>
                         {% endif %} 
                       {% else %}
@@ -459,7 +459,7 @@
               <form action="/feeds/{{ feed.id }}/comments/" method="POST">
                 {% csrf_token %}
                 <div class="comment-input-wrap mdl-textfield mdl-js-textfield mdl-textfield--floating-label w-100">
-                  <input class="mdl-textfield__input comment-input" type="text" id="feedcomment" name="content" placeholder="댓글을 입력하세요." minlength="2" maxlength="70" autocomplete="off" required />
+                  <input class="mdl-textfield__input comment-input" type="text" name="content" placeholder="댓글을 입력하세요." minlength="2" maxlength="70" autocomplete="off" required />
                   <input type="submit" class="comment-submit comment-submit-now invisible" data-feedid="{{ feed.id }}" data-csrfmiddlewaretoken="{{ csrf_token }}" value="댓글달기">
                 </div>
               </form> 
@@ -472,6 +472,15 @@
           신고가 10건 이상 접수되어 숨김처리된 게시글입니다.
         {% endif %}
       {% endfor %}
+      {% if feeds.has_next %}
+        <div id="feed-list-ajax">
+        <!--추가로 불러오는 피드들이 들어갈 곳-->
+        </div>
+        <input id="page-num-max" type="hidden" value={{page_num_max}}>
+        <input id="page-type" type="hidden" value="mysubscribe">
+        <input id="page" type="hidden" value={{feeds.next_page_number}}>
+        <button id="call-more-feeds" type="button">Loading...</button>
+      {% endif %}
     </div>
   </div>
 </div>

@@ -5,9 +5,11 @@
   }
 
   .contents {
-    padding-bottom: 50px;
-    padding-left: 3%;
-    padding-right: 3%;
+    padding: 80px 3% 60px;
+  }
+
+  .contents.my {
+    padding: 20px 3% 50px;
   }
 
   .comments-input-w {
@@ -48,11 +50,10 @@
     width: 100% !important;
     height: 50px;
     padding: 0 !important;
-    margin-bottom: -11px;
+    margin-bottom: 4px;
     display: inline-flex;
     background-color: white;
     padding: 5px;
-    margin: 7px -5px;
   }
 
   .promote-msg {
@@ -63,7 +64,11 @@
 
 @media (min-width: 576px) {
   .contents {
-    padding: 30px;
+    padding: 70px 40px 60px;
+  }
+
+  .contents.my {
+    padding: 25px 40px 40px;
   }
 
   .comments-input-w {
@@ -73,11 +78,7 @@
     padding-bottom: 9px;
   }
   .contents.noti {
-    padding-top: 10px !important;
-  }
-
-  .container {
-    max-width: 576px;
+    padding-top: 70px !important;
   }
 
   .more-info {
@@ -112,14 +113,13 @@
   }
 
   .page-content-two-tabs {
-    width: calc(100% + 10px) !important;
+    width: 100% !important;
     height: 50px;
     padding: 0 !important;
-    margin-bottom: -11px;
+    margin-bottom: 4px;
     display: inline-flex;
     background-color: white;
     padding: 5px;
-    margin: 7px -5px;
   }
 
   .promote-msg {
@@ -130,7 +130,11 @@
 
 @media (min-width: 768px) {
   .contents {
-    padding: 40px;
+    padding: 100px 40px 40px;
+  }
+
+  .contents.my {
+    padding: 30px 40px 40px;
   }
 
   .comments-input-w {
@@ -141,7 +145,7 @@
   }
 
   .contents.noti {
-    padding-top: 10px !important;
+    padding-top: 70px !important;
   }
 
   .container {
@@ -170,13 +174,12 @@
   }
 
   .page-content-two-tabs {
-    width: calc(100% + 10px) !important;
-    height: 50px;
+    width: 100% !important;
+    height: 70px;
     padding: 0 !important;
-    margin-bottom: -11px;
+    margin-bottom: 4px;
     display: inline-flex;
     background-color: white;
     padding: 5px;
-    margin: 7px -5px;
   }
 }

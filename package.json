@@ -4,7 +4,9 @@
   "description": "1-person side project for user-generated content platform",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack",
+    "start": "webpack && python manage.py runserver"
   },
   "repository": {
     "type": "git",
@@ -33,9 +35,14 @@
     "babel-loader": "^8.0.6",
     "banner-plugin": "^1.0.10",
     "clean-webpack-plugin": "^3.0.0",
+    "css-loader": "^3.4.2",
     "husky": "^4.0.10",
     "lint-staged": "^9.5.0",
+    "mini-css-extract-plugin": "^0.9.0",
+    "node-sass": "^4.13.1",
     "prettier": "^1.19.1",
+    "sass-loader": "^8.0.2",
+    "style-loader": "^1.1.3",
     "webpack": "^4.41.5",
     "webpack-cli": "^3.3.10"
   },

@@ -1,6 +1,102 @@
 $(document).ready(() => {
+  // 무한 스크롤 관련
+  const typeURLArr = {
+    index: "/feeds/ajax/",
+    mysubscribe: "/feeds/mysubscribe/ajax/",
+    myreaction: "/feeds/myreaction/ajax/",
+    mynotification: "/feeds/mynotification/ajax/"
+  };
+
+  $(document).on("click", "#call-more-feeds", function() {
+    const pageType = $("#page-type").val();
+    const page = $("#page").val();
+    const pageNumMax = $("#page-num-max").val();
+    const creatorName = $("#creator-name").val();
+    const isLastPage = page == pageNumMax;
+    console.log(parseInt(page) < parseInt(pageNumMax) || isLastPage);
+    if (parseInt(page) < parseInt(pageNumMax) || isLastPage) {
+      callMoreFeedsAjax(pageType, page, creatorName);
+      if (isLastPage) {
+        $("#call-more-feeds").remove();
+      }
+    }
+    $("#page").val(parseInt(page) + 1);
+  });
+
+  let timerForThrottle;
+  $(window).scroll(function() {
+    if (!timerForThrottle) {
+      timerForThrottle = setTimeout(function() {
+        const scrollHeight = $(window).scrollTop() + $(window).height();
+        const documentHeight = $(document).height();
+
+        if (scrollHeight + 100 >= documentHeight) {
+          const pageType = $("#page-type").val();
+          const page = $("#page").val();
+          const pageNumMax = $("#page-num-max").val();
+          const creatorName = $("#creator-name").val();
+          const isLastPage = page !== undefined && page === pageNumMax;
+          if (parseInt(page) < parseInt(pageNumMax) || isLastPage) {
+            callMoreFeedsAjax(pageType, page, creatorName);
+            if (isLastPage) {
+              $("#call-more-feeds").remove();
+            }
+            $("#page").val(parseInt(page) + 1);
+          }
+        }
+        timerForThrottle = null;
+      }, 100);
+    }
+  });
+
+  function getURLByType(type, user) {
+    if (type === "creator") {
+      // 예외케이스
+      return `/feeds/creator/${user}/ajax/`;
+    }
+    return typeURLArr[type];
+  }
+
+  function callMoreFeedsAjax(pageType, page, creator) {
+    const targetURL = getURLByType(pageType, creator);
+    console.log(page);
+    $.ajax({
+      url: targetURL,
+      type: "GET",
+      data: {
+        page: page
+      },
+      success: addMoreFeedsByAjax,
+      dataType: "html"
+    });
+  }
+
+  function addMoreFeedsByAjax(data) {
+    if (data !== "") {
+      $("#feed-list-ajax").append(data);
+      console.log("Loaded done");
+    }
+  }
+
+  // 검색창
+  $(document).on(
+    "click",
+    "label.mdl-button.mdl-js-button.mdl-button--icon",
+    function() {
+      const $this = $(this);
+      $this.parent().toggleClass("mdl-textfield--expandable");
+      $this
+        .siblings(".mdl-textfield__expandable-holder")
+        .toggleClass("search-wrap");
+      $this
+        .siblings(".mdl-textfield__expandable-holder")
+        .children(".search-input")
+        .toggleClass("none");
+    }
+  );
+
   // 댓글 펼치기
-  $(".toggle-comments").on("click", function(event) {
+  $(document).on("click", ".toggle-comments", function() {
     const $this = $(this);
     $this.siblings(".all-comments").slideDown();
     $this
@@ -13,17 +109,14 @@ $(document).ready(() => {
   });
 
   //더보기버튼
-  $(".more-js-btn").on("click", function() {
+  $(document).on("click", ".more-js-btn", function() {
     $(this)
       .next()
       .toggle();
   });
 
-  //클립보드에 복사
-  $(".element").CopyToClipboard();
-
   // 투표하기
-  $(".content-a-js, .content-b-js").on("click", function(event) {
+  $(document).on("click", ".content-a-js, .content-b-js", function(event) {
     const $this = $(this);
     const $siblingA = $this.siblings(".content-a-js");
     const $siblingB = $this.siblings(".content-b-js");
@@ -244,7 +337,7 @@ $(document).ready(() => {
   });
 
   // 신고하기
-  $(".report-js").on("click", function(event) {
+  $(document).on("click", ".report-js", function(event) {
     if (confirm("정말 신고하실 건가요?")) {
       const $this = $(this);
       const fid = $this.attr("data-feedid");
@@ -276,7 +369,7 @@ $(document).ready(() => {
   });
 
   // TODO:구독하기 -> 수정 필요할 가능성 존재
-  $(".subscribe-js").on("click", function(event) {
+  $(document).on("click", ".subscribe-js", function(event) {
     const $this = $(this);
     const creatorId = $this.attr("data-creatorid");
     const thisCreator = $('.subscribe-js[data-creatorid="' + creatorId + '"]');
@@ -298,7 +391,7 @@ $(document).ready(() => {
   });
 
   // 글 삭제
-  $(".delete-feed-js").on("click", function(event) {
+  $(document).on("click", ".delete-feed-js", function(event) {
     if (confirm("정말 삭제하실 건가요?")) {
       const $this = $(this);
       const fid = $this.attr("data-feedid");
@@ -341,8 +434,8 @@ $(document).ready(() => {
       type: "GET",
       dataType: "json",
       success: function(data) {
-        btnName = data.btn_name;
-        totalUpvote = data.total_upvote;
+        const btnName = data.btn_name;
+        const totalUpvote = data.total_upvote;
         console.log(btnName);
         console.log(totalUpvote);
         $heart.text(data.btn_name);
@@ -351,11 +444,11 @@ $(document).ready(() => {
         $heartNum.toggleClass("font-grey");
         $heartNum.toggleClass("font-midlight");
         if (btnName === "favorite" && totalUpvote === 1) {
-          $heartNum.text("x" + totalUpvote);
+          $heartNum.text(totalUpvote + "x");
         } else if (btnName === "favorite_border" && totalUpvote === 0) {
           $heartNum.text("");
         } else {
-          $heartNum.text("x" + totalUpvote);
+          $heartNum.text(totalUpvote + "x");
         }
       },
       error: function(response, status, error) {
@@ -403,7 +496,7 @@ $(document).ready(() => {
   });
 
   // 댓글 달기
-  $(".comment-submit-now").on("click", function(event) {
+  $(document).on("click", ".comment-submit-now", function(event) {
     event.preventDefault();
 
     const $this = $(this);
@@ -434,7 +527,7 @@ $(document).ready(() => {
             $("#new-comments").append(
               `
               <div class="comment norm w-100 v-center mtb-1 inline-flex">
-                <div style="width: calc(100% - 20px);">
+                <div class="comment-width">
                   ` +
                 side +
                 `
@@ -447,7 +540,7 @@ $(document).ready(() => {
                   <span class="comment-clear" data-feedid="${id}" data-commentid="${data.comment.id}" data-csrfmiddlewaretoken="` +
                 csrfmiddlewaretoken +
                 `">
-                    <i class="material-icons" style="font-size: 13px; color: grey;">clear</i>
+                    <i class="material-icons" style="font-size: 13px; color: grey; transform: translateY(4px);">clear</i>
                   </span>
                 </div>
                 <div style="width: 20px;" class="ml-auto comment-heart-btn" data-feedid="${id}" data-commentid="${data.comment.id}">
@@ -467,7 +560,7 @@ $(document).ready(() => {
             $comments.append(
               `
             <div class="comment norm w-100 v-center mtb-1 inline-flex">
-              <div style="width: calc(100% - 20px);">
+              <div class="comment-width">
                 ` +
                 side +
                 `
@@ -480,7 +573,7 @@ $(document).ready(() => {
                 <span class="comment-clear" data-feedid="${id}" data-commentid="${data.comment.id}" data-csrfmiddlewaretoken="` +
                 csrfmiddlewaretoken +
                 `">
-                  <i class="material-icons" style="font-size: 13px; color: grey;">clear</i>
+                  <i class="material-icons" style="font-size: 13px; color: grey; transform: translateY(4px);">clear</i>
                 </span>
               </div>
               <div style="width: 20px;" class="ml-auto comment-heart-btn" data-feedid="${id}" data-commentid="${data.comment.id}">
@@ -507,7 +600,7 @@ $(document).ready(() => {
   });
 
   //댓글달기 버튼 나오기
-  $(".comment-input").on("input", function(event) {
+  $(document).on("input", ".comment-input", function(event) {
     const $this = $(this);
     if ($this.val().length !== 0) {
       $this.siblings(".comment-submit").removeClass("invisible");
@@ -517,7 +610,7 @@ $(document).ready(() => {
   });
 
   //검색 버튼 나오기
-  $(".mdl-textfield__input").on("input", function(event) {
+  $(document).on("input", ".mdl-textfield__input", function(event) {
     const $this = $(this);
     if ($this.val().length !== 0) {
       $this.siblings(".search-btn").removeClass("invisible");
@@ -692,7 +785,10 @@ $(document).ready(() => {
               data.result.items[i].sizeheight / data.result.items[i].sizewidth >
               0.75
             ) {
-              thb = data.result.items[i].thumbnail.replace("&type=b150", "");
+              const thb = data.result.items[i].thumbnail.replace(
+                "&type=b150",
+                ""
+              );
               $eachResult.append(
                 `
                 <img src=` +
@@ -734,7 +830,7 @@ $(document).ready(() => {
     const img = $this.attr("src");
 
     if (aorb === "a") {
-      content_a = document.getElementsByClassName("content-a")[0].value;
+      const content_a = document.getElementsByClassName("content-a")[0].value;
       $eachContent.children(".uploaded-a").remove();
       $eachContent.prepend(
         `
@@ -758,7 +854,7 @@ $(document).ready(() => {
       `
       );
     } else if (aorb === "b") {
-      content_b = document.getElementsByClassName("content-b")[0].value;
+      const content_b = document.getElementsByClassName("content-b")[0].value;
       $eachContent.children(".uploaded-b").remove();
       $eachContent.append(
         `
