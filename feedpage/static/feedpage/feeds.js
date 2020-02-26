@@ -23,23 +23,29 @@ $(document).ready(() => {
     $("#page").val(parseInt(page) + 1);
   });
 
+  let timerForThrottle;
   $(window).scroll(function() {
-    const scrollHeight = $(window).scrollTop() + $(window).height();
-    const documentHeight = $(document).height();
+    if (!timerForThrottle) {
+      timerForThrottle = setTimeout(function() {
+        const scrollHeight = $(window).scrollTop() + $(window).height();
+        const documentHeight = $(document).height();
 
-    if (scrollHeight + 100 >= documentHeight) {
-      const pageType = $("#page-type").val();
-      const page = $("#page").val();
-      const pageNumMax = $("#page-num-max").val();
-      const creatorName = $("#creator-name").val();
-      const isLastPage = page !== undefined && page === pageNumMax;
-      if (parseInt(page) < parseInt(pageNumMax) || isLastPage) {
-        callMoreFeedsAjax(pageType, page, creatorName);
-        if (isLastPage) {
-          $("#call-more-feeds").remove();
+        if (scrollHeight + 100 >= documentHeight) {
+          const pageType = $("#page-type").val();
+          const page = $("#page").val();
+          const pageNumMax = $("#page-num-max").val();
+          const creatorName = $("#creator-name").val();
+          const isLastPage = page !== undefined && page === pageNumMax;
+          if (parseInt(page) < parseInt(pageNumMax) || isLastPage) {
+            callMoreFeedsAjax(pageType, page, creatorName);
+            if (isLastPage) {
+              $("#call-more-feeds").remove();
+            }
+            $("#page").val(parseInt(page) + 1);
+          }
         }
-      }
-      $("#page").val(parseInt(page) + 1);
+        timerForThrottle = null;
+      }, 100);
     }
   });
 
@@ -53,6 +59,7 @@ $(document).ready(() => {
 
   function callMoreFeedsAjax(pageType, page, creator) {
     const targetURL = getURLByType(pageType, creator);
+    console.log(page);
     $.ajax({
       url: targetURL,
       type: "GET",
