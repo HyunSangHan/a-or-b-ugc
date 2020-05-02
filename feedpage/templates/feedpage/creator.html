@@ -108,7 +108,7 @@
               <div class="csrf-js" data-csrfmiddlewaretoken="{{ csrf_token }}"></div>
             {% endif %}
             <div class="inline-flex w-more-btn">
-              <a href="/feeds/{{ feed.uuid }}">
+              <a href="/feeds/{{ feed.uuid }}" target="_blank" rel="noopener">
                 <h2 class="link-black">{{ feed.title }}</h2>
               </a>
               <div class="ml-auto more-btn">
@@ -117,7 +117,7 @@
                 </button>
                 <div class="more-info">
                   <div>
-                    <a href="/feeds/{{ feed.uuid }}" class="link-black">
+                    <a href="/feeds/{{ feed.uuid }}" target="_blank" rel="noopener" class="link-black">
                       <strong>더보기</strong>
                     </a>
                   </div>
@@ -331,10 +331,8 @@
                       {% endif %}
                     </div>
                   {% else %}
-                    <div class="ml-auto more-btn">
-                      <a href="/accounts/login/">
-                        <i class="material-icons comment-heart v-center m-auto link-grey ml-1">favorite_border</i>
-                      </a>
+                    <div class="ml-auto comment-heart-btn">
+                      <i class="material-icons comment-heart v-center m-auto link-grey ml-1">favorite_border</i>
                     {% if comment_a.total_upvote > 0 %}
                       {% if comment_upvote_tf %}
                         <div class="font-red font-midlight comment-heart-num comment-heart-num-hide">
@@ -399,10 +397,8 @@
                       {% endif %}
                     </div>
                   {% else %}
-                    <div class="ml-auto more-btn">
-                      <a href="/accounts/login/">
-                        <i class="material-icons comment-heart v-center m-auto link-grey ml-1">favorite_border</i>
-                      </a>
+                    <div class="ml-auto comment-heart-btn">
+                      <i class="material-icons comment-heart v-center m-auto link-grey ml-1">favorite_border</i>
                     {% if comment_b.total_upvote > 0 %}
                       {% if comment_upvote_tf %}
                         <div class="font-red font-midlight comment-heart-num comment-heart-num-hide">
@@ -423,7 +419,7 @@
               {% endif %}
             </div>
             {% if feed.feedcomment_set.count > 6 %}
-              <a href="/feeds/{{ feed.uuid }}">
+              <a href="/feeds/{{ feed.uuid }}" target="_blank" rel="noopener">
                 <div class="font-12 link-light-black font-light mt-2">
                   {% if comment_a and comment_b %}
                     댓글 {{feed.feedcomment_set.count|add:"-2"}}개 더보기
@@ -498,10 +494,8 @@
                         {% endif %}
                       </div>
                     {% else %}
-                      <div class="ml-auto more-btn">
-                        <a href="/accounts/login/">
-                          <i class="material-icons comment-heart v-center m-auto link-grey ml-1">favorite_border</i>
-                        </a>
+                      <div class="ml-auto comment-heart-btn">
+                        <i class="material-icons comment-heart v-center m-auto link-grey ml-1">favorite_border</i>
                       {% if c.total_upvote > 0 %}
                         {% if c.upvote_tf %}
                           <div class="font-red font-midlight comment-heart-num">

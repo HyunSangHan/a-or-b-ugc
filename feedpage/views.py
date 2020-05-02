@@ -60,7 +60,7 @@ def index(request):
         is_searched = False
     else:
         is_searched = True
-    return render(request, 'feedpage/index.html', {'feeds': feeds, 'keyword': keyword, 'page': page_num, 'is_searched': is_searched, 'page_num_max': page_num_max})
+    return render(request, 'feedpage/index.html', {'feeds': feeds, 'keyword': keyword, 'page': page_num, 'is_searched': is_searched, 'page_num_max': page_num_max, 'search_result_num': search_result_num})
 
 def index_ajax(request): 
     if request.user.is_anonymous == False and request.user.profile.is_first_login:
