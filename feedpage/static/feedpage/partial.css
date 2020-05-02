@@ -477,7 +477,7 @@
 
 .comment-input-bg-fix {
   position: fixed;
-  bottom: 50px;
+  bottom: 0;
   z-index: 1;
   opacity: 0.9;
 }
@@ -952,7 +952,6 @@
 
 .stat-detail-result-wrap {
   margin-top: 30px;
-  padding-bottom: 30px;
 }
 
 .stat-detail-side,

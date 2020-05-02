@@ -460,7 +460,7 @@
       <div class="contents-margin">
         <form action="/feeds/{{ feed.id }}/comments/" method="POST">
           {% csrf_token %}
-          <div class="comment-input-wrap mdl-textfield mdl-js-textfield mdl-textfield--floating-label w-100" style="padding: 20px 0 0; margin: -15px 0 0;">
+          <div class="comment-input-wrap mdl-textfield mdl-js-textfield mdl-textfield--floating-label w-100" style="padding: 10px 0 0; margin: 0 0 10px;">
             <input class="mdl-textfield__input comment-input" type="text" name="content" placeholder="댓글을 입력하세요." minlength="2" maxlength="70" autocomplete="off" required />
             <input type="submit" class="comment-submit comment-submit-now invisible" data-feedid="{{ feed.id }}" data-csrfmiddlewaretoken="{{ csrf_token }}" value="댓글달기">
           </div>
@@ -471,44 +471,7 @@
 </div>
 {% endif %}
 <!--navigation bar-->
-{% if user.is_authenticated %}
-  <div class="nav-bar-bg">
-    <div class="nav-bar-wrap">
-      <a href="/feeds/">
-        <div>
-          <i class="material-icons-outlined" style="font-size: 29px;">home</i>
-        </div>
-      </a>
-      <a href="/feeds/mysubscribe/">
-        <div>
-          <i class="material-icons-outlined" style="font-size: 26px; margin-top: 2px;">library_books</i>
-        </div>
-      </a>
-      <a href="/feeds/new">
-        <div>
-          <i class="material-icons-outlined" style="font-size: 29px;">add_circle_outline</i>
-        </div>
-      </a>
-      <a href="/feeds/mynotification">
-        <div>
-          {% get_noti_amount user.id as noti_amount %}
-          {% if noti_amount == 0 %}
-            <i class="material-icons-outlined" style="font-size: 29px; margin-right: -2px;">notifications_none</i>
-          {% else %}
-            <div class="material-icons mdl-badge mdl-badge--overlap" style="font-size: 28px; margin-top: px; margin-right: -3px;" data-badge="{{noti_amount}}">notifications_none</div>
-          {% endif%}
-        </div>
-      </a>
-      <a href="/feeds/creator/{{ request.user.username }}/">
-        {% if user.profile.image.url is not None %}
-          <div class="user-face-nav mb-1" style="background: url('{{ user.profile.image.url }}') center / cover;"></div>
-        {% else %}
-          <div class="user-face-nav mb-1" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
-        {% endif %}
-      </a>
-    </div>
-  </div>
-{% else%}
+{% if not user.is_authenticated %}
   <div class="float-btn flex-center bg-black">
     <a href="/accounts/login">
       <div class="w-100 h-100 font-white letter-space font-15">
