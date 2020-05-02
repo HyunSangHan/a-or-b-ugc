@@ -224,116 +224,112 @@ $(document).ready(() => {
     </div>
     `;
 
-    if (userIsAuthenticated) {
-      // frontend 먼저 반영하는 코드 (성능 이슈 해결을 위해)
-      $siblingA.children(".bg-grey").addClass("bg-black");
-      $siblingB.children(".bg-grey").addClass("bg-black");
-      $siblingA.children(".bg-grey").removeClass("bg-grey");
-      $siblingB.children(".bg-grey").removeClass("bg-grey");
-      if (side === "A") {
-        if (beforeSide === "") {
-          $this.parent().data("beforeside", "A");
-          $this
-            .children(".content-default-bg-js")
-            .removeClass("content-default-bg");
-          $siblingB
-            .children(".content-default-bg-js")
-            .removeClass("content-default-bg");
-          $this.prepend($resultA);
-          $this.prepend($clicked);
-          $siblingB.children(".content-label").toggleClass("bg-black");
-          $siblingB.children(".content-label").toggleClass("bg-grey");
-          $siblingB.prepend($resultB);
-          $siblingB.prepend($unclicked);
-        } else if (beforeSide === "A") {
-          $this.parent().data("beforeside", "");
-          $this
-            .children(".content-default-bg-js")
-            .addClass("content-default-bg");
-          $siblingB
-            .children(".content-default-bg-js")
-            .addClass("content-default-bg");
-          $this.children(".content-result").remove();
-          $this.children(".content-result-bg").remove();
-          $siblingB.children(".content-result").remove();
-          $siblingB.children(".content-result-bg").remove();
-        } else if (beforeSide === "B") {
-          $this.parent().data("beforeside", "A");
-          $this.children(".content-result").remove();
-          $this.children(".content-result-bg").remove();
-          $siblingB.children(".content-result").remove();
-          $siblingB.children(".content-result-bg").remove();
-          $this.children(".bg-grey").addClass("bg-black");
-          $this.children(".bg-grey").removeClass("bg-grey");
-          $this.prepend($resultA);
-          $this.prepend($clicked);
-          $siblingB.children(".content-label").removeClass("bg-black");
-          $siblingB.children(".content-label").addClass("bg-grey");
-          $siblingB.prepend($resultB);
-          $siblingB.prepend($unclicked);
-        }
-      } else if (side === "B") {
-        if (beforeSide === "") {
-          $this.parent().data("beforeside", "B");
-          $siblingA
-            .children(".content-default-bg-js")
-            .removeClass("content-default-bg");
-          $this
-            .children(".content-default-bg-js")
-            .removeClass("content-default-bg");
-          $this.prepend($resultB);
-          $this.prepend($clicked);
-          $siblingA.children(".content-label").toggleClass("bg-black");
-          $siblingA.children(".content-label").toggleClass("bg-grey");
-          $siblingA.prepend($resultA);
-          $siblingA.prepend($unclicked);
-        } else if (beforeSide === "A") {
-          $this.parent().data("beforeside", "B");
-          $this.children(".content-result").remove();
-          $this.children(".content-result-bg").remove();
-          $siblingA.children(".content-result").remove();
-          $siblingA.children(".content-result-bg").remove();
-          $this.children(".bg-grey").addClass("bg-black");
-          $this.children(".bg-grey").removeClass("bg-grey");
-          $this.prepend($resultB);
-          $this.prepend($clicked);
-          $siblingA.children(".content-label").removeClass("bg-black");
-          $siblingA.children(".content-label").addClass("bg-grey");
-          $siblingA.prepend($resultA);
-          $siblingA.prepend($unclicked);
-        } else if (beforeSide === "B") {
-          $this.parent().data("beforeside", "");
-          $siblingA
-            .children(".content-default-bg-js")
-            .addClass("content-default-bg");
-          $this
-            .children(".content-default-bg-js")
-            .addClass("content-default-bg");
-          $this.children(".content-result").remove();
-          $this.children(".content-result-bg").remove();
-          $siblingA.children(".content-result").remove();
-          $siblingA.children(".content-result-bg").remove();
-        }
-      }
-      // backend 실제 반영하는 코드
-      $.ajax({
-        url: `/feeds/${fid}/upvote_${side}`,
-        type: "GET",
-        dataType: "json",
-        success: function(data) {
-          console.log(beforeSide + " => " + side);
-        },
-        error: function(response, status, error) {
-          console.log(response, status, error);
-          console.log("error!!!");
-          window.location.reload();
-        },
-        complete: function(response) {}
-      });
-    } else {
-      alert("로그인이 필요한 서비스입니다.");
-      window.location.href = "/accounts/login";
+    if (!userIsAuthenticated) {
+      redirectToLogin();
+      return;
     }
+
+    // frontend 먼저 반영하는 코드 (성능 이슈 해결을 위해)
+    $siblingA.children(".bg-grey").addClass("bg-black");
+    $siblingB.children(".bg-grey").addClass("bg-black");
+    $siblingA.children(".bg-grey").removeClass("bg-grey");
+    $siblingB.children(".bg-grey").removeClass("bg-grey");
+    if (side === "A") {
+      if (beforeSide === "") {
+        $this.parent().data("beforeside", "A");
+        $this
+          .children(".content-default-bg-js")
+          .removeClass("content-default-bg");
+        $siblingB
+          .children(".content-default-bg-js")
+          .removeClass("content-default-bg");
+        $this.prepend($resultA);
+        $this.prepend($clicked);
+        $siblingB.children(".content-label").toggleClass("bg-black");
+        $siblingB.children(".content-label").toggleClass("bg-grey");
+        $siblingB.prepend($resultB);
+        $siblingB.prepend($unclicked);
+      } else if (beforeSide === "A") {
+        $this.parent().data("beforeside", "");
+        $this.children(".content-default-bg-js").addClass("content-default-bg");
+        $siblingB
+          .children(".content-default-bg-js")
+          .addClass("content-default-bg");
+        $this.children(".content-result").remove();
+        $this.children(".content-result-bg").remove();
+        $siblingB.children(".content-result").remove();
+        $siblingB.children(".content-result-bg").remove();
+      } else if (beforeSide === "B") {
+        $this.parent().data("beforeside", "A");
+        $this.children(".content-result").remove();
+        $this.children(".content-result-bg").remove();
+        $siblingB.children(".content-result").remove();
+        $siblingB.children(".content-result-bg").remove();
+        $this.children(".bg-grey").addClass("bg-black");
+        $this.children(".bg-grey").removeClass("bg-grey");
+        $this.prepend($resultA);
+        $this.prepend($clicked);
+        $siblingB.children(".content-label").removeClass("bg-black");
+        $siblingB.children(".content-label").addClass("bg-grey");
+        $siblingB.prepend($resultB);
+        $siblingB.prepend($unclicked);
+      }
+    } else if (side === "B") {
+      if (beforeSide === "") {
+        $this.parent().data("beforeside", "B");
+        $siblingA
+          .children(".content-default-bg-js")
+          .removeClass("content-default-bg");
+        $this
+          .children(".content-default-bg-js")
+          .removeClass("content-default-bg");
+        $this.prepend($resultB);
+        $this.prepend($clicked);
+        $siblingA.children(".content-label").toggleClass("bg-black");
+        $siblingA.children(".content-label").toggleClass("bg-grey");
+        $siblingA.prepend($resultA);
+        $siblingA.prepend($unclicked);
+      } else if (beforeSide === "A") {
+        $this.parent().data("beforeside", "B");
+        $this.children(".content-result").remove();
+        $this.children(".content-result-bg").remove();
+        $siblingA.children(".content-result").remove();
+        $siblingA.children(".content-result-bg").remove();
+        $this.children(".bg-grey").addClass("bg-black");
+        $this.children(".bg-grey").removeClass("bg-grey");
+        $this.prepend($resultB);
+        $this.prepend($clicked);
+        $siblingA.children(".content-label").removeClass("bg-black");
+        $siblingA.children(".content-label").addClass("bg-grey");
+        $siblingA.prepend($resultA);
+        $siblingA.prepend($unclicked);
+      } else if (beforeSide === "B") {
+        $this.parent().data("beforeside", "");
+        $siblingA
+          .children(".content-default-bg-js")
+          .addClass("content-default-bg");
+        $this.children(".content-default-bg-js").addClass("content-default-bg");
+        $this.children(".content-result").remove();
+        $this.children(".content-result-bg").remove();
+        $siblingA.children(".content-result").remove();
+        $siblingA.children(".content-result-bg").remove();
+      }
+    }
+    // backend 실제 반영하는 코드
+    $.ajax({
+      url: `/feeds/${fid}/upvote_${side}`,
+      type: "GET",
+      dataType: "json",
+      success: function(data) {
+        console.log(beforeSide + " => " + side);
+      },
+      error: function(response, status, error) {
+        console.log(response, status, error);
+        console.log("error!!!");
+        window.location.reload();
+      },
+      complete: function(response) {}
+    });
   });
 
   // 신고하기
@@ -428,6 +424,11 @@ $(document).ready(() => {
     const $heartNum = $this.children(".comment-heart-num");
     const fid = $this.attr("data-feedid");
     const cid = $this.attr("data-commentid");
+
+    if (!fid && !cid) {
+      redirectToLogin();
+      return;
+    }
 
     $.ajax({
       url: `/feeds/${fid}/comments/${cid}/upvote`,
@@ -1178,3 +1179,8 @@ $(document).ready(() => {
     });
   });
 });
+
+function redirectToLogin() {
+  confirm("로그인이 필요한 서비스입니다. 로그인하시겠어요?") &&
+    (window.location.href = "/accounts/login");
+}
