@@ -749,7 +749,12 @@ $(document).ready(() => {
         <div class="content-img-input-msg-lower font-white flex-center img-srch-btn" data-csrfmiddlewaretoken="` +
         csrfmiddlewaretoken +
         `">
-          이미지 추천
+          <div>
+            이미지 추천
+            <div>
+              <i class="font-11">by NAVER 이미지검색</i>
+            </div>
+          </div>
         </div>
       </div>
     `

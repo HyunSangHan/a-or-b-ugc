@@ -4,6 +4,10 @@
     height: 265px;
   }
 
+  .profile {
+    padding: 20px 3% 60px;
+  }
+
   .contents {
     padding: 80px 3% 60px;
   }
@@ -63,6 +67,10 @@
 }
 
 @media (min-width: 576px) {
+  .profile {
+    padding: 20px 40px 60px;
+  }
+
   .contents {
     padding: 70px 40px 60px;
   }
@@ -129,6 +137,10 @@
 }
 
 @media (min-width: 768px) {
+  .profile {
+    padding: 40px 40px 40px;
+  }
+
   .contents {
     padding: 100px 40px 40px;
   }
