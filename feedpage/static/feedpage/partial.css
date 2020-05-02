@@ -502,7 +502,7 @@
   -webkit-transform: translateZ(0);
   -webkit-overflow-scrolling: touch;
   bottom: 0;
-  width: 100%;
+  width: 100vw;
   height: 50px;
   background-color: white;
   z-index: 5;
