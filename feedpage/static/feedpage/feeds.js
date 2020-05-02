@@ -109,10 +109,17 @@ $(document).ready(() => {
   });
 
   //더보기버튼
-  $(document).on("click", ".more-js-btn", function() {
+  $(document).on("click", ".more-js-btn", function(e) {
+    e.stopPropagation();
     $(this)
       .next()
       .toggle();
+  });
+
+  $(document).on("click", function() {
+    $(".more-js-btn")
+      .next()
+      .hide();
   });
 
   // 투표하기
