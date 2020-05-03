@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
-    "start": "webpack && python manage.py runserver"
+    "dev": "webpack && python manage.py runserver",
+    "prod": "webpack && gunicorn snulion7th.wsgi:application --bind 0:8000 --daemon --reload"
   },
   "repository": {
     "type": "git",
