@@ -51,7 +51,7 @@ span > a {
 main {
   &.mdl-layout__content {
     &.white {
-      padding: 64px 0 50px;
+      padding: 68px 0 50px;
     }
     &.black {
       padding: 0 0 50px;
@@ -96,6 +96,11 @@ label > div:hover {
     display: flex;
     flex-flow: column;
     min-height: calc(100vh - 314px);
+  }
+
+  &.noti {
+    display: flex;
+    min-height: calc(100vh - 114px);
   }
 }
 

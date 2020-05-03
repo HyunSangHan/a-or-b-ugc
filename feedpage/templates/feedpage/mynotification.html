@@ -5,7 +5,7 @@
 {% block content %}
 <main class="mdl-layout__content white mt--1">
   <div class="page-content m-auto">
-    <div class="container">
+    <div class="container noti">
       {% if has_noti %}
         <div class="m-auto contents noti">
           <div class="contents-margin">
@@ -378,56 +378,56 @@
           </div>
         </div>
         {% else %}
-          <div class="m-auto contents noti empty">
+          <div class="contents empty">
             <div class="w-100 flex-center font-15">
               도착한 알림이 없습니다.
             </div>
           </div>
         {% endif %}
       </div>
-      <!--navigation bar-->
-      {% if user.is_authenticated %}
-        <div class="nav-bar-bg">
-          <div class="nav-bar-wrap">
-            <a href="/feeds/">
-              <div>
-                <i class="material-icons-outlined" style="font-size: 29px;">home</i>
-              </div>
-            </a>
-            <a href="/feeds/mysubscribe/">
-              <div>
-                <i class="material-icons-outlined" style="font-size: 26px; margin-top: 2px;">library_books</i>
-              </div>
-            </a>
-            <a href="/feeds/new">
-              <div>
-                <i class="material-icons-outlined" style="font-size: 29px;">add_circle_outline</i>
-              </div>
-            </a>
-            <a href="/feeds/mynotification">
-              <div>
-                <i class="material-icons" style="font-size: 29px; margin-right: -2px;">notifications</i>
-              </div>
-            </a>
-            <a href="/feeds/creator/{{ request.user.username }}/">
-              {% if user.profile.image.url is not None %}
-                <div class="user-face-nav mb-1" style="background: url('{{ user.profile.image.url }}') center / cover;"></div>
-              {% else %}
-                <div class="user-face-nav mb-1" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
-              {% endif %}
-            </a>
-          </div>
-        </div>
-      {% else%}
-        <div class="float-btn flex-center bg-black">
-          <a href="/accounts/login">
-            <div class="w-100 h-100 font-white letter-space font-15">
-              참여하기
-            </div>
-          </a>
-        </div>
-      {% endif %}
     </div>
   </div>
 </main>
+<!--navigation bar-->
+{% if user.is_authenticated %}
+  <div class="nav-bar-bg">
+    <div class="nav-bar-wrap">
+      <a href="/feeds/">
+        <div>
+          <i class="material-icons-outlined" style="font-size: 29px;">home</i>
+        </div>
+      </a>
+      <a href="/feeds/mysubscribe/">
+        <div>
+          <i class="material-icons-outlined" style="font-size: 26px; margin-top: 2px;">library_books</i>
+        </div>
+      </a>
+      <a href="/feeds/new">
+        <div>
+          <i class="material-icons-outlined" style="font-size: 29px;">add_circle_outline</i>
+        </div>
+      </a>
+      <a href="/feeds/mynotification">
+        <div>
+          <i class="material-icons" style="font-size: 29px; margin-right: -2px;">notifications</i>
+        </div>
+      </a>
+      <a href="/feeds/creator/{{ request.user.username }}/">
+        {% if user.profile.image.url is not None %}
+          <div class="user-face-nav mb-1" style="background: url('{{ user.profile.image.url }}') center / cover;"></div>
+        {% else %}
+          <div class="user-face-nav mb-1" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
+        {% endif %}
+      </a>
+    </div>
+  </div>
+{% else%}
+  <div class="float-btn flex-center bg-black">
+    <a href="/accounts/login">
+      <div class="w-100 h-100 font-white letter-space font-15">
+        참여하기
+      </div>
+    </a>
+  </div>
+{% endif %}
 {% endblock content %}

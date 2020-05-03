@@ -135,11 +135,22 @@
   text-align: center;
 }
 
-.contents.my.empty {
+.contents.empty {
   display: flex;
   min-height: 0;
   width: 100%;
-  padding: 0 0 50px;
+  padding: 0;
+}
+
+.contents.noti {
+  padding: 0 3% 10px;
+}
+
+.contents.empty {
+  display: flex;
+  min-height: 0;
+  width: 100%;
+  padding: 0;
 }
 
 .page-content-black {
