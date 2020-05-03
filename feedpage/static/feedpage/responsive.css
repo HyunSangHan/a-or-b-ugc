@@ -9,7 +9,13 @@
   }
 
   .contents {
-    padding: 80px 3% 60px;
+    padding: 10px 3% 0;
+  }
+
+  .contents.subs {
+    width: 94%;
+    flex-grow: 1;
+    padding: 10px 3% 0;
   }
 
   .contents.my {
@@ -74,7 +80,13 @@
   }
 
   .contents {
-    padding: 70px 40px 60px;
+    padding: 10px 40px 0;
+  }
+
+  .contents.subs {
+    width: calc(100% - 80px);
+    flex-grow: 1;
+    padding: 10px 40px 0;
   }
 
   .contents.my {
@@ -143,7 +155,13 @@
   }
 
   .contents {
-    padding: 100px 40px 40px;
+    padding: 10px 40px 0;
+  }
+
+  .contents.subs {
+    width: calc(100% - 80px);
+    flex-grow: 1;
+    padding: 10px 40px 0;
   }
 
   .contents.my {
