@@ -38,9 +38,12 @@ IMG_CLIENT_KEY = get_secret('IMG_CLIENT_KEY')
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'ec2-15-165-158-203.ap-northeast-2.compute.amazonaws.com',
+    '15.165.158.203'
+]
 
 
 # Application definition
@@ -145,10 +148,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT =  os.path.join(BASE_DIR, 'static')
-STATICFILES_DIRS = (
-	os.path.join(BASE_DIR, 'feedpage', 'static'),
-	# os.path.join(BASE_DIR, 'accounts', 'static'),
-)
+
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
