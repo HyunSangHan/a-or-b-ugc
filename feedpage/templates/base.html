@@ -53,12 +53,8 @@
           </form>
         </div>
       </header>
-      <main class="mdl-layout__content mt--1">
-        <div class="page-content m-auto">
-          {% block content %}
-          {% endblock %}
-        </div>
-      </main>
+      {% block content %}
+      {% endblock %}
     </div>
     <script src="{% static 'dist/index.js' %}"></script>
   </body>

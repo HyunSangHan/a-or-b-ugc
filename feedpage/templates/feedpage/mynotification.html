@@ -3,425 +3,431 @@
 <!--1피드투표/2피드댓글/3신고/4신고숨김/5댓글좋아요/6구독/7구독새글-->
 
 {% block content %}
-  <div class="container">
-    <div class="m-auto contents noti">
+<main class="mdl-layout__content white mt--1">
+  <div class="page-content m-auto">
+    <div class="container">
       {% if has_noti %}
-        <div class="contents-margin">
-          <!--unchecked-->
-          {% for noti in noti_unchecked %}
-            {% if noti.noti_type == 1 %}
-            <!-- 1.피드투표 -->
-              <li class="each-noti">
-                <a href="/feeds/creator/{{ noti.noti_from.user.username }}">
-                  <div class="user-face-bigger m-0" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
-                </a>
-                <a href="/feeds/{{ noti.feed.uuid }}">
-                  <div class="flex-center">
-                    <div class="noti-content-ml noti-content-mr font-13 font-black">
-                      누군가가 회원님이 업로드한 아젠다에 투표했습니다.
-                      <div class="font-grey">
-                        {% get_deltatime noti.id 2 %}
-                      </div>
-                    </div>
-                    <div class="abs-right--10">
-                      <div class="both-img-wrap">
-                        <div class="left-img" style="background: url('{{noti.feed.img_a.url}}') center / cover;"></div>
-                        <div class="right-img" style="background: url('{{noti.feed.img_b.url}}') center / cover;"></div>
-                      </div>
-                    </div>
-                  </div>
-                </a>
-              </li>
-            {% elif noti.noti_type == 2 %}
-            <!-- 2.피드댓글 -->
-              <li class="each-noti">
-                <a href="/feeds/creator/{{ noti.noti_from.user.username }}">
-                  {% if noti.noti_from.image.url is not None %}
-                    <div class="user-face-bigger m-0" style="background: url('{{noti.noti_from.image.url}}') center / cover;"></div>
-                  {% else %}
+        <div class="m-auto contents noti">
+          <div class="contents-margin">
+            <!--unchecked-->
+            {% for noti in noti_unchecked %}
+              {% if noti.noti_type == 1 %}
+              <!-- 1.피드투표 -->
+                <li class="each-noti">
+                  <a href="/feeds/creator/{{ noti.noti_from.user.username }}">
                     <div class="user-face-bigger m-0" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
-                  {% endif %}
-                </a>
-                <a href="/feeds/{{ noti.feed.uuid }}">
-                  <div class="flex-center">
-                    <div class="noti-content-ml noti-content-mr font-13 font-black">
-                      <strong>{{noti.noti_from}}</strong>님이 회원님이 업로드한 아젠다에 댓글을 남겼습니다.
-                      <div class="font-grey">
-                        {% get_deltatime noti.id 2 %}
+                  </a>
+                  <a href="/feeds/{{ noti.feed.uuid }}">
+                    <div class="flex-center">
+                      <div class="noti-content-ml noti-content-mr font-13 font-black">
+                        누군가가 회원님이 업로드한 아젠다에 투표했습니다.
+                        <div class="font-grey">
+                          {% get_deltatime noti.id 2 %}
+                        </div>
+                      </div>
+                      <div class="abs-right--10">
+                        <div class="both-img-wrap">
+                          <div class="left-img" style="background: url('{{noti.feed.img_a.url}}') center / cover;"></div>
+                          <div class="right-img" style="background: url('{{noti.feed.img_b.url}}') center / cover;"></div>
+                        </div>
                       </div>
                     </div>
-                    <div class="abs-right--10">
-                      <div class="both-img-wrap">
-                        <div class="left-img" style="background: url('{{noti.feed.img_a.url}}') center / cover;"></div>
-                        <div class="right-img" style="background: url('{{noti.feed.img_b.url}}') center / cover;"></div>
+                  </a>
+                </li>
+              {% elif noti.noti_type == 2 %}
+              <!-- 2.피드댓글 -->
+                <li class="each-noti">
+                  <a href="/feeds/creator/{{ noti.noti_from.user.username }}">
+                    {% if noti.noti_from.image.url is not None %}
+                      <div class="user-face-bigger m-0" style="background: url('{{noti.noti_from.image.url}}') center / cover;"></div>
+                    {% else %}
+                      <div class="user-face-bigger m-0" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
+                    {% endif %}
+                  </a>
+                  <a href="/feeds/{{ noti.feed.uuid }}">
+                    <div class="flex-center">
+                      <div class="noti-content-ml noti-content-mr font-13 font-black">
+                        <strong>{{noti.noti_from}}</strong>님이 회원님이 업로드한 아젠다에 댓글을 남겼습니다.
+                        <div class="font-grey">
+                          {% get_deltatime noti.id 2 %}
+                        </div>
+                      </div>
+                      <div class="abs-right--10">
+                        <div class="both-img-wrap">
+                          <div class="left-img" style="background: url('{{noti.feed.img_a.url}}') center / cover;"></div>
+                          <div class="right-img" style="background: url('{{noti.feed.img_b.url}}') center / cover;"></div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </a>
-              </li>
-            {% elif noti.noti_type == 3 %}
-            <!-- 3.신고 -->
-              <li class="each-noti">
-                <a href="/feeds/{{ noti.feed.uuid }}">
-                  <div class="user-face-bigger m-0" style="background: url('/static/feedpage/yellowcard.png') center / cover;"></div>
-                </a>
-                <a href="/feeds/{{ noti.feed.uuid }}">
-                  <div class="flex-center w-100 h-100">
-                    <div class="noti-content-ml noti-content-mr font-13 font-black">
-                      <strong>{{noti.feed.title}}</strong> 아젠다에 대한 신고 접수
-                      <div class="font-grey">
-                        {% get_deltatime noti.id 2 %}
+                  </a>
+                </li>
+              {% elif noti.noti_type == 3 %}
+              <!-- 3.신고 -->
+                <li class="each-noti">
+                  <a href="/feeds/{{ noti.feed.uuid }}">
+                    <div class="user-face-bigger m-0" style="background: url('/static/feedpage/yellowcard.png') center / cover;"></div>
+                  </a>
+                  <a href="/feeds/{{ noti.feed.uuid }}">
+                    <div class="flex-center w-100 h-100">
+                      <div class="noti-content-ml noti-content-mr font-13 font-black">
+                        <strong>{{noti.feed.title}}</strong> 아젠다에 대한 신고 접수
+                        <div class="font-grey">
+                          {% get_deltatime noti.id 2 %}
+                        </div>
+                      </div>
+                      <div class="abs-right--10">
+                        <div class="both-img-wrap">
+                          <div class="left-img" style="background: url('{{noti.feed.img_a.url}}') center / cover;"></div>
+                          <div class="right-img" style="background: url('{{noti.feed.img_b.url}}') center / cover;"></div>
+                        </div>
                       </div>
                     </div>
-                    <div class="abs-right--10">
-                      <div class="both-img-wrap">
-                        <div class="left-img" style="background: url('{{noti.feed.img_a.url}}') center / cover;"></div>
-                        <div class="right-img" style="background: url('{{noti.feed.img_b.url}}') center / cover;"></div>
+                  </a>
+                </li>
+              {% elif noti.noti_type == 4 %}
+              <!-- 4.신고숨김 -->
+                <li class="each-noti">
+                  <a href="/feeds/{{ noti.feed.uuid }}">
+                    <div class="user-face-bigger m-0" style="background: url('/static/feedpage/redcard.png') center / cover;"></div>
+                  </a>
+                  <a href="/feeds/{{ noti.feed.uuid }}">
+                    <div class="flex-center">
+                      <div class="noti-content-ml noti-content-mr font-13">
+                        회원님이 업로드한 아젠다가 10회 이상 신고당하여 추천피드에 노출되지 않게 되었습니다.: <strong>{{noti.feed.title}}</strong>
+                      </div>
+                      <div class="abs-right--10">
+                        <div class="both-img-wrap">
+                          <div class="left-img" style="background: url('{{noti.feed.img_a.url}}') center / cover;"></div>
+                          <div class="right-img" style="background: url('{{noti.feed.img_b.url}}') center / cover;"></div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </a>
-              </li>
-            {% elif noti.noti_type == 4 %}
-            <!-- 4.신고숨김 -->
-              <li class="each-noti">
-                <a href="/feeds/{{ noti.feed.uuid }}">
-                  <div class="user-face-bigger m-0" style="background: url('/static/feedpage/redcard.png') center / cover;"></div>
-                </a>
-                <a href="/feeds/{{ noti.feed.uuid }}">
-                  <div class="flex-center">
-                    <div class="noti-content-ml noti-content-mr font-13">
-                      회원님이 업로드한 아젠다가 10회 이상 신고당하여 추천피드에 노출되지 않게 되었습니다.: <strong>{{noti.feed.title}}</strong>
-                    </div>
-                    <div class="abs-right--10">
-                      <div class="both-img-wrap">
-                        <div class="left-img" style="background: url('{{noti.feed.img_a.url}}') center / cover;"></div>
-                        <div class="right-img" style="background: url('{{noti.feed.img_b.url}}') center / cover;"></div>
+                  </a>
+                </li>
+              {% elif noti.noti_type == 5 %}
+              <!-- 5.댓글좋아요 -->
+                <li class="each-noti">
+                  <a href="/feeds/creator/{{ noti.noti_from.user.username }}">
+                    {% if noti.noti_from.image.url is not None %}
+                      <div class="user-face-bigger m-0" style="background: url('{{noti.noti_from.image.url}}') center / cover;"></div>
+                    {% else %}
+                      <div class="user-face-bigger m-0" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
+                    {% endif %}
+                  </a>
+                  <a href="/feeds/{{ noti.feed.uuid }}">
+                    <div class="flex-center">
+                      <div class="noti-content-ml noti-content-mr font-13 font-black">
+                        <strong>{{noti.noti_from}}</strong>님이 회원님의 댓글을 좋아합니다.
+                        <div class="font-grey">
+                          {% get_deltatime noti.id 2 %}
+                        </div>
+                      </div>
+                      <div class="abs-right--10">
+                        <div class="both-img-wrap">
+                          <div class="left-img" style="background: url('{{noti.feed.img_a.url}}') center / cover;"></div>
+                          <div class="right-img" style="background: url('{{noti.feed.img_b.url}}') center / cover;"></div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </a>
-              </li>
-            {% elif noti.noti_type == 5 %}
-            <!-- 5.댓글좋아요 -->
-              <li class="each-noti">
-                <a href="/feeds/creator/{{ noti.noti_from.user.username }}">
-                  {% if noti.noti_from.image.url is not None %}
-                    <div class="user-face-bigger m-0" style="background: url('{{noti.noti_from.image.url}}') center / cover;"></div>
-                  {% else %}
-                    <div class="user-face-bigger m-0" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
-                  {% endif %}
-                </a>
-                <a href="/feeds/{{ noti.feed.uuid }}">
-                  <div class="flex-center">
-                    <div class="noti-content-ml noti-content-mr font-13 font-black">
-                      <strong>{{noti.noti_from}}</strong>님이 회원님의 댓글을 좋아합니다.
-                      <div class="font-grey">
-                        {% get_deltatime noti.id 2 %}
+                  </a>
+                </li>
+              {% elif noti.noti_type == 6 %}
+              <!-- 6.구독 -->
+                <li class="each-noti">
+                  <a href="/feeds/creator/{{ noti.noti_from.user.username }}">
+                    {% if noti.noti_from.image.url is not None %}
+                      <div class="user-face-bigger m-0" style="background: url('{{noti.noti_from.image.url}}') center / cover;"></div>
+                    {% else %}
+                      <div class="user-face-bigger m-0" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
+                    {% endif %}
+                  </a>
+                  <a href="/feeds/creator/{{ noti.noti_from.user.username }}">
+                    <div class="flex-center">
+                      <div class="noti-content-ml font-13 font-black">
+                        <strong>{{noti.noti_from}}</strong>님이 회원님의 구독자가 되었습니다.
+                        <div class="font-grey">
+                          {% get_deltatime noti.id 2 %}
+                        </div>
+                      </div>
+                      <div class="abs-right--10">
+                        <div class="both-img-wrap">
+                          <div class="left-img" style="background: url('{{noti.feed.img_a.url}}') center / cover;"></div>
+                          <div class="right-img" style="background: url('{{noti.feed.img_b.url}}') center / cover;"></div>
+                        </div>
                       </div>
                     </div>
-                    <div class="abs-right--10">
-                      <div class="both-img-wrap">
-                        <div class="left-img" style="background: url('{{noti.feed.img_a.url}}') center / cover;"></div>
-                        <div class="right-img" style="background: url('{{noti.feed.img_b.url}}') center / cover;"></div>
+                  </a>
+                </li>
+              {% elif noti.noti_type == 7 %}
+              <!-- 7.구독새글 -->
+                <li class="each-noti">
+                  <a href="/feeds/creator/{{ noti.noti_from.user.username }}">
+                    {% if noti.noti_from.image.url is not None %}
+                      <div class="user-face-bigger m-0" style="background: url('{{noti.noti_from.image.url}}') center / cover;"></div>
+                    {% else %}
+                      <div class="user-face-bigger m-0" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
+                    {% endif %}
+                  </a>
+                  <a href="/feeds/{{ noti.feed.uuid }}">
+                    <div class="flex-center">
+                      <div class="noti-content-ml noti-content-mr font-13 font-black">
+                        <strong>{{noti.noti_from}}</strong>님이 업로드한 새 아젠다: "{{noti.feed.title}}"
+                        <div class="font-grey">
+                          {% get_deltatime noti.id 2 %}
+                        </div>
+                      </div>
+                      <div class="abs-right--10">
+                        <div class="both-img-wrap">
+                          <div class="left-img" style="background: url('{{noti.feed.img_a.url}}') center / cover;"></div>
+                          <div class="right-img" style="background: url('{{noti.feed.img_b.url}}') center / cover;"></div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </a>
-              </li>
-            {% elif noti.noti_type == 6 %}
-            <!-- 6.구독 -->
-              <li class="each-noti">
-                <a href="/feeds/creator/{{ noti.noti_from.user.username }}">
-                  {% if noti.noti_from.image.url is not None %}
-                    <div class="user-face-bigger m-0" style="background: url('{{noti.noti_from.image.url}}') center / cover;"></div>
-                  {% else %}
-                    <div class="user-face-bigger m-0" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
-                  {% endif %}
-                </a>
-                <a href="/feeds/creator/{{ noti.noti_from.user.username }}">
-                  <div class="flex-center">
-                    <div class="noti-content-ml font-13 font-black">
-                      <strong>{{noti.noti_from}}</strong>님이 회원님의 구독자가 되었습니다.
-                      <div class="font-grey">
-                        {% get_deltatime noti.id 2 %}
-                      </div>
-                    </div>
-                    <div class="abs-right--10">
-                      <div class="both-img-wrap">
-                        <div class="left-img" style="background: url('{{noti.feed.img_a.url}}') center / cover;"></div>
-                        <div class="right-img" style="background: url('{{noti.feed.img_b.url}}') center / cover;"></div>
-                      </div>
-                    </div>
-                  </div>
-                </a>
-              </li>
-            {% elif noti.noti_type == 7 %}
-            <!-- 7.구독새글 -->
-              <li class="each-noti">
-                <a href="/feeds/creator/{{ noti.noti_from.user.username }}">
-                  {% if noti.noti_from.image.url is not None %}
-                    <div class="user-face-bigger m-0" style="background: url('{{noti.noti_from.image.url}}') center / cover;"></div>
-                  {% else %}
-                    <div class="user-face-bigger m-0" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
-                  {% endif %}
-                </a>
-                <a href="/feeds/{{ noti.feed.uuid }}">
-                  <div class="flex-center">
-                    <div class="noti-content-ml noti-content-mr font-13 font-black">
-                      <strong>{{noti.noti_from}}</strong>님이 업로드한 새 아젠다: "{{noti.feed.title}}"
-                      <div class="font-grey">
-                        {% get_deltatime noti.id 2 %}
-                      </div>
-                    </div>
-                    <div class="abs-right--10">
-                      <div class="both-img-wrap">
-                        <div class="left-img" style="background: url('{{noti.feed.img_a.url}}') center / cover;"></div>
-                        <div class="right-img" style="background: url('{{noti.feed.img_b.url}}') center / cover;"></div>
-                      </div>
-                    </div>
-                  </div>
-                </a>
-              </li>
-            {% endif %}
-          {% endfor %}
+                  </a>
+                </li>
+              {% endif %}
+            {% endfor %}
 
-          <!--checked-->
-          {% for noti in noti_checked %}
-            {% if noti.noti_type == 1 %}
-            <!-- 1.피드투표 -->
-              <li class="each-noti">
-                <a href="/feeds/creator/{{ noti.noti_from.user.username }}">
-                  <div class="user-face-bigger m-0" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
-                </a>
-                <a href="/feeds/{{ noti.feed.uuid }}">
-                  <div class="flex-center">
-                    <div class="noti-content-ml noti-content-mr font-13 font-grey">
-                      누군가가 회원님이 업로드한 아젠다에 투표했습니다.
-                      <div class="font-grey">
-                        {% get_deltatime noti.id 2 %}
-                      </div>
-                    </div>
-                    <div class="abs-right--10">
-                      <div class="both-img-wrap">
-                        <div class="left-img" style="background: url('{{noti.feed.img_a.url}}') center / cover;"></div>
-                        <div class="right-img" style="background: url('{{noti.feed.img_b.url}}') center / cover;"></div>
-                      </div>
-                    </div>
-                  </div>
-                </a>
-              </li>
-            {% elif noti.noti_type == 2 %}
-            <!-- 2.피드댓글 -->
-              <li class="each-noti">
-                <a href="/feeds/creator/{{ noti.noti_from.user.username }}">
-                  {% if noti.noti_from.image.url is not None %}
-                    <div class="user-face-bigger m-0" style="background: url('{{noti.noti_from.image.url}}') center / cover;"></div>
-                  {% else %}
+            <!--checked-->
+            {% for noti in noti_checked %}
+              {% if noti.noti_type == 1 %}
+              <!-- 1.피드투표 -->
+                <li class="each-noti">
+                  <a href="/feeds/creator/{{ noti.noti_from.user.username }}">
                     <div class="user-face-bigger m-0" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
-                  {% endif %}
-                </a>
-                <a href="/feeds/{{ noti.feed.uuid }}">
-                  <div class="flex-center">
-                    <div class="noti-content-ml noti-content-mr font-13 font-grey">
-                      <strong>{{noti.noti_from}}</strong>님이 회원님이 업로드한 아젠다에 댓글을 남겼습니다.
-                      <div class="font-grey">
-                        {% get_deltatime noti.id 2 %}
+                  </a>
+                  <a href="/feeds/{{ noti.feed.uuid }}">
+                    <div class="flex-center">
+                      <div class="noti-content-ml noti-content-mr font-13 font-grey">
+                        누군가가 회원님이 업로드한 아젠다에 투표했습니다.
+                        <div class="font-grey">
+                          {% get_deltatime noti.id 2 %}
+                        </div>
+                      </div>
+                      <div class="abs-right--10">
+                        <div class="both-img-wrap">
+                          <div class="left-img" style="background: url('{{noti.feed.img_a.url}}') center / cover;"></div>
+                          <div class="right-img" style="background: url('{{noti.feed.img_b.url}}') center / cover;"></div>
+                        </div>
                       </div>
                     </div>
-                    <div class="abs-right--10">
-                      <div class="both-img-wrap">
-                        <div class="left-img" style="background: url('{{noti.feed.img_a.url}}') center / cover;"></div>
-                        <div class="right-img" style="background: url('{{noti.feed.img_b.url}}') center / cover;"></div>
+                  </a>
+                </li>
+              {% elif noti.noti_type == 2 %}
+              <!-- 2.피드댓글 -->
+                <li class="each-noti">
+                  <a href="/feeds/creator/{{ noti.noti_from.user.username }}">
+                    {% if noti.noti_from.image.url is not None %}
+                      <div class="user-face-bigger m-0" style="background: url('{{noti.noti_from.image.url}}') center / cover;"></div>
+                    {% else %}
+                      <div class="user-face-bigger m-0" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
+                    {% endif %}
+                  </a>
+                  <a href="/feeds/{{ noti.feed.uuid }}">
+                    <div class="flex-center">
+                      <div class="noti-content-ml noti-content-mr font-13 font-grey">
+                        <strong>{{noti.noti_from}}</strong>님이 회원님이 업로드한 아젠다에 댓글을 남겼습니다.
+                        <div class="font-grey">
+                          {% get_deltatime noti.id 2 %}
+                        </div>
+                      </div>
+                      <div class="abs-right--10">
+                        <div class="both-img-wrap">
+                          <div class="left-img" style="background: url('{{noti.feed.img_a.url}}') center / cover;"></div>
+                          <div class="right-img" style="background: url('{{noti.feed.img_b.url}}') center / cover;"></div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </a>
-              </li>
-            {% elif noti.noti_type == 3 %}
-            <!-- 3.신고 -->
-              <li class="each-noti">
-                <a href="/feeds/{{ noti.feed.uuid }}">
-                  <div class="user-face-bigger m-0" style="background: url('/static/feedpage/yellowcard.png') center / cover;"></div>
-                </a>
-                <a href="/feeds/{{ noti.feed.uuid }}">
-                  <div class="flex-center w-100 h-100">
-                    <div class="noti-content-ml noti-content-mr font-13 font-grey">
-                      <strong>{{noti.feed.title}}</strong> 아젠다에 대한 신고 접수
-                      <div class="font-grey">
-                        {% get_deltatime noti.id 2 %}
+                  </a>
+                </li>
+              {% elif noti.noti_type == 3 %}
+              <!-- 3.신고 -->
+                <li class="each-noti">
+                  <a href="/feeds/{{ noti.feed.uuid }}">
+                    <div class="user-face-bigger m-0" style="background: url('/static/feedpage/yellowcard.png') center / cover;"></div>
+                  </a>
+                  <a href="/feeds/{{ noti.feed.uuid }}">
+                    <div class="flex-center w-100 h-100">
+                      <div class="noti-content-ml noti-content-mr font-13 font-grey">
+                        <strong>{{noti.feed.title}}</strong> 아젠다에 대한 신고 접수
+                        <div class="font-grey">
+                          {% get_deltatime noti.id 2 %}
+                        </div>
+                      </div>
+                      <div class="abs-right--10">
+                        <div class="both-img-wrap">
+                          <div class="left-img" style="background: url('{{noti.feed.img_a.url}}') center / cover;"></div>
+                          <div class="right-img" style="background: url('{{noti.feed.img_b.url}}') center / cover;"></div>
+                        </div>
                       </div>
                     </div>
-                    <div class="abs-right--10">
-                      <div class="both-img-wrap">
-                        <div class="left-img" style="background: url('{{noti.feed.img_a.url}}') center / cover;"></div>
-                        <div class="right-img" style="background: url('{{noti.feed.img_b.url}}') center / cover;"></div>
+                  </a>
+                </li>
+              {% elif noti.noti_type == 4 %}
+              <!-- 4.신고숨김 -->
+                <li class="each-noti">
+                  <a href="/feeds/{{ noti.feed.uuid }}">
+                    <div class="user-face-bigger m-0" style="background: url('/static/feedpage/redcard.png') center / cover;"></div>
+                  </a>
+                  <a href="/feeds/{{ noti.feed.uuid }}">
+                    <div class="flex-center">
+                      <div class="noti-content-ml noti-content-mr font-13 font-gry">
+                        회원님이 업로드한 아젠다가 10회 이상 신고당하여 추천피드에 노출되지 않게 되었습니다.: <strong>{{noti.feed.title}}</strong>
+                      </div>
+                      <div class="abs-right--10">
+                        <div class="both-img-wrap">
+                          <div class="left-img" style="background: url('{{noti.feed.img_a.url}}') center / cover;"></div>
+                          <div class="right-img" style="background: url('{{noti.feed.img_b.url}}') center / cover;"></div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </a>
-              </li>
-            {% elif noti.noti_type == 4 %}
-            <!-- 4.신고숨김 -->
-              <li class="each-noti">
-                <a href="/feeds/{{ noti.feed.uuid }}">
-                  <div class="user-face-bigger m-0" style="background: url('/static/feedpage/redcard.png') center / cover;"></div>
-                </a>
-                <a href="/feeds/{{ noti.feed.uuid }}">
-                  <div class="flex-center">
-                    <div class="noti-content-ml noti-content-mr font-13 font-gry">
-                      회원님이 업로드한 아젠다가 10회 이상 신고당하여 추천피드에 노출되지 않게 되었습니다.: <strong>{{noti.feed.title}}</strong>
-                    </div>
-                    <div class="abs-right--10">
-                      <div class="both-img-wrap">
-                        <div class="left-img" style="background: url('{{noti.feed.img_a.url}}') center / cover;"></div>
-                        <div class="right-img" style="background: url('{{noti.feed.img_b.url}}') center / cover;"></div>
+                  </a>
+                </li>
+              {% elif noti.noti_type == 5 %}
+              <!-- 5.댓글좋아요 -->
+                <li class="each-noti">
+                  <a href="/feeds/creator/{{ noti.noti_from.user.username }}">
+                    {% if noti.noti_from.image.url is not None %}
+                      <div class="user-face-bigger m-0" style="background: url('{{noti.noti_from.image.url}}') center / cover;"></div>
+                    {% else %}
+                      <div class="user-face-bigger m-0" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
+                    {% endif %}
+                  </a>
+                  <a href="/feeds/{{ noti.feed.uuid }}">
+                    <div class="flex-center">
+                      <div class="noti-content-ml noti-content-mr font-13 font-grey">
+                        <strong>{{noti.noti_from}}</strong>님이 회원님의 댓글을 좋아합니다.
+                        <div class="font-grey">
+                          {% get_deltatime noti.id 2 %}
+                        </div>
+                      </div>
+                      <div class="abs-right--10">
+                        <div class="both-img-wrap">
+                          <div class="left-img" style="background: url('{{noti.feed.img_a.url}}') center / cover;"></div>
+                          <div class="right-img" style="background: url('{{noti.feed.img_b.url}}') center / cover;"></div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </a>
-              </li>
-            {% elif noti.noti_type == 5 %}
-            <!-- 5.댓글좋아요 -->
-              <li class="each-noti">
-                <a href="/feeds/creator/{{ noti.noti_from.user.username }}">
-                  {% if noti.noti_from.image.url is not None %}
-                    <div class="user-face-bigger m-0" style="background: url('{{noti.noti_from.image.url}}') center / cover;"></div>
-                  {% else %}
-                    <div class="user-face-bigger m-0" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
-                  {% endif %}
-                </a>
-                <a href="/feeds/{{ noti.feed.uuid }}">
-                  <div class="flex-center">
-                    <div class="noti-content-ml noti-content-mr font-13 font-grey">
-                      <strong>{{noti.noti_from}}</strong>님이 회원님의 댓글을 좋아합니다.
-                      <div class="font-grey">
-                        {% get_deltatime noti.id 2 %}
+                  </a>
+                </li>
+              {% elif noti.noti_type == 6 %}
+              <!-- 6.구독 -->
+                <li class="each-noti">
+                  <a href="/feeds/creator/{{ noti.noti_from.user.username }}">
+                    {% if noti.noti_from.image.url is not None %}
+                      <div class="user-face-bigger m-0" style="background: url('{{noti.noti_from.image.url}}') center / cover;"></div>
+                    {% else %}
+                      <div class="user-face-bigger m-0" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
+                    {% endif %}
+                  </a>
+                  <a href="/feeds/creator/{{ noti.noti_from.user.username }}">
+                    <div class="flex-center">
+                      <div class="noti-content-ml font-13 font-grey">
+                        <strong>{{noti.noti_from}}</strong>님이 회원님의 구독자가 되었습니다.
+                        <div class="font-grey">
+                          {% get_deltatime noti.id 2 %}
+                        </div>
+                      </div>
+                      <div class="abs-right--10">
+                        <div class="both-img-wrap">
+                          <div class="left-img" style="background: url('{{noti.feed.img_a.url}}') center / cover;"></div>
+                          <div class="right-img" style="background: url('{{noti.feed.img_b.url}}') center / cover;"></div>
+                        </div>
                       </div>
                     </div>
-                    <div class="abs-right--10">
-                      <div class="both-img-wrap">
-                        <div class="left-img" style="background: url('{{noti.feed.img_a.url}}') center / cover;"></div>
-                        <div class="right-img" style="background: url('{{noti.feed.img_b.url}}') center / cover;"></div>
+                  </a>
+                </li>
+              {% elif noti.noti_type == 7 %}
+              <!-- 7.구독새글 -->
+                <li class="each-noti">
+                  <a href="/feeds/creator/{{ noti.noti_from.user.username }}">
+                    {% if noti.noti_from.image.url is not None %}
+                      <div class="user-face-bigger m-0" style="background: url('{{noti.noti_from.image.url}}') center / cover;"></div>
+                    {% else %}
+                      <div class="user-face-bigger m-0" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
+                    {% endif %}
+                  </a>
+                  <a href="/feeds/{{ noti.feed.uuid }}">
+                    <div class="flex-center">
+                      <div class="noti-content-ml noti-content-mr font-13 font-grey">
+                        <strong>{{noti.noti_from}}</strong>님이 업로드한 새 아젠다: "{{noti.feed.title}}"
+                        <div class="font-grey">
+                          {% get_deltatime noti.id 2 %}
+                        </div>
+                      </div>
+                      <div class="abs-right--10">
+                        <div class="both-img-wrap">
+                          <div class="left-img" style="background: url('{{noti.feed.img_a.url}}') center / cover;"></div>
+                          <div class="right-img" style="background: url('{{noti.feed.img_b.url}}') center / cover;"></div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </a>
-              </li>
-            {% elif noti.noti_type == 6 %}
-            <!-- 6.구독 -->
-              <li class="each-noti">
-                <a href="/feeds/creator/{{ noti.noti_from.user.username }}">
-                  {% if noti.noti_from.image.url is not None %}
-                    <div class="user-face-bigger m-0" style="background: url('{{noti.noti_from.image.url}}') center / cover;"></div>
-                  {% else %}
-                    <div class="user-face-bigger m-0" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
-                  {% endif %}
-                </a>
-                <a href="/feeds/creator/{{ noti.noti_from.user.username }}">
-                  <div class="flex-center">
-                    <div class="noti-content-ml font-13 font-grey">
-                      <strong>{{noti.noti_from}}</strong>님이 회원님의 구독자가 되었습니다.
-                      <div class="font-grey">
-                        {% get_deltatime noti.id 2 %}
-                      </div>
-                    </div>
-                    <div class="abs-right--10">
-                      <div class="both-img-wrap">
-                        <div class="left-img" style="background: url('{{noti.feed.img_a.url}}') center / cover;"></div>
-                        <div class="right-img" style="background: url('{{noti.feed.img_b.url}}') center / cover;"></div>
-                      </div>
-                    </div>
-                  </div>
-                </a>
-              </li>
-            {% elif noti.noti_type == 7 %}
-            <!-- 7.구독새글 -->
-              <li class="each-noti">
-                <a href="/feeds/creator/{{ noti.noti_from.user.username }}">
-                  {% if noti.noti_from.image.url is not None %}
-                    <div class="user-face-bigger m-0" style="background: url('{{noti.noti_from.image.url}}') center / cover;"></div>
-                  {% else %}
-                    <div class="user-face-bigger m-0" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
-                  {% endif %}
-                </a>
-                <a href="/feeds/{{ noti.feed.uuid }}">
-                  <div class="flex-center">
-                    <div class="noti-content-ml noti-content-mr font-13 font-grey">
-                      <strong>{{noti.noti_from}}</strong>님이 업로드한 새 아젠다: "{{noti.feed.title}}"
-                      <div class="font-grey">
-                        {% get_deltatime noti.id 2 %}
-                      </div>
-                    </div>
-                    <div class="abs-right--10">
-                      <div class="both-img-wrap">
-                        <div class="left-img" style="background: url('{{noti.feed.img_a.url}}') center / cover;"></div>
-                        <div class="right-img" style="background: url('{{noti.feed.img_b.url}}') center / cover;"></div>
-                      </div>
-                    </div>
-                  </div>
-                </a>
-              </li>
+                  </a>
+                </li>
+              {% endif %}
+            {% endfor %}
+            {% if noti_checked.has_next %}
+              <div id="feed-list-ajax">
+              <!--추가로 불러오는 피드들이 들어갈 곳-->
+              </div>
+              <input id="page-num-max" type="hidden" value={{page_num_max}}>
+              <input id="page-type" type="hidden" value="mynotification">
+              <input id="page" type="hidden" value={{noti_checked.next_page_number}}>
+              <button id="call-more-feeds" type="button">Loading...</button>
             {% endif %}
-          {% endfor %}
-          {% if noti_checked.has_next %}
-            <div id="feed-list-ajax">
-            <!--추가로 불러오는 피드들이 들어갈 곳-->
-            </div>
-            <input id="page-num-max" type="hidden" value={{page_num_max}}>
-            <input id="page-type" type="hidden" value="mynotification">
-            <input id="page" type="hidden" value={{noti_checked.next_page_number}}>
-            <button id="call-more-feeds" type="button">Loading...</button>
-          {% endif %}
+          </div>
         </div>
-      {% else %}
-        <div class="vh-80 w-100 flex-center font-15">
-          도착한 알림이 없습니다.
+        {% else %}
+          <div class="m-auto contents noti empty">
+            <div class="w-100 flex-center font-15">
+              도착한 알림이 없습니다.
+            </div>
+          </div>
+        {% endif %}
+      </div>
+      <!--navigation bar-->
+      {% if user.is_authenticated %}
+        <div class="nav-bar-bg">
+          <div class="nav-bar-wrap">
+            <a href="/feeds/">
+              <div>
+                <i class="material-icons-outlined" style="font-size: 29px;">home</i>
+              </div>
+            </a>
+            <a href="/feeds/mysubscribe/">
+              <div>
+                <i class="material-icons-outlined" style="font-size: 26px; margin-top: 2px;">library_books</i>
+              </div>
+            </a>
+            <a href="/feeds/new">
+              <div>
+                <i class="material-icons-outlined" style="font-size: 29px;">add_circle_outline</i>
+              </div>
+            </a>
+            <a href="/feeds/mynotification">
+              <div>
+                <i class="material-icons" style="font-size: 29px; margin-right: -2px;">notifications</i>
+              </div>
+            </a>
+            <a href="/feeds/creator/{{ request.user.username }}/">
+              {% if user.profile.image.url is not None %}
+                <div class="user-face-nav mb-1" style="background: url('{{ user.profile.image.url }}') center / cover;"></div>
+              {% else %}
+                <div class="user-face-nav mb-1" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
+              {% endif %}
+            </a>
+          </div>
+        </div>
+      {% else%}
+        <div class="float-btn flex-center bg-black">
+          <a href="/accounts/login">
+            <div class="w-100 h-100 font-white letter-space font-15">
+              참여하기
+            </div>
+          </a>
         </div>
       {% endif %}
     </div>
   </div>
-    <!--navigation bar-->
-  {% if user.is_authenticated %}
-    <div class="nav-bar-bg">
-      <div class="nav-bar-wrap">
-        <a href="/feeds/">
-          <div>
-            <i class="material-icons-outlined" style="font-size: 29px;">home</i>
-          </div>
-        </a>
-        <a href="/feeds/mysubscribe/">
-          <div>
-            <i class="material-icons-outlined" style="font-size: 26px; margin-top: 2px;">library_books</i>
-          </div>
-        </a>
-        <a href="/feeds/new">
-          <div>
-            <i class="material-icons-outlined" style="font-size: 29px;">add_circle_outline</i>
-          </div>
-        </a>
-        <a href="/feeds/mynotification">
-          <div>
-            <i class="material-icons" style="font-size: 29px; margin-right: -2px;">notifications</i>
-          </div>
-        </a>
-        <a href="/feeds/creator/{{ request.user.username }}/">
-          {% if user.profile.image.url is not None %}
-            <div class="user-face-nav mb-1" style="background: url('{{ user.profile.image.url }}') center / cover;"></div>
-          {% else %}
-            <div class="user-face-nav mb-1" style="background: url('/static/feedpage/default_avatar.png') center / cover;"></div>
-          {% endif %}
-        </a>
-      </div>
-    </div>
-  {% else%}
-    <div class="float-btn flex-center bg-black">
-      <a href="/accounts/login">
-        <div class="w-100 h-100 font-white letter-space font-15">
-          참여하기
-        </div>
-      </a>
-    </div>
-  {% endif %}
-
+</main>
 {% endblock content %}
