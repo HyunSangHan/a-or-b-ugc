@@ -13,7 +13,9 @@
   }
 
   .contents.my {
-    padding: 20px 3% 50px;
+    width: 94%;
+    flex-grow: 1;
+    padding: 20px 3% 0;
   }
 
   .comments-input-w {
@@ -76,7 +78,9 @@
   }
 
   .contents.my {
-    padding: 25px 40px 40px;
+    width: calc(100% - 80px);
+    flex-grow: 1;
+    padding: 25px 40px 0;
   }
 
   .comments-input-w {
@@ -86,12 +90,12 @@
     padding-bottom: 9px;
   }
   .contents.noti {
-    padding-top: 70px !important;
+    padding: 70px 0 0;
   }
 
   .more-info {
     position: absolute;
-    right: calc(50% - 235px);
+    right: calc(4% + 40px);
     top: auto;
     margin-top: -26px;
     margin-right: 20px;
@@ -146,7 +150,9 @@
   }
 
   .contents.my {
-    padding: 30px 40px 40px;
+    width: calc(100% - 80px);
+    flex-grow: 1;
+    padding: 30px 40px 0;
   }
 
   .comments-input-w {
@@ -157,7 +163,7 @@
   }
 
   .contents.noti {
-    padding-top: 70px !important;
+    padding: 70px 0 0;
   }
 
   .container {

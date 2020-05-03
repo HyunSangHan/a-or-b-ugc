@@ -135,6 +135,13 @@
   text-align: center;
 }
 
+.contents.my.empty {
+  display: flex;
+  min-height: 0;
+  width: 100%;
+  padding: 0 0 50px;
+}
+
 .page-content-black {
   height: 200px;
 }

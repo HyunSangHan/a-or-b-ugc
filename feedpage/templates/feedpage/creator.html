@@ -60,7 +60,7 @@
   </div>
 </div>
 <!--피드 나오는 영역-->
-<div class="container">
+<div class="container creator">
 <!--투탭-->
   {% if request.user == creator %}
     <div class="page-content-two-tabs w-100">
@@ -78,7 +78,7 @@
   {% endif %}
 <!--피드 나오는 영역 / 피드 없을 때-->
   {% if not has_feeds %}
-    <div class="m-auto contents my" style="min-height: 40vh; display: flex !important; display: -webkit-flex !important; display: -ms-flexbox !important;">
+    <div class="m-auto contents my empty">
       <div class="contents-margin w-100 h-100 flex-center font-15">
         {% if creator == user %}
           <div class="text-center">
