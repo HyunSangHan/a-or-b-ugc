@@ -148,6 +148,11 @@
   text-align: center;
 }
 
+.contents.feed {
+  margin: 0;
+  width: 100%;
+}
+
 .contents.subs {
   display: flex;
   flex-flow: column;
