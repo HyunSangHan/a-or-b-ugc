@@ -12,6 +12,11 @@
     padding: 10px 3% 0;
   }
 
+  .contents.feed {
+    width: 94%;
+    margin: 0;
+  }
+
   .contents.subs {
     width: 94%;
     flex-grow: 1;
@@ -81,6 +86,11 @@
 
   .contents {
     padding: 10px 40px 0;
+  }
+
+  .contents.feed {
+    width: calc(100% - 80px);
+    margin: 0;
   }
 
   .contents.subs {
@@ -156,6 +166,11 @@
 
   .contents {
     padding: 10px 40px 0;
+  }
+
+  .contents.feed {
+    width: calc(100% - 80px);
+    margin: 0;
   }
 
   .contents.subs {
