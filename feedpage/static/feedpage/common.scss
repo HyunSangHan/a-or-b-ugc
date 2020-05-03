@@ -48,6 +48,17 @@ span > a {
   color: black;
 }
 
+main {
+  &.mdl-layout__content {
+    &.white {
+      padding: 68px 0 50px;
+    }
+    &.black {
+      padding: 0 0 50px;
+    }
+  }
+}
+
 .hr-scroll {
   white-space: nowrap;
   overflow: overlay;
@@ -80,6 +91,18 @@ label > div:hover {
   width: 100%;
   margin-left: auto;
   margin-right: auto;
+
+  &.creator {
+    display: flex;
+    flex-flow: column;
+    min-height: calc(100vh - 314px);
+  }
+
+  &.subs,
+  &.noti {
+    display: flex;
+    min-height: calc(100vh - 114px);
+  }
 }
 
 .container-full {

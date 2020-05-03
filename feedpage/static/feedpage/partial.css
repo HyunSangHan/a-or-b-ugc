@@ -73,7 +73,7 @@
 
 .search-btn {
   position: absolute;
-  top: 23px;
+  top: 5px;
   right: 2px;
   font-size: 14px;
 }
@@ -135,6 +135,29 @@
   text-align: center;
 }
 
+.contents.empty {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  padding: 0;
+}
+
+.contents.empty > div {
+  padding: 0 20px;
+  text-align: center;
+}
+
+.contents.subs {
+  display: flex;
+  flex-flow: column;
+  padding: 0 3% 10px;
+}
+
+.contents.noti {
+  padding: 0 3% 10px;
+}
+
 .page-content-black {
   height: 200px;
 }
@@ -159,7 +182,6 @@
   background-color: white;
   padding: 5px;
   /* margin: -5px; */
-  min-height: 80vh;
 }
 
 .black-creator {
