@@ -539,14 +539,16 @@
     {% endif %}
   </div>
 </main>
-<script>
-  var emptyFrame;
-  function getRestHeight () {
-    emptyFrame = document.getElementsByClassName("container feed")[0];
-    emptyFrame.style.minHeight = (window.innerHeight - 114) + "px";
-  }
-  getRestHeight();
-  window.addEventListener("resize", getRestHeight);
-  window.addEventListener("orientationchange", getRestHeight);
-</script>
+{% if search_result_num == 0 %}
+  <script>
+    var emptyFrame;
+    function getRestHeight () {
+      emptyFrame = document.getElementsByClassName("container feed")[0];
+      emptyFrame.style.minHeight = (window.innerHeight - 114) + "px";
+    }
+    getRestHeight();
+    window.addEventListener("resize", getRestHeight);
+    window.addEventListener("orientationchange", getRestHeight);
+  </script>
+{% endif %}
 {% endblock content %}

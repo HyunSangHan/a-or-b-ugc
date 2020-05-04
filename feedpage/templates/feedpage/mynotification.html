@@ -430,14 +430,16 @@
     </a>
   </div>
 {% endif %}
-<script>
-  var emptyFrame;
-  function getRestHeight () {
-    emptyFrame = document.getElementsByClassName("container noti")[0];
-    emptyFrame.style.minHeight = (window.innerHeight - 114) + "px";
-  }
-  getRestHeight();
-  window.addEventListener("resize", getRestHeight);
-  window.addEventListener("orientationchange", getRestHeight);
-</script>
+{% if not has_noti %}
+  <script>
+    var emptyFrame;
+    function getRestHeight () {
+      emptyFrame = document.getElementsByClassName("container noti")[0];
+      emptyFrame.style.minHeight = (window.innerHeight - 114) + "px";
+    }
+    getRestHeight();
+    window.addEventListener("resize", getRestHeight);
+    window.addEventListener("orientationchange", getRestHeight);
+  </script>
+{% endif %}
 {% endblock content %}
