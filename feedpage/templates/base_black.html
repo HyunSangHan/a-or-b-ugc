@@ -94,6 +94,16 @@
         </a>
       </div>
     {% endif %}
+    <script>
+      var emptyFrame;
+      function getRestHeight () {
+        emptyFrame = document.getElementsByClassName("container creator")[0];
+        emptyFrame.style.minHeight = (window.innerHeight - 314) + "px";
+      }
+      getRestHeight();
+      window.addEventListener("resize", getRestHeight);
+      window.addEventListener("orientationchange", getRestHeight);
+    </script>
     <script src="{% static 'dist/index.js' %}"></script>
   </body>
 </html>

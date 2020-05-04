@@ -534,4 +534,14 @@
     </a>
   </div>
 {% endif %}
+<script>
+  var emptyFrame;
+  function getRestHeight () {
+    emptyFrame = document.getElementsByClassName("container subs")[0];
+    emptyFrame.style.minHeight = (window.innerHeight - 114) + "px";
+  }
+  getRestHeight();
+  window.addEventListener("resize", getRestHeight);
+  window.addEventListener("orientationchange", getRestHeight);
+</script>
 {% endblock content %}
