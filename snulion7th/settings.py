@@ -110,6 +110,17 @@ DATABASES = {
     }
 }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'HOST': get_secret('RDS_HOST'),
+#         'PORT': '5432',
+#         'NAME': get_secret('RDS_NAME'),
+#         'USER': get_secret('RDS_USER'),
+#         'PASSWORD': get_secret('RDS_PASSWORD')
+#     }
+# }
+
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
 
