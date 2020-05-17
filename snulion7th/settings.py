@@ -42,7 +42,8 @@ DEBUG = False
 
 ALLOWED_HOSTS = [
     'ec2-15-165-158-203.ap-northeast-2.compute.amazonaws.com',
-    '15.165.158.203'
+    '15.165.158.203',
+    'aorb.click'
 ]
 
 
