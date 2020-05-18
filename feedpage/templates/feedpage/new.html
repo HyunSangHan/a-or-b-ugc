@@ -6,7 +6,7 @@
     <div class="container">
       <div class="m-auto contents">
         <div class="contents-margin">
-          <form action="/feeds/new/" method="POST" enctype="multipart/form-data">
+          <form action="/new/" method="POST" enctype="multipart/form-data">
             {% csrf_token %} 
             <li class="each-li">
               <div class="w-100">
@@ -84,22 +84,22 @@
     {% if user.is_authenticated %}
       <div class="nav-bar-bg">
         <div class="nav-bar-wrap">
-          <a href="/feeds/">
+          <a href="/">
             <div>
               <i class="material-icons-outlined" style="font-size: 29px;">home</i>
             </div>
           </a>
-          <a href="/feeds/mysubscribe/">
+          <a href="/mysubscribe/">
             <div>
               <i class="material-icons-outlined" style="font-size: 26px; margin-top: 2px;">library_books</i>
             </div>
           </a>
-          <a href="/feeds/new">
+          <a href="/new">
             <div>
               <i class="material-icons-outlined" style="font-size: 29px;">add_circle</i>
             </div>
           </a>
-          <a href="/feeds/mynotification">
+          <a href="/mynotification">
             <div>
               {% get_noti_amount user.id as noti_amount %}
               {% if noti_amount == 0 %}
@@ -109,7 +109,7 @@
               {% endif%}
             </div>
           </a>
-          <a href="/feeds/creator/{{ request.user.username }}/">
+          <a href="/creator/{{ request.user.username }}/">
             {% if user.profile.image.url is not None %}
               <div class="user-face-nav mb-1" style="background: url('{{ user.profile.image.url }}') center / cover;"></div>
             {% else %}

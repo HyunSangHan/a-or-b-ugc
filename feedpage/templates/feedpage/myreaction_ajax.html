@@ -10,7 +10,7 @@
         <div class="csrf-js" data-csrfmiddlewaretoken="{{ csrf_token }}"></div>
       {% endif %}
       <div class="inline-flex w-more-btn">
-        <a href="/feeds/{{ upvote.feed.uuid }}">
+        <a href="/{{ upvote.feed.uuid }}">
           <h2 class="link-black">{{ upvote.feed.title }}</h2>
         </a>
         <div class="ml-auto more-btn">
@@ -19,12 +19,12 @@
           </button>
           <div class="more-info">
             <div>
-              <a href="/feeds/{{ upvote.feed.uuid }}" class="link-black">
+              <a href="/{{ upvote.feed.uuid }}" class="link-black">
                 <strong>더보기</strong>
               </a>
             </div>
 <!--배포 이후에 수정할 부분-->
-            <div data-clipboard-text="localhost:8000/feeds/{{ upvote.feed.uuid }}" onclick="return alert('콘텐츠의 주소가 클립보드에 복사되었습니다.')">공유하기</div>
+            <div data-clipboard-text="https://aorb.click/{{ upvote.feed.uuid }}" onclick="return alert('콘텐츠의 주소가 클립보드에 복사되었습니다.')">공유하기</div>
             {% if user.is_authenticated %}
               {% if request.user != upvote.feed.creator %}
                 <div class="subscribe-js" data-creatorid="{{ upvote.feed.creator.id }}">
@@ -47,7 +47,7 @@
                 <div>
                   {% is_deletable upvote.feed.id as is_deletable_feed %}
                   {% if is_deletable_feed %}
-                    <a href="/feeds/{{ upvote.feed.uuid }}/edit" class="link-black">수정하기</a>
+                    <a href="/{{ upvote.feed.uuid }}/edit" class="link-black">수정하기</a>
                   {% else %}
                     <span class="font-lightgrey" onclick="return alert('다른 사용자가 이미 투표/댓글 참여를 한 게시물의 경우, 내용 수정이 불가합니다. 반드시 수정이 필요하다면 삭제 후 재등록해주세요.')">수정하기</span>
                   {% endif %}                                
@@ -66,12 +66,12 @@
         {% get_feed_tags upvote.feed.id as feed_tags %}
         {% for tag in feed_tags %}
           <span class="font-13 font-light">
-            <a href="/feeds/?keyword={{tag}}" class="link-black">#{{ tag }}</a>
+            <a href="/?keyword={{tag}}" class="link-black">#{{ tag }}</a>
           </span>
         {% endfor %}
       </div>
       <div class="inline-flex v-center mt-1 mb-2">
-        <a href="/feeds/creator/{{upvote.feed.creator.username}}" class="link-grey">
+        <a href="/creator/{{upvote.feed.creator.username}}" class="link-grey">
           <div class="inline-flex">
             {% if upvote.feed.creator.profile.image.url is not None %}
               <div class="user-face" style="background: url('{{ upvote.feed.creator.profile.image.url }}') center / cover;"></div>
@@ -192,7 +192,7 @@
             <div class="comment-width">
               <span class="sideicon best">A / BEST</span>
               <span class="font-11 v-center mtb-auto comment-reactor">
-                <a href="/feeds/creator/{{comment_a.reactor.username}}">
+                <a href="/creator/{{comment_a.reactor.username}}">
                   <strong>{{ comment_a.reactor }}</strong>
                 </a>
               </span>
@@ -258,7 +258,7 @@
             <div class="comment-width">
               <span class="sideicon best">B / BEST</span>
               <span class="font-11 v-center mtb-auto comment-reactor">
-                <a href="/feeds/creator/{{comment_b.reactor.username}}">
+                <a href="/creator/{{comment_b.reactor.username}}">
                   <strong>{{ comment_b.reactor }}</strong>
                 </a>
               </span>
@@ -319,7 +319,7 @@
         {% endif %}
       </div>
       {% if upvote.feed.feedcomment_set.count > 6 %}
-        <a href="/feeds/{{ upvote.feed.uuid }}">
+        <a href="/{{ upvote.feed.uuid }}">
           <div class="font-12 link-light-black font-light mt-2">
             {% if comment_a and comment_b %}
               댓글 {{upvote.feed.feedcomment_set.count|add:"-2"}}개 더보기
@@ -348,13 +348,13 @@
                 {% if side != ""%}
                   <span class="sideicon norm"> {{ side }} </span>
                   <span class="font-11 v-center mtb-auto comment-reactor">
-                    <a href="/feeds/creator/{{c.reactor.username}}">
+                    <a href="/creator/{{c.reactor.username}}">
                       <strong>{{ c.reactor }}</strong>
                     </a>
                   </span>
                 {% else %}
                   <span class="font-11 v-center mtb-auto comment-reactor" style="margin-left: 0;">
-                    <a href="/feeds/creator/{{c.reactor.username}}">
+                    <a href="/creator/{{c.reactor.username}}">
                       <strong>{{ c.reactor }}</strong>
                     </a>
                   </span>
@@ -418,7 +418,7 @@
       {% endif %}
       <div class="new-comments"></div>
       {% if user.is_authenticated %}
-        <form action="/feeds/{{ upvote.feed.id }}/comments/" method="POST">
+        <form action="/{{ upvote.feed.id }}/comments/" method="POST">
           {% csrf_token %}
           <div class="comment-input-wrap mdl-textfield mdl-js-textfield mdl-textfield--floating-label w-100">
             <input class="mdl-textfield__input comment-input" type="text" name="content" placeholder="댓글을 입력하세요." minlength="2" maxlength="70" autocomplete="off" required />

@@ -26,9 +26,9 @@
           <!-- Title -->
           <!-- Add spacer, to align navigation to the right -->
           <div class="mdl-layout-spacer service-title">
-            <a href="/feeds" class="link-white font-13"></a>
+            <a href="/" class="link-white font-13"></a>
           </div>
-          <form action="/feeds/" method="get">
+          <form action="/" method="get">
             <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable mdl-textfield--floating-label mdl-textfield--align-right">
               <label class="mdl-button mdl-js-button mdl-button--icon" for="fixed-header-drawer-exp">
                 <i class="material-icons" style="color: white">search</i>
@@ -51,22 +51,22 @@
     {% if user.is_authenticated %}
       <div class="nav-bar-bg">
         <div class="nav-bar-wrap">
-          <a href="/feeds/">
+          <a href="/">
             <div>
               <i class="material-icons-outlined" style="font-size: 29px;">home</i>
             </div>
           </a>
-          <a href="/feeds/mysubscribe/">
+          <a href="/mysubscribe/">
             <div>
               <i class="material-icons-outlined" style="font-size: 26px; margin-top: 2px;">library_books</i>
             </div>
           </a>
-          <a href="/feeds/new">
+          <a href="/new">
             <div>
               <i class="material-icons-outlined" style="font-size: 29px;">add_circle_outline</i>
             </div>
           </a>
-          <a href="/feeds/mynotification">
+          <a href="/mynotification">
             <div>
               {% get_noti_amount user.id as noti_amount %}
               {% if noti_amount == 0 %}
@@ -76,7 +76,7 @@
               {% endif%}
             </div>
           </a>
-          <a href="/feeds/creator/{{ request.user.username }}/">
+          <a href="/creator/{{ request.user.username }}/">
             {% if user.profile.image.url is not None %}
               <div class="user-face-nav mb-1" style="background: url('{{ user.profile.image.url }}') center / cover;"></div>
             {% else %}
