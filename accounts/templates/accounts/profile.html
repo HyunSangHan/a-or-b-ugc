@@ -29,12 +29,16 @@
           <div class="version-status flex">
             {% if profile.is_premium %}
               Premium user입니다! 
-              <div id="is_premuim" class="qmark">?</div>
-              <div class="mdl-tooltip mdl-tooltip--large" for="is_premuim" style="line-height: 18px;">투표결과의 상세 통계까지<br>확인할 수 있습니다.</div>
+              <div class="qmark-wrapper">
+                <div class="qmark">?</div>
+                <div class="qmark-tooltip none" style="top: 5px; left: 25px; min-width: 130px;">투표결과의 상세통계까지<br>확인할 수 있습니다.</div>
+              </div>
             {% else %}
               아직 Lite user입니다.
-              <div id="is_lite" class="qmark">?</div>
-              <div class="mdl-tooltip mdl-tooltip--large" for="is_lite" style="line-height: 18px;">투표결과의 상세 통계는<br>확인할 수 없습니다.</div>
+              <div class="qmark-wrapper">
+                <div class="qmark">?</div>
+                <div class="qmark-tooltip none" style="top: 5px; left: 25px; min-width: 125px;">투표결과의 상세통계는<br>확인할 수 없습니다.</div>
+              </div>
             {% endif %}
           </div>
         </div>
@@ -54,8 +58,8 @@
               "30초면 돼요!"
             </div>
             <div class="font-13 font-grey">
-              프로필정보를 모두 채우시면 Premium user로 업그레이드 됩니다.<br>
-              Premium user는 투표결과에 대한 상세통계까지 확인 가능합니다.
+              프로필을 모두 채우시면 Premium user로 업그레이드 됩니다.<br>
+              Premium user는 투표결과의 상세통계까지 확인 가능합니다.
             </div>
           </div>
         {% endif %}
@@ -76,9 +80,11 @@
         <div class="each-profile-ul mt-2"></div>
         <div class="font-13 mt-7 flex">
           태어난 연도
-          <div id="birth" class="qmark-white">?</div>
-          <div class="mdl-tooltip mdl-tooltip--large mdl-tooltip--right" for="birth" style="line-height: 18px;">
-            숫자만 4자리 입력 (ex: 1991)
+          <div class="qmark-wrapper">
+            <div class="qmark-white">?</div>
+            <div class="qmark-tooltip none white" style="top: -26px; left: -62px; min-width: 160px;">
+              숫자만 4자리 입력 (ex: 1991)
+            </div>
           </div>
         </div>
         <div class="each-profile w-100">
@@ -96,9 +102,11 @@
         <div class="each-profile-ul mt-2"></div>
         <div class="font-13 mt-7 flex">
           배경지역
-          <div id="region" class="qmark-white">?</div>
-          <div class="mdl-tooltip mdl-tooltip--large mdl-tooltip--right" for="region" style="line-height: 18px;">
-            출신지/거주지 등 본인에게 가장 영향을 많이 준 지역을 선택
+          <div class="qmark-wrapper">
+            <div class="qmark-white">?</div>
+            <div class="qmark-tooltip none white" style="top: -43px; left: -47px; min-width: 160px;">
+              출신지/거주지 등 본인에게 가장 영향을 많이 준 지역을 선택
+            </div>
           </div>
         </div>
         <div class="each-profile w-100">
@@ -140,9 +148,11 @@
         <div class="each-profile-ul mt-2"></div>
         <div class="font-13 mt-7 flex">
           모바일
-          <div id="mobile" data-mobile="{{ profile.likes_iphone }}" class="qmark-white">?</div>
-          <div class="mdl-tooltip mdl-tooltip--large mdl-tooltip--right" for="mobile" style="line-height: 18px;">
+          <div class="qmark-wrapper">
+            <div id="mobile" data-mobile="{{ profile.likes_iphone }}" class="qmark-white">?</div>
+            <div class="qmark-tooltip none white" style="top: -43px; left: -34px; min-width: 160px;">
             아이폰 사용자라면 iOS, <br>그 외에는 Android를 선택
+            </div>
           </div>
         </div>
         <div class="each-profile">
@@ -208,7 +218,7 @@
         <div class="each-profile-ul mt-6"></div>
         <div id="last-msg" class="font-13 mt-9">
           {% if not profile.is_premium %}
-            <strong>입력하신 정보는 타인에게 <u>공개되지 않습니다.</u></strong><br>오직 투표결과에 대한 상세통계를 위해서만 <u>익명</u>으로 사용됩니다.<br>안심하고 입력해주세요.
+            <strong>입력하신 정보는 타인에게 <u>공개되지 않습니다.</u></strong><br>오직 투표결과에 대한 상세통계를 위해서만 <u>익명</u>으로 사용되니, 안심하고 입력해주세요.
           {% endif %}
         </div>
         <div class="w-100 flex">

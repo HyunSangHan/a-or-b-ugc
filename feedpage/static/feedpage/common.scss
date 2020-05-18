@@ -95,14 +95,12 @@ label > div:hover {
   &.creator {
     display: flex;
     flex-flow: column;
-    min-height: calc(100vh - 314px);
   }
 
   &.feed,
   &.subs,
   &.noti {
     display: flex;
-    min-height: calc(100vh - 114px);
   }
 }
 

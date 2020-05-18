@@ -140,17 +140,12 @@
   flex: 1;
   min-height: 0;
   width: 100%;
-  padding: 0;
+  padding-top: 0 !important;
 }
 
 .contents.empty > div {
   padding: 0 20px;
   text-align: center;
-}
-
-.contents.feed {
-  margin: 0;
-  width: 100%;
 }
 
 .contents.subs {
@@ -568,7 +563,7 @@
   font-size: 36px;
   margin-top: -24px;
   margin-left: -1px;
-  background-color: black;
+  background-color: transparent;
   border: none;
   color: white;
   font-weight: 700;
@@ -602,6 +597,11 @@
   cursor: pointer;
 }
 
+.qmark-wrapper {
+  position: relative;
+  cursor: pointer;
+}
+
 .qmark {
   display: flex;
   justify-content: center;
@@ -625,6 +625,20 @@
   font-size: 8px;
   color: grey;
   border: 1px solid grey;
+}
+
+.qmark-tooltip {
+  position: absolute;
+  z-index: 1000;
+  border: 1px solid #ddd;
+  background-color: black;
+  font-size: 12px;
+  padding: 2px 6px;
+  line-height: 18px;
+}
+
+.qmark-tooltip.white {
+  background-color: white;
 }
 
 .photo-edit-btn {

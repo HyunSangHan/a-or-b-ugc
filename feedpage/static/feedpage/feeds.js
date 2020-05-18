@@ -1,10 +1,10 @@
 $(document).ready(() => {
   // 무한 스크롤 관련
   const typeURLArr = {
-    index: "/feeds/ajax/",
-    mysubscribe: "/feeds/mysubscribe/ajax/",
-    myreaction: "/feeds/myreaction/ajax/",
-    mynotification: "/feeds/mynotification/ajax/"
+    index: "/ajax/",
+    mysubscribe: "/mysubscribe/ajax/",
+    myreaction: "/myreaction/ajax/",
+    mynotification: "/mynotification/ajax/"
   };
 
   $(document).on("click", "#call-more-feeds", function() {
@@ -52,7 +52,7 @@ $(document).ready(() => {
   function getURLByType(type, user) {
     if (type === "creator") {
       // 예외케이스
-      return `/feeds/creator/${user}/ajax/`;
+      return `/creator/${user}/ajax/`;
     }
     return typeURLArr[type];
   }
@@ -324,7 +324,7 @@ $(document).ready(() => {
     }
     // backend 실제 반영하는 코드
     $.ajax({
-      url: `/feeds/${fid}/upvote_${side}`,
+      url: `/${fid}/upvote_${side}`,
       type: "GET",
       dataType: "json",
       success: function(data) {
@@ -345,7 +345,7 @@ $(document).ready(() => {
       const $this = $(this);
       const fid = $this.attr("data-feedid");
       $.ajax({
-        url: `/feeds/${fid}/report`,
+        url: `/${fid}/report`,
         type: "GET",
         dataType: "json",
         success: function(data) {
@@ -377,7 +377,7 @@ $(document).ready(() => {
     const creatorId = $this.attr("data-creatorid");
     const thisCreator = $('.subscribe-js[data-creatorid="' + creatorId + '"]');
     $.ajax({
-      url: `/feeds/${creatorId}/follow`,
+      url: `/${creatorId}/follow`,
       type: "GET",
       dataType: "json",
       success: function(data) {
@@ -399,7 +399,7 @@ $(document).ready(() => {
       const $this = $(this);
       const fid = $this.attr("data-feedid");
       $.ajax({
-        url: `/feeds/${fid}/delete`,
+        url: `/${fid}/delete`,
         type: "GET",
         dataType: "json",
         success: function(data) {
@@ -438,7 +438,7 @@ $(document).ready(() => {
     }
 
     $.ajax({
-      url: `/feeds/${fid}/comments/${cid}/upvote`,
+      url: `/${fid}/comments/${cid}/upvote`,
       type: "GET",
       dataType: "json",
       success: function(data) {
@@ -478,7 +478,7 @@ $(document).ready(() => {
       const csrfmiddlewaretoken = $this.data("csrfmiddlewaretoken");
       $.ajax({
         type: "POST",
-        url: `/feeds/${id}/comments/${cid}/`,
+        url: `/${id}/comments/${cid}/`,
         data: {
           csrfmiddlewaretoken: csrfmiddlewaretoken,
           id: id,
@@ -515,7 +515,7 @@ $(document).ready(() => {
     if (content != "") {
       $.ajax({
         type: "POST",
-        url: `/feeds/${id}/comments/`, // 앞 뒤 슬래시 꼭
+        url: `/${id}/comments/`, // 앞 뒤 슬래시 꼭
         data: {
           csrfmiddlewaretoken: csrfmiddlewaretoken,
           id: id,
@@ -779,7 +779,7 @@ $(document).ready(() => {
     if (keyword !== "") {
       $.ajax({
         type: "POST",
-        url: `/feeds/new/image_search/`,
+        url: `/new/image_search/`,
         data: {
           csrfmiddlewaretoken: csrfmiddlewaretoken,
           keyword: keyword
@@ -900,7 +900,7 @@ $(document).ready(() => {
     const trid = $this.data("tagrelationid");
     $.ajax({
       type: "GET",
-      url: `/feeds/${id}/delete_tag/${trid}/`,
+      url: `/${id}/delete_tag/${trid}/`,
       dataType: "json",
       success: function(data) {
         $this.prev().remove();
@@ -1120,7 +1120,7 @@ $(document).ready(() => {
     console.log(statMenu);
     $.ajax({
       type: "GET",
-      url: `/feeds/${id}/statistics/` + statMenu + `/` + clickedStat + `/`,
+      url: `/${id}/statistics/` + statMenu + `/` + clickedStat + `/`,
       dataType: "json",
       success: function(data) {
         $(".stat-detail-result-wrap").remove();

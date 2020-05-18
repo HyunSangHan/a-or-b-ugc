@@ -26,13 +26,13 @@ def signup(request):
                 profile.image = request.FILES.get('profile_image', False)
                 profile.save()
                 auth.login(request, user)
-                return redirect('/feeds')
+                return redirect('/')
         else:
             return render(request, 'accounts/signup.html', {'error' : 'Check your password'})
     elif request.user.is_anonymous:
         return render(request, 'accounts/signup.html')
     else:
-        return redirect('/feeds/')
+        return redirect('/')
 
 def logout(request):
     auth.logout(request)
@@ -51,7 +51,7 @@ def login(request):
                 user.profile.save()
                 if user is not None:
                     auth.login(request, user)
-                    return redirect('/feeds')
+                    return redirect('/')
                 else:
                     return render(request, 'accounts/login.html', {'error' : 'Hey! password is incorrect'})
         except:
@@ -59,7 +59,7 @@ def login(request):
     elif request.user.is_anonymous:
         return render(request, 'accounts/login.html')
     else:
-        return redirect('/feeds/')
+        return redirect('/')
 
 def profile(request):
     if request.method == 'POST' and request.is_ajax():

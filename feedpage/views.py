@@ -24,8 +24,8 @@ import math
 NUM_PER_PAGE = 2
 IMG_SEARCH_DISPLAY_NUM = 40
 
-def main(request):
-    return redirect('/feeds')
+# def main(request):
+#     return redirect('/feeds')
 
 def index(request): 
     if request.user.is_anonymous == False and request.user.profile.is_first_login:
@@ -116,7 +116,7 @@ def new(request):
             try:
                 next = request.META['HTTP_REFERER']
             except:
-                next = '/feeds/'
+                next = '/'
             return redirect('%s'%next)
 
         if img_url_b is None and img_b is None:
@@ -124,7 +124,7 @@ def new(request):
             try:
                 next = request.META['HTTP_REFERER']
             except:
-                next = '/feeds/'
+                next = '/'
             return redirect('%s'%next)
 
         feed = Feed.objects.create(title=title, content_a=content_a, img_a=img_a, img_b=img_b, content_b=content_b, creator=request.user)
@@ -154,7 +154,7 @@ def new(request):
 
         feedid = feed.id
         make_notification(7, feedid, request.user.id)
-        return redirect('/feeds')
+        return redirect('/')
 
     elif request.user.is_anonymous:
         return redirect('/accounts/login')
@@ -176,13 +176,13 @@ def delete(request, id):
     else:
         if feed.creator == request.user:
             feed.delete()
-            next = '/feeds/'
+            next = '/'
         else:
             print("비정상적인 삭제 접근 시도")
             try:
                 next = request.META['HTTP_REFERER']
             except:
-                next = '/feeds/'
+                next = '/'
         return redirect('%s'%next)
 
 def edit(request, uuid):
@@ -232,7 +232,7 @@ def edit(request, uuid):
         feed.update_date()
         feed.save()
         next = request.POST['next']
-        #여기로 보내기 위함=> '/feeds'+'?page='+feeds.number
+        #여기로 보내기 위함=> '/'+'?page='+feeds.number
         return redirect('%s'%next)
     elif request.user.is_anonymous:
         return redirect('/accounts/login')
@@ -240,14 +240,14 @@ def edit(request, uuid):
         try:
             next = request.META['HTTP_REFERER']
         except:
-            next = '/feeds/'
+            next = '/'
         return render(request, 'feedpage/edit.html', {'feed': feed, 'next': next})
     else:
         print("비정상적인 수정 접근 시도")
         try:
             next = request.META['HTTP_REFERER']
         except:
-            next = '/feeds/'
+            next = '/'
         return redirect('%s'%next)
 
 def delete_tag(request, id, trid):
@@ -265,7 +265,7 @@ def delete_tag(request, id, trid):
     try:
         next = request.META['HTTP_REFERER']
     except:
-        next = '/feeds/'
+        next = '/'
     return redirect('%s'%next)
 
 
@@ -308,7 +308,7 @@ def create_comment(request, id):
     try:
         next = request.META['HTTP_REFERER']
     except:
-        next = '/feeds/'
+        next = '/'
     return redirect('%s'%next)
 
 def delete_comment(request, id, cid):
@@ -320,7 +320,7 @@ def delete_comment(request, id, cid):
     try:
         next = request.META['HTTP_REFERER']
     except:
-        next = '/feeds/'
+        next = '/'
     return redirect('%s'%next)
 
 def upvote_comment(request, id, cid):
@@ -345,7 +345,7 @@ def upvote_comment(request, id, cid):
         try:
             next = request.META['HTTP_REFERER']
         except:
-            next = '/feeds/'
+            next = '/'
         return redirect('%s'%next)
 
 
@@ -419,7 +419,7 @@ def feed_upvote_a(request, pk):
             try:
                 next = request.META['HTTP_REFERER']
             except:
-                next = '/feeds/'
+                next = '/'
         except:
             next = '/accounts/login'
         return redirect('%s'%next)
@@ -491,7 +491,7 @@ def feed_upvote_b(request, pk):
             try:
                 next = request.META['HTTP_REFERER']
             except:
-                next = '/feeds/'
+                next = '/'
         except:
             next = '/accounts/login'
         return redirect('%s'%next)
@@ -526,7 +526,7 @@ def follow_manager(request, pk):
         try:
             next = request.META['HTTP_REFERER']
         except:
-            next = '/feeds/'
+            next = '/'
         return redirect('%s'%next)
 
 def report(request, pk):
@@ -557,7 +557,7 @@ def report(request, pk):
         try:
             next = request.META['HTTP_REFERER']
         except:
-            next = '/feeds/'
+            next = '/'
         return redirect('%s'%next)
 
 def statistics(request, pk, stat_menu, stat_name):
@@ -671,7 +671,7 @@ def statistics(request, pk, stat_menu, stat_name):
         try:
             next = request.META['HTTP_REFERER']
         except:
-            next = '/feeds/'
+            next = '/'
         return redirect('%s'%next)
 
 def creator(request, creator_name):
@@ -693,7 +693,7 @@ def creator(request, creator_name):
         try:
             next = request.META['HTTP_REFERER']
         except:
-            next = '/feeds/'
+            next = '/'
         return redirect('%s'%next)
 
 def creator_ajax(request, creator_name):
@@ -719,7 +719,7 @@ def creator_ajax(request, creator_name):
         try:
             next = request.META['HTTP_REFERER']
         except:
-            next = '/feeds/'
+            next = '/'
         return redirect('%s'%next)
 
 def mysubscribe(request):

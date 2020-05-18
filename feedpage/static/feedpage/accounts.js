@@ -1,4 +1,10 @@
 $(document).ready(() => {
+  // tooltips
+  $(document).on("click", ".qmark-wrapper", function() {
+    const $this = $(this);
+    $this.children(".qmark-tooltip").toggleClass("none");
+  });
+
   // 프로필수정 페이지에서 select 버튼 바뀔 때
   $(".select-form").on("change", function() {
     if ($(this).val()) {

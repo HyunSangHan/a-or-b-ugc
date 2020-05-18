@@ -31,7 +31,7 @@
           <!-- Title -->
           <!-- Add spacer, to align navigation to the right -->
           <div class="mdl-layout-spacer service-title">
-            <a href="/feeds">A / B</a>
+            <a href="/">A / B</a>
           </div>
           <a class="flex-end" href="#" onclick="window.close()">
             <i class="material-icons">clear</i>
@@ -56,7 +56,7 @@
                       </button>
                       <div class="more-info">
             <!--배포 이후에 수정할 부분-->
-                        <div data-clipboard-text="localhost:8000/feeds/{{ feed.uuid }}" onclick="return alert('콘텐츠의 주소가 클립보드에 복사되었습니다.')">공유하기</div>
+                        <div data-clipboard-text="https://aorb.click/{{ feed.uuid }}" onclick="return alert('콘텐츠의 주소가 클립보드에 복사되었습니다.')">공유하기</div>
                         {% if user.is_authenticated %}
                           {% if request.user != feed.creator %}
                             <div class="subscribe-js" data-creatorid="{{ feed.creator.id }}">
@@ -79,13 +79,13 @@
                             <div>
                               {% is_deletable feed.id as is_deletable_feed %}
                               {% if is_deletable_feed %}
-                                <a href="/feeds/{{ feed.uuid }}/edit" class="link-black">수정하기</a>
+                                <a href="/{{ feed.uuid }}/edit" class="link-black">수정하기</a>
                               {% else %}
                                 <span class="font-lightgrey" onclick="return alert('다른 사용자가 이미 투표/댓글 참여를 한 게시물의 경우, 내용 수정이 불가합니다. 반드시 수정이 필요하다면 삭제 후 재등록해주세요.')">수정하기</span>
                               {% endif %}                                
                             </div>
                             <div>
-                              <a href="/feeds/{{ feed.id }}/delete" class="link-black" onclick="return confirm('정말 삭제하실 건가요?')">
+                              <a href="/{{ feed.id }}/delete" class="link-black" onclick="return confirm('정말 삭제하실 건가요?')">
                                 삭제하기
                               </a>
                             </div>
@@ -98,12 +98,12 @@
                     {% get_feed_tags feed.id as feed_tags %}
                     {% for tag in feed_tags %}
                       <span class="font-13 font-light">
-                        <a href="/feeds/?keyword={{tag}}" class="link-black">#{{ tag }}</a>
+                        <a href="/?keyword={{tag}}" class="link-black">#{{ tag }}</a>
                       </span>
                     {% endfor %}
                   </div>
                   <div class="inline-flex v-center mt-1 mb-2">
-                    <a href="/feeds/creator/{{feed.creator.username}}" class="link-grey">
+                    <a href="/creator/{{feed.creator.username}}" class="link-grey">
                       <div class="inline-flex">
                         {% if feed.creator.profile.image.url is not None %}
                           <div class="user-face" style="background: url('{{ feed.creator.profile.image.url }}') center / cover;"></div>
@@ -222,7 +222,7 @@
                         <div class="comment-width">
                           <span class="sideicon best">A / BEST</span>
                           <span class="font-11 v-center mtb-auto comment-reactor">
-                            <a href="/feeds/creator/{{comment_a.reactor.username}}">
+                            <a href="/creator/{{comment_a.reactor.username}}">
                               <strong>{{ comment_a.reactor }}</strong>
                             </a>
                           </span>
@@ -288,7 +288,7 @@
                         <div class="comment-width">
                           <span class="sideicon best">B / BEST</span>
                           <span class="font-11 v-center mtb-auto comment-reactor">
-                            <a href="/feeds/creator/{{comment_b.reactor.username}}">
+                            <a href="/creator/{{comment_b.reactor.username}}">
                               <strong>{{ comment_b.reactor }}</strong>
                             </a>
                           </span>
@@ -360,13 +360,13 @@
                           {% if side != ""%}
                             <span class="sideicon norm"> {{ side }} </span>
                             <span class="font-11 v-center mtb-auto comment-reactor">
-                              <a href="/feeds/creator/{{c.reactor.username}}">
+                              <a href="/creator/{{c.reactor.username}}">
                                 <strong>{{ c.reactor }}</strong>
                               </a>
                             </span>
                           {% else %}
                             <span class="font-11 v-center mtb-auto comment-reactor" style="margin-left: 0;">
-                              <a href="/feeds/creator/{{c.reactor.username}}">
+                              <a href="/creator/{{c.reactor.username}}">
                                 <strong>{{ c.reactor }}</strong>
                               </a>
                             </span>
@@ -445,7 +445,7 @@
                       </div>
                     </a>
                   {% elif choice == "" %}
-                    <a href="/feeds/{{ feed.uuid }}/">
+                    <a href="/{{ feed.uuid }}/">
                       <div class="dotted-box font-13 font-grey">
                         <div class="text-center">
                           투표 후 새로고침하시면 열람 가능합니다.
@@ -496,7 +496,7 @@
             <div class="container">
               <div class="m-auto comments-input-w bg-white">
                 <div class="contents-margin">
-                  <form action="/feeds/{{ feed.id }}/comments/" method="POST">
+                  <form action="/{{ feed.id }}/comments/" method="POST">
                     {% csrf_token %}
                     <div class="comment-input-wrap mdl-textfield mdl-js-textfield mdl-textfield--floating-label w-100" style="padding: 10px 0 0; margin: 0 0 10px;">
                       <input class="mdl-textfield__input comment-input" type="text" name="content" placeholder="댓글을 입력하세요." minlength="2" maxlength="70" autocomplete="off" required />
