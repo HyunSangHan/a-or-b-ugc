@@ -41,9 +41,9 @@ IMG_CLIENT_KEY = get_secret('IMG_CLIENT_KEY')
 DEBUG = False
 
 ALLOWED_HOSTS = [
-    'ec2-15-165-158-203.ap-northeast-2.compute.amazonaws.com',
+    'aorb.click',
+    'www.aorb.click',
     '15.165.158.203',
-    'aorb.click'
 ]
 
 
