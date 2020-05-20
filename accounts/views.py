@@ -237,6 +237,7 @@ def profile(request):
         profile.save()
         # print(social_user.extra_data)
         # print(social_user.extra_data['properties'])
-
-
         return render(request, 'accounts/profile.html', {'profile': profile}) #for GET method
+
+def privacy_policy(request):
+    return render(request, 'accounts/privacy_policy.html')
