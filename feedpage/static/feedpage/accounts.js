@@ -1,4 +1,13 @@
 $(document).ready(() => {
+  // privacy policy popup
+  $(document).on("click", "#privacy-policy", function() {
+    $("#popup").removeClass("hide");
+  });
+
+  $(document).on("click", "#popup-close", function() {
+    $("#popup").addClass("hide");
+  });
+
   // tooltips
   $(document).on("click", ".qmark-wrapper", function() {
     const $this = $(this);
